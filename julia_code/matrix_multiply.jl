@@ -200,3 +200,13 @@ kern(c, a, b, ndrange=size(c))
 @show isapprox(a*b, c)
 @show maximum(abs, (a*b-c))
 # 1.8 s serial, 515 ms with 4 threads for 1024x1024
+
+# println("gpu kernel mul")
+# using CUDA
+# a = CUDA.rand(DIM, DIM)
+# b = CUDA.rand(DIM, DIM)
+# c = CUDA.zeros(DIM, DIM)
+# kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
+# kern(c, a, b, ndrange=size(c))
+# @show isapprox(a*b, c)
+# @show maximum(abs, (a*b-c))
