@@ -134,6 +134,6 @@ open(outfile, "w") do io
         code_sass(io, job; kwargs...)
     end
 
-   CUDA.GPUCompiler.emit_hooked_compilation(kern, (typeof(a), typeof(b), typeof(c)), debuginfo=:none, dump_module=true)
+   CUDA.GPUCompiler.emit_hooked_compilation(hook, debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c)))
 end
 println("done. saved binary to ", outfile)
