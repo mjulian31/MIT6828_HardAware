@@ -128,7 +128,7 @@ outfile = string("gpu_", DIM, ".ll")
 open(outfile, "w") do io
    # CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
 
-   function hook(job::CUDACompilerJob; io::IO=stdout, kwargs...)
+   function hook(job::CUDA.CUDACompilerJob; io::IO=stdout, kwargs...)
         println(io, "// $job")
         println(io)
         code_sass(io, job; kwargs...)
