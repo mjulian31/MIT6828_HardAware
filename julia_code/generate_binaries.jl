@@ -1,10 +1,12 @@
-const DIM = parse(Int, ARGS[1])
-@show DIM
+if size(ARGS)[1] == 0
+    println("please enter a dimension")
+    exit()
+end
 
 print("loading packages...")
 using LinearAlgebra
 using SIMD
-using CUDA
+# using CUDA
 using StaticArrays
 using InteractiveUtils
 using Base.Threads
@@ -12,8 +14,10 @@ using KernelAbstractions
 
 println("done.")
 
-const TILE_DIM = 32
 @show nthreads()
+
+print("loading globals and functions...")
+const TILE_DIM = 32
 
 function mul_tile!(A::Array{T,2}, B::Array{T,2}, C::Array{T,2}) where {T}
     # assuming square matrix
@@ -106,27 +110,35 @@ end
      @inbounds output[I, J] = outval[1]
 end
 
-print("generating cpu binary...")
-a = rand(DIM, DIM)
-b = rand(DIM, DIM)
-c = zeros(DIM, DIM)
-outfile = string("cpu_", DIM, ".ll")
-open(outfile, "w") do out
-    redirect_stdout(out) do
-        @code_llvm debuginfo=:none dump_module=true mul_tile!(a, b, c)
-    end
-end
-println("done. saved cpu binary to ", outfile)
+println("done.")
 
-print("generating gpu binary...")
-a = CUDA.rand(DIM, DIM)
-b = CUDA.rand(DIM, DIM)
-c = CUDA.zeros(DIM, DIM)
-kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
-outfile = string("gpu_", DIM, ".ll")
-open(outfile, "w") do out
-    redirect_stdout(out) do
-        CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
+for i in 1:size(ARGS)[1]
+    DIM = parse(Int, ARGS[i])
+    println("dimension requested: ", DIM)
+
+    print("generating cpu binary...")
+    a = rand(DIM, DIM)
+    b = rand(DIM, DIM)
+    c = zeros(DIM, DIM)
+    outfile = string("cpu_", DIM, ".ll")
+    open(outfile, "w") do out
+        redirect_stdout(out) do
+            @code_llvm debuginfo=:none dump_module=true mul_tile!(a, b, c)
+        end
     end
+    println("done. saved cpu binary to ", outfile)
+
+    # print("generating gpu binary...")
+    # a = CUDA.rand(DIM, DIM)
+    # b = CUDA.rand(DIM, DIM)
+    # c = CUDA.zeros(DIM, DIM)
+    # kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
+    # outfile = string("gpu_", DIM, ".ll")
+    # open(outfile, "w") do out
+    #     redirect_stdout(out) do
+    #         CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
+    #     end
+    # end
+    # println("done. saved gpu binary to ", outfile)
+
 end
-println("done. saved gpu binary to ", outfile)
