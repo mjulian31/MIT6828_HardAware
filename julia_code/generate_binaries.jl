@@ -1,21 +1,23 @@
-using SIMD
-using BenchmarkTools
+println("input dimension: ")
+const DIM = parse(Int, readline())
+
+@show DIM
+
+print("loading packages...")
 using LinearAlgebra
-using KernelAbstractions
-using Base.Threads
+using SIMD
+# using CUDA
 using StaticArrays
 using InteractiveUtils
-using CUDA
+using Base.Threads
+using KernelAbstractions
+
+println("done.")
 
 const TILE_DIM = 32
 @show nthreads()
-@show CUDA.version()
 
 function mul_tile!(A::Array{T,2}, B::Array{T,2}, C::Array{T,2}) where {T}
-    @assert size(B,1) == size(A,2)
-    @assert size(A,1) == size(C,1)
-    @assert size(B,2) == size(C,2)
-    @assert size(B) == size(A) == size(C)
     # assuming square matrix
     N = size(C)[1]
     NUM_TILES = Int(N/TILE_DIM)
@@ -106,34 +108,26 @@ end
      @inbounds output[I, J] = outval[1]
 end
 
-
-# benchmark versions
-
-const DIM = 1024
-@show DIM
-
-println("tile mul")
+print("generating cpu binary...")
 a = rand(DIM, DIM)
 b = rand(DIM, DIM)
 c = zeros(DIM, DIM)
-@btime mul_tile!($a, $b, c) setup=(c = zeros(DIM, DIM))
-c = zeros(DIM, DIM)
-mul_tile!(a, b, c)
-@show isapprox(a*b, c)
+outfile = string("cpu_", DIM, ".ll")
+open(outfile, "w") do io
+   code_llvm(io, mul_tile!, (typeof(a), typeof(b), typeof(c)), debuginfo=:none, dump_module=true)
+end
+println("done. saved binary to ", outfile)
 
-println("kernel mul")
-a = rand(DIM, DIM)
-b = rand(DIM, DIM)
-c = zeros(DIM, DIM)
-kern = coalesced_matmul_kernel!(CPU(), (TILE_DIM, TILE_DIM))
-@btime wait(kern(c, $a, $b, ndrange=size(c))) setup=(c = zeros(DIM, DIM))
-wait(kern(c, a, b, ndrange=size(c)))
-@show isapprox(a*b, c)
-
-println("gpu kernel mul")
+print("generating gpu binary...")
 a = CUDA.rand(DIM, DIM)
 b = CUDA.rand(DIM, DIM)
 c = CUDA.zeros(DIM, DIM)
 kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
-wait(kern(c, a, b, ndrange=size(c)))
-@show isapprox(a*b, c)
+
+outfile = string("gpu_", DIM, ".ll")
+open(outfile, "w") do io
+   # CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
+
+   CUDA.code_sass(kern, (typeof(a), typeof(b), typeof(c)), debuginfo=:none, dump_module=true)
+end
+println("done. saved binary to ", outfile)
