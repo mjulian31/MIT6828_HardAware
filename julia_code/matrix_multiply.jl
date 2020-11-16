@@ -5,7 +5,7 @@ using KernelAbstractions
 using Base.Threads
 using StaticArrays
 using InteractiveUtils
-BLAS.set_num_threads(1)
+using CUDA
 
 const TILE_DIM = 32
 @show nthreads()
@@ -187,8 +187,6 @@ c = zeros(DIM, DIM)
 c = zeros(DIM, DIM)
 mul_tile!(a, b, c)
 @show isapprox(a*b, c)
-@code_typed mul_tile!(a, b, c)
-# 373.653 ms for 1024x1024 serial, 170 ms with 4 threads
 
 println("kernel mul")
 a = rand(DIM, DIM)
@@ -198,15 +196,11 @@ kern = coalesced_matmul_kernel!(CPU(), (TILE_DIM, TILE_DIM))
 @btime wait(kern(c, $a, $b, ndrange=size(c))) setup=(c = zeros(DIM, DIM))
 wait(kern(c, a, b, ndrange=size(c)))
 @show isapprox(a*b, c)
-@show maximum(abs, (a*b-c))
-# 1.8 s serial, 515 ms with 4 threads for 1024x1024
 
-# println("gpu kernel mul")
-# using CUDA
-# a = CUDA.rand(DIM, DIM)
-# b = CUDA.rand(DIM, DIM)
-# c = CUDA.zeros(DIM, DIM)
-# kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
-# wait(kern(c, a, b, ndrange=size(c)))
-# @show isapprox(a*b, c)
-# @show maximum(abs, (a*b-c))
+println("gpu kernel mul")
+a = CUDA.rand(DIM, DIM)
+b = CUDA.rand(DIM, DIM)
+c = CUDA.zeros(DIM, DIM)
+kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
+wait(kern(c, a, b, ndrange=size(c)))
+@show isapprox(a*b, c)
