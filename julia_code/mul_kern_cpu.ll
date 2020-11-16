@@ -1,4 +1,13 @@
-define void @julia_overdub_1383({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture nonnull readonly dereferenceable(48), %jl_value_t* nonnull align 16 dereferenceable(40), %jl_value_t* nonnull align 16 dereferenceable(40), %jl_value_t* nonnull align 16 dereferenceable(40)) {
+; ModuleID = 'overdub'
+source_filename = "overdub"
+target datalayout = "e-m:e-i64:64-n32:64"
+target triple = "powerpc64le-unknown-linux-gnu"
+
+%jl_value_t = type opaque
+
+@llvm.compiler.used = appending global [3 x i8*] [i8* bitcast (void (%jl_value_t*)* @jl_gc_queue_root to i8*), i8* bitcast (%jl_value_t* (i8*, i32, i32)* @jl_gc_pool_alloc to i8*), i8* bitcast (%jl_value_t* (i8*, i64)* @jl_gc_big_alloc to i8*)], section "llvm.metadata"
+
+define void @julia_overdub_1856({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture nonnull readonly dereferenceable(48), %jl_value_t* nonnull align 16 dereferenceable(40), %jl_value_t* nonnull align 16 dereferenceable(40), %jl_value_t* nonnull align 16 dereferenceable(40)) {
 top:
   %4 = alloca i67584, align 16
   %5 = bitcast i67584* %4 to i8*
@@ -201,3 +210,130 @@ L451:                                             ; preds = %L451, %L450.L451_cr
 L545:                                             ; preds = %L451
   ret void
 }
+
+define nonnull %jl_value_t* @jfptr_overdub_1857(%jl_value_t*, %jl_value_t**, i32) #0 {
+top:
+  %gcframe = alloca %jl_value_t*, i32 3, align 16
+  %3 = bitcast %jl_value_t** %gcframe to i8*
+  call void @llvm.memset.p0i8.i32(i8* align 16 %3, i8 0, i32 24, i1 false)
+  %4 = call %jl_value_t*** inttoptr (i64 17590368344944 to %jl_value_t*** ()*)() #3
+  %5 = getelementptr %jl_value_t*, %jl_value_t** %gcframe, i32 0
+  %6 = bitcast %jl_value_t** %5 to i64*
+  store i64 4, i64* %6
+  %7 = getelementptr %jl_value_t**, %jl_value_t*** %4, i32 0
+  %8 = load %jl_value_t**, %jl_value_t*** %7
+  %9 = getelementptr %jl_value_t*, %jl_value_t** %gcframe, i32 1
+  %10 = bitcast %jl_value_t** %9 to %jl_value_t***
+  store %jl_value_t** %8, %jl_value_t*** %10
+  %11 = bitcast %jl_value_t*** %7 to %jl_value_t***
+  store %jl_value_t** %gcframe, %jl_value_t*** %11
+  %12 = bitcast %jl_value_t** %1 to { { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }**
+  %13 = load { { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }*, { { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }** %12, align 8
+  %14 = getelementptr inbounds %jl_value_t*, %jl_value_t** %1, i64 2
+  %15 = load %jl_value_t*, %jl_value_t** %14, align 8
+  %16 = getelementptr inbounds %jl_value_t*, %jl_value_t** %1, i64 3
+  %17 = load %jl_value_t*, %jl_value_t** %16, align 8
+  %18 = getelementptr inbounds %jl_value_t*, %jl_value_t** %1, i64 4
+  %19 = load %jl_value_t*, %jl_value_t** %18, align 8
+  %20 = getelementptr %jl_value_t*, %jl_value_t** %gcframe, i32 2
+  %21 = bitcast { { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* %13 to %jl_value_t*
+  store %jl_value_t* %21, %jl_value_t** %20
+  call void @julia_overdub_1856({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly %13, %jl_value_t* %15, %jl_value_t* %17, %jl_value_t* %19)
+  %22 = getelementptr %jl_value_t*, %jl_value_t** %gcframe, i32 1
+  %23 = load %jl_value_t*, %jl_value_t** %22
+  %24 = getelementptr %jl_value_t**, %jl_value_t*** %4, i32 0
+  %25 = bitcast %jl_value_t*** %24 to %jl_value_t**
+  store %jl_value_t* %23, %jl_value_t** %25
+  ret %jl_value_t* inttoptr (i64 127778503625680 to %jl_value_t*)
+}
+
+; Function Attrs: allocsize(1)
+declare noalias nonnull %jl_value_t* @julia.gc_alloc_obj(i8*, i64, %jl_value_t*) #1
+
+; Function Attrs: noreturn
+declare void @jl_throw(%jl_value_t*) #2
+
+declare token @llvm.julia.gc_preserve_begin(...)
+
+; Function Attrs: nounwind readnone
+declare %jl_value_t* @julia.pointer_from_objref(%jl_value_t*) #3
+
+declare void @llvm.julia.gc_preserve_end(token)
+
+declare nonnull %jl_value_t* @j_overdub_1859({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [1 x i64]* nocapture readonly)
+
+; Function Attrs: cold noreturn nounwind
+declare void @llvm.trap() #4
+
+declare nonnull %jl_value_t* @j_overdub_1860({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [3 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1861({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [1 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1862({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [3 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1863({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [1 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1864({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [2 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1865({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [1 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1866({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [2 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1867({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [1 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1868({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [3 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1869({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [1 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1870({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [2 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1871({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [1 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1872({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [2 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1873({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [1 x i64]* nocapture readonly)
+
+declare nonnull %jl_value_t* @j_overdub_1874({ { [1 x [2 x i64]], [1 x [2 x [1 x i64]]], { [1 x [2 x [1 x i64]]] } } }* nocapture readonly, %jl_value_t*, [3 x i64]* nocapture readonly)
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.start.p0i8(i64 immarg, i8* nocapture) #5
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.end.p0i8(i64 immarg, i8* nocapture) #5
+
+; Function Attrs: inaccessiblemem_or_argmemonly
+declare void @jl_gc_queue_root(%jl_value_t*) #6
+
+; Function Attrs: allocsize(1)
+declare noalias nonnull %jl_value_t* @jl_gc_pool_alloc(i8*, i32, i32) #1
+
+; Function Attrs: allocsize(1)
+declare noalias nonnull %jl_value_t* @jl_gc_big_alloc(i8*, i64) #1
+
+; Function Attrs: nounwind
+declare void @llvm.assume(i1) #7
+
+declare noalias nonnull %jl_value_t** @julia.new_gc_frame(i32)
+
+declare void @julia.push_gc_frame(%jl_value_t**, i32)
+
+declare %jl_value_t** @julia.get_gc_frame_slot(%jl_value_t**, i32)
+
+declare void @julia.pop_gc_frame(%jl_value_t**)
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memset.p0i8.i32(i8* nocapture writeonly, i8, i32, i1 immarg) #5
+
+attributes #0 = { "thunk" }
+attributes #1 = { allocsize(1) }
+attributes #2 = { noreturn }
+attributes #3 = { nounwind readnone }
+attributes #4 = { cold noreturn nounwind }
+attributes #5 = { argmemonly nounwind }
+attributes #6 = { inaccessiblemem_or_argmemonly }
+attributes #7 = { nounwind }
+
+!llvm.module.flags = !{!0, !1}
+
+!0 = !{i32 2, !"Dwarf Version", i32 4}
+!1 = !{i32 1, !"Debug Info Version", i32 3}
