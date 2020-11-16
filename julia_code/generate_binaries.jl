@@ -1,6 +1,4 @@
-println("input dimension: ")
-const DIM = parse(Int, readline())
-
+const DIM = parse(Int, ARGS[1])
 @show DIM
 
 print("loading packages...")
