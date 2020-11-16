@@ -113,27 +113,22 @@ a = rand(DIM, DIM)
 b = rand(DIM, DIM)
 c = zeros(DIM, DIM)
 outfile = string("cpu_", DIM, ".ll")
-open(outfile, "w") do io
-   code_llvm(io, mul_tile!, (typeof(a), typeof(b), typeof(c)), debuginfo=:none, dump_module=true)
+open(outfile, "w") do out
+    redirect_stdout(out) do
+        @code_llvm debuginfo=:none dump_module=true mul_tile!(a, b, c)
+    end
 end
-println("done. saved binary to ", outfile)
+println("done. saved cpu binary to ", outfile)
 
 print("generating gpu binary...")
 a = CUDA.rand(DIM, DIM)
 b = CUDA.rand(DIM, DIM)
 c = CUDA.zeros(DIM, DIM)
 kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
-
 outfile = string("gpu_", DIM, ".ll")
-open(outfile, "w") do io
-   # CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
-
-   function hook(job::CUDA.CUDACompilerJob; io::IO=stdout, kwargs...)
-        println(io, "// $job")
-        println(io)
-        code_sass(io, job; kwargs...)
+open(outfile, "w") do out
+    redirect_stdout(out) do
+        @CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
     end
-
-   CUDA.GPUCompiler.emit_hooked_compilation(hook, debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c)))
 end
-println("done. saved binary to ", outfile)
+println("done. saved gpu binary to ", outfile)
