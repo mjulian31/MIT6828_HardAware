@@ -126,7 +126,7 @@ kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
 outfile = string("gpu_", DIM, ".ll")
 open(outfile, "w") do out
     redirect_stdout(out) do
-        @CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
+        CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
     end
 end
 println("done. saved gpu binary to ", outfile)
