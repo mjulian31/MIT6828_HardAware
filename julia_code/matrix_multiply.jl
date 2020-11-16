@@ -9,6 +9,8 @@ using CUDA
 
 const TILE_DIM = 32
 @show nthreads()
+@show CUDA.version()
+
 
 function mul!(A::Array{T,2}, B::Array{T,2}, C::Array{T,2}, ::Type{Vec{N,T}}) where {N, T}
     @assert size(B,1) == size(A,2)
@@ -183,7 +185,7 @@ println("tile mul")
 a = rand(DIM, DIM)
 b = rand(DIM, DIM)
 c = zeros(DIM, DIM)
-@btime mul_tile!($a, $b, c) setup=(c = zeros(DIM, DIM))
+# @btime mul_tile!($a, $b, c) setup=(c = zeros(DIM, DIM))
 c = zeros(DIM, DIM)
 mul_tile!(a, b, c)
 @show isapprox(a*b, c)
@@ -193,7 +195,7 @@ a = rand(DIM, DIM)
 b = rand(DIM, DIM)
 c = zeros(DIM, DIM)
 kern = coalesced_matmul_kernel!(CPU(), (TILE_DIM, TILE_DIM))
-@btime wait(kern(c, $a, $b, ndrange=size(c))) setup=(c = zeros(DIM, DIM))
+# @btime wait(kern(c, $a, $b, ndrange=size(c))) setup=(c = zeros(DIM, DIM))
 wait(kern(c, a, b, ndrange=size(c)))
 @show isapprox(a*b, c)
 
