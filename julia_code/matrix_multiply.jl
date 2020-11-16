@@ -91,7 +91,7 @@ function mul_tile!(A::Array{T,2}, B::Array{T,2}, C::Array{T,2}) where {T}
 end
 
 
-@kernel function coalesced_matmul_kernel!(output, @Const(input1), @Const(input2),
+@kernel function coalesced_matmul_kernel!(output, input1, input2,
                                              ::Val{BANK}=Val(1)) where BANK
      gi, gj = @index(Group, NTuple)
      i, j   = @index(Local, NTuple)
