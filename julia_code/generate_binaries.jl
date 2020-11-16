@@ -6,7 +6,7 @@ const DIM = parse(Int, readline())
 print("loading packages...")
 using LinearAlgebra
 using SIMD
-# using CUDA
+using CUDA
 using StaticArrays
 using InteractiveUtils
 using Base.Threads
@@ -134,6 +134,6 @@ open(outfile, "w") do io
         code_sass(io, job; kwargs...)
     end
 
-   GPUCompiler.emit_hooked_compilation(kern, (typeof(a), typeof(b), typeof(c)), debuginfo=:none, dump_module=true)
+   CUDA.GPUCompiler.emit_hooked_compilation(kern, (typeof(a), typeof(b), typeof(c)), debuginfo=:none, dump_module=true)
 end
 println("done. saved binary to ", outfile)
