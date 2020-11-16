@@ -128,6 +128,12 @@ outfile = string("gpu_", DIM, ".ll")
 open(outfile, "w") do io
    # CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
 
-   CUDA.code_sass(kern, (typeof(a), typeof(b), typeof(c)), debuginfo=:none, dump_module=true)
+   function hook(job::CUDACompilerJob; io::IO=stdout, kwargs...)
+        println(io, "// $job")
+        println(io)
+        code_sass(io, job; kwargs...)
+    end
+
+   GPUCompiler.emit_hooked_compilation(kern, (typeof(a), typeof(b), typeof(c)), debuginfo=:none, dump_module=true)
 end
 println("done. saved binary to ", outfile)
