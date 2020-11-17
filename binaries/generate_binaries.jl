@@ -27,7 +27,7 @@ function mul_tile!(A::Array{T,2}, B::Array{T,2}, C::Array{T,2}) where {T}
     NUM_TILES = Int(N/TILE_DIM)
 
     # loop over all tiles
-    @inbounds @threads for gj in 1:NUM_TILES
+    @inbounds for gj in 1:NUM_TILES
         @inbounds for gi in 1:NUM_TILES
             # loop over tiles needed for this calculation
             tile1 = @MArray zeros(TILE_DIM, TILE_DIM)
@@ -146,6 +146,7 @@ for i in 1:size(ARGS)[1]
 
     job, kwargs = mcjob(mul_tile!, (typeof(a), typeof(b), typeof(c)))
     ir, func = GPUCompiler.compile(:llvm, job; kwargs...)
+    name!(func, "matmul")
     GPUCompiler.finish_module!(job, ir)
     objfile = string("cpu_", DIM, ".o")
     tm = GPUCompiler.llvm_machine(job.target)
