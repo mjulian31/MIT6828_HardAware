@@ -143,34 +143,29 @@ for i in 1:size(ARGS)[1]
     a = rand(DIM, DIM)
     b = rand(DIM, DIM)
     c = zeros(DIM, DIM)
-    outfile = string("cpu_", DIM, ".ll")
-    open(outfile, "w") do out
-        redirect_stdout(out) do
-            @code_llvm debuginfo=:none dump_module=true mul_tile!(a, b, c)
-        end
-    end
-    println("done. saved cpu binary to ", outfile)
 
-    print("generating gpu binary...")
-
-    a = CUDA.rand(DIM, DIM)
-    b = CUDA.rand(DIM, DIM)
-    c = CUDA.zeros(DIM, DIM)
-    kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
-
-    job, kwargs = mcjob(kern, (typeof(a), typeof(b), typeof(c)))
+    job, kwargs = mcjob(mul_tile!, (typeof(a), typeof(b), typeof(c)))
     ir, func = GPUCompiler.compile(:llvm, job; kwargs...)
     GPUCompiler.finish_module!(job, ir)
-    objfile = "kernel.o"
+    objfile = string("cpu_", DIM, ".o")
     tm = GPUCompiler.llvm_machine(job.target)
     LLVM.emit(tm, ir, LLVM.API.LLVMObjectFile, objfile)
 
-    outfile = string("gpu_", DIM, ".ll")
-    open(outfile, "w") do out
-        redirect_stdout(out) do
-            CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
-        end
-    end
-    println("done. saved gpu binary to ", outfile)
+    println("done. saved cpu binary to ", objfile)
+
+    # print("generating gpu binary...")
+    #
+    # a = CUDA.rand(DIM, DIM)
+    # b = CUDA.rand(DIM, DIM)
+    # c = CUDA.zeros(DIM, DIM)
+    # kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
+    #
+    # outfile = string("gpu_", DIM, ".ll")
+    # open(outfile, "w") do out
+    #     redirect_stdout(out) do
+    #         CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
+    #     end
+    # end
+    # println("done. saved gpu binary to ", outfile)
 
 end
