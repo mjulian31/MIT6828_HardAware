@@ -21,9 +21,9 @@ println("done.")
 print("loading globals and functions...")
 const TILE_DIM = 32
 
-function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}, N::Csize_t)
+function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}, N::Cint)
     # assuming square matrix
-    NUM_TILES = Int(N/TILE_DIM)
+    NUM_TILES = div(N, TILE_DIM)
     A = unsafe_wrap(Array, ptr_A, (N, N), own = false)
     B = unsafe_wrap(Array, ptr_B, (N, N), own = false)
     C = unsafe_wrap(Array, ptr_C, (N, N), own = false)
@@ -143,10 +143,10 @@ for i in 1:size(ARGS)[1]
     println("dimension requested: ", DIM)
 
     print("generating cpu binary...")
-
-    job, kwargs = mcjob(mul_tile!, (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Csize_t))
+    job, kwargs = mcjob(mul_tile!, (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Cint))
     ir, func = GPUCompiler.compile(:llvm, job; kwargs...)
     name!(func, "matmul")
+    @show func
     GPUCompiler.finish_module!(job, ir)
     objfile = string("cpu_", DIM, ".o")
     tm = GPUCompiler.llvm_machine(job.target)
