@@ -120,10 +120,10 @@ for i in 1:size(ARGS)[1]
     a = rand(DIM, DIM)
     b = rand(DIM, DIM)
     c = zeros(DIM, DIM)
-    outfile = string("cpu_", DIM, ".s")
+    outfile = string("cpu_", DIM, ".ll")
     open(outfile, "w") do out
         redirect_stdout(out) do
-            @code_native debuginfo=:none mul_tile!(a, b, c)
+            @code_llvm debuginfo=:none dump_module=true mul_tile!(a, b, c)
         end
     end
     println("done. saved cpu binary to ", outfile)
@@ -133,10 +133,10 @@ for i in 1:size(ARGS)[1]
     b = CUDA.rand(DIM, DIM)
     c = CUDA.zeros(DIM, DIM)
     kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
-    outfile = string("gpu_", DIM, ".s")
+    outfile = string("gpu_", DIM, ".ll")
     open(outfile, "w") do out
         redirect_stdout(out) do
-            CUDA.@device_code_ptx kern(c, a, b, ndrange=size(c))
+            CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
         end
     end
     println("done. saved gpu binary to ", outfile)
