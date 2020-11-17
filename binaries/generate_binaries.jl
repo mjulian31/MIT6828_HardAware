@@ -11,6 +11,8 @@ using StaticArrays
 using InteractiveUtils
 using Base.Threads
 using KernelAbstractions
+import LLVM
+using GPUCompiler
 
 println("done.")
 
@@ -110,6 +112,27 @@ end
      @inbounds output[I, J] = outval[1]
 end
 
+function mcjob(@nospecialize(func), @nospecialize(types);
+               cpu::String = (LLVM.version() < v"8") ? "" : unsafe_string(LLVM.API.LLVMGetHostCPUName()),
+               features::String=(LLVM.version() < v"8") ? "" : unsafe_string(LLVM.API.LLVMGetHostCPUFeatures()),
+               kwargs...)
+    source = FunctionSpec(func, Base.to_tuple_type(types), #=kernel=# false)
+    target = NativeCompilerTarget(cpu=cpu, features=features)
+    params = CompilerParams()
+    CompilerJob(target, source, params), kwargs
+end
+
+module MockRuntime
+    signal_exception() = return
+    malloc(sz) = C_NULL
+    report_oom(sz) = return
+    report_exception(ex) = return
+    report_exception_name(ex) = return
+    report_exception_frame(idx, func, file, line) = return
+end
+struct CompilerParams <: AbstractCompilerParams end
+GPUCompiler.runtime_module(::CompilerJob{<:Any,CompilerParams}) = MockRuntime
+
 println("done.")
 
 for i in 1:size(ARGS)[1]
@@ -129,10 +152,19 @@ for i in 1:size(ARGS)[1]
     println("done. saved cpu binary to ", outfile)
 
     print("generating gpu binary...")
+
     a = CUDA.rand(DIM, DIM)
     b = CUDA.rand(DIM, DIM)
     c = CUDA.zeros(DIM, DIM)
     kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
+
+    job, kwargs = mcjob(kern, (typeof(a), typeof(b), typeof(c)))
+    ir, func = GPUCompiler.compile(:llvm, job; kwargs...)
+    GPUCompiler.finish_module!(job, ir)
+    objfile = "kernel.o"
+    tm = GPUCompiler.llvm_machine(job.target)
+    LLVM.emit(tm, ir, LLVM.API.LLVMObjectFile, objfile)
+
     outfile = string("gpu_", DIM, ".ll")
     open(outfile, "w") do out
         redirect_stdout(out) do
