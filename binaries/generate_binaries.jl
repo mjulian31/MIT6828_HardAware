@@ -87,8 +87,7 @@ function coalesced_matmul_kernel!(output, input1, input2)
      tile1 = @shmem eltype(output) (TILE_DIM+1, TILE_DIM)
      tile2 = @shmem eltype(output) (TILE_DIM+1, TILE_DIM)
 
-     outval = eltype(output) 1
-     @inbounds outval[1] = -zero(eltype(output))
+     outval = zero(eltype(output))
 
      N = size(output,1)
      NUM_TILES = div(N, TILE_DIM)
@@ -112,7 +111,7 @@ function coalesced_matmul_kernel!(output, input1, input2)
 
          # calculate value of spot in output
          for k in 1:TILE_DIM
-             @inbounds outval[1] += tile1[i, k] * tile2[k, j]
+             @inbounds outval += tile1[i, k] * tile2[k, j]
          end
 
          sync_threads()
@@ -121,7 +120,7 @@ function coalesced_matmul_kernel!(output, input1, input2)
      I = (gi-1) * TILE_DIM + i
      J = (gj-1) * TILE_DIM + j
 
-     @inbounds output[I, J] = outval[1]
+     @inbounds output[I, J] = outval
 
      return nothing
 end
