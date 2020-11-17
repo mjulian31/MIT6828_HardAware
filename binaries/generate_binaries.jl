@@ -6,7 +6,7 @@ end
 print("loading packages...")
 using LinearAlgebra
 using SIMD
-# using CUDA
+using CUDA
 using StaticArrays
 using InteractiveUtils
 using Base.Threads
@@ -128,17 +128,17 @@ for i in 1:size(ARGS)[1]
     end
     println("done. saved cpu binary to ", outfile)
 
-    # print("generating gpu binary...")
-    # a = CUDA.rand(DIM, DIM)
-    # b = CUDA.rand(DIM, DIM)
-    # c = CUDA.zeros(DIM, DIM)
-    # kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
-    # outfile = string("gpu_", DIM, ".ll")
-    # open(outfile, "w") do out
-    #     redirect_stdout(out) do
-    #         CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
-    #     end
-    # end
-    # println("done. saved gpu binary to ", outfile)
+    print("generating gpu binary...")
+    a = CUDA.rand(DIM, DIM)
+    b = CUDA.rand(DIM, DIM)
+    c = CUDA.zeros(DIM, DIM)
+    kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
+    outfile = string("gpu_", DIM, ".ll")
+    open(outfile, "w") do out
+        redirect_stdout(out) do
+            CUDA.@device_code_llvm debuginfo=:none dump_module=true kern(c, a, b, ndrange=size(c))
+        end
+    end
+    println("done. saved gpu binary to ", outfile)
 
 end
