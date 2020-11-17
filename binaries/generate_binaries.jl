@@ -4,13 +4,10 @@ using SIMD
 using CUDA
 using StaticArrays
 using InteractiveUtils
-using Base.Threads
 using LLVM
 using GPUCompiler
 
 println("done.")
-
-@show nthreads()
 
 print("loading globals and functions...")
 const TILE_DIM = 32
@@ -84,8 +81,8 @@ function coalesced_matmul_kernel!(output, input1, input2)
      j = threadIdx().y
 
      # +1 to avoid bank conflicts on shared memory
-     tile1 = @shmem eltype(output) (TILE_DIM+1, TILE_DIM)
-     tile2 = @shmem eltype(output) (TILE_DIM+1, TILE_DIM)
+     tile1 = @cuStaticSharedMem eltype(output) (TILE_DIM+1, TILE_DIM)
+     tile2 = @cuStaticSharedMem eltype(output) (TILE_DIM+1, TILE_DIM)
 
      outval = zero(eltype(output))
 
@@ -148,25 +145,21 @@ GPUCompiler.runtime_module(::CompilerJob{<:Any,CompilerParams}) = MockRuntime
 
 println("done.")
 
-# print("generating cpu binary...")
-# job, kwargs = mcjob(mul_tile!, (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Cint))
-# ir, func = GPUCompiler.compile(:llvm, job; kwargs...)
-# name!(func, "matmul")
-# GPUCompiler.finish_module!(job, ir)
-# objfile = "cpu.o"
-# tm = GPUCompiler.llvm_machine(job.target)
-# LLVM.emit(tm, ir, LLVM.API.LLVMObjectFile, objfile)
-#
-# println("done. saved cpu binary to ", objfile)
+print("generating cpu binary...")
+job, kwargs = mcjob(mul_tile!, (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Cint))
+ir, func = GPUCompiler.compile(:llvm, job; kwargs...)
+name!(func, "matmul")
+GPUCompiler.finish_module!(job, ir)
+objfile = "matmul_cpu.o"
+tm = GPUCompiler.llvm_machine(job.target)
+LLVM.emit(tm, ir, LLVM.API.LLVMObjectFile, objfile)
+run(`clang -o matmul_cpu main.c matmul_cpu.o`)
+println("done. saved cpu binary to matmul_cpu")
 
 print("generating gpu binary...")
-
 DIM = 1024
 a = CUDA.rand(DIM, DIM)
 b = CUDA.rand(DIM, DIM)
 c = CUDA.zeros(DIM, DIM)
-@cuda threads=(TILE_DIM, TILE_DIM) blocks=(div(DIM, TILE_DIM), div(DIM, TILE_DIM)) coalesced_matmul_kernel!(c, a, b)
-
-# CUDA.@device_code debuginfo=:none dir="dump" kern(c, a, b, ndrange=size(c))
-
-println("done. saved gpu binary to dump")
+CUDA.@device_code dir="dump" @cuda threads=(TILE_DIM, TILE_DIM) blocks=(div(DIM, TILE_DIM), div(DIM, TILE_DIM)) coalesced_matmul_kernel!(c, a, b)
+println("done. saved gpu binary to dump/")
