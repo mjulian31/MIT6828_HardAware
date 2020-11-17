@@ -6,26 +6,45 @@
 #include <sys/wait.h> 
 
 // block and wait for child process example
-int start_subprocess_blocking(char** argv_list);
-int start_subprocess_blocking_julia_test();
+int start_subprocess_blocking(char**);
+int start_subprocess_blocking_julia_test(char*, char*);
 
 // don't block and poll child process example
-int start_subprocess_nonblocking_monitor(char** argv_list);
-int start_subprocess_nonblocking(char** argv_list);
-int start_subprocess_nonblocking_julia_test(char* julia_script_path);
+int start_subprocess_nonblocking_monitor(char**);
+int start_subprocess_nonblocking(char**);
+int start_subprocess_nonblocking_julia_test(char*, char*);
+
+char* pow8_julia_bin_path= (char*) "/opt/julia/usr/bin/julia";
+char* x86_julia_bin_path= (char*) "/usr/local/bin/julia";
 
 int main() {
+    // x86 machines
+    // taylor 
+    //char* julia_script_path = (char*)"/home/local/git/MIT6828_HardAware/julia_code/matrix_multiply.jl";
+    //char* julia_bin_path = x86_julia_bin_path; // or pow8_julia_bin_path
+
+    // cloudlab machines 
+    char* julia_bin_path = pow8_julia_bin_path;
+    // taylor
+    //char* julia_script_path = (char*)"/users/tandrews/MIT6828_HardAware/julia_code/matrix_multiply.jl";
+    // meredith
+    char* julia_script_path = (char*)"/users/mjulian/MIT6828_HardAware/julia_code/matrix_multiply.jl";
+
     //test workload to start as new process to monitor
-    start_subprocess_nonblocking_julia_test((char*)"/users/tandrews/MIT6828_HardAware/julia_code/matrix_multiply.jl");
+    start_subprocess_nonblocking_julia_test(julia_bin_path, (char*) julia_script_path);
+
+    // not as helpful test to start process and block until finished
+    //start_subprocess_blocking_julia_test(julia_bin_path, (char*) julia_script_path);
+    return 0;
 }
 
-int start_subprocess_nonblocking_julia_test(char* julia_script_path) {
+int start_subprocess_nonblocking_julia_test(char* julia_bin_path, char* julia_script_path) {
     char* argv_list[] = {
-        (char*) "/opt/julia/usr/bin/julia",  // can be path to any binary on disk
-        (char*) julia_script_path,           // first argv to binary, can add arbitrary number
+        (char*) julia_bin_path,         // can be path to any binary on disk
+        (char*) julia_script_path,      // first argv to binary, can add arbitrary number
         (char*) 0, //must terminate arg list
     };
-    start_subprocess_nonblocking_monitor(argv_list);
+    return start_subprocess_nonblocking_monitor(argv_list);
 }
 
 int start_subprocess_nonblocking_monitor(char** argv_list) {
@@ -120,17 +139,14 @@ int start_subprocess_nonblocking(char** argv_list) {
 
 }
 
-int start_subprocess_blocking_julia_test() {
-    char* binary_path = (char*) "/opt/julia/usr/bin/julia";
-    char* julia_script_path = (char*) "/users/tandrews/MIT6828_HardAware/julia_code/matrix_multiply.jl";
-
+int start_subprocess_blocking_julia_test(char* julia_bin_path, char* julia_script_path) {
     // set up command line strings
     char* argv_list[] = {
-        (char*) binary_path,
+        (char*) julia_bin_path,
         (char*) julia_script_path,
-        (char*) 0
+        (char*) 0 // end of command line arguments
     };
-    start_subprocess_blocking(argv_list);
+    return start_subprocess_blocking(argv_list);
 }
 
 // generic version based on example from 
