@@ -5,7 +5,6 @@ using CUDA
 using StaticArrays
 using InteractiveUtils
 using Base.Threads
-using KernelAbstractions
 using LLVM
 using GPUCompiler
 
@@ -78,22 +77,21 @@ function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}
 end
 
 
-@kernel function coalesced_matmul_kernel!(output, input1, input2,
-                                             ::Val{BANK}=Val(1)) where BANK
-     gi, gj = @index(Group, NTuple)
-     i, j   = @index(Local, NTuple)
-
-     TILE_DIM = @uniform groupsize()[1]
+function coalesced_matmul_kernel!(output, input1, input2)
+     gi = blockIdx().x
+     gj = blockIdx().y
+     i = threadIdx().x
+     j = threadIdx().y
 
      # +1 to avoid bank conflicts on shared memory
-     tile1 = @localmem eltype(output) (TILE_DIM+BANK, TILE_DIM)
-     tile2 = @localmem eltype(output) (TILE_DIM+BANK, TILE_DIM)
+     tile1 = @shmem eltype(output) (TILE_DIM+1, TILE_DIM)
+     tile2 = @shmem eltype(output) (TILE_DIM+1, TILE_DIM)
 
-     outval = @private eltype(output) 1
+     outval = eltype(output) 1
      @inbounds outval[1] = -zero(eltype(output))
 
-     @uniform N = size(output,1)
-     @uniform NUM_TILES = div(N, TILE_DIM)
+     N = size(output,1)
+     NUM_TILES = div(N, TILE_DIM)
 
      # loop over all tiles needed for this calculation
      for t in 0:NUM_TILES-1
@@ -106,7 +104,7 @@ end
          @inbounds tile2[i, j] = input2[t*TILE_DIM+i, J]
 
          # wait for all tiles to be loaded
-         @synchronize
+         sync_threads()
 
          # get global values again
          I = (gi-1) * TILE_DIM + i
@@ -117,13 +115,15 @@ end
              @inbounds outval[1] += tile1[i, k] * tile2[k, j]
          end
 
-         @synchronize
+         sync_threads()
      end
 
      I = (gi-1) * TILE_DIM + i
      J = (gj-1) * TILE_DIM + j
 
      @inbounds output[I, J] = outval[1]
+
+     return nothing
 end
 
 function mcjob(@nospecialize(func), @nospecialize(types);
@@ -149,24 +149,25 @@ GPUCompiler.runtime_module(::CompilerJob{<:Any,CompilerParams}) = MockRuntime
 
 println("done.")
 
-print("generating cpu binary...")
-job, kwargs = mcjob(mul_tile!, (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Cint))
-ir, func = GPUCompiler.compile(:llvm, job; kwargs...)
-name!(func, "matmul")
-GPUCompiler.finish_module!(job, ir)
-objfile = "cpu.o"
-tm = GPUCompiler.llvm_machine(job.target)
-LLVM.emit(tm, ir, LLVM.API.LLVMObjectFile, objfile)
-
-println("done. saved cpu binary to ", objfile)
+# print("generating cpu binary...")
+# job, kwargs = mcjob(mul_tile!, (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Cint))
+# ir, func = GPUCompiler.compile(:llvm, job; kwargs...)
+# name!(func, "matmul")
+# GPUCompiler.finish_module!(job, ir)
+# objfile = "cpu.o"
+# tm = GPUCompiler.llvm_machine(job.target)
+# LLVM.emit(tm, ir, LLVM.API.LLVMObjectFile, objfile)
+#
+# println("done. saved cpu binary to ", objfile)
 
 print("generating gpu binary...")
 
+DIM = 1024
 a = CUDA.rand(DIM, DIM)
 b = CUDA.rand(DIM, DIM)
 c = CUDA.zeros(DIM, DIM)
-kern = coalesced_matmul_kernel!(CUDADevice(), (TILE_DIM, TILE_DIM))
+@cuda threads=(TILE_DIM, TILE_DIM) blocks=(div(DIM, TILE_DIM), div(DIM, TILE_DIM)) coalesced_matmul_kernel!(c, a, b)
 
-CUDA.@device_code debuginfo=:none dir="dump" kern(c, a, b, ndrange=size(c))
+# CUDA.@device_code debuginfo=:none dir="dump" kern(c, a, b, ndrange=size(c))
 
 println("done. saved gpu binary to dump")
