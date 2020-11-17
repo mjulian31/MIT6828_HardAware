@@ -6,12 +6,12 @@ end
 print("loading packages...")
 using LinearAlgebra
 using SIMD
-using CUDA
+# using CUDA
 using StaticArrays
 using InteractiveUtils
 using Base.Threads
 using KernelAbstractions
-import LLVM
+using LLVM
 using GPUCompiler
 
 println("done.")
@@ -21,10 +21,12 @@ println("done.")
 print("loading globals and functions...")
 const TILE_DIM = 32
 
-function mul_tile!(A::Array{T,2}, B::Array{T,2}, C::Array{T,2}) where {T}
+function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}, N::Csize_t)
     # assuming square matrix
-    N = size(C)[1]
     NUM_TILES = Int(N/TILE_DIM)
+    A = unsafe_wrap(Array, ptr_A, (N, N), own = false)
+    B = unsafe_wrap(Array, ptr_B, (N, N), own = false)
+    C = unsafe_wrap(Array, ptr_C, (N, N), own = false)
 
     # loop over all tiles
     @inbounds for gj in 1:NUM_TILES
@@ -61,6 +63,7 @@ function mul_tile!(A::Array{T,2}, B::Array{T,2}, C::Array{T,2}) where {T}
             end
         end
     end
+    return nothing
 end
 
 
@@ -140,11 +143,8 @@ for i in 1:size(ARGS)[1]
     println("dimension requested: ", DIM)
 
     print("generating cpu binary...")
-    a = rand(DIM, DIM)
-    b = rand(DIM, DIM)
-    c = zeros(DIM, DIM)
 
-    job, kwargs = mcjob(mul_tile!, (typeof(a), typeof(b), typeof(c)))
+    job, kwargs = mcjob(mul_tile!, (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Csize_t))
     ir, func = GPUCompiler.compile(:llvm, job; kwargs...)
     name!(func, "matmul")
     GPUCompiler.finish_module!(job, ir)
