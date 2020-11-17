@@ -136,7 +136,7 @@ for i in 1:size(ARGS)[1]
     outfile = string("gpu_", DIM, ".s")
     open(outfile, "w") do out
         redirect_stdout(out) do
-            CUDA.@device_code_ptx debuginfo=:none kern(c, a, b, ndrange=size(c))
+            CUDA.@device_code_ptx kern(c, a, b, ndrange=size(c))
         end
     end
     println("done. saved gpu binary to ", outfile)
