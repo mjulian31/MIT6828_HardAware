@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
 	if (argc >= 2) {
 		dim = atoi(argv[1]);
 	}
+	printf("[dim %d]\n", dim);
 
 	// alloc mem
 	double* A = malloc(sizeof(double) * dim * dim);
