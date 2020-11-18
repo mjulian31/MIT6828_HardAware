@@ -81,9 +81,7 @@ int main(int argc, char **argv) {
   dim3 cudaBlockSize(threadsPerBlock, threadsPerBlock, 1);
   dim3 cudaGridSize(blocksPerGrid, blocksPerGrid, 1);
 
-  void *arr[] = {reinterpret_cast<double *>(&d_A), reinterpret_cast<double *>(&d_B),
-                 reinterpret_cast<double *>(&d_output),
-                 reinterpret_cast<int *>(&dim)};
+  void *arr[] = {&d_A, &d_B, &d_output, &dim};
   printf("launching kernel\n");
   CUresult launch = cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
                                  cudaGridSize.z, /* grid dim */
