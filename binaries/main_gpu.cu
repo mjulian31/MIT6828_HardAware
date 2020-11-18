@@ -11,9 +11,9 @@ int main(int argc, char *argv[]) {
 	if (argc >= 2) {
 		dim = atoi(argv[1]);
 	}
-	double* A = malloc(sizeof(double) * dim * dim);
-	double* B = malloc(sizeof(double) * dim * dim);
-	double* output = malloc(sizeof(double) * dim * dim);
+	double* A = (double*)malloc(sizeof(double) * dim * dim);
+	double* B = (double*)malloc(sizeof(double) * dim * dim);
+	double* output = (double*)malloc(sizeof(double) * dim * dim);
   double *d_A, *d_B, *d_output;
 	cudaMalloc((void **)&A, sizeof(double) * dim * dim);
 	cudaMalloc((void **)&B, sizeof(double) * dim * dim);
@@ -28,5 +28,5 @@ int main(int argc, char *argv[]) {
   cudaFree(d_output);
 	free(A);
 	free(B);
-	free(C);
+	free(output);
 }
