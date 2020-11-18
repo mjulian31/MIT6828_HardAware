@@ -31,14 +31,10 @@ int main(int argc, char **argv) {
   size_t size = dim * dim * sizeof(double);
   printf("[dim %d]\n", dim);
 
-  // Allocate the host input matrix A
-  float *h_A = reinterpret_cast<float *>(malloc(size));
-
-  // Allocate the host input matrix B
-  float *h_B = reinterpret_cast<float *>(malloc(size));
-
-  // Allocate the host output matrix output
-  float *h_output = reinterpret_cast<float *>(malloc(size));
+  // Allocate the host matricies
+  double *h_A = reinterpret_cast<double *>(malloc(size));
+  double *h_B = reinterpret_cast<double *>(malloc(size));
+  double *h_output = reinterpret_cast<double *>(malloc(size));
 
   // Verify that allocations succeeded
   if (h_A == NULL || h_B == NULL || h_output == NULL) {
@@ -58,22 +54,22 @@ int main(int argc, char **argv) {
   // Allocate the device input vector A
   CUdeviceptr d_A;
   cuMemAlloc(&d_A, size);
-
   // Allocate the device input vector B
   CUdeviceptr d_B;
   cuMemAlloc(&d_B, size);
-
   // Allocate the device output vector C
   CUdeviceptr d_output;
   CUresult alloc = cuMemAlloc(&d_output, size);
   printf("allocing: %i\n", alloc);
+
   // Copy the host input vectors A and B in host memory to the device input
   // vectors in device memory
   printf("Copy input data from the host memory to the CUDA device\n");
   cuMemcpyHtoD(d_A, h_A, size);
   CUresult mov = cuMemcpyHtoD(d_B, h_B, size);
   printf("moving: %i\n", mov);
-  // Launch the Vector Add CUDA Kernel
+
+  // Launch the matmul CUDA Kernel
   int threadsPerBlock = 32;
   int blocksPerGrid = dim/threadsPerBlock;
   printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid,
@@ -81,7 +77,7 @@ int main(int argc, char **argv) {
   dim3 cudaBlockSize(threadsPerBlock, threadsPerBlock, 1);
   dim3 cudaGridSize(blocksPerGrid, blocksPerGrid, 1);
 
-  void *arr[] = {&d_A, &d_B, &d_output, &dim};
+  void *arr[] = {&d_output, &d_A, &d_B, &dim};
   printf("launching kernel\n");
   CUresult launch = cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
                                  cudaGridSize.z, /* grid dim */
