@@ -101,7 +101,7 @@ int main(int argc, char **argv) {
   printf("Copy output data from the CUDA device to the host memory\n");
   CUresult loadback = cuMemcpyDtoH(h_output, d_output, size);
   printf("load back: %i\n", loadback);
-  
+
   for (int i = 0; i < dim; ++i) {
     for (int j = 0; j < dim; ++j) {
       if (h_output[dim*i + j] == 0) {
