@@ -13,11 +13,11 @@ int main(int argc, char **argv) {
   CUresult init = cuInit(0);
   printf("initializing: %i\n", init);
   CUmodule module;
-  cuModuleLoad(&module, "matmul_gpu.ptx");
-
+  CUresult load = cuModuleLoad(&module, "matmul_gpu.ptx");
+  printf("loading: %i\n", load);
   CUfunction kernel_addr;
-  cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_ES_I5Int32E");
-
+  CUresult func = cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_ES_I5Int32E");
+  printf("func load: %i\n", func);
   // Print the vector length to be used, and compute its size
   int dim = 1024;
 	if (argc >= 2) {
