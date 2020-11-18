@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
   cuModuleLoad(&module, "matmul_gpu.ptx");
 
   CUfunction kernel_addr;
-  cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32");
+  cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_ES_I5Int32E");
 
   // Print the vector length to be used, and compute its size
   int dim = 1024;
