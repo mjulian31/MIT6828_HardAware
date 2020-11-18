@@ -5,8 +5,9 @@
 #include <cuda_runtime.h>
 #include <nvrtc.h>
 #include <builtin_types.h>
+#include <string>
 
-static inline void check_errors(CUresult res, char* name) {
+static inline void check_errors(CUresult res, std::string name) {
   if (res != CUDA_SUCCESS) {
     fprintf(stderr, "cuda failure %i at %s!\n", res, name);
     exit(EXIT_FAILURE);
