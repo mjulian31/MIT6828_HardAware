@@ -15,8 +15,8 @@ int main(int argc, char *argv[]) {
 	double* output = malloc(sizeof(double) * dim * dim);
 	for (int i = 0; i < dim; ++i) {
     for (int j = 0; j < dim; ++j) {
-			A[dim*i + j] = rand() / static_cast<double>(RAND_MAX);
-      B[dim*i + j] = rand() / static_cast<double>(RAND_MAX);
+			A[dim*i + j] = rand() / (double)(RAND_MAX);
+      B[dim*i + j] = rand() / (double)(RAND_MAX);
       output[dim*i + j] = 0;
     }
   }
