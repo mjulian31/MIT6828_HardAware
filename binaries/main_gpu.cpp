@@ -65,14 +65,14 @@ int main(int argc, char **argv) {
 
   // Allocate the device output vector C
   CUdeviceptr d_output;
-  cuMemAlloc(&d_output, size);
-
+  CUresult alloc = cuMemAlloc(&d_output, size);
+  printf("allocing: %i\n", alloc);
   // Copy the host input vectors A and B in host memory to the device input
   // vectors in device memory
   printf("Copy input data from the host memory to the CUDA device\n");
   cuMemcpyHtoD(d_A, h_A, size);
-  cuMemcpyHtoD(d_B, h_B, size);
-
+  CUresult mov = cuMemcpyHtoD(d_B, h_B, size);
+  printf("moving: %i\n", mov);
   // Launch the Vector Add CUDA Kernel
   int threadsPerBlock = 32;
   int blocksPerGrid = dim/threadsPerBlock;
