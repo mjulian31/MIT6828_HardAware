@@ -59,8 +59,8 @@ int main(int argc, char **argv) {
   // Copy the host input vectors A and B in host memory to the device input
   // vectors in device memory
   printf("Copy input data from the host memory to the CUDA device\n");
-  cudaErrors(cuMemcpyHtoD(d_A, h_A, size));
-  cudaErrors(cuMemcpyHtoD(d_B, h_B, size));
+  cuMemcpyHtoD(d_A, h_A, size);
+  cuMemcpyHtoD(d_B, h_B, size);
 
   // Launch the Vector Add CUDA Kernel
   int threadsPerBlock = 32;
@@ -73,24 +73,24 @@ int main(int argc, char **argv) {
   void *arr[] = {reinterpret_cast<double *>(&d_A), reinterpret_cast<double *>(&d_B),
                  reinterpret_cast<double *>(&d_output),
                  reinterpret_cast<int *>(&dim)};
-  checkCudaErrors(cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
+  cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
                                  cudaGridSize.z, /* grid dim */
                                  cudaBlockSize.x, cudaBlockSize.y,
                                  cudaBlockSize.z, /* block dim */
                                  0, 0,            /* shared mem, stream */
                                  &arr[0],         /* arguments */
-                                 0));
-  checkCudaErrors(cuCtxSynchronize());
+                                 0);
+  cuCtxSynchronize();
 
   // Copy the device result vector in device memory to the host result vector
   // in host memory.
   printf("Copy output data from the CUDA device to the host memory\n");
-  checkCudaErrors(cuMemcpyDtoH(h_output, d_output, size));
+  cuMemcpyDtoH(h_output, d_output, size);
 
   // Free device global memory
-  checkCudaErrors(cuMemFree(d_A));
-  checkCudaErrors(cuMemFree(d_B));
-  checkCudaErrors(cuMemFree(d_output));
+  cuMemFree(d_A);
+  cuMemFree(d_B);
+  cuMemFree(d_output);
 
   // Free host memory
   free(h_A);
