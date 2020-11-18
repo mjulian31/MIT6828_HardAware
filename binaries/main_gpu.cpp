@@ -9,7 +9,7 @@
 
 static inline void check_errors(CUresult res, std::string name) {
   if (res != CUDA_SUCCESS) {
-    fprintf(stderr, "cuda failure %i at %s!\n", res, name);
+    fprintf(stderr, "cuda failure %i at %s!\n", res, name.c_str());
     exit(EXIT_FAILURE);
   }
 }
