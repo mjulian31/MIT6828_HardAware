@@ -15,9 +15,13 @@ int main(int argc, char *argv[]) {
 	if (argc >= 2) {
 		dim = atoi(argv[1]);
 	}
+	printf("dim: %i\n", dim);
 	double* A = (double*)malloc(sizeof(double) * dim * dim);
+	A[1] = 0xfffffff;;
 	double* B = (double*)malloc(sizeof(double) * dim * dim);
+	B[1] = 0xfffffff;
 	double* output = (double*)malloc(sizeof(double) * dim * dim);
+	printf("start, out1: %f, a1: %f, b1: %f\n", output[1], A[1], B[1]);
   double *d_A, *d_B, *d_output;
 	cudaMalloc((void **)&d_A, sizeof(double) * dim * dim);
 	cudaMalloc((void **)&d_B, sizeof(double) * dim * dim);
@@ -27,6 +31,7 @@ int main(int argc, char *argv[]) {
 	__matmul<<<dim, dim>>>(output, A, B, dim);
   cudaDeviceSynchronize();
   cudaMemcpy(output, d_output, dim*dim, cudaMemcpyDeviceToHost);
+  printf("done, out1: %f\n", output[1]);
   cudaFree(d_A);
   cudaFree(d_B);
   cudaFree(d_output);

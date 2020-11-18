@@ -124,7 +124,6 @@ function coalesced_matmul_kernel!(ptr_out::Ptr{Cdouble}, ptr_in1::Ptr{Cdouble}, 
     J = (gj-1) * TILE_DIM + j
 
     @inbounds output[I, J] = outval
-
     return nothing
 end
 
@@ -180,5 +179,5 @@ run(`scp dump/matmul_1.asm matmul_gpu.ptx`)
 run(`/usr/local/cuda-11.1/bin/nvcc -arch=sm_60 -dc matmul_gpu.ptx -o matmul_gpu.o`)
 run(`/usr/local/cuda-11.1/bin/nvcc -arch=sm_60 -dc main_gpu.cu -o main_gpu.o`)
 run(`/usr/local/cuda-11.1/bin/nvcc -arch=sm_60 --device-link -o link.o main_gpu.o matmul_gpu.o`)
-run(`g++ matmul.o main.o link.o -L/opt/cuda/lib64 -lcudart`)
+run(`g++ matmul_gpu.o main_gpu.o link.o -L/usr/local/cuda-11.1/lib64 -lcudart -o matmul_gpu`)
 println("done. saved gpu binary to matmul_gpu")
