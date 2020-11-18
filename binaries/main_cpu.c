@@ -1,7 +1,7 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <cmath>
+#include <math.h>
 
 void matmul(double* out, double* A, double* B, int dim);
 
