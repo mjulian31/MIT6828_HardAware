@@ -85,23 +85,23 @@ int main(int argc, char **argv) {
                  reinterpret_cast<double *>(&d_output),
                  reinterpret_cast<int *>(&dim)};
   printf("launching kernel\n");
-  CUresult err = cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
+  CUresult launch = cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
                                  cudaGridSize.z, /* grid dim */
                                  cudaBlockSize.x, cudaBlockSize.y,
                                  cudaBlockSize.z, /* block dim */
                                  0, 0,            /* shared mem, stream */
                                  &arr[0],         /* arguments */
                                  0);
-  if (err != CUDA_SUCCESS) {
-	  printf("error launching kernel %i\n", err);
-  }
-  cuCtxSynchronize();
+  printf("kernel launch %i\n", launch);
+  CUresult sync = cuCtxSynchronize();
+  printf("kernel sync %i\n", sync);
   printf("done\n");
   // Copy the device result vector in device memory to the host result vector
   // in host memory.
   printf("Copy output data from the CUDA device to the host memory\n");
-  cuMemcpyDtoH(h_output, d_output, size);
-
+  CUresult loadback = cuMemcpyDtoH(h_output, d_output, size);
+  printf("load back: %i\n", loadback);
+  
   for (int i = 0; i < dim; ++i) {
     for (int j = 0; j < dim; ++j) {
       if (h_output[dim*i + j] == 0) {
