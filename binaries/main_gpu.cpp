@@ -2,8 +2,6 @@
 #include <cmath>
 #include <cuda.h>
 #include <cuda_runtime.h>
-#include <helper_functions.h>
-#include <nvrtc_helper.h>
 
 /**
  * Host main routine
@@ -13,7 +11,7 @@ int main(int argc, char **argv) {
   cuModuleLoad(&module, "matmul_gpu.ptx");
 
   CUfunction kernel_addr;
-  checkCudaErrors(cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32"));
+  cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32");
 
   // Print the vector length to be used, and compute its size
   int dim = 1024;
@@ -33,7 +31,7 @@ int main(int argc, char **argv) {
   float *h_output = reinterpret_cast<float *>(malloc(size));
 
   // Verify that allocations succeeded
-  if (h_A == NULL || h_B == NULL || h_C == NULL) {
+  if (h_A == NULL || h_B == NULL || h_output == NULL) {
     fprintf(stderr, "Failed to allocate host vectors!\n");
     exit(EXIT_FAILURE);
   }
@@ -48,21 +46,21 @@ int main(int argc, char **argv) {
 
   // Allocate the device input vector A
   CUdeviceptr d_A;
-  checkCudaErrors(cuMemAlloc(&d_A, size));
+  cuMemAlloc(&d_A, size);
 
   // Allocate the device input vector B
   CUdeviceptr d_B;
-  checkCudaErrors(cuMemAlloc(&d_B, size));
+  cuMemAlloc(&d_B, size);
 
   // Allocate the device output vector C
   CUdeviceptr d_output;
-  checkCudaErrors(cuMemAlloc(&d_output, size));
+  cuMemAlloc(&d_output, size);
 
   // Copy the host input vectors A and B in host memory to the device input
   // vectors in device memory
   printf("Copy input data from the host memory to the CUDA device\n");
-  checkCudaErrors(cuMemcpyHtoD(d_A, h_A, size));
-  checkCudaErrors(cuMemcpyHtoD(d_B, h_B, size));
+  cudaErrors(cuMemcpyHtoD(d_A, h_A, size));
+  cudaErrors(cuMemcpyHtoD(d_B, h_B, size));
 
   // Launch the Vector Add CUDA Kernel
   int threadsPerBlock = 32;
@@ -73,8 +71,8 @@ int main(int argc, char **argv) {
   dim3 cudaGridSize(blocksPerGrid, blocksPerGrid, 1);
 
   void *arr[] = {reinterpret_cast<double *>(&d_A), reinterpret_cast<double *>(&d_B),
-                 reinterpret_cast<double *>(&d_C),
-                 reinterpret_cast<int>(dim)};
+                 reinterpret_cast<double *>(&d_output),
+                 reinterpret_cast<int *>(&dim)};
   checkCudaErrors(cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
                                  cudaGridSize.z, /* grid dim */
                                  cudaBlockSize.x, cudaBlockSize.y,
@@ -89,25 +87,15 @@ int main(int argc, char **argv) {
   printf("Copy output data from the CUDA device to the host memory\n");
   checkCudaErrors(cuMemcpyDtoH(h_output, d_output, size));
 
-  // Verify that the result vector is correct
-  for (int i = 0; i < dim*dim; ++i) {
-    if (fabs(h_A[i] + h_B[i] - h_C[i]) > 1e-5) {
-      fprintf(stderr, "Result verification failed at element %d!\n", i);
-      exit(EXIT_FAILURE);
-    }
-  }
-
-  printf("Test PASSED\n");
-
   // Free device global memory
   checkCudaErrors(cuMemFree(d_A));
   checkCudaErrors(cuMemFree(d_B));
-  checkCudaErrors(cuMemFree(d_C));
+  checkCudaErrors(cuMemFree(d_output));
 
   // Free host memory
   free(h_A);
   free(h_B);
-  free(h_C);
+  free(h_output);
 
   printf("Done\n");
 
