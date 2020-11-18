@@ -2,6 +2,8 @@
 #include <cmath>
 #include <cuda.h>
 #include <cuda_runtime.h>
+#include <helper_functions.h>
+#include <nvrtc_helper.h>
 
 /**
  * Host main routine
@@ -11,7 +13,7 @@ int main(int argc, char **argv) {
   cuModuleLoad(&module, "matmul_gpu.ptx");
 
   CUfunction kernel_addr;
-  cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32");
+  checkCudaErrors(cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32"));
 
   // Print the vector length to be used, and compute its size
   int dim = 1024;
@@ -46,21 +48,21 @@ int main(int argc, char **argv) {
 
   // Allocate the device input vector A
   CUdeviceptr d_A;
-  cuMemAlloc(&d_A, size);
+  checkCudaErrors(cuMemAlloc(&d_A, size));
 
   // Allocate the device input vector B
   CUdeviceptr d_B;
-  cuMemAlloc(&d_B, size);
+  checkCudaErrors(cuMemAlloc(&d_B, size));
 
   // Allocate the device output vector C
   CUdeviceptr d_output;
-  cuMemAlloc(&d_output, size);
+  checkCudaErrors(cuMemAlloc(&d_output, size));
 
   // Copy the host input vectors A and B in host memory to the device input
   // vectors in device memory
   printf("Copy input data from the host memory to the CUDA device\n");
-  cuMemcpyHtoD(d_A, h_A, size);
-  cuMemcpyHtoD(d_B, h_B, size);
+  checkCudaErrors(cuMemcpyHtoD(d_A, h_A, size));
+  checkCudaErrors(cuMemcpyHtoD(d_B, h_B, size));
 
   // Launch the Vector Add CUDA Kernel
   int threadsPerBlock = 32;
@@ -73,29 +75,29 @@ int main(int argc, char **argv) {
   void *arr[] = {reinterpret_cast<double *>(&d_A), reinterpret_cast<double *>(&d_B),
                  reinterpret_cast<double *>(&d_output),
                  reinterpret_cast<int *>(&dim)};
-  cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
+  checkCudaErrors(cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
                                  cudaGridSize.z, /* grid dim */
                                  cudaBlockSize.x, cudaBlockSize.y,
                                  cudaBlockSize.z, /* block dim */
                                  0, 0,            /* shared mem, stream */
                                  &arr[0],         /* arguments */
-                                 0);
-  cuCtxSynchronize();
+                                 0));
+  checkCudaErrors(cuCtxSynchronize());
 
   // Copy the device result vector in device memory to the host result vector
   // in host memory.
   printf("Copy output data from the CUDA device to the host memory\n");
-  cuMemcpyDtoH(h_output, d_output, size);
+  checkCudaErrors(cuMemcpyDtoH(h_output, d_output, size));
 
   // Free device global memory
-  cuMemFree(d_A);
-  cuMemFree(d_B);
-  cuMemFree(d_output);
+  checkCudaErrors(cuMemFree(d_A));
+  checkCudaErrors(cuMemFree(d_B));
+  checkCudaErrors(cuMemFree(d_output));
 
   // Free host memory
   free(h_A);
   free(h_B);
-  free(h_output);
+  free(h_ouput);
 
   printf("Done\n");
 
