@@ -7,7 +7,7 @@
 extern "C" __device__ void _Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32(double* out, double* A, double* B, int dim);
 
 __global__ void __matmul(double* out, double* A, double* B, int dim) {
-	_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32(output, A, B, dim);
+	_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32(out, A, B, dim);
 }
 
 int main(int argc, char *argv[]) {
