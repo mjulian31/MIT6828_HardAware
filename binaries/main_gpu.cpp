@@ -12,6 +12,11 @@
 int main(int argc, char **argv) {
   CUresult init = cuInit(0);
   printf("initializing: %i\n", init);
+  CUdevice device;
+  cuDeviceGet(&device, 0)
+  CUcontext context;
+  CUresult ctx = cuCtxCreate(&context, 0, device);
+  printf("initializing: %i\n", ctx);
   CUmodule module;
   CUresult load = cuModuleLoad(&module, "matmul_gpu.ptx");
   printf("loading: %i\n", load);
