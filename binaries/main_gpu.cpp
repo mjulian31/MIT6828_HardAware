@@ -77,6 +77,7 @@ int main(int argc, char **argv) {
   void *arr[] = {reinterpret_cast<double *>(&d_A), reinterpret_cast<double *>(&d_B),
                  reinterpret_cast<double *>(&d_output),
                  reinterpret_cast<int *>(&dim)};
+  printf("launching kernel\n");
   cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
                                  cudaGridSize.z, /* grid dim */
                                  cudaBlockSize.x, cudaBlockSize.y,
@@ -85,7 +86,7 @@ int main(int argc, char **argv) {
                                  &arr[0],         /* arguments */
                                  0);
   cuCtxSynchronize();
-
+  printf("done\n");
   // Copy the device result vector in device memory to the host result vector
   // in host memory.
   printf("Copy output data from the CUDA device to the host memory\n");
@@ -94,7 +95,7 @@ int main(int argc, char **argv) {
   for (int i = 0; i < dim; ++i) {
     for (int j = 0; j < dim; ++j) {
       if (h_output[dim*i + j] == 0) {
-        printf("error with output\n");
+        // printf("error with output\n");
       }
     }
   }
