@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
   CUresult load = cuModuleLoad(&module, "matmul_gpu.ptx");
   printf("loading: %i\n", load);
   CUfunction kernel_addr;
-  CUresult func = cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_ES_I5Int32E");
+  CUresult func = cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32");
   printf("func load: %i\n", func);
   // Print the vector length to be used, and compute its size
   int dim = 1024;
