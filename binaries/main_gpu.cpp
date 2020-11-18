@@ -6,116 +6,108 @@
 #include <nvrtc.h>
 #include <builtin_types.h>
 
+static inline void check_errors(CUresult res, char* name) {
+  if (res != CUDA_SUCCESS) {
+    fprintf(stderr, "cuda failure %i at %s!\n", res, name);
+    exit(EXIT_FAILURE);
+  }
+}
+
 /**
  * Host main routine
  */
 int main(int argc, char **argv) {
-  CUresult init = cuInit(0);
-  printf("initializing: %i\n", init);
+  // init driver
+  check_errors(cuInit(0), "init");
+  // get device
   CUdevice device;
   cuDeviceGet(&device, 0);
+  // create context
   CUcontext context;
-  CUresult ctx = cuCtxCreate(&context, 0, device);
-  printf("initializing: %i\n", ctx);
+  check_errors(cuCtxCreate(&context, 0, device), "context create");
+  // load module
   CUmodule module;
-  CUresult load = cuModuleLoad(&module, "matmul_gpu.ptx");
-  printf("loading: %i\n", load);
+  check_errors(cuModuleLoad(&module, "matmul_gpu.ptx"), "module load");
+  // get kernel function from binary
   CUfunction kernel_addr;
-  CUresult func = cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32");
-  printf("func load: %i\n", func);
-  // Print the vector length to be used, and compute its size
+  check_errors(cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32"), "function load");
+  // get dimension to use
   int dim = 1024;
 	if (argc >= 2) {
 		dim = atoi(argv[1]);
 	}
+  // compute total size
   size_t size = dim * dim * sizeof(double);
   printf("[dim %d]\n", dim);
 
-  // Allocate the host matricies
+  // allocate the host matricies
   double *h_A = reinterpret_cast<double *>(malloc(size));
   double *h_B = reinterpret_cast<double *>(malloc(size));
   double *h_output = reinterpret_cast<double *>(malloc(size));
 
-  // Verify that allocations succeeded
+  // verify that allocations succeeded
   if (h_A == NULL || h_B == NULL || h_output == NULL) {
     fprintf(stderr, "Failed to allocate host vectors!\n");
     exit(EXIT_FAILURE);
   }
 
-  // Initialize the host input vectors
+  // init the host arrays
   for (int i = 0; i < dim; ++i) {
     for (int j = 0; j < dim; ++j) {
       h_A[dim*i + j] = rand() / static_cast<double>(RAND_MAX);
       h_B[dim*i + j] = rand() / static_cast<double>(RAND_MAX);
-      h_output[dim*i + j] = 0;
     }
   }
 
-  // Allocate the device input vector A
+  // alloc the device matricies
   CUdeviceptr d_A;
-  cuMemAlloc(&d_A, size);
-  // Allocate the device input vector B
+  check_errors(cuMemAlloc(&d_A, size), "device input a alloc");
   CUdeviceptr d_B;
-  cuMemAlloc(&d_B, size);
-  // Allocate the device output vector C
+  check_errors(cuMemAlloc(&d_B, size), "device input b alloc");
   CUdeviceptr d_output;
-  CUresult alloc = cuMemAlloc(&d_output, size);
-  printf("allocing: %i\n", alloc);
+  check_errors(cuMemAlloc(&d_output, size), "device output alloc");
 
-  // Copy the host input vectors A and B in host memory to the device input
-  // vectors in device memory
-  printf("Copy input data from the host memory to the CUDA device\n");
-  cuMemcpyHtoD(d_A, h_A, size);
-  CUresult mov = cuMemcpyHtoD(d_B, h_B, size);
-  printf("moving: %i\n", mov);
+  // copy the host matricies to device
+  check_errors(cuMemcpyHtoD(d_A, h_A, size), "device copy a");
+  check_errors(cuMemcpyHtoD(d_B, h_B, size), "device copy b");
 
-  // Launch the matmul CUDA Kernel
+  // launch the matmul CUDA Kernel
   int threadsPerBlock = 32;
   int blocksPerGrid = dim/threadsPerBlock;
-  printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid,
-         threadsPerBlock);
   dim3 cudaBlockSize(threadsPerBlock, threadsPerBlock, 1);
   dim3 cudaGridSize(blocksPerGrid, blocksPerGrid, 1);
 
   void *arr[] = {&d_output, &d_A, &d_B, &dim};
-  printf("launching kernel\n");
-  CUresult launch = cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
+  check_errors(cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
                                  cudaGridSize.z, /* grid dim */
                                  cudaBlockSize.x, cudaBlockSize.y,
                                  cudaBlockSize.z, /* block dim */
                                  0, 0,            /* shared mem, stream */
                                  &arr[0],         /* arguments */
-                                 0);
-  printf("kernel launch %i\n", launch);
-  CUresult sync = cuCtxSynchronize();
-  printf("kernel sync %i\n", sync);
-  printf("done\n");
-  // Copy the device result vector in device memory to the host result vector
-  // in host memory.
-  printf("Copy output data from the CUDA device to the host memory\n");
-  CUresult loadback = cuMemcpyDtoH(h_output, d_output, size);
-  printf("load back: %i\n", loadback);
+                                 0), "kernel launch");
+  check_errors(cuCtxSynchronize(), "sync");
 
-  int c = 0;
-  for (int i = 0; i < dim; ++i) {
-    for (int j = 0; j < dim; ++j) {
-      if (h_output[dim*i + j] == 0) {
-      	c++;
-      }
-    }
-  }
-  printf("zero %i, tot: %i\n", c, dim*dim);
-  // Free device global memory
-  cuMemFree(d_A);
-  cuMemFree(d_B);
-  cuMemFree(d_output);
+  // copy device result to host
+  check_errors(cuMemcpyDtoH(h_output, d_output, size), "host to device copy");
+
+  // free device global memory
+  check_errors(cuMemFree(d_A), "free device a");
+  check_errors(cuMemFree(d_B), "free device b");
+  check_errors(cuMemFree(d_output), "free device output");
+
+  // error check
+	// for (int i = 0; i < dim; ++i) {
+  //   for (int j = 0; j < dim; ++j) {
+  //     if (output[dim*i + j] == 0) {
+  //       printf("error with output\n");
+  //     }
+  //   }
+  // }
 
   // Free host memory
   free(h_A);
   free(h_B);
   free(h_output);
-
-  printf("Done\n");
 
   return 0;
 }
