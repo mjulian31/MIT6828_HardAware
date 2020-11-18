@@ -12,10 +12,13 @@ int main(int argc, char *argv[]) {
 		dim = atoi(argv[1]);
 	}
   double *A, *B, *output;
+	A = malloc(sizeof(double*) * dim * dim);
+	B = malloc(sizeof(double*) * dim * dim);
+	output = malloc(sizeof(double*) * dim * dim);
   double *d_A, *d_B, *d_output;
-	cudaMalloc((void **)&A, sizeof(double) * dim * dim);
-	cudaMalloc((void **)&B, sizeof(double) * dim * dim);
-	cudaMalloc((void **)&output, sizeof(double) * dim * dim);
+	cudaMalloc((void **)&A, sizeof(double*) * dim * dim);
+	cudaMalloc((void **)&B, sizeof(double*) * dim * dim);
+	cudaMalloc((void **)&output, sizeof(double*) * dim * dim);
   cudaMemcpy(d_A, A, dim*dim, cudaMemcpyHostToDevice);
   cudaMemcpy(d_B, B, dim*dim, cudaMemcpyHostToDevice);
 	_Z38julia_coalesced_matmul_kernelNOT__393513CuDeviceArrayI7Float32Li2ELi1EES_IS0_Li2ELi1EES_IS0_Li2ELi1EE<<<dim, dim>>>(output, A, B, dim);
@@ -24,4 +27,7 @@ int main(int argc, char *argv[]) {
   cudaFree(d_A);
   cudaFree(d_B);
   cudaFree(d_output);
+	free(A);
+	free(B);
+	free(C);
 }
