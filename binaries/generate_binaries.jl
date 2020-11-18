@@ -36,8 +36,8 @@ function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}
     C = CArray(ptr_C, (N, N))
 
     # loop over all tiles
-    @inbounds for gj in 1:NUM_TILES
-        @inbounds for gi in 1:NUM_TILES
+    @inbounds @simd for gj in 1:NUM_TILES
+        @inbounds @simd for gi in 1:NUM_TILES
             # loop over tiles needed for this calculation
             tile1 = @MArray zeros(TILE_DIM, TILE_DIM)
             tile2 = @MArray zeros(TILE_DIM, TILE_DIM)
