@@ -74,7 +74,8 @@ function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}
 end
 
 
-function coalesced_matmul_kernel!(ptr_out::Ptr{Cdouble}, ptr_in1::Ptr{Cdouble}, ptr_in2::Ptr{Cdouble}, N::Cint)
+function coalesced_matmul_kernel!(ptr_out::Ptr{Cdouble}, ptr_in1::Ptr{Cdouble}, ptr_in2::Ptr{Cdouble}, ptr_N::Ptr{Cint})
+    N = unsafe_load(ptr_N)
     dptr_out = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_out)
     dptr_in1 = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_in1)
     dptr_in2 = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_in2)
@@ -172,9 +173,9 @@ bptr = reinterpret(Ptr{Cdouble}, db.ptr)
 c = CuArray{Float64}(undef, 10)
 dc = CUDA.cudaconvert(c)
 cptr = reinterpret(Ptr{Cdouble}, dc.ptr)
-n = Cint(DIM)
+nptr = Ptr{Cint}(DIM)
 run(`rm -f -r dump`)
-CUDA.@device_code dir="dump" @cuda name="matmul" threads=(TILE_DIM, TILE_DIM) blocks=(div(DIM, TILE_DIM), div(DIM, TILE_DIM)) coalesced_matmul_kernel!(cptr, aptr, bptr, n)
+CUDA.@device_code dir="dump" @cuda name="matmul" threads=(TILE_DIM, TILE_DIM) blocks=(div(DIM, TILE_DIM), div(DIM, TILE_DIM)) coalesced_matmul_kernel!(cptr, aptr, bptr, nptr)
 run(`scp dump/matmul_1.asm matmul_gpu.ptx`)
 run(`/usr/local/cuda-11.1/bin/nvcc -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu`)
 println("done. saved gpu binary to matmul_gpu")

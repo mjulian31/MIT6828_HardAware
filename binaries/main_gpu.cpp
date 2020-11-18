@@ -10,6 +10,8 @@
  * Host main routine
  */
 int main(int argc, char **argv) {
+  CUresult init = cuInit(0);
+  printf("initializing: %i\n", init);
   CUmodule module;
   cuModuleLoad(&module, "matmul_gpu.ptx");
 
@@ -78,13 +80,16 @@ int main(int argc, char **argv) {
                  reinterpret_cast<double *>(&d_output),
                  reinterpret_cast<int *>(&dim)};
   printf("launching kernel\n");
-  cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
+  CUresult err = cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
                                  cudaGridSize.z, /* grid dim */
                                  cudaBlockSize.x, cudaBlockSize.y,
                                  cudaBlockSize.z, /* block dim */
                                  0, 0,            /* shared mem, stream */
                                  &arr[0],         /* arguments */
                                  0);
+  if (err != CUDA_SUCCESS) {
+	  printf("error launching kernel %i\n", err);
+  }
   cuCtxSynchronize();
   printf("done\n");
   // Copy the device result vector in device memory to the host result vector
