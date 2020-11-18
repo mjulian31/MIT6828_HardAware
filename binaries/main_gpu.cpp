@@ -2,8 +2,7 @@
 #include <cmath>
 #include <cuda.h>
 #include <cuda_runtime.h>
-#include "helper_functions.h"
-#include "nvrtc_helper.h"
+#include <nvrtc.h>
 
 /**
  * Host main routine
@@ -97,7 +96,7 @@ int main(int argc, char **argv) {
   // Free host memory
   free(h_A);
   free(h_B);
-  free(h_ouput);
+  free(h_output);
 
   printf("Done\n");
 
