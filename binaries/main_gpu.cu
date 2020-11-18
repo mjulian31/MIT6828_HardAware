@@ -28,7 +28,10 @@ int main(int argc, char *argv[]) {
 	cudaMalloc((void **)&d_output, sizeof(double) * dim * dim);
   cudaMemcpy(d_A, A, dim*dim, cudaMemcpyHostToDevice);
   cudaMemcpy(d_B, B, dim*dim, cudaMemcpyHostToDevice);
-	__matmul<<<dim, dim>>>(output, A, B, dim);
+	int tileDim = 32;
+	int numBlocks = dim/32;
+	dim3 threadsPerBlock(tileDim, tileDim);
+	__matmul<<<numBlocks, threadsPerBlock>>>(output, A, B, dim);
   cudaDeviceSynchronize();
   cudaMemcpy(output, d_output, dim*dim, cudaMemcpyDeviceToHost);
   printf("done, out1: %f\n", output[1]);
