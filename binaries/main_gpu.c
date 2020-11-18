@@ -1,1 +1,17 @@
-extern __global__ void _Z38julia_coalesced_matmul_kernelNOT__393513CuDeviceArrayI7Float32Li2ELi1EES_IS0_Li2ELi1EES_IS0_Li2ELi1EE(void);
+#include <malloc.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+void matmul(double* out, double* A, double* B, int dim);
+
+int main(int argc, char *argv[]) {
+	int dim = 1024;
+	if (argc >= 2) {
+		dim = atoi(argv[1]);
+	}
+  double* A, B, output;
+	cudaMalloc(&A, sizeof(double) * dim * dim);
+	cudaMalloc(&B, sizeof(double) * dim * dim);
+	cudaMalloc(&output, sizeof(double) * dim * dim);
+	matmul(output, A, B, dim);
+}
