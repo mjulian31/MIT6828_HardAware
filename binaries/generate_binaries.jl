@@ -153,7 +153,7 @@ GPUCompiler.finish_module!(job, ir)
 objfile = "matmul_cpu.o"
 tm = GPUCompiler.llvm_machine(job.target)
 LLVM.emit(tm, ir, LLVM.API.LLVMObjectFile, objfile)
-run(`clang -o matmul_cpu main.c matmul_cpu.o`)
+run(`clang -o matmul_cpu main_cpu.c matmul_cpu.o`)
 println("done. saved cpu binary to matmul_cpu")
 
 print("generating gpu binary...")
