@@ -44,6 +44,7 @@ int main(int argc, char **argv) {
     for (int j = 0; j < dim; ++j) {
       h_A[dim*i + j] = rand() / static_cast<double>(RAND_MAX);
       h_B[dim*i + j] = rand() / static_cast<double>(RAND_MAX);
+      h_output[dim*i + j] = 0;
     }
   }
 
@@ -89,6 +90,14 @@ int main(int argc, char **argv) {
   // in host memory.
   printf("Copy output data from the CUDA device to the host memory\n");
   cuMemcpyDtoH(h_output, d_output, size);
+
+  for (int i = 0; i < dim; ++i) {
+    for (int j = 0; j < dim; ++j) {
+      if (h_output[dim*i + j] == 0) {
+        printf("error with output\n");
+      }
+    }
+  }
 
   // Free device global memory
   cuMemFree(d_A);
