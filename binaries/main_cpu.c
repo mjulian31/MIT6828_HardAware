@@ -13,4 +13,7 @@ int main(int argc, char *argv[]) {
 	double* B = malloc(sizeof(double) * dim * dim);
 	double* output = malloc(sizeof(double) * dim * dim);
 	matmul(output, A, B, dim);
+	free(A);
+	free(B);
+	free(output);
 }
