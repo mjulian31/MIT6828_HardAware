@@ -100,14 +100,15 @@ int main(int argc, char **argv) {
   CUresult loadback = cuMemcpyDtoH(h_output, d_output, size);
   printf("load back: %i\n", loadback);
 
+  int c = 0;
   for (int i = 0; i < dim; ++i) {
     for (int j = 0; j < dim; ++j) {
       if (h_output[dim*i + j] == 0) {
-        // printf("error with output\n");
+      	c++;
       }
     }
   }
-
+  printf("zero %i, tot: %i\n", c, dim*dim);
   // Free device global memory
   cuMemFree(d_A);
   cuMemFree(d_B);
