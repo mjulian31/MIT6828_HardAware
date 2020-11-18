@@ -4,7 +4,11 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 
-__global__ void _Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32(double* out, double* A, double* B, int dim);
+extern "C" __device__ void _Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32(double* out, double* A, double* B, int dim);
+
+__global__ void __matmul(double* out, double* A, double* B, int dim) {
+	_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32(output, A, B, dim);
+}
 
 int main(int argc, char *argv[]) {
 	int dim = 1024;
@@ -20,7 +24,7 @@ int main(int argc, char *argv[]) {
 	cudaMalloc((void **)&d_output, sizeof(double) * dim * dim);
   cudaMemcpy(d_A, A, dim*dim, cudaMemcpyHostToDevice);
   cudaMemcpy(d_B, B, dim*dim, cudaMemcpyHostToDevice);
-	_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32<<<dim, dim>>>(output, A, B, dim);
+	__matmul<<<dim, dim>>>(output, A, B, dim);
   cudaDeviceSynchronize();
   cudaMemcpy(output, d_output, dim*dim, cudaMemcpyDeviceToHost);
   cudaFree(d_A);
