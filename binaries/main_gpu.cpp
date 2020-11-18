@@ -2,8 +2,8 @@
 #include <cmath>
 #include <cuda.h>
 #include <cuda_runtime.h>
-#include <helper_functions.h>
-#include <nvrtc_helper.h>
+#include "helper_functions.h"
+#include "nvrtc_helper.h"
 
 /**
  * Host main routine
