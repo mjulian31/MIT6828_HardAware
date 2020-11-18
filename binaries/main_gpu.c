@@ -1,6 +1,8 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
 
 extern __global__ void matmul(double* out, double* A, double* B, int dim);
 
