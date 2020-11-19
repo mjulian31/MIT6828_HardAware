@@ -9,10 +9,11 @@ HAWS::HAWS()
     printf("HAWS Constructed\n");
 }
 
-
-// PRIVATE
-
 void HAWS::PrintData()
 {
     printf("Hello from HAWS\n");
 }
+
+
+// PRIVATE
+
