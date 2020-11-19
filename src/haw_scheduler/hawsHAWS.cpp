@@ -15,10 +15,9 @@ class HAWS {
     //Map offlineStaticAnalysis[TaskID] -> object TODO
     //Queue tasksToStartQueue[ClientRequests]
 
-    int
     public:
-        void HAWS_Main() {}
-        void HAWS_ScheduleLoop {}
+        void HAWS_Main() {};
+        void HAWS_ScheduleLoop() {};
 
      
     private:
