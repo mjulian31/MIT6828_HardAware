@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include "hawsHAWS.h"
+#include "hawsClientRequest.h"
 
 int main () {
     HAWS haws;
