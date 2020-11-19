@@ -13,11 +13,17 @@ int start_subprocess_blocking_julia_test(char*, char*);
 int start_subprocess_nonblocking_monitor(char**);
 int start_subprocess_nonblocking(char**);
 int start_subprocess_nonblocking_julia_test(char*, char*);
+int start_subprocess_test();
 
 char* pow8_julia_bin_path= (char*) "/opt/julia/usr/bin/julia";
 char* x86_julia_bin_path= (char*) "/usr/local/bin/julia";
 
 int main() {
+
+    return 0;
+}
+
+int start_subprocess_test() {
     // x86 machines
     // taylor 
     //char* julia_script_path = (char*)"/home/local/git/MIT6828_HardAware/julia_code/matrix_multiply.jl";
@@ -35,7 +41,6 @@ int main() {
 
     // not as helpful test to start process and block until finished
     //start_subprocess_blocking_julia_test(julia_bin_path, (char*) julia_script_path);
-    return 0;
 }
 
 int start_subprocess_nonblocking_julia_test(char* julia_bin_path, char* julia_script_path) {
