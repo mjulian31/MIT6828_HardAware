@@ -4,6 +4,8 @@
 #include "hawsClientRequest.h"
 #include <mutex>
 #include <queue>
+#include <thread>
+#include <unistd.h>
 #include <assert.h>
 
 using namespace std;
@@ -13,9 +15,13 @@ class HAWS {
         mutex tasksToStartQueueLock; // synchronizes queue access
         queue<HAWSClientRequest*>* tasksToStartQueue;
 
+        bool schedLoopThreadRunning;
+        thread* schedLoopThread;
+
         mutex globalTerminationFlagLock;
+        static bool globalTerminationFlag;
+
         mutex tasksActiveLock;
-        bool globalTerminationFlag;
         //Map cpuTaskIDs[TaskID] -> status
         //Map cpuBinaryPaths[TaskID] -> string?
         int cpuTasksActive = 0;
@@ -26,45 +32,24 @@ class HAWS {
         //Map workloadTask[TaskID] -> string (args?)
         //Map offlineStaticAnalysis[TaskID] -> object TODO
     
-        void ScheduleLoop() {
-            
-        }
-
-        void ParseFields() {};
-        void StartTaskCPUManager() {};
-        void StartTaskGPUManager() {};
-        void StopTaskCPUManager() {};
-        void StopTaskGPUManager() {};
-        void ColdQueryCPUManager() {};
-        void ColdQueryGPUManager() {};
-        void HotQueryCPUManager() {};
-        void HotQueryGPUManager() {};
+        static void ScheduleLoop(); 
+        void ParseFields();
+        void StartTaskCPUManager();
+        void StartTaskGPUManager();
+        void StopTaskCPUManager();
+        void StopTaskGPUManager();
+        void ColdQueryCPUManager();
+        void ColdQueryGPUManager();
+        void HotQueryCPUManager();
+        void HotQueryGPUManager();
 
     public:
-        HAWS()
-        {
-            printf("HAWS Constructed\n");
-            tasksToStartQueue = new queue<HAWSClientRequest*>();
-        }
-
-        void PrintData()
-        {
-            printf("Hello from HAWS\n");
-        }
-
+        HAWS();
         void Start();
-
+        void HardAwareSchedule(HAWSClientRequest* req);
         void Stop();
+        void PrintData();
 
-        void HardAwareSchedule(HAWSClientRequest* req)
-        {
-            tasksToStartQueueLock.lock();
-            assert(tasksToStartQueue != NULL);
-            tasksToStartQueue->push(req);
-            tasksToStartQueueLock.unlock(); 
-        }
-
-        
 };
 
 
