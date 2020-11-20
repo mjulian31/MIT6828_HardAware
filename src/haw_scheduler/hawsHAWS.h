@@ -10,6 +10,8 @@
 
 using namespace std;
 
+enum HAWSHWTarget { TargCPU, TargGPU };
+
 class HAWS {
     private:
         bool schedLoopThreadRunning;
@@ -27,6 +29,9 @@ class HAWS {
         //Map offlineStaticAnalysis[TaskID] -> object TODO
     
         static void ScheduleLoop(); 
+        static void ProcessClientRequest(HAWSClientRequest* req);
+        static HAWSHWTarget DetermineReqTarget(HAWSClientRequest* req);
+
         void ParseFields();
         void StartTaskCPUManager();
         void StartTaskGPUManager();

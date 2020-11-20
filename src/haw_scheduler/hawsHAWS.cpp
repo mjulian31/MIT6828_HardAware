@@ -22,19 +22,40 @@ void HAWS::ScheduleLoop() { // run by separate thread
         bool gotReq = false;
         tasksToStartQueueLock.lock(); // lock queue
         if (!tasksToStartQueue->empty()) { // check if item is in queue
-            // copy it to local req buffer
-            req = new HAWSClientRequest(tasksToStartQueue->front());
+            HAWSClientRequest* next = tasksToStartQueue->front();
+            req = new HAWSClientRequest(next); // copy it to local req buffer
             tasksToStartQueue->pop();  // calls destructor on object in queue
             gotReq = true;
         } 
         tasksToStartQueueLock.unlock(); // unlock queue
         if (gotReq) { // schedule removed item
             printf("HAWS/SL: dequeued %s\n", req->ToStr().c_str());
+            ProcessClientRequest(req);
             free(req); // done processing client request
         } 
         usleep(1000);
     }
     printf("HAWS: ScheduleLoop ended...\n");
+}
+
+void HAWS::ProcessClientRequest(HAWSClientRequest* req) {
+    HAWSHWTarget HWTarget = DetermineReqTarget(req);
+    if (HWTarget == TargCPU) {
+        // TODO use CPU manager to start it
+    } else if (HWTarget == TargGPU) {
+        // TODO use GPU manager to start it
+    } else {
+        assert(false); // "hardware target not implemented"
+    }
+}
+
+HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) {
+    bool shouldUseCPU = false;
+
+    //TODO consult extra hints or profiling info to pick target intelligently
+    // do analysis to determine if should use CPU or gpu
+
+    return shouldUseCPU ? TargCPU : TargGPU;
 }
 
 HAWS::HAWS() {
