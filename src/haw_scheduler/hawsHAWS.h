@@ -1,5 +1,5 @@
-#ifndef HAWS_H
-#define HAWS_H
+#ifndef HAWS_H_
+#define HAWS_H_
 
 #include "hawsClientRequest.h"
 #include <mutex>
@@ -9,12 +9,6 @@
 #include <assert.h>
 
 using namespace std;
-
-mutex globalKillFlagLock;
-bool globalKillFlag;
-
-mutex tasksToStartQueueLock; // synchronizes queue access
-queue<HAWSClientRequest*>* tasksToStartQueue;
 
 class HAWS {
     private:

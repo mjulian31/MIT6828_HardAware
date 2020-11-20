@@ -1,5 +1,3 @@
-//#include "hawsHAWS.h" 
-using namespace std;
 
 #include <stdio.h>
 #include <mutex>
@@ -9,6 +7,13 @@ using namespace std;
 #include "hawsHAWS.h"
 #include "hawsClientRequest.h"
 
+using namespace std;
+
+mutex globalKillFlagLock; // signal to stop schedule loop / running tasks
+bool globalKillFlag;
+
+mutex tasksToStartQueueLock; // synchronizes queue access
+queue<HAWSClientRequest*>* tasksToStartQueue;
 
 void HAWS::ScheduleLoop() { // run by separate thread
     printf("HAWS/SL: ScheduleLoop started...\n");
@@ -23,7 +28,7 @@ void HAWS::ScheduleLoop() { // run by separate thread
         } 
         tasksToStartQueueLock.unlock(); // unlock queue
         if (gotReq) { // schedule removed item
-            printf("HAWS/SL: dequeued %s\n", req.ToStr());
+            printf("HAWS/SL: dequeued %s\n", req.ToStr().c_str());
         } 
         usleep(1000);
     }

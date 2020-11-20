@@ -1,8 +1,8 @@
 
 #include <stdio.h>
-#include "hawsClientRequest.h"
 #include <assert.h>
 #include <thread>
+#include <unistd.h>
 #include "hawsHAWS.h"
 
 //#define NDEBUG  // turn asserts off
@@ -26,6 +26,7 @@ void haws_test_1(HAWS* haws) {
 
     haws->Start();
     haws->HardAwareSchedule(r1);
+    sleep(5);
     haws->Stop();
 
     printf("Yay from test1, done!\n");
