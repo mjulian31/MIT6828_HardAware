@@ -4,18 +4,27 @@
 using namespace std;
 #include <string>
 
-class ClientRequest {
+class HAWSClientRequest {
     private:
-        string cpuBinaryPath;
-        string gpuBinaryPath;
+        string cpuBinPath;
+        string gpuBinPath;
         string taskArgs;
 
     public:
-        string GetCPUBinaryPath() { return cpuBinaryPath; }
-        string GetGPUBinaryPath() { return gpuBinaryPath; }
+        HAWSClientRequest(string cpuBin, string gpuBin, string args) { 
+            cpuBinPath = cpuBin;
+            gpuBinPath = gpuBin;
+            taskArgs = args;
+        }
+        string GetCPUBinPath() { return cpuBinPath; }
+        string GetGPUBinPath() { return gpuBinPath; }
         string GetTaskArgs()      { return taskArgs;      }
-        string SetCPUBinaryPath(string s) { cpuBinaryPath = s; }
-        string SetGPUBinaryPath(string s) { gpuBinaryPath = s; }
+        string SetCPUBinPath(string s) { cpuBinPath = s; }
+        string SetGPUBinPath(string s) { gpuBinPath = s; }
         string SetTaskArgs(string s) { taskArgs = s; }
+        string ToStr() {
+            return "cpuBinPath: " + cpuBinPath + 
+                   ", gpuBinPath: " + gpuBinPath + ", args: " + taskArgs;
+        }
 };
 #endif
