@@ -24,6 +24,7 @@ int start_subprocess_test() {
 
     // not as helpful test to start process and block until finished
     //start_subprocess_blocking_julia_test(julia_bin_path, (char*) julia_script_path);
+    return 0;
 }
 
 int start_subprocess_nonblocking_julia_test(char* julia_bin_path, char* julia_script_path) {

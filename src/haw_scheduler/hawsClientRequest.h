@@ -33,9 +33,9 @@ class HAWSClientRequest {
         string GetCPUBinPath() { return cpuBinPath; }
         string GetGPUBinPath() { return gpuBinPath; }
         string GetTaskArgs()      { return taskArgs;      }
-        string SetCPUBinPath(string s) { cpuBinPath = s; }
-        string SetGPUBinPath(string s) { gpuBinPath = s; }
-        string SetTaskArgs(string s) { taskArgs = s; }
+        void SetCPUBinPath(string s) { cpuBinPath = s; }
+        void SetGPUBinPath(string s) { gpuBinPath = s; }
+        void SetTaskArgs(string s) { taskArgs = s; }
         string ToStr() {
             return "cpuBinPath: " + cpuBinPath + 
                    ", gpuBinPath: " + gpuBinPath + ", args: " + taskArgs;
