@@ -1,5 +1,5 @@
 #ifndef CLIENTREQUEST_H
-#define CLIENTREQEUST_H
+#define CLIENTREQUEST_H
 
 using namespace std;
 #include <string>
