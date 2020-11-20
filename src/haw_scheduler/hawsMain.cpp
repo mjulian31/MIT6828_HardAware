@@ -3,6 +3,7 @@
 #include "hawsClientRequest.h"
 #include <assert.h>
 #include <thread>
+#include "hawsHAWS.h"
 
 //#define NDEBUG  // turn asserts off
 #undef NDEBUG   // turn asserts on

@@ -10,16 +10,16 @@
 
 using namespace std;
 
+mutex globalKillFlagLock;
+bool globalKillFlag;
+
+mutex tasksToStartQueueLock; // synchronizes queue access
+queue<HAWSClientRequest*>* tasksToStartQueue;
+
 class HAWS {
     private:
-        mutex tasksToStartQueueLock; // synchronizes queue access
-        queue<HAWSClientRequest*>* tasksToStartQueue;
-
         bool schedLoopThreadRunning;
         thread* schedLoopThread;
-
-        mutex globalTerminationFlagLock;
-        static bool globalTerminationFlag;
 
         mutex tasksActiveLock;
         //Map cpuTaskIDs[TaskID] -> status

@@ -1,10 +1,10 @@
 
 
 haws: hawsMain.o subprocess.o hawsHAWS.o hawsCPUMgr.o hawsGPUMgr.o
-	g++ -o haws hawsMain.o subprocess.o hawsHAWS.o hawsCPUMgr.o hawsGPUMgr.o
+	g++ -o haws hawsMain.o subprocess.o hawsHAWS.o hawsCPUMgr.o hawsGPUMgr.o -lpthread
 
 hawsMain.o: hawsMain.cpp
-	g++ -c hawsMain.cpp  hawsClientRequest.h
+	g++ -c hawsMain.cpp  hawsClientRequest.h 
 
 subprocess.o: subprocess.cpp  subprocess.h
 	g++ -c subprocess.cpp subprocess.h

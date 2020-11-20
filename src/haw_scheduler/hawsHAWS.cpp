@@ -1,21 +1,30 @@
 //#include "hawsHAWS.h" 
+using namespace std;
+
 #include <stdio.h>
 #include <mutex>
 #include <queue>
 #include <thread>
 #include <unistd.h>
+#include "hawsHAWS.h"
 #include "hawsClientRequest.h"
 
-using namespace std;
 
-static void HAWS::ScheduleLoop() { // run by separate thread
+void HAWS::ScheduleLoop() { // run by separate thread
     printf("HAWS/SL: ScheduleLoop started...\n");
-    while (!globalTerminationFlag) {
-        // lock queue
-        // check if items in queue
-        // rm item from queue
-        // unlock queue
-        // schedule removed item
+    HAWSClientRequest req;
+    while (!globalKillFlag) {
+        bool gotReq = false;
+        tasksToStartQueueLock.lock(); // lock queue
+        if (!tasksToStartQueue->empty()) { // check if item is in queue
+            req.copyInReq(tasksToStartQueue->front());  // copy it to local buffer
+            tasksToStartQueue->pop();  // calls destructor on object in queue
+            gotReq = true;
+        } 
+        tasksToStartQueueLock.unlock(); // unlock queue
+        if (gotReq) { // schedule removed item
+            printf("HAWS/SL: dequeued %s\n", req.ToStr());
+        } 
         usleep(1000);
     }
     printf("HAWS: ScheduleLoop ended...\n");
@@ -33,22 +42,22 @@ void HAWS::PrintData() {
 void HAWS::Start() {
     printf("HAWS: Starting ScheduleLoop\n");
     assert(!schedLoopThreadRunning); // must be stopped before started
-    schedLoopThread = new thread(ScheduleLoop);
+    schedLoopThread = new thread(HAWS::ScheduleLoop); // start schedule loop
+    globalKillFlag = false;          // disable killswitch for schedule loop 
     schedLoopThreadRunning = true;   // schedule loop thread active
 }
 
 void HAWS::Stop() {
+    assert(schedLoopThreadRunning);  // must be started before stopped
     printf("HAWS: Stopping ScheduleLoop\n");
-    assert(schedLoopThreadRunning); // must be started before stopped
-    globalTerminationFlag = true;    // killswitch for schedule loop thread to end
-    schedLoopThread->join();          // block until thread exits and returns
-    globalTerminationFlag = false;   // reset killswitch
+    globalKillFlag = true;           // enable killswitch for schedule loop thread
+    schedLoopThread->join();         // block until thread exits and returns
+    globalKillFlag = false;          // reset killswitch
     schedLoopThreadRunning = false;  // schedule loop thread gone
 }
 
 void HAWS::HardAwareSchedule(HAWSClientRequest* req) {
     assert(tasksToStartQueue != NULL);
-
     tasksToStartQueueLock.lock();
     tasksToStartQueue->push(req);
     tasksToStartQueueLock.unlock(); 

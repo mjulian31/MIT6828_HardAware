@@ -16,6 +16,16 @@ class HAWSClientRequest {
             gpuBinPath = gpuBin;
             taskArgs = args;
         }
+        HAWSClientRequest() {
+            cpuBinPath = "";
+            gpuBinPath = "";
+            taskArgs = "";
+        }
+        void copyInReq(HAWSClientRequest* another) {
+            cpuBinPath = another->GetCPUBinPath();
+            gpuBinPath = another->GetGPUBinPath();
+            taskArgs = another->GetTaskArgs();
+        }
         string GetCPUBinPath() { return cpuBinPath; }
         string GetGPUBinPath() { return gpuBinPath; }
         string GetTaskArgs()      { return taskArgs;      }
