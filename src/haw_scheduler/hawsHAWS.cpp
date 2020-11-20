@@ -47,6 +47,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) {
     } else {
         assert(false); // "hardware target not implemented"
     }
+    printf("HAWS/SL: processed %s\n", req->ToStr().c_str());
 }
 
 HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) {
