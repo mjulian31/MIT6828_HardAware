@@ -17,18 +17,20 @@ queue<HAWSClientRequest*>* tasksToStartQueue;
 
 void HAWS::ScheduleLoop() { // run by separate thread
     printf("HAWS/SL: ScheduleLoop started...\n");
-    HAWSClientRequest req;
+    HAWSClientRequest* req;
     while (!globalKillFlag) {
         bool gotReq = false;
         tasksToStartQueueLock.lock(); // lock queue
         if (!tasksToStartQueue->empty()) { // check if item is in queue
-            req.copyInReq(tasksToStartQueue->front());  // copy it to local buffer
+            // copy it to local req buffer
+            req = new HAWSClientRequest(tasksToStartQueue->front());
             tasksToStartQueue->pop();  // calls destructor on object in queue
             gotReq = true;
         } 
         tasksToStartQueueLock.unlock(); // unlock queue
         if (gotReq) { // schedule removed item
-            printf("HAWS/SL: dequeued %s\n", req.ToStr().c_str());
+            printf("HAWS/SL: dequeued %s\n", req->ToStr().c_str());
+            free(req); // done processing client request
         } 
         usleep(1000);
     }
