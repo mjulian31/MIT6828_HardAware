@@ -12,15 +12,15 @@ char* x86_julia_bin_path= (char*) "/usr/local/bin/julia";
 int start_subprocess_test() {
     // x86 machines
     // taylor 
-    //char* julia_script_path = (char*)"/home/local/git/MIT6828_HardAware/julia_code/matrix_multiply.jl";
-    //char* julia_bin_path = x86_julia_bin_path; // or pow8_julia_bin_path
+    char* julia_script_path = (char*)"/home/local/git/MIT6828_HardAware/julia_code/matrix_multiply.jl";
+    char* julia_bin_path = x86_julia_bin_path; // or pow8_julia_bin_path
 
     // cloudlab machines 
-    char* julia_bin_path = pow8_julia_bin_path;
+    //char* julia_bin_path = pow8_julia_bin_path;
     // taylor
     //char* julia_script_path = (char*)"/users/tandrews/MIT6828_HardAware/julia_code/matrix_multiply.jl";
     // meredith
-    char* julia_script_path = (char*)"/users/mjulian/MIT6828_HardAware/julia_code/matrix_multiply.jl";
+    //char* julia_script_path = (char*)"/users/mjulian/MIT6828_HardAware/julia_code/matrix_multiply.jl";
 
     //test workload to start as new process to monitor
     start_subprocess_nonblocking_julia_test(julia_bin_path, (char*) julia_script_path);

@@ -4,6 +4,7 @@
 #include <thread>
 #include <unistd.h>
 #include "hawsHAWS.h"
+#include "subprocess.h"
 
 //#define NDEBUG  // turn asserts off
 #undef NDEBUG   // turn asserts on
@@ -11,12 +12,15 @@
 
 void haws_test_1(HAWS* haws);
 void haws_test_2(HAWS* haws);
+void haws_test_3(HAWS* haws);
+void haws_test_4(HAWS* haws);
+void haws_test_5(HAWS* haws);
 
 int main () {
     HAWS haws;
     haws.PrintData();
 
-    haws_test_2(&haws);    
+    haws_test_3(&haws);    
 }
 
 void haws_test_1(HAWS* haws) {
@@ -53,10 +57,52 @@ void haws_test_2(HAWS* haws) {
     haws->HardAwareSchedule(&r1);
     haws->HardAwareSchedule(&r2);
     haws->HardAwareSchedule(&r3);
-    haws->HardAwareSchedule(&r4);
-    haws->HardAwareSchedule(&r5);
-    sleep(5);
+    //haws->HardAwareSchedule(&r4);
+    //haws->HardAwareSchedule(&r5);
+    sleep(1);
+    while (haws->GetNumActiveTasksCPU() > 0) {
+        usleep(1000);
+    }
     haws->Stop();
 
     printf("Yay from test1, done!\n");
+}
+
+void haws_test_3(HAWS* haws) {
+    HAWSClientRequest r1("/usr/local/bin/julia",
+                         "/usr/local/bin/julia",
+                         "/home/local/git/MIT6828_HardAware/julia_code/matrix_multiply.jl");
+    HAWSClientRequest r2("/usr/local/bin/julia",
+                         "/usr/local/bin/julia",
+                         "/home/local/git/MIT6828_HardAware/julia_code/matrix_multiply.jl");
+    HAWSClientRequest r3("/usr/local/bin/julia",
+                         "/usr/local/bin/julia",
+                         "/home/local/git/MIT6828_HardAware/julia_code/matrix_multiply.jl");
+    haws->Start();
+    haws->HardAwareSchedule(&r1);
+    sleep(2);
+    haws->HardAwareSchedule(&r2);
+    sleep(4);
+    haws->HardAwareSchedule(&r3);
+    while(haws->GetNumActiveTasksCPU() > 0) {
+        usleep(1000);
+    }
+    haws->Stop();
+}
+
+void haws_test_4(HAWS* haws) {
+     HAWSClientRequest r1("ls",
+                          "ls",
+                          "");
+     haws->Start();
+     haws->HardAwareSchedule(&r1);
+     sleep(1);
+     while(haws->GetNumActiveTasksCPU() > 0) {
+        usleep(1000);
+     }
+     haws->Stop();
+}
+
+void haws_test_5(HAWS* haws) {
+    start_subprocess_test(); 
 }

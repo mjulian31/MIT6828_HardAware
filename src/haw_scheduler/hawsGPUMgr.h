@@ -11,6 +11,7 @@ class HAWSGPUMgr {
     public:
         void StartTask(string binpath, string args) {}
         void GetTaskStatus () {}
+        //int GetNumActiveTasks();
         void StopTask() {}
         void ColdQuery() {}
         void HotQuery() {}

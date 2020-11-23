@@ -4,6 +4,7 @@
 #include <queue>
 #include <thread>
 #include <unistd.h>
+#include <cstring>
 #include "hawsHAWS.h"
 #include "hawsCPUMgr.h"
 #include "hawsGPUMgr.h"
@@ -19,9 +20,9 @@ mutex tasksToStartQueueLock; // synchronizes queue access
 queue<HAWSClientRequest*>* tasksToStartQueue;
 
 HAWSCPUMgr* cpuMgr;
-int cpuActiveTasks = 0;
 HAWSGPUMgr* gpuMgr;
-int gpuActiveTasks = 0;
+
+int globalNumCPUTasksActive = 0;
 
 void HAWS::ScheduleLoop() { // run by separate thread
     printf("HAWS/SL: ScheduleLoop started...\n");
@@ -40,10 +41,10 @@ void HAWS::ScheduleLoop() { // run by separate thread
             printf("HAWS/SL: dequeued %s\n", req->ToStr().c_str());
             ProcessClientRequest(req);
             free(req); // done processing client request
-        } 
-        cpuActiveTasks = cpuMgr->Monitor(); //poll and update state of CPU processes
-        //gpuActiveTasks = gpuMgr->Monitor(); //poll and update state of GPU processes
-        usleep(1000);
+        }
+        //MonitorHWTargets();
+        cpuMgr->Monitor(); //update state of processes in cpu manager
+        //gpuMgr->Monitor(); //update state of processes in gpu manager
     }
     printf("HAWS: ScheduleLoop ended...\n");
 }
@@ -52,6 +53,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) {
     HAWSHWTarget HWTarget = DetermineReqTarget(req);
     if (HWTarget == TargCPU) {
         int success = cpuMgr->StartTask(req->GetCPUBinPath(), req->GetTaskArgs());
+        globalNumCPUTasksActive++;
         assert(success == 0);
     } else if (HWTarget == TargGPU) {
         //int success gpuMgr->StartTask(req->GetGPUBinPath(), req->GetTaskArgs());
@@ -76,9 +78,54 @@ HAWS::HAWS() {
     tasksToStartQueue = new queue<HAWSClientRequest*>();
 }
 
+int HAWS::GetNumActiveTasksCPU() {
+    return globalNumCPUTasksActive;
+}
+//int HAWS::GetNumActiveTasksGPU() {
+//    return gpuMgr->GetNumActiveTasks();
+//}
+
 void HAWS::PrintData() {
     printf("HAWS: Hello From PrintData\n");
 }
+
+void my_sigchld_handler(int sig)
+{
+    pid_t p;
+    int status;
+
+    while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
+       /* Handle the death of pid p */
+       printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
+       //if (status == 0) {
+              //if (print_state_throttle++ % 1000 == 0) { // print once a second
+              //    printf("pid %d still running...\n", pid);
+              //}
+              //usleep(1000); // sleep for a millisecond
+       //} else { 
+           // waitpid() failed 
+       //    printf("waitpid() was < 0\n"); 
+       //    printf("errno error codes are ECHILD: %d, EINTR: %d, EINVAL %d\n", ECHILD, EINTR, EINVAL);
+       //    printf("errno was = %d\n", errno);
+           if (WIFEXITED(status) && !WEXITSTATUS(status)) {
+              printf("program execution successful\n"); 
+           } else if (WIFEXITED(status) && WEXITSTATUS(status)) { 
+                if (WEXITSTATUS(status) == 127) { 
+                    // execv failed 
+                    printf("execv failed\n"); 
+                } 
+                else  {
+                    printf("program terminated normally,"
+                       " but returned a non-zero status\n");                 
+                }
+           } else {
+               printf("program didn't terminate normally\n");             
+           }
+           globalNumCPUTasksActive--;
+    }
+}
+
+
 
 void HAWS::Start() {
     printf("HAWS: Starting ScheduleLoop\n");
@@ -89,6 +136,12 @@ void HAWS::Start() {
 
     cpuMgr = new HAWSCPUMgr();
     gpuMgr = new HAWSGPUMgr();
+
+    struct sigaction sa;
+
+    memset(&sa, 0, sizeof(sa));
+    sa.sa_handler = my_sigchld_handler;
+    sigaction(SIGCHLD, &sa, NULL);
 }
 
 void HAWS::Stop() {
