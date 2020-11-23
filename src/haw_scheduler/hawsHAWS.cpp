@@ -6,8 +6,9 @@
 #include <unistd.h>
 #include "hawsHAWS.h"
 #include "hawsCPUMgr.h"
-//#include "hawsGPUMgr.h"
+#include "hawsGPUMgr.h"
 #include "hawsClientRequest.h"
+#include <unordered_map>
 
 using namespace std;
 
@@ -18,7 +19,9 @@ mutex tasksToStartQueueLock; // synchronizes queue access
 queue<HAWSClientRequest*>* tasksToStartQueue;
 
 HAWSCPUMgr* cpuMgr;
-//HAWSGPUMgr* gpuMgr;
+int cpuActiveTasks = 0;
+HAWSGPUMgr* gpuMgr;
+int gpuActiveTasks = 0;
 
 void HAWS::ScheduleLoop() { // run by separate thread
     printf("HAWS/SL: ScheduleLoop started...\n");
@@ -38,6 +41,8 @@ void HAWS::ScheduleLoop() { // run by separate thread
             ProcessClientRequest(req);
             free(req); // done processing client request
         } 
+        cpuActiveTasks = cpuMgr->Monitor(); //poll and update state of CPU processes
+        //gpuActiveTasks = gpuMgr->Monitor(); //poll and update state of GPU processes
         usleep(1000);
     }
     printf("HAWS: ScheduleLoop ended...\n");
@@ -46,9 +51,11 @@ void HAWS::ScheduleLoop() { // run by separate thread
 void HAWS::ProcessClientRequest(HAWSClientRequest* req) {
     HAWSHWTarget HWTarget = DetermineReqTarget(req);
     if (HWTarget == TargCPU) {
-        cpuMgr->StartTask(req->GetCPUBinPath(), req->GetTaskArgs());
+        int success = cpuMgr->StartTask(req->GetCPUBinPath(), req->GetTaskArgs());
+        assert(success == 0);
     } else if (HWTarget == TargGPU) {
-        // TODO use GPU manager to start it
+        //int success gpuMgr->StartTask(req->GetGPUBinPath(), req->GetTaskArgs());
+        //assert(success == 0);
     } else {
         assert(false); // "hardware target not implemented"
     }
@@ -81,7 +88,7 @@ void HAWS::Start() {
     schedLoopThreadRunning = true;   // schedule loop thread active
 
     cpuMgr = new HAWSCPUMgr();
-    //gpuMgr = new HAWSGPUMgr();
+    gpuMgr = new HAWSGPUMgr();
 }
 
 void HAWS::Stop() {

@@ -9,11 +9,11 @@ class HAWSGPUMgr {
     //GPUCostModel cputCostModel; //object TODO
 
     public:
-        void GPUMgr_StartTask() {}
-        void GPUMgr_GetTaskStatus () {}
-        void GPUMgr_StopTask() {}
-        void GPUMgr_ColdQuery() {}
-        void GPUMgr_HotQuery() {}
+        void StartTask(string binpath, string args) {}
+        void GetTaskStatus () {}
+        void StopTask() {}
+        void ColdQuery() {}
+        void HotQuery() {}
 
 };
 #endif
