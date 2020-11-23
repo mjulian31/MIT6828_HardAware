@@ -41,7 +41,6 @@ class HAWS {
         void ColdQueryGPUManager();
         void HotQueryCPUManager();
         void HotQueryGPUManager();
-
     public:
         HAWS();
         void Start();

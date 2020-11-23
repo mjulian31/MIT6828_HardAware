@@ -20,7 +20,7 @@ int main () {
     HAWS haws;
     haws.PrintData();
 
-    haws_test_3(&haws);    
+    haws_test_2(&haws);    
 }
 
 void haws_test_1(HAWS* haws) {
@@ -49,7 +49,7 @@ void haws_test_2(HAWS* haws) {
                          "2048");
     HAWSClientRequest r4("/opt/haws/bin/matmul_cpu", 
                          "/opt/haws/bin/matmul_gpu",
-                         "4096");
+                         "2048");
     HAWSClientRequest r5("/opt/haws/bin/matmul_cpu", 
                          "/opt/haws/bin/matmul_gpu",
                          "8182"); 
@@ -57,7 +57,7 @@ void haws_test_2(HAWS* haws) {
     haws->HardAwareSchedule(&r1);
     haws->HardAwareSchedule(&r2);
     haws->HardAwareSchedule(&r3);
-    //haws->HardAwareSchedule(&r4);
+    haws->HardAwareSchedule(&r4);
     //haws->HardAwareSchedule(&r5);
     sleep(1);
     while (haws->GetNumActiveTasksCPU() > 0) {

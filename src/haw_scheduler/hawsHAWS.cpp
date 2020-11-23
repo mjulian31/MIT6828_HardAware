@@ -89,7 +89,7 @@ void HAWS::PrintData() {
     printf("HAWS: Hello From PrintData\n");
 }
 
-void my_sigchld_handler(int sig)
+void SIGCHLD_Handler(int sig)
 {
     pid_t p;
     int status;
@@ -137,10 +137,10 @@ void HAWS::Start() {
     cpuMgr = new HAWSCPUMgr();
     gpuMgr = new HAWSGPUMgr();
 
+    //register SIGCHLD handler to handle all child processes that change state
     struct sigaction sa;
-
     memset(&sa, 0, sizeof(sa));
-    sa.sa_handler = my_sigchld_handler;
+    sa.sa_handler = SIGCHLD_Handler;
     sigaction(SIGCHLD, &sa, NULL);
 }
 
