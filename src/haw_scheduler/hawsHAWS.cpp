@@ -5,6 +5,8 @@
 #include <thread>
 #include <unistd.h>
 #include "hawsHAWS.h"
+#include "hawsCPUMgr.h"
+//#include "hawsGPUMgr.h"
 #include "hawsClientRequest.h"
 
 using namespace std;
@@ -14,6 +16,9 @@ bool globalKillFlag;
 
 mutex tasksToStartQueueLock; // synchronizes queue access
 queue<HAWSClientRequest*>* tasksToStartQueue;
+
+HAWSCPUMgr* cpuMgr;
+//HAWSGPUMgr* gpuMgr;
 
 void HAWS::ScheduleLoop() { // run by separate thread
     printf("HAWS/SL: ScheduleLoop started...\n");
@@ -41,7 +46,7 @@ void HAWS::ScheduleLoop() { // run by separate thread
 void HAWS::ProcessClientRequest(HAWSClientRequest* req) {
     HAWSHWTarget HWTarget = DetermineReqTarget(req);
     if (HWTarget == TargCPU) {
-        // TODO use CPU manager to start it
+        cpuMgr->StartTask(req->GetCPUBinPath(), req->GetTaskArgs());
     } else if (HWTarget == TargGPU) {
         // TODO use GPU manager to start it
     } else {
@@ -51,7 +56,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) {
 }
 
 HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) {
-    bool shouldUseCPU = false;
+    bool shouldUseCPU = true;
 
     //TODO consult extra hints or profiling info to pick target intelligently
     // do analysis to determine if should use CPU or gpu
@@ -74,6 +79,9 @@ void HAWS::Start() {
     schedLoopThread = new thread(HAWS::ScheduleLoop); // start schedule loop
     globalKillFlag = false;          // disable killswitch for schedule loop 
     schedLoopThreadRunning = true;   // schedule loop thread active
+
+    cpuMgr = new HAWSCPUMgr();
+    //gpuMgr = new HAWSGPUMgr();
 }
 
 void HAWS::Stop() {

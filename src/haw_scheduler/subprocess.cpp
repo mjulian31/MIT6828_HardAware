@@ -6,6 +6,9 @@
 #include <sys/wait.h> 
 #include "subprocess.h"
 
+char* pow8_julia_bin_path= (char*) "/opt/julia/usr/bin/julia";
+char* x86_julia_bin_path= (char*) "/usr/local/bin/julia";
+
 int start_subprocess_test() {
     // x86 machines
     // taylor 

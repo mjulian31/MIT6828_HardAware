@@ -18,7 +18,4 @@ int start_subprocess_nonblocking(char**);
 int start_subprocess_nonblocking_julia_test(char*, char*);
 int start_subprocess_test();
 
-char* pow8_julia_bin_path= (char*) "/opt/julia/usr/bin/julia";
-char* x86_julia_bin_path= (char*) "/usr/local/bin/julia";
-
 #endif
