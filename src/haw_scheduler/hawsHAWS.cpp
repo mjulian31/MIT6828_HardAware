@@ -46,6 +46,8 @@ void HAWS::ScheduleLoop() { // run by separate thread
         //MonitorHWTargets();
         cpuMgr->Monitor(); //update state of processes in cpu manager
         //gpuMgr->Monitor(); //update state of processes in gpu manager
+
+        usleep(50); // yield CPU
     }
     printf("HAWS: ScheduleLoop ended...\n");
 }
@@ -100,7 +102,7 @@ void SIGCHLD_Handler(int sig)
     while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
        long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
        /* Handle the death of pid p */
-       printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
+       //printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
        //if (status == 0) {
               //if (print_state_throttle++ % 1000 == 0) { // print once a second
               //    printf("pid %d still running...\n", pid);
@@ -112,7 +114,7 @@ void SIGCHLD_Handler(int sig)
        //    printf("errno error codes are ECHILD: %d, EINTR: %d, EINVAL %d\n", ECHILD, EINTR, EINVAL);
        //    printf("errno was = %d\n", errno);
            if (WIFEXITED(status) && !WEXITSTATUS(status)) {
-              printf("program execution successful\n"); 
+              //printf("program execution successful\n"); 
               task_status = TASK_FINISHED_SUCCESS;
            } else if (WIFEXITED(status) && WEXITSTATUS(status)) { 
                 if (WEXITSTATUS(status) == 127) { 
@@ -122,12 +124,12 @@ void SIGCHLD_Handler(int sig)
                     assert(false);
                 } 
                 else  {
-                    printf("program terminated normally,"
-                       " but returned a non-zero status\n");                 
+                    //printf("program terminated normally,"
+                    //   " but returned a non-zero status\n");                 
                     task_status = TASK_FINISHED_NONZERO;
                 }
            } else {
-               printf("program didn't terminate normally\n");             
+               //printf("program didn't terminate normally\n");             
                task_status = TASK_FINISHED_ABNORMAL;
            }
 

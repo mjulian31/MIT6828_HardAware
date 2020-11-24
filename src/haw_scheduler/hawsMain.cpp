@@ -15,10 +15,11 @@ void haws_test_2(HAWS* haws);
 void haws_test_3(HAWS* haws);
 void haws_test_4(HAWS* haws);
 void haws_test_5(HAWS* haws);
+void haws_test_many_processes(HAWS* haws);
 
 int main () {
     HAWS haws;
-    haws_test_2(&haws);    
+    haws_test_many_processes(&haws);    
 }
 
 void haws_test_1(HAWS* haws) {
@@ -50,14 +51,14 @@ void haws_test_2(HAWS* haws) {
                          "2048");
     HAWSClientRequest r5("/opt/haws/bin/matmul_cpu", 
                          "/opt/haws/bin/matmul_gpu",
-                         "8182"); 
+                         "4096"); 
     haws->Start();
     haws->HardAwareSchedule(&r1);
     haws->HardAwareSchedule(&r2);
     haws->HardAwareSchedule(&r3);
     haws->HardAwareSchedule(&r4);
-    //haws->HardAwareSchedule(&r5);
-    sleep(1); // let things move through queue and start
+    haws->HardAwareSchedule(&r5);
+    sleep(1); // let reqs move through queue and start
     while (haws->GetNumActiveTasks() > 0) {
         usleep(1000);
     }
@@ -95,12 +96,24 @@ void haws_test_4(HAWS* haws) {
      haws->Start();
      haws->HardAwareSchedule(&r1);
      sleep(1);
-     while(haws->GetNumActiveTasks() > 0) {
-        usleep(1000);
-     }
+     while(haws->GetNumActiveTasks() > 0) { usleep(1000); }
      haws->Stop();
 }
 
 void haws_test_5(HAWS* haws) {
     start_subprocess_test(); 
+}
+
+void haws_test_many_processes (HAWS* haws) {
+    haws->Start();
+    for (int i = 0; i < 40; i++) {
+        HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_cpu", 
+                                                     "/opt/haws/bin/matmul_gpu",
+                                                     "2048");
+        sleep(i % 5 == 0 ? 1 : 0);
+        haws->HardAwareSchedule(r);
+    }
+    sleep(1);
+    while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
+    haws->Stop();
 }
