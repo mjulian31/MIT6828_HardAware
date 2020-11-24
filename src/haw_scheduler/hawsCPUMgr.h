@@ -127,21 +127,64 @@ class HAWSCPUMgr {
         }
         
         void Monitor () {
-            taskLock.lock();
+            pid_t p;
+            int status;
+            TaskStatus task_status;
+            while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
+               long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
+               /* Handle the death of pid p */
+               printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
 
+               // debugging
+               //printf("waitpid() was < 0\n"); 
+               //printf("errno codes are ECHILD: %d, EINTR: %d, EINVAL %d\n", ECHILD, EINTR, EINVAL);
+               //printf("errno was = %d\n", errno);
+
+               if (WIFEXITED(status) && !WEXITSTATUS(status)) {
+                  //printf("program execution successful\n"); 
+                  task_status = TASK_FINISHED_SUCCESS;
+               } else if (WIFEXITED(status) && WEXITSTATUS(status)) { 
+                    if (WEXITSTATUS(status) == 127) { 
+                        // execv failed 
+                        printf("execv failed\n"); 
+                        task_status = TASK_FINISHED_ABNORMAL;
+                        assert(false);
+                    } 
+                    else  {
+                        //printf("program terminated normally,"
+                        //   " but returned a non-zero status\n");                 
+                        task_status = TASK_FINISHED_NONZERO;
+                    }
+               } else {
+                   //printf("program didn't terminate normally\n");             
+                   task_status = TASK_FINISHED_ABNORMAL;
+               }
+
+               //if (cpuMgr->TaskIsActive(p)) {
+               //printf("concluding task\n");
+               this->TaskConclude(p, task_status, status, time_completed); 
+               //printf("done!\n");
+
+               //}// else if (gpuMgr->TaskOwned(p) {
+                //   gpuMgr->ConcludeTask(p, task_status, status); 
+                // }
+               //else {
+               //    assert(false); //unclaimed process
+               //}
+               //printf("globalNumTasksActive = %d\n", globalNumTasksActive);
+            }
+
+            taskLock.lock();
             // make sure all invariants are satisfied
-            
             if (printThrottle % 1000 == 0) {
                 printf("-->doing sanity check\n");
                 this->SanityCheckActiveTasks(); 
+                this->SanityCheckCompletedTasks();
                 printf("<--done doing sanity check\n");
-                //this->SanityCheckCompletedTasks();
             //    this->PrintDataProtected();
             }
             printThrottle++;
-
             //usleep(1); //simulate work
-
             taskLock.unlock();
         }
         void PrintData () {

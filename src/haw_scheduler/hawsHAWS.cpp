@@ -82,7 +82,7 @@ HAWS::HAWS() {
 }
 
 int HAWS::GetNumActiveTasks() {
-    return globalNumTasksActive;
+    return cpuMgr->GetNumActiveTasks();
 }
 //int HAWS::GetNumActiveTasksGPU() {
 //    return gpuMgr->GetNumActiveTasks();
@@ -162,10 +162,10 @@ void HAWS::Start() {
     gpuMgr = new HAWSGPUMgr();
 
     //register SIGCHLD handler to handle all child processes that change state
-    struct sigaction sa;
-    memset(&sa, 0, sizeof(sa));
-    sa.sa_handler = SIGCHLD_Handler;
-    sigaction(SIGCHLD, &sa, NULL);
+//    struct sigaction sa;
+//    memset(&sa, 0, sizeof(sa));
+//    sa.sa_handler = SIGCHLD_Handler;
+//    sigaction(SIGCHLD, &sa, NULL);
 }
 
 void HAWS::Stop() {
