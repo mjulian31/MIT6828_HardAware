@@ -16,6 +16,14 @@ enum TaskStatus {
     TASK_FINISHED_ABNORMAL
 };
 
+/*
+typdef struct TaskCompleted {
+    pid_t pid;
+    TaskStatus task_status;
+    int status_code;
+    long time_completed;
+} TaskCompleted; */
+
 static const char* TaskStatusToStr(TaskStatus ts) {
     return ts == TASK_RUNNING ? "TASK_RUNNING " :
            ts == TASK_FINISHED_SUCCESS ? "TASK_FINISHED_SUCCESS" :
@@ -25,12 +33,14 @@ static const char* TaskStatusToStr(TaskStatus ts) {
 
 class HAWSCPUMgr {
     list<pid_t> allPids;
+    //list<TaskCompleted> completedTasksIn;
     unordered_map<pid_t, string> tasksActive;
     unordered_map<pid_t, TaskStatus> tasksStatus;
     unordered_map<pid_t, int> tasksStatusCode;
     unordered_map<pid_t, long> tasksStartTime;
     unordered_map<pid_t, long> tasksEndTime;
     std::mutex taskLock; 
+    std::mutex completionLock; 
     int activeTasks = 0;
     int printThrottle = 0;
 
@@ -106,6 +116,12 @@ class HAWSCPUMgr {
             printf("CPUMGR:    status code: %d\n", tasksStatusCode[pid]);
         }
     }
+    void TaskCompleteAccountingProtected(pid_t pid, TaskStatus ts, int s_code, long time_completed) {
+        tasksEndTime[pid] = time_completed;
+        tasksStatus[pid] = ts;
+        tasksStatusCode[pid] = s_code;
+        tasksActive.erase(pid);
+    }
     public:
         HAWSCPUMgr () {
            
@@ -127,11 +143,21 @@ class HAWSCPUMgr {
             taskLock.unlock();
             return 0; // success
         }
-
+        
         void Monitor () {
+            /*
+            completionLock.lock();
+            if (completedTasksIn.size() > 0) {
+
+            }
+            completionLock.unlock();
+            */
+
             taskLock.lock();
 
             //this->SanityChecks(); // make sure all invariants are satisfied
+
+
 
             /*
             while (it != tasksActive.end()) {
@@ -144,18 +170,26 @@ class HAWSCPUMgr {
             //printThrottle++;
 
             taskLock.unlock();
+            usleep(10);
         }
         void PrintData () {
             taskLock.lock();
             this->PrintDataProtected();
             taskLock.unlock();
         }
-        void TaskConclude(pid_t pid, TaskStatus task_status, int status) {  
+        void TaskConclude(pid_t pid, TaskStatus ts, int status_code, long time_completed) {  
+            /*
+            TaskCompleted tc;
+            completionLock.lock();
+            tc.pid = pid;
+            tc.task_status = ts;
+            tc.status_code = status_code;
+            tc.time_completed = time_completed;
+            completedTasksIn.insert(completedTasksIn.begin(), tc);
+            completionLock.unlock();
+            */
             taskLock.lock();
-            tasksEndTime[pid] = (std::chrono::system_clock::now().time_since_epoch()).count();
-            tasksStatus[pid] = task_status;
-            tasksStatusCode[pid] = status;
-            tasksActive.erase(pid);
+            this->TaskCompleteAccountingProtected(pid, ts, status_code, time_completed); 
             taskLock.unlock();
         }
         int TaskIsActive (pid_t pid) { // must lock before

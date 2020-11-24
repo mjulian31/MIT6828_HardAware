@@ -98,6 +98,7 @@ void SIGCHLD_Handler(int sig)
     TaskStatus task_status;
 
     while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
+       long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
        /* Handle the death of pid p */
        printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
        //if (status == 0) {
@@ -131,7 +132,9 @@ void SIGCHLD_Handler(int sig)
            }
 
            //if (cpuMgr->TaskIsActive(p)) {
-           cpuMgr->TaskConclude(p, task_status, status); 
+
+           cpuMgr->TaskConclude(p, task_status, status, time_completed); 
+
            //}// else if (gpuMgr->TaskOwned(p) {
             //   gpuMgr->ConcludeTask(p, task_status, status); 
             // }
