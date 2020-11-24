@@ -39,7 +39,7 @@ int start_subprocess_nonblocking_julia_test(char* julia_bin_path, char* julia_sc
     return start_subprocess_nonblocking_monitor(argv_list);
 }
 
-int start_subprocess_nonblocking_monitor(char** argv_list) {
+pid_t start_subprocess_nonblocking_monitor(char** argv_list) {
    int print_state_throttle = 0;
    int pid = start_subprocess_nonblocking(argv_list); 
    int status; 

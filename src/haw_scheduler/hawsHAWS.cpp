@@ -22,7 +22,8 @@ queue<HAWSClientRequest*>* tasksToStartQueue;
 HAWSCPUMgr* cpuMgr;
 HAWSGPUMgr* gpuMgr;
 
-int globalNumCPUTasksActive = 0;
+int globalNumTasksActive = 0;
+
 
 void HAWS::ScheduleLoop() { // run by separate thread
     printf("HAWS/SL: ScheduleLoop started...\n");
@@ -53,7 +54,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) {
     HAWSHWTarget HWTarget = DetermineReqTarget(req);
     if (HWTarget == TargCPU) {
         int success = cpuMgr->StartTask(req->GetCPUBinPath(), req->GetTaskArgs());
-        globalNumCPUTasksActive++;
+        globalNumTasksActive++;
         assert(success == 0);
     } else if (HWTarget == TargGPU) {
         //int success gpuMgr->StartTask(req->GetGPUBinPath(), req->GetTaskArgs());
@@ -78,8 +79,8 @@ HAWS::HAWS() {
     tasksToStartQueue = new queue<HAWSClientRequest*>();
 }
 
-int HAWS::GetNumActiveTasksCPU() {
-    return globalNumCPUTasksActive;
+int HAWS::GetNumActiveTasks() {
+    return globalNumTasksActive;
 }
 //int HAWS::GetNumActiveTasksGPU() {
 //    return gpuMgr->GetNumActiveTasks();
@@ -87,12 +88,14 @@ int HAWS::GetNumActiveTasksCPU() {
 
 void HAWS::PrintData() {
     printf("HAWS: Hello From PrintData\n");
+    cpuMgr->PrintData();
 }
 
 void SIGCHLD_Handler(int sig)
 {
     pid_t p;
     int status;
+    TaskStatus task_status;
 
     while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
        /* Handle the death of pid p */
@@ -109,19 +112,33 @@ void SIGCHLD_Handler(int sig)
        //    printf("errno was = %d\n", errno);
            if (WIFEXITED(status) && !WEXITSTATUS(status)) {
               printf("program execution successful\n"); 
+              task_status = TASK_FINISHED_SUCCESS;
            } else if (WIFEXITED(status) && WEXITSTATUS(status)) { 
                 if (WEXITSTATUS(status) == 127) { 
                     // execv failed 
                     printf("execv failed\n"); 
+                    task_status = TASK_FINISHED_ABNORMAL;
+                    assert(false);
                 } 
                 else  {
                     printf("program terminated normally,"
                        " but returned a non-zero status\n");                 
+                    task_status = TASK_FINISHED_NONZERO;
                 }
            } else {
                printf("program didn't terminate normally\n");             
+               task_status = TASK_FINISHED_ABNORMAL;
            }
-           globalNumCPUTasksActive--;
+
+           //if (cpuMgr->TaskIsActive(p)) {
+           cpuMgr->TaskConclude(p, task_status, status); 
+           //}// else if (gpuMgr->TaskOwned(p) {
+            //   gpuMgr->ConcludeTask(p, task_status, status); 
+            // }
+           //else {
+           //    assert(false); //unclaimed process
+           //}
+           globalNumTasksActive--;
     }
 }
 
@@ -151,6 +168,7 @@ void HAWS::Stop() {
     schedLoopThread->join();         // block until thread exits and returns
     globalKillFlag = false;          // reset killswitch
     schedLoopThreadRunning = false;  // schedule loop thread gone
+    this->PrintData();
 }
 
 void HAWS::HardAwareSchedule(HAWSClientRequest* req) {

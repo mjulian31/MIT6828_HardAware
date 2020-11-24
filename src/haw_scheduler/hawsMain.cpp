@@ -18,8 +18,6 @@ void haws_test_5(HAWS* haws);
 
 int main () {
     HAWS haws;
-    haws.PrintData();
-
     haws_test_2(&haws);    
 }
 
@@ -59,8 +57,8 @@ void haws_test_2(HAWS* haws) {
     haws->HardAwareSchedule(&r3);
     haws->HardAwareSchedule(&r4);
     //haws->HardAwareSchedule(&r5);
-    sleep(1);
-    while (haws->GetNumActiveTasksCPU() > 0) {
+    sleep(1); // let things move through queue and start
+    while (haws->GetNumActiveTasks() > 0) {
         usleep(1000);
     }
     haws->Stop();
@@ -84,7 +82,7 @@ void haws_test_3(HAWS* haws) {
     haws->HardAwareSchedule(&r2);
     sleep(4);
     haws->HardAwareSchedule(&r3);
-    while(haws->GetNumActiveTasksCPU() > 0) {
+    while(haws->GetNumActiveTasks() > 0) {
         usleep(1000);
     }
     haws->Stop();
@@ -97,7 +95,7 @@ void haws_test_4(HAWS* haws) {
      haws->Start();
      haws->HardAwareSchedule(&r1);
      sleep(1);
-     while(haws->GetNumActiveTasksCPU() > 0) {
+     while(haws->GetNumActiveTasks() > 0) {
         usleep(1000);
      }
      haws->Stop();
