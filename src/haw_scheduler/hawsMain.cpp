@@ -18,7 +18,7 @@ void haws_test_5(HAWS* haws);
 void haws_test_many_processes(HAWS* haws);
 
 int cpuBinRAMBase = 90;
-int gpuBinRAMBase = 120;
+int gpuBinRAMBase = 2;
 
 int main () {
     HAWS haws;
@@ -109,8 +109,8 @@ void haws_test_5(HAWS* haws) {
 
 void haws_test_many_processes (HAWS* haws) {
     haws->Start();
-    for (int i = 0; i < 100; i++) {
-        HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_cpu", cpuBinRAMBase,
+    for (int i = 0; i < 1000; i++) {
+        HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_gpu", cpuBinRAMBase,
                                                      "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
                                                      "2048");
         usleep(1);

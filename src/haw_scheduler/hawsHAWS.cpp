@@ -22,7 +22,7 @@ queue<HAWSClientRequest*>* tasksToStartQueue;
 HAWSCPUMgr* cpuMgr;
 HAWSGPUMgr* gpuMgr;
 
-#define SCHED_MEM_MAX_RR1 62464
+#define SCHED_MEM_MAX_RR1 (1024*58) // use up to 58GB of 64GB phys ram
 #define SCHED_MEM_MAX_CLOUDLAB 62464
 //must change when on other systems
 #define SCHED_MEM_MAX SCHED_MEM_MAX_RR1
