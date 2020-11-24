@@ -46,6 +46,7 @@ class HAWSCPUMgr {
     unordered_map<pid_t, int> tasksStatusCode;
     unordered_map<pid_t, long> tasksStartTime;
     unordered_map<pid_t, long> tasksEndTime;
+    unordered_map<pid_t, int> tasksMaxRAM;
     std::mutex taskLock; 
     std::mutex completionLock; 
     int activeTasks = 0;
@@ -99,16 +100,17 @@ class HAWSCPUMgr {
             printf("CPUMGR:    status code: %d\n", tasksStatusCode[pid]);
         }
     }
-    void TaskCompleteAccountingProtected(pid_t pid, TaskStatus ts, int s_code, long time_completed) {
+    int TaskCompleteAccountingProtected(pid_t pid, TaskStatus ts, int s_code, long time_completed) {
         tasksEndTime[pid] = time_completed;
         tasksStatus[pid] = ts;
         tasksStatusCode[pid] = s_code;
         tasksCompleted[pid] = "STDOUT";
         tasksActive.erase(pid);
+        return tasksMaxRAM[pid];
     }
     public:
         HAWSCPUMgr () { }
-        int StartTask(string binpath, string args) {
+        int StartTask(string binpath, string args, int maxRAM) {
             char* argv_list[] = {
                 (char*) binpath.c_str(), (char*) args.c_str(), (char*) 0
             };
@@ -122,13 +124,15 @@ class HAWSCPUMgr {
             tasksStatusCode[pid] = -1;
             tasksEndTime[pid] = 0; 
             tasksStartTime[pid] = start_time; 
+            tasksMaxRAM[pid] = maxRAM;
             taskLock.unlock();
             return 0; // success
         }
         
-        void Monitor () {
+        int Monitor () { //SCHEDLOOP THREAD
             pid_t p;
             int status;
+            int freedRAMMB = 0;
             TaskStatus task_status;
             while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
                long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
@@ -162,7 +166,8 @@ class HAWSCPUMgr {
 
                //if (cpuMgr->TaskIsActive(p)) {
                //printf("concluding task\n");
-               this->TaskConclude(p, task_status, status, time_completed); 
+               freedRAMMB += this->TaskConclude(p, task_status, status, time_completed); 
+
                //printf("done!\n");
 
                //}// else if (gpuMgr->TaskOwned(p) {
@@ -186,20 +191,24 @@ class HAWSCPUMgr {
             printThrottle++;
             //usleep(1); //simulate work
             taskLock.unlock();
+
+            return freedRAMMB; // give concluded task memory back to HAWS
         }
         void PrintData () {
             taskLock.lock();
             this->PrintDataProtected();
             taskLock.unlock();
         }
-        void TaskConclude(pid_t pid, TaskStatus ts, int status_code, long time_completed) {  
+        int TaskConclude(pid_t pid, TaskStatus ts, int status_code, long time_completed) {  
             printf("locking TaskConclude\n");
             taskLock.lock();
             printf("doing accounting\n");
-            this->TaskCompleteAccountingProtected(pid, ts, status_code, time_completed); 
+            int freedRAMMB = this->TaskCompleteAccountingProtected(pid, ts, status_code, 
+                                                                   time_completed); 
             printf("done doing accounting\n");
             taskLock.unlock();
             printf("unlocked TaskConclude\n");
+            return freedRAMMB;
         }
         int TaskIsActive(pid_t pid) {
             taskLock.lock();
