@@ -106,10 +106,10 @@ void haws_test_5(HAWS* haws) {
 
 void haws_test_many_processes (HAWS* haws) {
     haws->Start();
-    for (int i = 0; i < 400; i++) {
+    for (int i = 0; i < 800; i++) {
         HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_cpu", 
                                                      "/opt/haws/bin/matmul_gpu",
-                                                     "2048");
+                                                     "1024");
         sleep(i % 5 == 0 ? 1 : 0);
         haws->HardAwareSchedule(r);
     }

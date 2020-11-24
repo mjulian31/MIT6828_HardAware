@@ -61,7 +61,7 @@ class HAWSCPUMgr {
             it++;
         }
     }
-    void SanityCheckCompletedTasks () { // holding lock
+    inline void SanityCheckCompletedTasks () { // holding lock
         unordered_map<pid_t, string>::iterator it = tasksCompleted.begin();
         while (it != tasksCompleted.end()) {
             pid_t pid = it->first;
@@ -120,10 +120,10 @@ class HAWSCPUMgr {
             taskLock.lock();
 
             // make sure all invariants are satisfied
-            //this->SanityCheckCompletedTasks();
 
             if (printThrottle % 1000 == 0) {
                 this->SanityCheckActiveTasks(); 
+                //this->SanityCheckCompletedTasks();
             //    this->PrintDataProtected();
             }
             printThrottle++;
