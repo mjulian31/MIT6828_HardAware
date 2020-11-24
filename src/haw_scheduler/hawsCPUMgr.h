@@ -51,6 +51,7 @@ class HAWSCPUMgr {
     std::mutex completionLock; 
     int activeTasks = 0;
     int printThrottle = 0;
+    int freedPhysMB = 0;
 
     //unordered_map<int, std::chrono::steady_clock::time_point> tasksEndTime;
 
@@ -100,13 +101,13 @@ class HAWSCPUMgr {
             printf("CPUMGR:    status code: %d\n", tasksStatusCode[pid]);
         }
     }
-    int TaskCompleteAccountingProtected(pid_t pid, TaskStatus ts, int s_code, long time_completed) {
+    void TaskCompleteAccountingProtected(pid_t pid, TaskStatus ts, int s_code, long time_completed) {
         tasksEndTime[pid] = time_completed;
         tasksStatus[pid] = ts;
         tasksStatusCode[pid] = s_code;
         tasksCompleted[pid] = "STDOUT";
         tasksActive.erase(pid);
-        return tasksMaxRAM[pid];
+        this->freedPhysMB += tasksMaxRAM[pid];
     }
     public:
         HAWSCPUMgr () { }
@@ -129,10 +130,9 @@ class HAWSCPUMgr {
             return 0; // success
         }
         
-        int Monitor () { //SCHEDLOOP THREAD
+        void Monitor () { //SCHEDLOOP THREAD
             pid_t p;
             int status;
-            int freedRAMMB = 0;
             TaskStatus task_status;
             while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
                long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
@@ -166,7 +166,7 @@ class HAWSCPUMgr {
 
                //if (cpuMgr->TaskIsActive(p)) {
                //printf("concluding task\n");
-               freedRAMMB += this->TaskConclude(p, task_status, status, time_completed); 
+               this->TaskConclude(p, task_status, status, time_completed); 
 
                //printf("done!\n");
 
@@ -191,24 +191,29 @@ class HAWSCPUMgr {
             printThrottle++;
             //usleep(1); //simulate work
             taskLock.unlock();
-
-            return freedRAMMB; // give concluded task memory back to HAWS
         }
         void PrintData () {
             taskLock.lock();
             this->PrintDataProtected();
             taskLock.unlock();
+        }   
+        int GetFreedMBRam() {
+            taskLock.lock();
+            int freed = this->freedPhysMB;
+            this->freedPhysMB = 0; // requester has been notified with reclaimed mem
+            taskLock.unlock();
+            return freed;
         }
-        int TaskConclude(pid_t pid, TaskStatus ts, int status_code, long time_completed) {  
+        void TaskConclude(pid_t pid, TaskStatus ts, int status_code, 
+                         long time_completed) { //SCHEDLOOP THREAD
             printf("locking TaskConclude\n");
             taskLock.lock();
             printf("doing accounting\n");
-            int freedRAMMB = this->TaskCompleteAccountingProtected(pid, ts, status_code, 
-                                                                   time_completed); 
+            this->TaskCompleteAccountingProtected(pid, ts, status_code, 
+                                                                      time_completed); 
             printf("done doing accounting\n");
             taskLock.unlock();
             printf("unlocked TaskConclude\n");
-            return freedRAMMB;
         }
         int TaskIsActive(pid_t pid) {
             taskLock.lock();

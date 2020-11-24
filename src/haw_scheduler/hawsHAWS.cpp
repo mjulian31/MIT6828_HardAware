@@ -22,18 +22,27 @@ queue<HAWSClientRequest*>* tasksToStartQueue;
 HAWSCPUMgr* cpuMgr;
 HAWSGPUMgr* gpuMgr;
 
+mutex globalMemLock;
+// physmem control 
 #define SCHED_MEM_MAX_RR1 (1024*58) // use up to 58GB of 64GB phys ram
 #define SCHED_MEM_MAX_CLOUDLAB 62464
+// gpu memory control
+#define SCHED_MEM_GPU_MAX_RR1 (1024*5) // use up to 5GB of 6GB gpu ram
+#define SCHED_MEM_GPU_MAX_CLOUDLAB (1024*6) // update on cloudlab
+
 //must change when on other systems
-#define SCHED_MEM_MAX SCHED_MEM_MAX_RR1
+#define SCHED_MEM_MAX     SCHED_MEM_MAX_RR1
+#define SCHED_MEM_GPU_MAX SCHED_MEM_GPU_MAX_RR1
+
 int globalSchedRAMAvail = SCHED_MEM_MAX;
-mutex globalMemLock;
+int globalSchedRAMGPUAvail = SCHED_MEM_GPU_MAX;
 
 int globalNumTasksActive = 0;
 
 void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
     printf("HAWS/SL: ScheduleLoop started...\n");
     int throttle = 0;
+    int freedMBRam; // from task completion
     HAWSClientRequest* req;
     while (!globalKillFlag) {
         bool gotReq = false;
@@ -59,14 +68,19 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
         }
 
         //monitor HW targets
-        int freedMBRam = cpuMgr->Monitor(); //update state of processes in cpu manager  
-        globalSchedRAMAvail += freedMBRam; // replenish mem of finished tasks
+        cpuMgr->Monitor(); //update state of processes in cpu manager  
+        globalSchedRAMAvail += cpuMgr->GetFreedMBRam(); // replenish mem of finished tasks
+    
+        //freedMBRam = gpuMgr->Monitor();
+        //globalSchedRAMAvail += gpuMgr->GetFreedMBRam();
+        //globalSchedRAMGPUAvail += gpuMgr->GetFreedGPUMBRam();
 
         if (throttle++ % 1000 == 0) {
-            printf("HAWS/SL: free mem %dMB (%d%%)\n", globalSchedRAMAvail, 
+            printf("HAWS/SL: free phys mem %dMB (%d%%)\n", globalSchedRAMAvail, 
                    (int)(((float) globalSchedRAMAvail / (float) SCHED_MEM_MAX)*100));
+            printf("HAWS/SL: free gpu mem %dMB (%d%%)\n", globalSchedRAMGPUAvail, 
+                   (int)(((float) globalSchedRAMGPUAvail / (float) SCHED_MEM_GPU_MAX)*100));
         }
-        //gpuMgr->Monitor(); //update state of processes in gpu manager
 
         usleep(50); // yield CPU
     }
