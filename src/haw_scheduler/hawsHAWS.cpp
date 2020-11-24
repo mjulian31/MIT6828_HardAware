@@ -93,16 +93,16 @@ void HAWS::PrintData() {
     cpuMgr->PrintData();
 }
 
+
 void SIGCHLD_Handler(int sig)
 {
     pid_t p;
     int status;
     TaskStatus task_status;
-
     while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
        long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
        /* Handle the death of pid p */
-       //printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
+       printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
        //if (status == 0) {
               //if (print_state_throttle++ % 1000 == 0) { // print once a second
               //    printf("pid %d still running...\n", pid);
@@ -134,8 +134,9 @@ void SIGCHLD_Handler(int sig)
            }
 
            //if (cpuMgr->TaskIsActive(p)) {
-
+           printf("concluding task\n");
            cpuMgr->TaskConclude(p, task_status, status, time_completed); 
+           printf("done!\n");
 
            //}// else if (gpuMgr->TaskOwned(p) {
             //   gpuMgr->ConcludeTask(p, task_status, status); 
@@ -144,6 +145,7 @@ void SIGCHLD_Handler(int sig)
            //    assert(false); //unclaimed process
            //}
            globalNumTasksActive--;
+           printf("globalNumTasksActive = %d\n", globalNumTasksActive);
     }
 }
 

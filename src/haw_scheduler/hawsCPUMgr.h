@@ -31,6 +31,13 @@ static const char* TaskStatusToStr(TaskStatus ts) {
            "TASK_FINISHED_ABNORMAL";
 }
 
+static void hassert(bool cond, string msg) {
+    if (!cond) {
+        printf("ASSERT %s:", msg.c_str());
+        exit(1);
+    }
+}
+
 class HAWSCPUMgr {
     list<pid_t> allPids;
     unordered_map<pid_t, string> tasksCompleted;
@@ -54,14 +61,17 @@ class HAWSCPUMgr {
         list<pid_t>::iterator allPidIt;
         while (it != tasksActive.end()) {
             pid_t pid = it->first;
-            assert(this->tasksStatus[pid] == TASK_RUNNING);
-            assert(this->tasksStatusCode[pid] == -1);
-            assert(this->tasksStartTime[pid] > 0);
-            assert(this->tasksEndTime[pid] == 0);
+            hassert(this->tasksStatus[pid] == TASK_RUNNING, "assert1");
+            hassert(this->tasksStatusCode[pid] == -1, "assert2");
+            hassert(this->tasksStartTime[pid] > 0, "assert3");
+            hassert(this->tasksEndTime[pid] == 0, "assert4");
             it++;
         }
     }
     inline void SanityCheckCompletedTasks () { // holding lock
+        if (tasksCompleted.size() == 0) {
+            return;
+        }
         unordered_map<pid_t, string>::iterator it = tasksCompleted.begin();
         while (it != tasksCompleted.end()) {
             pid_t pid = it->first;
@@ -120,13 +130,17 @@ class HAWSCPUMgr {
             taskLock.lock();
 
             // make sure all invariants are satisfied
-
+            
             if (printThrottle % 1000 == 0) {
+                printf("-->doing sanity check\n");
                 this->SanityCheckActiveTasks(); 
+                printf("<--done doing sanity check\n");
                 //this->SanityCheckCompletedTasks();
             //    this->PrintDataProtected();
             }
             printThrottle++;
+
+            //usleep(1); //simulate work
 
             taskLock.unlock();
         }
@@ -136,9 +150,13 @@ class HAWSCPUMgr {
             taskLock.unlock();
         }
         void TaskConclude(pid_t pid, TaskStatus ts, int status_code, long time_completed) {  
+            printf("locking TaskConclude\n");
             taskLock.lock();
+            printf("doing accounting\n");
             this->TaskCompleteAccountingProtected(pid, ts, status_code, time_completed); 
+            printf("done doing accounting\n");
             taskLock.unlock();
+            printf("unlocked TaskConclude\n");
         }
         int TaskIsActive(pid_t pid) {
             taskLock.lock();
