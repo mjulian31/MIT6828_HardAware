@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <algorithm>
 #include <mutex>
 #include <queue>
 #include <thread>
@@ -39,6 +40,64 @@ int globalSchedRAMGPUAvail = SCHED_MEM_GPU_MAX;
 
 int globalNumTasksActive = 0;
 
+list<pid_t> allCPUPids;
+list<pid_t> allGPUPids;
+
+void HAWS::ReapChildren() {
+    pid_t p;
+    int status;
+    int reapedTasks = 0;
+    TaskStatus task_status;
+    while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
+       long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
+       /* Handle the death of pid p */
+       //printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
+
+       // debugging
+       //printf("waitpid() was < 0\n"); 
+       //printf("errno codes are ECHILD: %d, EINTR: %d, EINVAL %d\n", ECHILD, EINTR, EINVAL);
+       //printf("errno was = %d\n", errno);
+
+       if (WIFEXITED(status) && !WEXITSTATUS(status)) {
+          //printf("program execution successful\n"); 
+          task_status = TASK_FINISHED_SUCCESS;
+       } else if (WIFEXITED(status) && WEXITSTATUS(status)) { 
+            if (WEXITSTATUS(status) == 127) { 
+                // execv failed 
+                printf("execv failed\n"); 
+                task_status = TASK_FINISHED_ABNORMAL;
+                assert(false);
+            } 
+            else  {
+                //printf("program terminated normally,"
+                //   " but returned a non-zero status\n");                 
+                task_status = TASK_FINISHED_NONZERO;
+            }
+       } else {
+           //printf("program didn't terminate normally\n");             
+           task_status = TASK_FINISHED_ABNORMAL;
+       }
+
+       if (std::find(allCPUPids.begin(), allCPUPids.end(), p) != allCPUPids.end()) {
+           assert(cpuMgr->TaskIsActive(p));
+           assert(std::find(allGPUPids.begin(), allGPUPids.end(), p) == allGPUPids.end());
+           cpuMgr->TaskConclude(p, task_status, status, time_completed); 
+       }
+
+       //printf("concluding task\n");
+
+       //printf("done!\n");
+
+       //}// else if (gpuMgr->TaskOwned(p) {
+        //   gpuMgr->ConcludeTask(p, task_status, status); 
+        // }
+       //else {
+       //    assert(false); //unclaimed process
+       //}
+       //printf("globalNumTasksActive = %d\n", globalNumTasksActive);
+    }
+}
+
 void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
     printf("HAWS/SL: ScheduleLoop started...\n");
     int throttle = 0;
@@ -69,6 +128,8 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
             free(req); // done processing client request
         }
 
+        ReapChildren();
+        
         //monitor HW targets
         cpuMgr->Monitor(); //update state of processes in cpu manager  
         globalSchedRAMAvail += cpuMgr->GetFreedMBRam(); // replenish mem of finished tasks
@@ -101,8 +162,8 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
         } else {
             int maxRAM = req->GetCPUBinRAM();
             globalSchedRAMAvail -= maxRAM;
-            int success = cpuMgr->StartTask(req->GetCPUBinPath(), req->GetTaskArgs(), maxRAM);
-            assert(success == 0);
+            int pid = cpuMgr->StartTask(req->GetCPUBinPath(), req->GetTaskArgs(), maxRAM);
+            allCPUPids.insert(allCPUPids.begin(), pid);
             globalNumTasksActive++;
             //printf("HAWS/SL: CPU got %s\n", req->ToStr().c_str());
         }

@@ -50,7 +50,7 @@ class HAWSTargetMgr {
     std::mutex taskLock; 
     std::mutex completionLock; 
     int activeTasks = 0;
-    int printThrottle = 0;
+    int throttle = 0;
     int freedPhysMB = 0;
 
     //CPUCostModel cputCostModel; //object TODO
@@ -87,8 +87,9 @@ class HAWSTargetMgr {
     }
     void PrintDataProtected () { // holding lock
         list<pid_t>::iterator it = allPids.begin();
-        printf("\nPROCESS SET | CPU processes %ld/%ld active/all\n", 
+        printf("TARGMGR/CPU | processes %ld/%ld active/all\n", 
                 tasksActive.size(), allPids.size());
+        /*
         for (it != allPids.begin(); it != allPids.end(); ++it) {
             pid_t pid = *it;
             printf("CPUMGR: PID %d\n", pid);
@@ -97,7 +98,7 @@ class HAWSTargetMgr {
             printf("CPUMGR:          ended: %ld\n", tasksEndTime[pid]);
             printf("CPUMGR:    task status: %s\n", TaskStatusToStr(tasksStatus[pid]));
             printf("CPUMGR:    status code: %d\n", tasksStatusCode[pid]);
-        }
+        }*/
     }
     void TaskCompleteAccountingProtected(pid_t pid, TaskStatus ts, int s_code, long time_completed) {
         tasksEndTime[pid] = time_completed;
@@ -125,7 +126,7 @@ class HAWSTargetMgr {
             tasksStartTime[pid] = start_time; 
             tasksMaxRAM[pid] = maxRAM;
             taskLock.unlock();
-            return 0; // success
+            return pid;
         }
         
         void Monitor () { //SCHEDLOOP THREAD
@@ -178,17 +179,19 @@ class HAWSTargetMgr {
                //printf("globalNumTasksActive = %d\n", globalNumTasksActive);
             }
 
-            //printf("-->doing sanity check\n");
-            taskLock.lock();
-            if (printThrottle % 1000 == 0) { // make sure all invariants are satisfied
+            if (throttle % 1000 == 0) { // make sure all invariants are satisfied
+                //printf("-->doing sanity check\n");
+                taskLock.lock();
                 this->SanityCheckActiveTasks(); 
                 this->SanityCheckCompletedTasks();
-            //    this->PrintDataProtected();
+                if (throttle % 1000 == 0) {
+                    this->PrintDataProtected();
+                }
+                taskLock.unlock();
+                //printf("<--done doing sanity check\n");
             }
-            printThrottle++;
             //usleep(1); //simulate work
-            taskLock.unlock();
-            //printf("<--done doing sanity check\n");
+            throttle++;
 
             if (reapedTasks > 0) {
                 printf("TARGMGR: subprocesses reaped: %d\n", reapedTasks);

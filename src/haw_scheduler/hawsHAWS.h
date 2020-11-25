@@ -27,8 +27,10 @@ class HAWS {
 
         //Map workloadTask[TaskID] -> string (args?)
         //Map offlineStaticAnalysis[TaskID] -> object TODO
-    
+   
+        //SCHEDLOOP THREAD 
         static void ScheduleLoop(); 
+        static void ReapChildren();
         static void ProcessClientRequest(HAWSClientRequest* req);
         static HAWSHWTarget DetermineReqTarget(HAWSClientRequest* req);
 
