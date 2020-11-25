@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <assert.h>
 #include <thread>
@@ -16,16 +15,19 @@ void haws_test_3(HAWS* haws);
 void haws_test_4(HAWS* haws);
 void haws_test_5(HAWS* haws);
 void haws_test_phys_mem_management(HAWS* haws);
+void haws_test_phys_mem_management2(HAWS* haws);
 
 int cpuBinRAM1024 = 24;
 int cpuBinRAM2048 = 90;
+int cpuBinRAM4096 = 385;
+int cpuBinRAM8192 = 1536;
 
 int cpuBinRAMGPUBase = 2;
 int gpuBinRAMBase = 2;
 
 int main () {
     HAWS haws;
-    haws_test_phys_mem_management(&haws);    
+    haws_test_phys_mem_management2(&haws);
 }
 
 void haws_test_1(HAWS* haws) {
@@ -123,9 +125,23 @@ void haws_test_phys_mem_management(HAWS* haws) {
     haws->Stop();
 }
 
+
+void haws_test_phys_mem_management2(HAWS* haws) {
+    haws->Start();
+    for (int i = 0; i < 38; i++) {
+        HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_cpu", cpuBinRAM8192,
+                                                     "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
+                                                     "8192");
+        haws->HardAwareSchedule(r);
+    }
+    sleep(1);
+    while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
+    haws->Stop();
+}
+
 void haws_test_gpu_mgmt(HAWS* haws) {
     haws->Start();
-    for (int i = 0; i < 8000; i++) {
+    for (int i = 0; i < 100; i++) {
         HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_gpu", cpuBinRAMGPUBase,
                                                      "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
                                                      "1024");

@@ -6,6 +6,51 @@
 #include <sys/wait.h> 
 #include "subprocess.h"
 
+
+int start_subprocess_nonblocking(char** argv_list) {
+    pid_t  pid; 
+    int ret = 1; 
+    pid = fork(); 
+  
+    if (pid == -1){ 
+       // pid == -1 means error occured 
+       printf("can't fork, error occured\n"); 
+       exit(EXIT_FAILURE); 
+    } 
+    else if (pid == 0){ 
+       // pid == 0 means child process created 
+       // getpid() returns process id of calling process 
+       // Here It will return process id of child process 
+       //printf("child process, pid = %u\n",getpid()); 
+       // Here It will return Parent of child Process means Parent process it self 
+       //printf("parent of child process, pid = %u\n",getppid());  
+  
+       // the argv list first argument should point to   
+       // filename associated with file being executed, ex argv_list[0] = /bin/ls
+       // next are args to executed file ex. argv_list[1] = '-lrth' and argv_list[2] = "/home"
+       // the array must be terminated by NULL to signal end of command line args
+       // pointer 
+ 
+       // the execv() only return if error occured. 
+       // The return value is -1 
+       execv(argv_list[0],argv_list); 
+       exit(0); 
+    } else{ 
+       // a positive number is returned for the pid of 
+       // parent process 
+       // getppid() returns process id of parent of  
+       // calling process 
+       // Here It will return parent of parent process's ID 
+       //printf("Parent Of parent process, pid = %u\n",getppid()); 
+       //printf("parent process, pid = %u\n",getpid());  
+       //printf("caught pid %d\n", pid);
+       return pid;
+   } 
+   return 0;
+}
+
+// early dev code below - unused but kept for debugging 
+
 char* pow8_julia_bin_path= (char*) "/opt/julia/usr/bin/julia";
 char* x86_julia_bin_path= (char*) "/usr/local/bin/julia";
 
@@ -88,47 +133,6 @@ pid_t start_subprocess_nonblocking_monitor(char** argv_list) {
     exit(0);
 }
 
-int start_subprocess_nonblocking(char** argv_list) {
-    pid_t  pid; 
-    int ret = 1; 
-    pid = fork(); 
-  
-    if (pid == -1){ 
-       // pid == -1 means error occured 
-       printf("can't fork, error occured\n"); 
-       exit(EXIT_FAILURE); 
-    } 
-    else if (pid == 0){ 
-       // pid == 0 means child process created 
-       // getpid() returns process id of calling process 
-       // Here It will return process id of child process 
-       //printf("child process, pid = %u\n",getpid()); 
-       // Here It will return Parent of child Process means Parent process it self 
-       //printf("parent of child process, pid = %u\n",getppid());  
-  
-       // the argv list first argument should point to   
-       // filename associated with file being executed, ex argv_list[0] = /bin/ls
-       // next are args to executed file ex. argv_list[1] = '-lrth' and argv_list[2] = "/home"
-       // the array must be terminated by NULL to signal end of command line args
-       // pointer 
- 
-       // the execv() only return if error occured. 
-       // The return value is -1 
-       execv(argv_list[0],argv_list); 
-       exit(0); 
-    } else{ 
-       // a positive number is returned for the pid of 
-       // parent process 
-       // getppid() returns process id of parent of  
-       // calling process 
-       // Here It will return parent of parent process's ID 
-       //printf("Parent Of parent process, pid = %u\n",getppid()); 
-       //printf("parent process, pid = %u\n",getpid());  
-       //printf("caught pid %d\n", pid);
-       return pid;
-   } 
-   return 0;
-}
 
 int start_subprocess_blocking_julia_test(char* julia_bin_path, char* julia_script_path) {
     // set up command line strings
