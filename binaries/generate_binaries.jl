@@ -90,9 +90,9 @@ function coalesced_matmul_kernel!(ptr_out::Ptr{Cdouble}, ptr_in1::Ptr{Cdouble}, 
     dptr_out = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_out)
     dptr_in1 = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_in1)
     dptr_in2 = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_in2)
-    output = CuDeviceArray((N,N), dptr_out)
-    input1 = CuDeviceArray((N,N), dptr_in1)
-    input2 = CuDeviceArray((N,N), dptr_in2)
+    output = CuDeviceArray((N,M), dptr_out)
+    input1 = CuDeviceArray((N,R), dptr_in1)
+    input2 = CuDeviceArray((R,M), dptr_in2)
     gi = blockIdx().x
     gj = blockIdx().y
     i = threadIdx().x
@@ -191,13 +191,13 @@ println("done. saved cpu binary to matmul_cpu")
 
 print("generating gpu binary...")
 DIM = 1024
-a = CuArray{Float64}(undef, 10)
+a = CuArray{Float64}(undef, (DIM, DIM))
 da = CUDA.cudaconvert(a)
 aptr = reinterpret(Ptr{Cdouble}, da.ptr)
-b = CuArray{Float64}(undef, 10)
+b = CuArray{Float64}(undef, (DIM, DIM))
 db = CUDA.cudaconvert(b)
 bptr = reinterpret(Ptr{Cdouble}, db.ptr)
-c = CuArray{Float64}(undef, 10)
+c = CuArray{Float64}(undef, (DIM, DIM))
 dc = CUDA.cudaconvert(c)
 cptr = reinterpret(Ptr{Cdouble}, dc.ptr)
 n = Cint(DIM)
