@@ -102,9 +102,9 @@ int start_subprocess_nonblocking(char** argv_list) {
        // pid == 0 means child process created 
        // getpid() returns process id of calling process 
        // Here It will return process id of child process 
-       printf("child process, pid = %u\n",getpid()); 
+       //printf("child process, pid = %u\n",getpid()); 
        // Here It will return Parent of child Process means Parent process it self 
-       printf("parent of child process, pid = %u\n",getppid());  
+       //printf("parent of child process, pid = %u\n",getppid());  
   
        // the argv list first argument should point to   
        // filename associated with file being executed, ex argv_list[0] = /bin/ls
@@ -122,13 +122,12 @@ int start_subprocess_nonblocking(char** argv_list) {
        // getppid() returns process id of parent of  
        // calling process 
        // Here It will return parent of parent process's ID 
-       printf("Parent Of parent process, pid = %u\n",getppid()); 
-       printf("parent process, pid = %u\n",getpid());  
-       printf("caught pid %d\n", pid);
+       //printf("Parent Of parent process, pid = %u\n",getppid()); 
+       //printf("parent process, pid = %u\n",getpid());  
+       //printf("caught pid %d\n", pid);
        return pid;
    } 
    return 0;
-
 }
 
 int start_subprocess_blocking_julia_test(char* julia_bin_path, char* julia_script_path) {

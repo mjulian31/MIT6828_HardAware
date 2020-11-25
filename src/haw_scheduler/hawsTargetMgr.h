@@ -38,7 +38,7 @@ static void hassert(bool cond, string msg) {
     }
 }
 
-class HAWSCPUMgr {
+class HAWSTargetMgr {
     list<pid_t> allPids;
     unordered_map<pid_t, string> tasksCompleted;
     unordered_map<pid_t, string> tasksActive;
@@ -110,7 +110,7 @@ class HAWSCPUMgr {
         this->freedPhysMB += tasksMaxRAM[pid];
     }
     public:
-        HAWSCPUMgr () { }
+        HAWSTargetMgr () { }
         int StartTask(string binpath, string args, int maxRAM) {
             char* argv_list[] = {
                 (char*) binpath.c_str(), (char*) args.c_str(), (char*) 0
@@ -133,11 +133,12 @@ class HAWSCPUMgr {
         void Monitor () { //SCHEDLOOP THREAD
             pid_t p;
             int status;
+            int reapedTasks = 0;
             TaskStatus task_status;
             while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
                long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
                /* Handle the death of pid p */
-               printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
+               //printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
 
                // debugging
                //printf("waitpid() was < 0\n"); 
@@ -179,18 +180,21 @@ class HAWSCPUMgr {
                //printf("globalNumTasksActive = %d\n", globalNumTasksActive);
             }
 
+            //printf("-->doing sanity check\n");
             taskLock.lock();
-            // make sure all invariants are satisfied
-            if (printThrottle % 1000 == 0) {
-                printf("-->doing sanity check\n");
+            if (printThrottle % 1000 == 0) { // make sure all invariants are satisfied
                 this->SanityCheckActiveTasks(); 
                 this->SanityCheckCompletedTasks();
-                printf("<--done doing sanity check\n");
             //    this->PrintDataProtected();
             }
             printThrottle++;
             //usleep(1); //simulate work
             taskLock.unlock();
+            //printf("<--done doing sanity check\n");
+
+            if (reapedTasks > 0) {
+                printf("TARGMGR: subprocesses reaped: %d\n", reapedTasks);
+            }
         }
         void PrintData () {
             taskLock.lock();
@@ -206,14 +210,14 @@ class HAWSCPUMgr {
         }
         void TaskConclude(pid_t pid, TaskStatus ts, int status_code, 
                          long time_completed) { //SCHEDLOOP THREAD
-            printf("locking TaskConclude\n");
+            //printf("locking TaskConclude\n");
             taskLock.lock();
-            printf("doing accounting\n");
+            //printf("doing accounting\n");
             this->TaskCompleteAccountingProtected(pid, ts, status_code, 
                                                                       time_completed); 
-            printf("done doing accounting\n");
+            //printf("done doing accounting\n");
             taskLock.unlock();
-            printf("unlocked TaskConclude\n");
+            //printf("unlocked TaskConclude\n");
         }
         int TaskIsActive(pid_t pid) {
             taskLock.lock();
