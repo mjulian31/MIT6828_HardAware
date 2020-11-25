@@ -106,11 +106,10 @@ int main(int argc, char **argv) {
 
   // launch the matmul CUDA Kernel
   int threadsPerBlock = 32;
-  int maxdim = std::max(std::max(M, R), N);
-  int add = (maxdim % threadsPerBlock == 0)? 0 : threadsPerBlock;
-  int blocksPerGrid = (maxdim + add)/threadsPerBlock;
+  int blocksPerRow = (N + threadsPerBlock - N%threadsPerBlock)/threadsPerBlock;
+  int blocksPerCol = (M + threadsPerBlock - M%threadsPerBlock)/threadsPerBlock;
   dim3 cudaBlockSize(threadsPerBlock, threadsPerBlock, 1);
-  dim3 cudaGridSize(blocksPerGrid, blocksPerGrid, 1);
+  dim3 cudaGridSize(blocksPerRow, blocksPerCol, 1);
 
   void *arr[] = {&d_output, &d_A, &d_B, &N, &R, &M};
   check_errors(cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,

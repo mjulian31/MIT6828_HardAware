@@ -1,7 +1,7 @@
 print("loading packages...")
 using LinearAlgebra
 using SIMD
-# using CUDA
+using CUDA
 using StaticArrays
 using InteractiveUtils
 using LLVM
@@ -29,7 +29,6 @@ end
 
 
 function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}, N::Cint, R::Cint, M::Cint)
-    # assuming square matrix
     NUM_TILES_ROW = div(N + TILE_DIM - N%TILE_DIM, TILE_DIM)
     NUM_TILES_COL = div(M + TILE_DIM - M%TILE_DIM, TILE_DIM)
     NUM_TILES = div(R + TILE_DIM - R%TILE_DIM, TILE_DIM)
@@ -86,69 +85,67 @@ function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}
 end
 
 
-# function coalesced_matmul_kernel!(ptr_out::Ptr{Cdouble}, ptr_in1::Ptr{Cdouble}, ptr_in2::Ptr{Cdouble}, N::Cint, R::Cint, M::Cint)
-#     dptr_out = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_out)
-#     dptr_in1 = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_in1)
-#     dptr_in2 = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_in2)
-#     output = CuDeviceArray((N,M), dptr_out)
-#     input1 = CuDeviceArray((N,R), dptr_in1)
-#     input2 = CuDeviceArray((R,M), dptr_in2)
-#     gi = blockIdx().x
-#     gj = blockIdx().y
-#     i = threadIdx().x
-#     j = threadIdx().y
-#
-#     # +1 to avoid bank conflicts on shared memory
-#     tile1 = @cuStaticSharedMem eltype(output) (TILE_DIM+1, TILE_DIM)
-#     tile2 = @cuStaticSharedMem eltype(output) (TILE_DIM+1, TILE_DIM)
-#
-#     outval = zero(eltype(output))
-#
-#     maxdim = max(N, R, M)
-#     add = maxdim % TILE_DIM == 0 ? 0 : TILE_DIM
-#     NUM_TILES = div(maxdim + add, TILE_DIM)
-#
-#     # loop over all tiles needed for this calculation
-#     for t in 0:NUM_TILES-1
-#         # Can't use @index(Global), because we use a smaller ndrange
-#         I = (gi-1) * TILE_DIM + i
-#         J = (gj-1) * TILE_DIM + j
-#
-#         # load inputs into tiles
-#         if I <= N && t*TILE_DIM + j <= R
-#             @inbounds tile1[i, j] = input1[I, t*TILE_DIM + j]
-#         else
-#             @inbounds tile1[i, j] = 0.0
-#         end
-#         if t*TILE_DIM + i <= R && J <= M
-#             @inbounds tile2[i, j] = input2[t*TILE_DIM + i, J]
-#         else
-#             @inbounds tile2[i, j] = 0.0
-#         end
-#
-#         # wait for all tiles to be loaded
-#         sync_threads()
-#
-#         # get global values again
-#         I = (gi-1) * TILE_DIM + i
-#         J = (gj-1) * TILE_DIM + j
-#
-#         # calculate value of spot in output
-#         for k in 1:TILE_DIM
-#             @inbounds outval += tile1[i, k] * tile2[k, j]
-#         end
-#
-#         sync_threads()
-#     end
-#
-#     I = (gi-1) * TILE_DIM + i
-#     J = (gj-1) * TILE_DIM + j
-#
-#     if I <= N && J <= M
-#         @inbounds output[I, J] = outval
-#     end
-#     return nothing
-# end
+function coalesced_matmul_kernel!(ptr_out::Ptr{Cdouble}, ptr_in1::Ptr{Cdouble}, ptr_in2::Ptr{Cdouble}, N::Cint, R::Cint, M::Cint)
+    dptr_out = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_out)
+    dptr_in1 = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_in1)
+    dptr_in2 = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_in2)
+    output = CuDeviceArray((N,M), dptr_out)
+    input1 = CuDeviceArray((N,R), dptr_in1)
+    input2 = CuDeviceArray((R,M), dptr_in2)
+    gi = blockIdx().x
+    gj = blockIdx().y
+    i = threadIdx().x
+    j = threadIdx().y
+
+    # +1 to avoid bank conflicts on shared memory
+    tile1 = @cuStaticSharedMem eltype(output) (TILE_DIM+1, TILE_DIM)
+    tile2 = @cuStaticSharedMem eltype(output) (TILE_DIM+1, TILE_DIM)
+
+    outval = zero(eltype(output))
+
+    NUM_TILES = div(R + TILE_DIM - R%TILE_DIM, TILE_DIM)
+
+    # loop over all tiles needed for this calculation
+    for t in 0:NUM_TILES-1
+        # Can't use @index(Global), because we use a smaller ndrange
+        I = (gi-1) * TILE_DIM + i
+        J = (gj-1) * TILE_DIM + j
+
+        # load inputs into tiles
+        if I <= N && t*TILE_DIM + j <= R
+            @inbounds tile1[i, j] = input1[I, t*TILE_DIM + j]
+        else
+            @inbounds tile1[i, j] = 0.0
+        end
+        if t*TILE_DIM + i <= R && J <= M
+            @inbounds tile2[i, j] = input2[t*TILE_DIM + i, J]
+        else
+            @inbounds tile2[i, j] = 0.0
+        end
+
+        # wait for all tiles to be loaded
+        sync_threads()
+
+        # get global values again
+        I = (gi-1) * TILE_DIM + i
+        J = (gj-1) * TILE_DIM + j
+
+        # calculate value of spot in output
+        for k in 1:TILE_DIM
+            @inbounds outval += tile1[i, k] * tile2[k, j]
+        end
+
+        sync_threads()
+    end
+
+    I = (gi-1) * TILE_DIM + i
+    J = (gj-1) * TILE_DIM + j
+
+    if I <= N && J <= M
+        @inbounds output[I, J] = outval
+    end
+    return nothing
+end
 
 function mcjob(@nospecialize(func), @nospecialize(types);
                cpu::String = (LLVM.version() < v"8") ? "" : unsafe_string(LLVM.API.LLVMGetHostCPUName()),
@@ -193,26 +190,26 @@ else
 end
 println("done. saved cpu binary to matmul_cpu")
 
-# print("generating gpu binary...")
-# DIM = 1024
-# a = CuArray{Float64}(undef, (DIM, DIM))
-# da = CUDA.cudaconvert(a)
-# aptr = reinterpret(Ptr{Cdouble}, da.ptr)
-# b = CuArray{Float64}(undef, (DIM, DIM))
-# db = CUDA.cudaconvert(b)
-# bptr = reinterpret(Ptr{Cdouble}, db.ptr)
-# c = CuArray{Float64}(undef, (DIM, DIM))
-# dc = CUDA.cudaconvert(c)
-# cptr = reinterpret(Ptr{Cdouble}, dc.ptr)
-# n = Cint(DIM)
-# r = Cint(DIM)
-# m = Cint(DIM)
-# run(`rm -f -r dump`)
-# CUDA.@device_code dir="dump" @cuda name="matmul" threads=(TILE_DIM, TILE_DIM) blocks=(div(DIM, TILE_DIM), div(DIM, TILE_DIM)) coalesced_matmul_kernel!(cptr, aptr, bptr, n, r, m)
-# run(`scp dump/matmul_1.asm matmul_gpu.ptx`)
-# if check_err
-#     run(`/usr/local/cuda-11.1/bin/nvcc -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu -DERR_CHECK`)
-# else
-#     run(`/usr/local/cuda-11.1/bin/nvcc -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu`)
-# end
-# println("done. saved gpu binary to matmul_gpu")
+print("generating gpu binary...")
+DIM = 1024
+a = CuArray{Float64}(undef, (DIM, DIM))
+da = CUDA.cudaconvert(a)
+aptr = reinterpret(Ptr{Cdouble}, da.ptr)
+b = CuArray{Float64}(undef, (DIM, DIM))
+db = CUDA.cudaconvert(b)
+bptr = reinterpret(Ptr{Cdouble}, db.ptr)
+c = CuArray{Float64}(undef, (DIM, DIM))
+dc = CUDA.cudaconvert(c)
+cptr = reinterpret(Ptr{Cdouble}, dc.ptr)
+n = Cint(DIM)
+r = Cint(DIM)
+m = Cint(DIM)
+run(`rm -f -r dump`)
+CUDA.@device_code dir="dump" @cuda name="matmul" threads=(TILE_DIM, TILE_DIM) blocks=(div(DIM, TILE_DIM), div(DIM, TILE_DIM)) coalesced_matmul_kernel!(cptr, aptr, bptr, n, r, m)
+run(`scp dump/matmul_1.asm matmul_gpu.ptx`)
+if check_err
+    run(`/usr/local/cuda-11.1/bin/nvcc -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu -DERR_CHECK`)
+else
+    run(`/usr/local/cuda-11.1/bin/nvcc -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu`)
+end
+println("done. saved gpu binary to matmul_gpu")
