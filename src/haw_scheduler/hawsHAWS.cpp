@@ -43,6 +43,11 @@ int globalNumTasksActive = 0;
 list<pid_t> allCPUPids;
 list<pid_t> allGPUPids;
 
+int throttle = 0;
+
+#define IN_LIST(list, item) (std::find(list.begin(), list.end(), item) != list.end())
+#define NOT_IN_LIST(list, item) (std::find(list.begin(), list.end(), item) == list.end())
+
 void HAWS::ReapChildren() {
     pid_t p;
     int status;
@@ -77,30 +82,26 @@ void HAWS::ReapChildren() {
            //printf("program didn't terminate normally\n");             
            task_status = TASK_FINISHED_ABNORMAL;
        }
-
-       if (std::find(allCPUPids.begin(), allCPUPids.end(), p) != allCPUPids.end()) {
-           assert(cpuMgr->TaskIsActive(p));
-           assert(std::find(allGPUPids.begin(), allGPUPids.end(), p) == allGPUPids.end());
-           cpuMgr->TaskConclude(p, task_status, status, time_completed); 
-       }
-
-       //printf("concluding task\n");
-
-       //printf("done!\n");
-
-       //}// else if (gpuMgr->TaskOwned(p) {
-        //   gpuMgr->ConcludeTask(p, task_status, status); 
-        // }
-       //else {
-       //    assert(false); //unclaimed process
-       //}
-       //printf("globalNumTasksActive = %d\n", globalNumTasksActive);
+       DispatchConclusion(p, task_status, status, time_completed); 
     }
+    if (reapedTasks > 0) { printf("TARGMGR: subprocesses reaped: %d\n", reapedTasks); }
+}
+
+void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, long time_completed) {
+    if (IN_LIST(allCPUPids, pid)) {
+       assert(cpuMgr->TaskIsActive(pid));
+       assert(NOT_IN_LIST(allGPUPids, pid));
+       cpuMgr->TaskConclude(pid, task_status, status, time_completed); 
+   } else if (IN_LIST(allGPUPids, pid)) {
+       assert(false); //NOT IMPLEMENTED
+       assert(gpuMgr->TaskIsActive(pid));
+       assert(NOT_IN_LIST(allCPUPids, pid));
+       //gpuMgr->ConcludeTask(p, task_status, status); 
+   }
 }
 
 void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
     printf("HAWS/SL: ScheduleLoop started...\n");
-    int throttle = 0;
     int freedMBRam; // from task completion
     HAWSClientRequest* req;
     while (!globalKillFlag) {

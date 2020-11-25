@@ -12,6 +12,13 @@ using namespace std;
 
 enum HAWSHWTarget { TargCPU, TargGPU };
 
+enum TaskStatus { 
+    TASK_RUNNING, 
+    TASK_FINISHED_SUCCESS, 
+    TASK_FINISHED_NONZERO, 
+    TASK_FINISHED_ABNORMAL
+};
+
 class HAWS {
     private:
         bool schedLoopThreadRunning;
@@ -31,6 +38,7 @@ class HAWS {
         //SCHEDLOOP THREAD 
         static void ScheduleLoop(); 
         static void ReapChildren();
+        static void DispatchConclusion(pid_t, TaskStatus, int status, long time_completed);
         static void ProcessClientRequest(HAWSClientRequest* req);
         static HAWSHWTarget DetermineReqTarget(HAWSClientRequest* req);
 

@@ -9,13 +9,6 @@
 
 using namespace std; 
 
-enum TaskStatus { 
-    TASK_RUNNING, 
-    TASK_FINISHED_SUCCESS, 
-    TASK_FINISHED_NONZERO, 
-    TASK_FINISHED_ABNORMAL
-};
-
 /*
 typdef struct TaskCompleted {
     pid_t pid;
@@ -85,26 +78,31 @@ class HAWSTargetMgr {
     int TaskIsActiveProtected (pid_t pid) { // holding lock 
         return this->tasksActive.find(pid) != this->tasksActive.end();
     }
-    void PrintDataProtected () { // holding lock
+    void PrintProcessProtected(pid_t pid) { // holding lock
+        printf("HWMGR: PID %d\n", pid);
+        printf("HWMGR:  in active set: %d\n", this->TaskIsActiveProtected(pid));  
+        printf("HWMGR:        started: %ld\n", tasksStartTime[pid]);
+        printf("HWMGR:          ended: %ld\n", tasksEndTime[pid]);
+        printf("HWMGR:    task status: %s\n", TaskStatusToStr(tasksStatus[pid]));
+        printf("HWMGR:    status code: %d\n", tasksStatusCode[pid]);
+        printf("HWMGR:   max phys mem: %d\n", tasksMaxRAM[pid]);  
+    }
+    void PrintAllProcessesProtected() { // holding lock
         list<pid_t>::iterator it = allPids.begin();
+        for (it != allPids.begin(); it != allPids.end(); ++it) {
+            this->PrintProcessProtected(*it);
+        }
+    }
+    void PrintDataProtected () { // holding lock
         printf("TARGMGR/CPU | processes %ld/%ld active/all\n", 
                 tasksActive.size(), allPids.size());
-        /*
-        for (it != allPids.begin(); it != allPids.end(); ++it) {
-            pid_t pid = *it;
-            printf("CPUMGR: PID %d\n", pid);
-            printf("CPUMGR:  in active set: %d\n", this->TaskIsActiveProtected(pid));  
-            printf("CPUMGR:        started: %ld\n", tasksStartTime[pid]);
-            printf("CPUMGR:          ended: %ld\n", tasksEndTime[pid]);
-            printf("CPUMGR:    task status: %s\n", TaskStatusToStr(tasksStatus[pid]));
-            printf("CPUMGR:    status code: %d\n", tasksStatusCode[pid]);
-        }*/
+        
     }
     void TaskCompleteAccountingProtected(pid_t pid, TaskStatus ts, int s_code, long time_completed) {
         tasksEndTime[pid] = time_completed;
         tasksStatus[pid] = ts;
         tasksStatusCode[pid] = s_code;
-        tasksCompleted[pid] = "STDOUT";
+        tasksCompleted[pid] = "STDOUT"; //TODO
         tasksActive.erase(pid);
         this->freedPhysMB += tasksMaxRAM[pid];
     }
@@ -130,20 +128,18 @@ class HAWSTargetMgr {
         }
         
         void Monitor () { //SCHEDLOOP THREAD
+            /*
             pid_t p;
             int status;
             int reapedTasks = 0;
             TaskStatus task_status;
             while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
                long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
-               /* Handle the death of pid p */
-               //printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
-
                // debugging
+               //printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
                //printf("waitpid() was < 0\n"); 
                //printf("errno codes are ECHILD: %d, EINTR: %d, EINVAL %d\n", ECHILD, EINTR, EINVAL);
                //printf("errno was = %d\n", errno);
-
                if (WIFEXITED(status) && !WEXITSTATUS(status)) {
                   //printf("program execution successful\n"); 
                   task_status = TASK_FINISHED_SUCCESS;
@@ -177,7 +173,7 @@ class HAWSTargetMgr {
                //    assert(false); //unclaimed process
                //}
                //printf("globalNumTasksActive = %d\n", globalNumTasksActive);
-            }
+            }*/
 
             if (throttle % 1000 == 0) { // make sure all invariants are satisfied
                 //printf("-->doing sanity check\n");
@@ -189,13 +185,11 @@ class HAWSTargetMgr {
                 }
                 taskLock.unlock();
                 //printf("<--done doing sanity check\n");
-            }
-            //usleep(1); //simulate work
-            throttle++;
+            } throttle++;
 
-            if (reapedTasks > 0) {
-                printf("TARGMGR: subprocesses reaped: %d\n", reapedTasks);
-            }
+            //usleep(1); //simulate work
+
+            
         }
         void PrintData () {
             taskLock.lock();
