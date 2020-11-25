@@ -6,6 +6,7 @@
 #include <thread>
 #include <unistd.h>
 #include <cstring>
+#include "hawsUtil.h"
 #include "hawsHAWS.h"
 #include "hawsTargetMgr.h"
 #include "hawsGPUMgr.h"
@@ -41,16 +42,14 @@ int globalSchedRAMGPUAvail = SCHED_MEM_GPU_MAX;
 
 list<pid_t> allCPUPids;
 list<pid_t> allGPUPids;
-#define IN_LIST(list, item) (std::find(list.begin(), list.end(), item) != list.end())
-#define NOT_IN_LIST(list, item) (std::find(list.begin(), list.end(), item) == list.end())
 
 float centsPerUnitTimeCPU = 0.001; // 1 penny per second default
 float centsPerUnitTimeGPU = 0.0015; // 1.5 pennies per second default
 long billableCPUms = 0;
 long billableGPUms = 0;
 
-std::chrono::time_point<std::chrono::system_clock> hawsStartTime; //ms 
-std::chrono::time_point<std::chrono::system_clock> hawsStopTime; //ms TODO check chrono
+time_point hawsStartTime;
+time_point hawsStopTime;
 
 int throttle = 0;
 
@@ -203,9 +202,9 @@ int HAWS::GetNumActiveTasks() {
 
 void HAWS::PrintData() {
     printf("HAWS: Hello From PrintData\n");
-    auto elapsedUS = std::chrono::duration_cast<std::chrono::microseconds>(hawsStopTime - hawsStartTime).count();
-    auto elapsedMS = std::chrono::duration_cast<std::chrono::milliseconds>(hawsStopTime - hawsStartTime).count();
-    auto elapsedS = std::chrono::duration_cast<std::chrono::seconds>(hawsStopTime - hawsStartTime).count();
+    auto elapsedUS = TIMEDIFF_CAST_USEC(hawsStopTime - hawsStartTime);
+    auto elapsedMS = TIMEDIFF_CAST_MSEC(hawsStopTime - hawsStartTime);
+    auto elapsedS = TIMEDIFF_CAST_SEC(hawsStopTime - hawsStartTime);
     printf("HAWS: System runtime: %ld us (%ld ms) (%ld s)\n", elapsedUS, elapsedMS, elapsedS);
     printf("HAWS: Billable CPU ms: %ld\n", billableCPUms);
     printf("HAWS: Billable CPU cents/ms: %f\n", centsPerUnitTimeCPU);

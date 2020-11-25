@@ -9,7 +9,7 @@ hawsMain.o: hawsMain.cpp
 subprocess.o: subprocess.cpp  subprocess.h
 	g++ -c subprocess.cpp subprocess.h
 
-hawsHAWS.o: hawsHAWS.cpp hawsHAWS.h
+hawsHAWS.o: hawsHAWS.cpp hawsHAWS.h hawsUtil.h
 	g++ -c hawsHAWS.cpp
 
 #hawsCPUMgr.o: hawsCPUMgr.cpp
