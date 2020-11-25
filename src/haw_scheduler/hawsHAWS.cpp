@@ -23,6 +23,7 @@ queue<HAWSClientRequest*>* tasksToStartQueue;
 HAWSTargetMgr* cpuMgr;
 HAWSTargetMgr* gpuMgr;
 
+// memory control - how much memory can the scheduler use for children?
 mutex globalMemLock;
 // physmem control 
 #define SCHED_MEM_MAX_RR1 (1024*58) // use up to 58GB of 64GB phys ram
@@ -37,8 +38,6 @@ mutex globalMemLock;
 
 int globalSchedRAMAvail = SCHED_MEM_MAX;
 int globalSchedRAMGPUAvail = SCHED_MEM_GPU_MAX;
-
-int globalNumTasksActive = 0;
 
 list<pid_t> allCPUPids;
 list<pid_t> allGPUPids;
@@ -110,7 +109,8 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
         if (!tasksToStartQueue->empty()) { // check if item is in queue
             HAWSClientRequest* next = tasksToStartQueue->front();
             req = new HAWSClientRequest(next); // copy it to local req buffer
-            // if neither binary has enough mem to run, leave queue alone until a task completion
+            // if no binary has enough physmem to run, 
+            // leave queue alone until a task completion frees physmem
             if (globalSchedRAMAvail - req->GetCPUBinRAM() < 0 &&
                 globalSchedRAMAvail - req->GetGPUBinRAM() < 0) {
                 if (throttle % 1000 == 0) {
@@ -118,10 +118,10 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
                 }
                 gotReq = false;
             } else {
-                tasksToStartQueue->pop();  // calls destructor on object in queue
+                tasksToStartQueue->pop();  // calls destructor on object in queue, req gone
                 gotReq = true;
             }
-        } 
+        }
         tasksToStartQueueLock.unlock(); // unlock queue
         if (gotReq) { // schedule removed item
             //printf("HAWS/SL: dequeued %s\n", req->ToStr().c_str());
@@ -129,11 +129,11 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
             free(req); // done processing client request
         }
 
-        ReapChildren();
+        ReapChildren(); // collect all completed child processes
         
         //monitor HW targets
         cpuMgr->Monitor(); //update state of processes in cpu manager  
-        globalSchedRAMAvail += cpuMgr->GetFreedMBRam(); // replenish mem of finished tasks
+        globalSchedRAMAvail += cpuMgr->GetFreedMBRam(); // replenish physmem of finished tasks
     
         //freedMBRam = gpuMgr->Monitor();
         //globalSchedRAMAvail += gpuMgr->GetFreedMBRam();
@@ -151,22 +151,27 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
     printf("HAWS: ScheduleLoop ended...\n");
 }
 
+void HAWS::RequeueReq(HAWSClientRequest* req) {
+    tasksToStartQueueLock.lock();
+    tasksToStartQueue->push(req); //put it back in queue
+    tasksToStartQueueLock.unlock();
+}
+
+void HAWS::StartTaskCPU(HAWSClientRequest* req) {
+    int maxRAM = req->GetCPUBinRAM();
+    globalSchedRAMAvail -= maxRAM;
+    int pid = cpuMgr->StartTask(req->GetCPUBinPath(), req->GetTaskArgs(), maxRAM);
+    allCPUPids.insert(allCPUPids.begin(), pid);
+    //printf("HAWS/SL: CPU got %s\n", req->ToStr().c_str());
+}
+
 void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
     HAWSHWTarget HWTarget = DetermineReqTarget(req);
     if (HWTarget == TargCPU) {
-        // this target doesn't have enough memory to run
         if (globalSchedRAMAvail - req->GetCPUBinRAM() < 0) {
-            tasksToStartQueueLock.lock();
-            tasksToStartQueue->push(req); //put it back in queue
-            tasksToStartQueueLock.unlock();
-            //printf("HAWS/SL: requed a CPU task request");
+            RequeueReq(req); // this target doesn't have enough memory to run
         } else {
-            int maxRAM = req->GetCPUBinRAM();
-            globalSchedRAMAvail -= maxRAM;
-            int pid = cpuMgr->StartTask(req->GetCPUBinPath(), req->GetTaskArgs(), maxRAM);
-            allCPUPids.insert(allCPUPids.begin(), pid);
-            globalNumTasksActive++;
-            //printf("HAWS/SL: CPU got %s\n", req->ToStr().c_str());
+            StartTaskCPU(req);        
         }
     } else if (HWTarget == TargGPU) {
         //int success gpuMgr->StartTask(req->GetGPUBinPath(), req->GetTaskArgs());
@@ -193,71 +198,11 @@ HAWS::HAWS() {
 int HAWS::GetNumActiveTasks() {
     return cpuMgr->GetNumActiveTasks();
 }
-//int HAWS::GetNumActiveTasksGPU() {
-//    return gpuMgr->GetNumActiveTasks();
-//}
 
 void HAWS::PrintData() {
     printf("HAWS: Hello From PrintData\n");
     cpuMgr->PrintData();
 }
-
-/*
-void SIGCHLD_Handler(int sig)
-{
-    pid_t p;
-    int status;
-    TaskStatus task_status;
-    while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
-       long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
-       printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
-       //if (status == 0) {
-              //if (print_state_throttle++ % 1000 == 0) { // print once a second
-              //    printf("pid %d still running...\n", pid);
-              //}
-              //usleep(1000); // sleep for a millisecond
-       //} else { 
-           // waitpid() failed 
-       //    printf("waitpid() was < 0\n"); 
-       //    printf("errno error codes are ECHILD: %d, EINTR: %d, EINVAL %d\n", ECHILD, EINTR, EINVAL);
-       //    printf("errno was = %d\n", errno);
-           if (WIFEXITED(status) && !WEXITSTATUS(status)) {
-              //printf("program execution successful\n"); 
-              task_status = TASK_FINISHED_SUCCESS;
-           } else if (WIFEXITED(status) && WEXITSTATUS(status)) { 
-                if (WEXITSTATUS(status) == 127) { 
-                    // execv failed 
-                    printf("execv failed\n"); 
-                    task_status = TASK_FINISHED_ABNORMAL;
-                    assert(false);
-                } 
-                else  {
-                    //printf("program terminated normally,"
-                    //   " but returned a non-zero status\n");                 
-                    task_status = TASK_FINISHED_NONZERO;
-                }
-           } else {
-               //printf("program didn't terminate normally\n");             
-               task_status = TASK_FINISHED_ABNORMAL;
-           }
-
-           //if (cpuMgr->TaskIsActive(p)) {
-           printf("concluding task\n");
-           cpuMgr->TaskConclude(p, task_status, status, time_completed); 
-           printf("done!\n");
-
-           //}// else if (gpuMgr->TaskOwned(p) {
-            //   gpuMgr->ConcludeTask(p, task_status, status); 
-            // }
-           //else {
-           //    assert(false); //unclaimed process
-           //}
-           globalNumTasksActive--;
-           printf("globalNumTasksActive = %d\n", globalNumTasksActive);
-    }
-}*/
-
-
 
 void HAWS::Start() {
     printf("HAWS: Starting ScheduleLoop\n");
@@ -268,12 +213,6 @@ void HAWS::Start() {
 
     cpuMgr = new HAWSTargetMgr();
     gpuMgr = new HAWSTargetMgr();
-
-    //register SIGCHLD handler to handle all child processes that change state
-//    struct sigaction sa;
-//    memset(&sa, 0, sizeof(sa));
-//    sa.sa_handler = SIGCHLD_Handler;
-//    sigaction(SIGCHLD, &sa, NULL);
 }
 
 void HAWS::Stop() {

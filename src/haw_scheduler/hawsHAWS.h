@@ -40,6 +40,8 @@ class HAWS {
         static void ReapChildren();
         static void DispatchConclusion(pid_t, TaskStatus, int status, long time_completed);
         static void ProcessClientRequest(HAWSClientRequest* req);
+        static void RequeueReq(HAWSClientRequest* req);
+        static void StartTaskCPU(HAWSClientRequest* req);
         static HAWSHWTarget DetermineReqTarget(HAWSClientRequest* req);
 
         void ParseFields();
