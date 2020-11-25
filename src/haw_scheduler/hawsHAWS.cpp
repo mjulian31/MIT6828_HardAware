@@ -41,11 +41,18 @@ int globalSchedRAMGPUAvail = SCHED_MEM_GPU_MAX;
 
 list<pid_t> allCPUPids;
 list<pid_t> allGPUPids;
-
-int throttle = 0;
-
 #define IN_LIST(list, item) (std::find(list.begin(), list.end(), item) != list.end())
 #define NOT_IN_LIST(list, item) (std::find(list.begin(), list.end(), item) == list.end())
+
+float centsPerUnitTimeCPU = 0.001; // 1 penny per second default
+float centsPerUnitTimeGPU = 0.0015; // 1.5 pennies per second default
+long billableCPUms = 0;
+long billableGPUms = 0;
+
+std::chrono::time_point<std::chrono::system_clock> hawsStartTime; //ms 
+std::chrono::time_point<std::chrono::system_clock> hawsStopTime; //ms TODO check chrono
+
+int throttle = 0;
 
 void HAWS::ReapChildren() {
     pid_t p;
@@ -54,10 +61,8 @@ void HAWS::ReapChildren() {
     TaskStatus task_status;
     while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
        long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
-       /* Handle the death of pid p */
-       //printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
-
        // debugging
+       //printf("WAIDPID: PID %d status %d\n", p, status);
        //printf("waitpid() was < 0\n"); 
        //printf("errno codes are ECHILD: %d, EINTR: %d, EINVAL %d\n", ECHILD, EINTR, EINVAL);
        //printf("errno was = %d\n", errno);
@@ -73,12 +78,9 @@ void HAWS::ReapChildren() {
                 assert(false);
             } 
             else  {
-                //printf("program terminated normally,"
-                //   " but returned a non-zero status\n");                 
                 task_status = TASK_FINISHED_NONZERO;
             }
        } else {
-           //printf("program didn't terminate normally\n");             
            task_status = TASK_FINISHED_ABNORMAL;
        }
        DispatchConclusion(p, task_status, status, time_completed); 
@@ -90,7 +92,7 @@ void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, lon
     if (IN_LIST(allCPUPids, pid)) {
        assert(cpuMgr->TaskIsActive(pid));
        assert(NOT_IN_LIST(allGPUPids, pid));
-       cpuMgr->TaskConclude(pid, task_status, status, time_completed); 
+       billableCPUms += cpuMgr->TaskConclude(pid, task_status, status, time_completed); 
    } else if (IN_LIST(allGPUPids, pid)) {
        assert(false); //NOT IMPLEMENTED
        assert(gpuMgr->TaskIsActive(pid));
@@ -201,22 +203,31 @@ int HAWS::GetNumActiveTasks() {
 
 void HAWS::PrintData() {
     printf("HAWS: Hello From PrintData\n");
+    auto elapsedUS = std::chrono::duration_cast<std::chrono::microseconds>(hawsStopTime - hawsStartTime).count();
+    auto elapsedMS = std::chrono::duration_cast<std::chrono::milliseconds>(hawsStopTime - hawsStartTime).count();
+    auto elapsedS = std::chrono::duration_cast<std::chrono::seconds>(hawsStopTime - hawsStartTime).count();
+    printf("HAWS: System runtime: %ld us (%ld ms) (%ld s)\n", elapsedUS, elapsedMS, elapsedS);
+    printf("HAWS: Billable CPU ms: %ld\n", billableCPUms);
+    printf("HAWS: Billable CPU cents/ms: %f\n", centsPerUnitTimeCPU);
+    float billableCents = centsPerUnitTimeCPU * billableCPUms;
+    printf("HAWS: Billable CPU cents: %f cents (%f$)\n", billableCents, billableCents / 100);
     cpuMgr->PrintData();
 }
 
 void HAWS::Start() {
-    printf("HAWS: Starting ScheduleLoop\n");
     assert(!schedLoopThreadRunning); // must be stopped before started
+    hawsStartTime = std::chrono::system_clock::now();
+    printf("HAWS: Starting ScheduleLoop\n");
     schedLoopThread = new thread(HAWS::ScheduleLoop); // start schedule loop
     globalKillFlag = false;          // disable killswitch for schedule loop 
     schedLoopThreadRunning = true;   // schedule loop thread active
-
     cpuMgr = new HAWSTargetMgr();
     gpuMgr = new HAWSTargetMgr();
 }
 
 void HAWS::Stop() {
     assert(schedLoopThreadRunning);  // must be started before stopped
+    hawsStopTime = std::chrono::system_clock::now();
     printf("HAWS: Stopping ScheduleLoop\n");
     globalKillFlag = true;           // enable killswitch for schedule loop thread
     schedLoopThread->join();         // block until thread exits and returns

@@ -25,6 +25,7 @@ class HAWSTargetMgr {
     unordered_map<pid_t, long> tasksStartTime;
     unordered_map<pid_t, long> tasksEndTime;
     unordered_map<pid_t, int> tasksMaxRAM;
+    unordered_map<pid_t, long> tasksBillableMS;
     std::mutex taskLock; 
     std::mutex completionLock; 
     int activeTasks = 0;
@@ -43,6 +44,7 @@ class HAWSTargetMgr {
             assert(this->tasksStatusCode[pid] == -1);
             assert(this->tasksStartTime[pid] > 0);
             assert(this->tasksEndTime[pid] == 0);
+            assert(this->tasksBillableMS[pid] == 0);
             it++;
         }
     }
@@ -57,6 +59,7 @@ class HAWSTargetMgr {
             assert(this->tasksStatusCode[pid] != -1);
             assert(this->tasksStartTime[pid] > 0);
             assert(this->tasksEndTime[pid] > this->tasksStartTime[pid]);
+            assert(this->tasksBillableMS[pid] > 0);
             it++;
         }
     }
@@ -71,6 +74,7 @@ class HAWSTargetMgr {
         printf("HWMGR:    task status: %s\n", TaskStatusToStr(tasksStatus[pid]));
         printf("HWMGR:    status code: %d\n", tasksStatusCode[pid]);
         printf("HWMGR:   max phys mem: %d\n", tasksMaxRAM[pid]);  
+        printf("HWMGR:    billable ms: %ld\n", tasksBillableMS[pid]);  
     }
     void PrintAllProcessesProtected() { // holding lock
         list<pid_t>::iterator it = allPids.begin();
@@ -90,13 +94,12 @@ class HAWSTargetMgr {
         tasksCompleted[pid] = "STDOUT"; //TODO
         tasksActive.erase(pid);
         this->freedPhysMB += tasksMaxRAM[pid];
+        tasksBillableMS[pid] = tasksEndTime[pid] - tasksStartTime[pid];
     }
     public:
         HAWSTargetMgr () { }
         int StartTask(string binpath, string args, int maxRAM) {
-            char* argv_list[] = {
-                (char*) binpath.c_str(), (char*) args.c_str(), (char*) 0
-            };
+            char* argv_list[] = { (char*) binpath.c_str(), (char*) args.c_str(), (char*) 0 };
             pid_t pid = start_subprocess_nonblocking(argv_list);
             long start_time = (chrono::system_clock::now().time_since_epoch()).count();
             assert(start_time > 0);
@@ -108,6 +111,7 @@ class HAWSTargetMgr {
             tasksEndTime[pid] = 0; 
             tasksStartTime[pid] = start_time; 
             tasksMaxRAM[pid] = maxRAM;
+            tasksBillableMS[pid] = 0;
             taskLock.unlock();
             return pid;
         }
@@ -138,15 +142,17 @@ class HAWSTargetMgr {
             taskLock.unlock();
             return freed;
         }
-        void TaskConclude(pid_t pid, TaskStatus ts, int status_code, 
+        int TaskConclude(pid_t pid, TaskStatus ts, int status_code, 
                          long time_completed) { //SCHEDLOOP THREAD
             //printf("locking TaskConclude\n");
             taskLock.lock();
             //printf("doing accounting\n");
             this->TaskCompleteAccountingProtected(pid, ts, status_code, time_completed); 
+            int billableMS = tasksBillableMS[pid];
             //printf("done doing accounting\n");
             taskLock.unlock();
             //printf("unlocked TaskConclude\n");
+            return billableMS;
         }
         int TaskIsActive(pid_t pid) {
             taskLock.lock();

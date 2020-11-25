@@ -8,7 +8,6 @@
 //#define NDEBUG  // turn asserts off
 #undef NDEBUG   // turn asserts on
 
-
 void haws_test_1(HAWS* haws);
 void haws_test_2(HAWS* haws);
 void haws_test_3(HAWS* haws);
@@ -16,18 +15,28 @@ void haws_test_4(HAWS* haws);
 void haws_test_5(HAWS* haws);
 void haws_test_phys_mem_management(HAWS* haws);
 void haws_test_phys_mem_management2(HAWS* haws);
+void haws_test_v4_8k(HAWS* haws);
+void haws_test_billing(HAWS* haws);
 
+#define TEST_MEMCAP haws_test_phys_mem_management
+#define TEST_8K haws_test_v4_8k
+#define TEST_BILLING haws_test_billing
+
+#define SINGLE_TEST TEST_BILLING
+
+//rr1 - current verion v4
+//cpu
 int cpuBinRAM1024 = 24;
 int cpuBinRAM2048 = 90;
 int cpuBinRAM4096 = 385;
-int cpuBinRAM8192 = 1536;
-
+int cpuBinRAM8k = 1536;
+//gpu
 int cpuBinRAMGPUBase = 2;
 int gpuBinRAMBase = 2;
 
 int main () {
     HAWS haws;
-    haws_test_phys_mem_management2(&haws);
+    SINGLE_TEST(&haws);
 }
 
 void haws_test_1(HAWS* haws) {
@@ -117,7 +126,7 @@ void haws_test_phys_mem_management(HAWS* haws) {
     for (int i = 0; i < 4000; i++) {
         HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
                                                      "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
-                                                     "2048");
+                                                     "1024");
         haws->HardAwareSchedule(r);
     }
     sleep(1);
@@ -129,9 +138,35 @@ void haws_test_phys_mem_management(HAWS* haws) {
 void haws_test_phys_mem_management2(HAWS* haws) {
     haws->Start();
     for (int i = 0; i < 38; i++) {
-        HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_cpu", cpuBinRAM8192,
+        HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_cpu", cpuBinRAM8k,
                                                      "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
+                                                     "8k");
+        haws->HardAwareSchedule(r);
+    }
+    sleep(1);
+    while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
+    haws->Stop();
+}
+
+void haws_test_v4_8k(HAWS* haws) {
+    haws->Start();
+    for (int i = 0; i < 31; i++) {
+        HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_cpu_v4", cpuBinRAM8k,
+                                                     "/opt/haws/bin/matmul_gpu_v4", gpuBinRAMBase,
                                                      "8192");
+        haws->HardAwareSchedule(r);
+    }
+    sleep(1); // let jobs start
+    while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
+    haws->Stop();
+}
+
+void haws_test_billing(HAWS* haws) {
+    haws->Start();
+    for (int i = 0; i < 31; i++) {
+        HAWSClientRequest* r  = new HAWSClientRequest("/opt/haws/bin/matmul_cpu_v4", cpuBinRAM1024,
+                                                      "/opt/haws/bin/matmul_gpu_v4", gpuBinRAMBase,
+                                                      "1024");
         haws->HardAwareSchedule(r);
     }
     sleep(1);
@@ -151,3 +186,5 @@ void haws_test_gpu_mgmt(HAWS* haws) {
     while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
     haws->Stop();
 }
+
+
