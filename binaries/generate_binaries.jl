@@ -28,12 +28,14 @@ function Base.setindex!(A::CArray, val, i)
 end
 
 
-function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}, N::Cint)
+function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}, N::Cint, R::Cint, M::Cint)
     # assuming square matrix
-    NUM_TILES = div(N, TILE_DIM)
-    A = CArray(ptr_A, (N, N))
-    B = CArray(ptr_B, (N, N))
-    C = CArray(ptr_C, (N, N))
+    maxdim = max(N, R, M)
+    add = maxdim % TILE_DIM == 0 ? 0 : TILE_DIM
+    NUM_TILES = div(maxdim + add, TILE_DIM)
+    A = CArray(ptr_A, (N, R))
+    B = CArray(ptr_B, (R, M))
+    C = CArray(ptr_C, (N, M))
 
     # loop over all tiles
     @inbounds @simd for gj in 1:NUM_TILES
@@ -49,8 +51,16 @@ function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}
                         I = (gi-1) * TILE_DIM + i
                         J = (gj-1) * TILE_DIM + j
                         # get tile1 and tile2 values
-                        tile1[i, j] = A[I, t*TILE_DIM + j]
-                        tile2[i, j] = B[t*TILE_DIM + i, J]
+                        if I <= N && t*TILE_DIM + j <= R
+                            tile1[i, j] = A[I, t*TILE_DIM + j]
+                        else
+                            tile1[i, j] = 0.0
+                        end
+                        if t*TILE_DIM + i <= R && J <= M
+                            tile2[i, j] = B[t*TILE_DIM + i, J]
+                        else
+                            tile2[i, j] = 0.0
+                        end
                     end
                 end
                 # synchronize
@@ -63,7 +73,9 @@ function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}
                             # global tile
                             I = (gi-1) * TILE_DIM + i
                             # add tile1 * tile2
-                            C[I, J] += tile1[i, k] * tile2[k, j]
+                            if I <= N && J <= M
+                                C[I, J] += tile1[i, k] * tile2[k, j]
+                            end
                         end
                     end
                 end
@@ -151,7 +163,7 @@ GPUCompiler.runtime_module(::CompilerJob{<:Any,CompilerParams}) = MockRuntime
 println("done.")
 
 print("generating cpu binary...")
-job, kwargs = mcjob(mul_tile!, (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Cint))
+job, kwargs = mcjob(mul_tile!, (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Cint, Cint, Cint))
 ir, func = GPUCompiler.compile(:llvm, job; kwargs...)
 name!(func, "matmul")
 GPUCompiler.finish_module!(job, ir)
@@ -176,9 +188,5 @@ n = Cint(DIM)
 run(`rm -f -r dump`)
 CUDA.@device_code dir="dump" @cuda name="matmul" threads=(TILE_DIM, TILE_DIM) blocks=(div(DIM, TILE_DIM), div(DIM, TILE_DIM)) coalesced_matmul_kernel!(cptr, aptr, bptr, n)
 run(`scp dump/matmul_1.asm matmul_gpu.ptx`)
-# run(`/usr/local/cuda-11.1/bin/nvcc -arch=sm_60 -dc matmul_gpu.ptx -o matmul_gpu.o`)
-# run(`/usr/local/cuda-11.1/bin/nvcc -arch=sm_60 -dc main_gpu.cu -o main_gpu.o`)
-# run(`/usr/local/cuda-11.1/bin/nvcc -arch=sm_60 --device-link -o link.o main_gpu.o matmul_gpu.o`)
-# run(`g++ matmul_gpu.o main_gpu.o link.o -L/usr/local/cuda-11.1/lib64 -lcudart -o matmul_gpu`)
 run(`/usr/local/cuda-11.1/bin/nvcc -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu`)
 println("done. saved gpu binary to matmul_gpu")
