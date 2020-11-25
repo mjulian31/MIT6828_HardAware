@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 		N = atoi(argv[1]);
 		R = atoi(argv[2]);
 		M = atoi(argv[3]);
-	} else if (argc >- 2) {
+	} else if (argc >= 2) {
 		N = atoi(argv[1]);
 		R = N;
 		M = N;
@@ -133,14 +133,16 @@ int main(int argc, char **argv) {
   #ifdef ERR_CHECK
   basic_matmul(h_output_check, h_A, h_B, N, R, M);
 	int count = 0;
+  double diff = 0.0;
 	for (int i = 0; i < N; ++i) {
     for (int j = 0; j < M; ++j) {
       if (fabs(h_output[N*j + i] - h_output_check[M*i + j]) > 1e-9) {
         count += 1;
+        diff += fabs(h_output[N*j + i] - h_output_check[M*i + j]);
       }
     }
   }
-	if (count > 0) fprintf(stderr, "%i wrong of %i\n", count, N*M);
+	if (count > 0) fprintf(stderr, "%i wrong of %i avg diff %f\n", count, N*M, diff/(N*M));
 	else printf("all good!\n");
   #endif
 
