@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
       }
     }
   }
-	if (count > 0) printf("error: %i wrong of %i\n", count, N*M);
+	if (count > 0) fprintf(stderr, "%i wrong of %i\n", count, N*M);
 	else printf("all good!\n");
 	#endif
 
@@ -82,4 +82,6 @@ int main(int argc, char *argv[]) {
 	free(A);
 	free(B);
 	free(output);
+
+	return 0;
 }
