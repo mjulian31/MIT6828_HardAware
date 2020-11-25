@@ -53,8 +53,6 @@ class HAWSTargetMgr {
     int printThrottle = 0;
     int freedPhysMB = 0;
 
-    //unordered_map<int, std::chrono::steady_clock::time_point> tasksEndTime;
-
     //CPUCostModel cputCostModel; //object TODO
 
     private: 
@@ -63,10 +61,10 @@ class HAWSTargetMgr {
         list<pid_t>::iterator allPidIt;
         while (it != tasksActive.end()) {
             pid_t pid = it->first;
-            hassert(this->tasksStatus[pid] == TASK_RUNNING, "assert1");
-            hassert(this->tasksStatusCode[pid] == -1, "assert2");
-            hassert(this->tasksStartTime[pid] > 0, "assert3");
-            hassert(this->tasksEndTime[pid] == 0, "assert4");
+            assert(this->tasksStatus[pid] == TASK_RUNNING);
+            assert(this->tasksStatusCode[pid] == -1);
+            assert(this->tasksStartTime[pid] > 0);
+            assert(this->tasksEndTime[pid] == 0);
             it++;
         }
     }

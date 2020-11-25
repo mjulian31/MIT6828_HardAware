@@ -131,7 +131,7 @@ void haws_test_gpu_mgmt(HAWS* haws) {
                                                      "1024");
         haws->HardAwareSchedule(r);
     }
-    sleep(1);
+    sleep(1); // let jobs start
     while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
     haws->Stop();
 }
