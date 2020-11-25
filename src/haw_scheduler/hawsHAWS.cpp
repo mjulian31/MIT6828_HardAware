@@ -22,11 +22,27 @@ queue<HAWSClientRequest*>* tasksToStartQueue;
 HAWSCPUMgr* cpuMgr;
 HAWSGPUMgr* gpuMgr;
 
+mutex globalMemLock;
+// physmem control 
+#define SCHED_MEM_MAX_RR1 (1024*58) // use up to 58GB of 64GB phys ram
+#define SCHED_MEM_MAX_CLOUDLAB 62464
+// gpu memory control
+#define SCHED_MEM_GPU_MAX_RR1 (1024*5) // use up to 5GB of 6GB gpu ram
+#define SCHED_MEM_GPU_MAX_CLOUDLAB (1024*6) // update on cloudlab
+
+//must change when on other systems
+#define SCHED_MEM_MAX     SCHED_MEM_MAX_RR1
+#define SCHED_MEM_GPU_MAX SCHED_MEM_GPU_MAX_RR1
+
+int globalSchedRAMAvail = SCHED_MEM_MAX;
+int globalSchedRAMGPUAvail = SCHED_MEM_GPU_MAX;
+
 int globalNumTasksActive = 0;
 
-
-void HAWS::ScheduleLoop() { // run by separate thread
+void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
     printf("HAWS/SL: ScheduleLoop started...\n");
+    int throttle = 0;
+    int freedMBRam; // from task completion
     HAWSClientRequest* req;
     while (!globalKillFlag) {
         bool gotReq = false;
@@ -34,8 +50,15 @@ void HAWS::ScheduleLoop() { // run by separate thread
         if (!tasksToStartQueue->empty()) { // check if item is in queue
             HAWSClientRequest* next = tasksToStartQueue->front();
             req = new HAWSClientRequest(next); // copy it to local req buffer
-            tasksToStartQueue->pop();  // calls destructor on object in queue
-            gotReq = true;
+            // if neither binary has enough mem to run, leave queue alone until a task completion
+            if (globalSchedRAMAvail - req->GetCPUBinRAM() < 0 &&
+                globalSchedRAMAvail - req->GetGPUBinRAM() < 0) {
+                printf("memory at capacity, not dequing...\n");
+                gotReq = false;
+            } else {
+                tasksToStartQueue->pop();  // calls destructor on object in queue
+                gotReq = true;
+            }
         } 
         tasksToStartQueueLock.unlock(); // unlock queue
         if (gotReq) { // schedule removed item
@@ -43,28 +66,50 @@ void HAWS::ScheduleLoop() { // run by separate thread
             ProcessClientRequest(req);
             free(req); // done processing client request
         }
-        //MonitorHWTargets();
-        cpuMgr->Monitor(); //update state of processes in cpu manager
-        //gpuMgr->Monitor(); //update state of processes in gpu manager
+
+        //monitor HW targets
+        cpuMgr->Monitor(); //update state of processes in cpu manager  
+        globalSchedRAMAvail += cpuMgr->GetFreedMBRam(); // replenish mem of finished tasks
+    
+        //freedMBRam = gpuMgr->Monitor();
+        //globalSchedRAMAvail += gpuMgr->GetFreedMBRam();
+        //globalSchedRAMGPUAvail += gpuMgr->GetFreedGPUMBRam();
+
+        if (throttle++ % 1000 == 0) {
+            printf("HAWS/SL: free phys mem %dMB (%d%%)\n", globalSchedRAMAvail, 
+                   (int)(((float) globalSchedRAMAvail / (float) SCHED_MEM_MAX)*100));
+            printf("HAWS/SL: free gpu mem %dMB (%d%%)\n", globalSchedRAMGPUAvail, 
+                   (int)(((float) globalSchedRAMGPUAvail / (float) SCHED_MEM_GPU_MAX)*100));
+        }
 
         usleep(50); // yield CPU
     }
     printf("HAWS: ScheduleLoop ended...\n");
 }
 
-void HAWS::ProcessClientRequest(HAWSClientRequest* req) {
+void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
     HAWSHWTarget HWTarget = DetermineReqTarget(req);
     if (HWTarget == TargCPU) {
-        int success = cpuMgr->StartTask(req->GetCPUBinPath(), req->GetTaskArgs());
-        globalNumTasksActive++;
-        assert(success == 0);
+        // this target doesn't have enough memory to run
+        if (globalSchedRAMAvail - req->GetCPUBinRAM() < 0) {
+            tasksToStartQueueLock.lock();
+            tasksToStartQueue->push(req); //put it back in queue
+            tasksToStartQueueLock.unlock();
+            printf("HAWS/SL: requed a CPU task request");
+        } else {
+            int maxRAM = req->GetCPUBinRAM();
+            globalSchedRAMAvail -= maxRAM;
+            int success = cpuMgr->StartTask(req->GetCPUBinPath(), req->GetTaskArgs(), maxRAM);
+            assert(success == 0);
+            globalNumTasksActive++;
+            printf("HAWS/SL: CPU got %s\n", req->ToStr().c_str());
+        }
     } else if (HWTarget == TargGPU) {
         //int success gpuMgr->StartTask(req->GetGPUBinPath(), req->GetTaskArgs());
         //assert(success == 0);
     } else {
         assert(false); // "hardware target not implemented"
     }
-    printf("HAWS/SL: processed %s\n", req->ToStr().c_str());
 }
 
 HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) {
@@ -82,7 +127,7 @@ HAWS::HAWS() {
 }
 
 int HAWS::GetNumActiveTasks() {
-    return globalNumTasksActive;
+    return cpuMgr->GetNumActiveTasks();
 }
 //int HAWS::GetNumActiveTasksGPU() {
 //    return gpuMgr->GetNumActiveTasks();
@@ -93,7 +138,7 @@ void HAWS::PrintData() {
     cpuMgr->PrintData();
 }
 
-
+/*
 void SIGCHLD_Handler(int sig)
 {
     pid_t p;
@@ -101,7 +146,6 @@ void SIGCHLD_Handler(int sig)
     TaskStatus task_status;
     while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
        long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
-       /* Handle the death of pid p */
        printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
        //if (status == 0) {
               //if (print_state_throttle++ % 1000 == 0) { // print once a second
@@ -147,7 +191,7 @@ void SIGCHLD_Handler(int sig)
            globalNumTasksActive--;
            printf("globalNumTasksActive = %d\n", globalNumTasksActive);
     }
-}
+}*/
 
 
 
@@ -162,10 +206,10 @@ void HAWS::Start() {
     gpuMgr = new HAWSGPUMgr();
 
     //register SIGCHLD handler to handle all child processes that change state
-    struct sigaction sa;
-    memset(&sa, 0, sizeof(sa));
-    sa.sa_handler = SIGCHLD_Handler;
-    sigaction(SIGCHLD, &sa, NULL);
+//    struct sigaction sa;
+//    memset(&sa, 0, sizeof(sa));
+//    sa.sa_handler = SIGCHLD_Handler;
+//    sigaction(SIGCHLD, &sa, NULL);
 }
 
 void HAWS::Stop() {
