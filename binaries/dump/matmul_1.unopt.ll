@@ -69,7 +69,7 @@ top:
 ; │││││││┌ @ boot.jl:708 within `Int64'
 ; ││││││││┌ @ boot.jl:627 within `toInt64'
            %40 = sext i32 %3 to i64, !dbg !57
-           %41 = sext i32 %3 to i64, !dbg !57
+           %41 = sext i32 %5 to i64, !dbg !57
 ; ││││└└└└└
       %42 = getelementptr inbounds [2 x i64], [2 x i64]* %6, i32 0, i32 0, !dbg !69
       store i64 %40, i64* %42, align 8, !dbg !69, !tbaa !81
@@ -95,7 +95,7 @@ top:
 ; │││││││┌ @ boot.jl:708 within `Int64'
 ; ││││││││┌ @ boot.jl:627 within `toInt64'
            %48 = sext i32 %3 to i64, !dbg !84
-           %49 = sext i32 %3 to i64, !dbg !84
+           %49 = sext i32 %4 to i64, !dbg !84
 ; ││││└└└└└
       %50 = getelementptr inbounds [2 x i64], [2 x i64]* %8, i32 0, i32 0, !dbg !89
       store i64 %48, i64* %50, align 8, !dbg !89, !tbaa !81
@@ -120,8 +120,8 @@ top:
 ; ││││││┌ @ broadcast.jl:648 within `_broadcast_getindex_evalf'
 ; │││││││┌ @ boot.jl:708 within `Int64'
 ; ││││││││┌ @ boot.jl:627 within `toInt64'
-           %56 = sext i32 %3 to i64, !dbg !96
-           %57 = sext i32 %3 to i64, !dbg !96
+           %56 = sext i32 %4 to i64, !dbg !96
+           %57 = sext i32 %5 to i64, !dbg !96
 ; ││││└└└└└
       %58 = getelementptr inbounds [2 x i64], [2 x i64]* %10, i32 0, i32 0, !dbg !101
       store i64 %56, i64* %58, align 8, !dbg !101, !tbaa !81

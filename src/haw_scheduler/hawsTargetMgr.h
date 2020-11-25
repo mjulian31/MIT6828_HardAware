@@ -9,26 +9,11 @@
 
 using namespace std; 
 
-/*
-typdef struct TaskCompleted {
-    pid_t pid;
-    TaskStatus task_status;
-    int status_code;
-    long time_completed;
-} TaskCompleted; */
-
 static const char* TaskStatusToStr(TaskStatus ts) {
     return ts == TASK_RUNNING ? "TASK_RUNNING " :
            ts == TASK_FINISHED_SUCCESS ? "TASK_FINISHED_SUCCESS" :
            ts == TASK_FINISHED_NONZERO ? "TASK_FINISHED_NONZERO" :
            "TASK_FINISHED_ABNORMAL";
-}
-
-static void hassert(bool cond, string msg) {
-    if (!cond) {
-        printf("ASSERT %s:", msg.c_str());
-        exit(1);
-    }
 }
 
 class HAWSTargetMgr {
@@ -128,53 +113,6 @@ class HAWSTargetMgr {
         }
         
         void Monitor () { //SCHEDLOOP THREAD
-            /*
-            pid_t p;
-            int status;
-            int reapedTasks = 0;
-            TaskStatus task_status;
-            while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
-               long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
-               // debugging
-               //printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
-               //printf("waitpid() was < 0\n"); 
-               //printf("errno codes are ECHILD: %d, EINTR: %d, EINVAL %d\n", ECHILD, EINTR, EINVAL);
-               //printf("errno was = %d\n", errno);
-               if (WIFEXITED(status) && !WEXITSTATUS(status)) {
-                  //printf("program execution successful\n"); 
-                  task_status = TASK_FINISHED_SUCCESS;
-               } else if (WIFEXITED(status) && WEXITSTATUS(status)) { 
-                    if (WEXITSTATUS(status) == 127) { 
-                        // execv failed 
-                        printf("execv failed\n"); 
-                        task_status = TASK_FINISHED_ABNORMAL;
-                        assert(false);
-                    } 
-                    else  {
-                        //printf("program terminated normally,"
-                        //   " but returned a non-zero status\n");                 
-                        task_status = TASK_FINISHED_NONZERO;
-                    }
-               } else {
-                   //printf("program didn't terminate normally\n");             
-                   task_status = TASK_FINISHED_ABNORMAL;
-               }
-
-               //if (cpuMgr->TaskIsActive(p)) {
-               //printf("concluding task\n");
-               this->TaskConclude(p, task_status, status, time_completed); 
-
-               //printf("done!\n");
-
-               //}// else if (gpuMgr->TaskOwned(p) {
-                //   gpuMgr->ConcludeTask(p, task_status, status); 
-                // }
-               //else {
-               //    assert(false); //unclaimed process
-               //}
-               //printf("globalNumTasksActive = %d\n", globalNumTasksActive);
-            }*/
-
             if (throttle % 1000 == 0) { // make sure all invariants are satisfied
                 //printf("-->doing sanity check\n");
                 taskLock.lock();
@@ -186,10 +124,7 @@ class HAWSTargetMgr {
                 taskLock.unlock();
                 //printf("<--done doing sanity check\n");
             } throttle++;
-
-            //usleep(1); //simulate work
-
-            
+            //usleep(1); //simulate extra work
         }
         void PrintData () {
             taskLock.lock();
@@ -208,8 +143,7 @@ class HAWSTargetMgr {
             //printf("locking TaskConclude\n");
             taskLock.lock();
             //printf("doing accounting\n");
-            this->TaskCompleteAccountingProtected(pid, ts, status_code, 
-                                                                      time_completed); 
+            this->TaskCompleteAccountingProtected(pid, ts, status_code, time_completed); 
             //printf("done doing accounting\n");
             taskLock.unlock();
             //printf("unlocked TaskConclude\n");
@@ -226,6 +160,8 @@ class HAWSTargetMgr {
             taskLock.unlock();
             return size;
         }
+
+        // shelved
         void GetTaskStatus () {}
         void StopTask() {}
         void ColdQuery() {}
