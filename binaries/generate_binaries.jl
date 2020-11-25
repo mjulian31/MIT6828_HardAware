@@ -86,7 +86,7 @@ function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}
 end
 
 
-function coalesced_matmul_kernel!(ptr_out::Ptr{Cdouble}, ptr_in1::Ptr{Cdouble}, ptr_in2::Ptr{Cdouble}, N::Cint)
+function coalesced_matmul_kernel!(ptr_out::Ptr{Cdouble}, ptr_in1::Ptr{Cdouble}, ptr_in2::Ptr{Cdouble}, N::Cint, R::Cint, M::Cint)
     dptr_out = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_out)
     dptr_in1 = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_in1)
     dptr_in2 = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_in2)
@@ -104,8 +104,9 @@ function coalesced_matmul_kernel!(ptr_out::Ptr{Cdouble}, ptr_in1::Ptr{Cdouble}, 
 
     outval = zero(eltype(output))
 
-    N = size(output,1)
-    NUM_TILES = div(N, TILE_DIM)
+    maxdim = max(N, R, M)
+    add = maxdim % TILE_DIM == 0 ? 0 : TILE_DIM
+    NUM_TILES = div(maxdim + add, TILE_DIM)
 
     # loop over all tiles needed for this calculation
     for t in 0:NUM_TILES-1
@@ -114,8 +115,16 @@ function coalesced_matmul_kernel!(ptr_out::Ptr{Cdouble}, ptr_in1::Ptr{Cdouble}, 
         J = (gj-1) * TILE_DIM + j
 
         # load inputs into tiles
-        @inbounds tile1[i, j] = input1[I, t*TILE_DIM+j]
-        @inbounds tile2[i, j] = input2[t*TILE_DIM+i, J]
+        if I <= N && t*TILE_DIM + j <= R
+            @inbounds tile1[i, j] = input1[I, t*TILE_DIM + j]
+        else
+            @inbounds tile1[i, j] = 0.0
+        end
+        if t*TILE_DIM + i <= R && J <= M
+            @inbounds tile2[i, j] = input2[t*TILE_DIM + i, J]
+        else
+            @inbounds tile2[i, j] = 0.0
+        end
 
         # wait for all tiles to be loaded
         sync_threads()
@@ -135,7 +144,9 @@ function coalesced_matmul_kernel!(ptr_out::Ptr{Cdouble}, ptr_in1::Ptr{Cdouble}, 
     I = (gi-1) * TILE_DIM + i
     J = (gj-1) * TILE_DIM + j
 
-    @inbounds output[I, J] = outval
+    if I <= N && J <= M
+        @inbounds output[I, J] = outval
+    end
     return nothing
 end
 
@@ -159,6 +170,11 @@ module MockRuntime
 end
 struct CompilerParams <: AbstractCompilerParams end
 GPUCompiler.runtime_module(::CompilerJob{<:Any,CompilerParams}) = MockRuntime
+
+check_err = false
+if sizeof(ARGS) > 0 && ARGS[1] == "check_err"
+    check_err = true
+end
 
 println("done.")
 
@@ -185,8 +201,14 @@ c = CuArray{Float64}(undef, 10)
 dc = CUDA.cudaconvert(c)
 cptr = reinterpret(Ptr{Cdouble}, dc.ptr)
 n = Cint(DIM)
+r = Cint(DIM)
+m = Cint(DIM)
 run(`rm -f -r dump`)
-CUDA.@device_code dir="dump" @cuda name="matmul" threads=(TILE_DIM, TILE_DIM) blocks=(div(DIM, TILE_DIM), div(DIM, TILE_DIM)) coalesced_matmul_kernel!(cptr, aptr, bptr, n)
+CUDA.@device_code dir="dump" @cuda name="matmul" threads=(TILE_DIM, TILE_DIM) blocks=(div(DIM, TILE_DIM), div(DIM, TILE_DIM)) coalesced_matmul_kernel!(cptr, aptr, bptr, n, r, m)
 run(`scp dump/matmul_1.asm matmul_gpu.ptx`)
-run(`/usr/local/cuda-11.1/bin/nvcc -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu`)
+if check_err
+    run(`/usr/local/cuda-11.1/bin/nvcc -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu -DERR_CHECK`)
+else
+    run(`/usr/local/cuda-11.1/bin/nvcc -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu`)
+end
 println("done. saved gpu binary to matmul_gpu")
