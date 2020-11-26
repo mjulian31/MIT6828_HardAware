@@ -10,20 +10,27 @@ class HAWSClientRequest {
         int cpuBinRAM;
         string gpuBinPath;
         int gpuBinRAM;
+        char* stdinBuf;
+        int stdinBufLen;
         string taskArgs;
 
     public:
         HAWSClientRequest(string cpuBin, int cpuBinRAM, 
-                          string gpuBin, int gpuBinRAM, string args) { 
+                          string gpuBin, int gpuBinRAM, 
+                          char* stdinBuf, int stdinBufLen, string args) {
             this->cpuBinPath = cpuBin;
             this->cpuBinRAM = cpuBinRAM;
             this->gpuBinPath = gpuBin;
             this->gpuBinRAM = gpuBinRAM; 
+            this->stdinBuf = stdInBuf;
+            this->stdinBufLen = stdInBuf;
             taskArgs = args;
         }
         HAWSClientRequest() {
             cpuBinPath = "";
             gpuBinPath = "";
+            stdinBuf = NULL;
+            stdinBufLen = 0;
             taskArgs = "";
         }
         HAWSClientRequest(HAWSClientRequest* another) {
@@ -31,6 +38,9 @@ class HAWSClientRequest {
             cpuBinRAM  = another->GetCPUBinRAM();
             gpuBinPath = another->GetGPUBinPath();
             gpuBinRAM  = another->GetGPUBinRAM();
+            stdinBufLen = another->stdinBufLen;
+            stdinBuf = malloc(sizeof(stdinBufLen));
+            memcpy(stdinBuf, another->stdinBuf, stdinBufLen);
             taskArgs = another->GetTaskArgs();
         }
         /* destructor disabled
@@ -41,6 +51,8 @@ class HAWSClientRequest {
         int GetCPUBinRAM()        { return cpuBinRAM; }
         string GetGPUBinPath()    { return gpuBinPath; }
         int GetGPUBinRAM()        { return cpuBinRAM; }
+        char* GetStdinBuf()       { return stdinBuf; }
+        int GetStdinBufLen()      { return stdinBufLen; }
         string GetTaskArgs()      { return taskArgs;      }
         void SetCPUBinPath(string s) { cpuBinPath = s; }
         void SetGPUBinPath(string s) { gpuBinPath = s; }
