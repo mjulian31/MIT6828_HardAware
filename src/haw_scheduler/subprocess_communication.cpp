@@ -65,6 +65,6 @@ int main() {
         } else {
             printf("IO Error\n");
         }
-        printf("I CAN STILL PRINT!");
+        printf("I CAN STILL PRINT!\n");
     }
 }

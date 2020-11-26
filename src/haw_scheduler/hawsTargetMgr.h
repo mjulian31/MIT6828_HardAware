@@ -96,7 +96,8 @@ class HAWSTargetMgr {
         HAWSTargetMgr () { }
         int StartTask(string binpath, string args, int maxRAM) {
             char* argv_list[] = { (char*) binpath.c_str(), (char*) args.c_str(), (char*) 0 };
-            pid_t pid = start_subprocess_nonblocking(argv_list);
+            ChildHandle* handle = start_subprocess_nonblocking(argv_list);
+            pid_t pid = handle->pid;
             time_point start_time = chrono::system_clock::now();
             taskLock.lock();
             allPids.insert(allPids.begin(), pid);
