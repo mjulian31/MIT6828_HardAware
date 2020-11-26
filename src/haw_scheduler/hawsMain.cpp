@@ -136,8 +136,8 @@ void haws_test_5(HAWS* haws) {
 void haws_test_phys_mem_management(HAWS* haws) {
     haws->Start();
     for (int i = 0; i < 4000; i++) {
-        HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
-                                                     "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
+        HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_cpu_v4", cpuBinRAM2048,
+                                                     "/opt/haws/bin/matmul_gpu_v4", gpuBinRAMBase,
                                                      (char*) "", 0,
                                                      "1024");
         haws->HardAwareSchedule(r);
