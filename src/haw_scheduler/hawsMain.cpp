@@ -188,6 +188,20 @@ void haws_test_billing(HAWS* haws) {
     haws->Stop();
 }
 
+void haws_test_stdout_cap(HAWS* haws) {
+    haws->Start();
+    for (int i = 0; i < 1; i++) {
+        HAWSClientRequest* r  = new HAWSClientRequest("/usr/bin/echo", 1,
+                                                      "/usr/bin/echo", 1,
+                                                      (char*) "this is my first test\n", 22,
+                                                      "");
+        haws->HardAwareSchedule(r);
+    }
+    sleep(1);
+    while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
+    haws->Stop();
+}
+
 void haws_test_gpu_mgmt(HAWS* haws) {
     haws->Start();
     for (int i = 0; i < 100; i++) {
