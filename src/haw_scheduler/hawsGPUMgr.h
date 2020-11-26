@@ -9,7 +9,7 @@ class HAWSGPUMgr {
     //GPUCostModel cputCostModel; //object TODO
 
     public:
-        void StartTask(string binpath, string args) {}
+        void StartTask(std::string binpath, std::string args) {}
         void GetTaskStatus () {}
         //int GetNumActiveTasks();
         void StopTask() {}

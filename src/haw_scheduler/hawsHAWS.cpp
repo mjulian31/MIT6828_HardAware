@@ -17,19 +17,19 @@
 #include "hawsGPUMgr.h"
 #include "hawsClientRequest.h"
 
-using namespace std;
+//using namespace std;
 
-mutex globalKillFlagLock; // signal to stop schedule loop / running tasks
+std::mutex globalKillFlagLock; // signal to stop schedule loop / running tasks
 bool globalKillFlag;
 
-mutex tasksToStartQueueLock; // synchronizes queue access
-queue<HAWSClientRequest*>* tasksToStartQueue;
+std::mutex tasksToStartQueueLock; // synchronizes queue access
+std::queue<HAWSClientRequest*>* tasksToStartQueue;
 
 HAWSTargetMgr* cpuMgr;
 HAWSTargetMgr* gpuMgr;
 
 // memory control - how much memory can the scheduler use for children?
-mutex globalMemLock;
+std::mutex globalMemLock;
 // physmem control 
 #define SCHED_MEM_MAX_RR1 (1024*58) // use up to 58GB of 64GB phys ram
 #define SCHED_MEM_MAX_CLOUDLAB 62464
@@ -44,8 +44,8 @@ mutex globalMemLock;
 int globalSchedRAMAvail = SCHED_MEM_MAX;
 int globalSchedRAMGPUAvail = SCHED_MEM_GPU_MAX;
 
-list<pid_t> allCPUPids;
-list<pid_t> allGPUPids;
+std::list<pid_t> allCPUPids;
+std::list<pid_t> allGPUPids;
 
 float centsPerUnitTimeCPU = 0.000001; // 1 penny per second default
 float centsPerUnitTimeGPU = 0.0000015; // 1.5 pennies per second default
@@ -197,7 +197,7 @@ HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) {
 
 HAWS::HAWS() {
     printf("HAWS: Constructed\n");
-    tasksToStartQueue = new queue<HAWSClientRequest*>();
+    tasksToStartQueue = new std::queue<HAWSClientRequest*>();
 }
 
 int HAWS::GetNumActiveTasks() {
@@ -221,7 +221,7 @@ void HAWS::Start() {
     assert(!schedLoopThreadRunning); // must be stopped before started
     hawsStartTime = std::chrono::system_clock::now();
     printf("HAWS: Starting ScheduleLoop\n");
-    schedLoopThread = new thread(HAWS::ScheduleLoop); // start schedule loop
+    schedLoopThread = new std::thread(HAWS::ScheduleLoop); // start schedule loop
     globalKillFlag = false;          // disable killswitch for schedule loop 
     schedLoopThreadRunning = true;   // schedule loop thread active
     cpuMgr = new HAWSTargetMgr();

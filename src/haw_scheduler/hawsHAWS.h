@@ -1,15 +1,15 @@
 #ifndef HAWS_H_
 #define HAWS_H_
 
-//#include <mutex>
 //#include <queue>
 //#include <unistd.h>
 //#include <assert.h>
 
+#include <mutex>
 #include "hawsClientRequest.h"
 #include "hawsUtil.h"
 
-using namespace std;
+//using namespace std;
 
 enum HAWSHWTarget { TargCPU, TargGPU };
 
@@ -23,9 +23,9 @@ enum TaskStatus {
 class HAWS {
     private:
         bool schedLoopThreadRunning;
-        thread* schedLoopThread;
+        std::thread* schedLoopThread;
 
-        mutex tasksActiveLock;
+        std::mutex tasksActiveLock;
         //Map cpuTaskIDs[TaskID] -> status
         //Map cpuBinaryPaths[TaskID] -> string?
         int cpuTasksActive = 0;

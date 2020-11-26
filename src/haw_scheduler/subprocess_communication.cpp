@@ -12,7 +12,7 @@
 #define PARENT_WRITE_PIPE  0
 #define PARENT_READ_PIPE   1
 
-using namespace std; 
+//using namespace std; 
 
 int pipes[NUM_PIPES][2];
  

@@ -10,12 +10,6 @@
 #include "subprocess.h"
 #include "hawsUtil.h"
 
-using namespace std; 
-
-//extern ssize_t read(int fd, char* buf, int nbytes);
-
-extern ssize_t read(int fd, void* buf, size_t nbytes);
-
 static const char* TaskStatusToStr(TaskStatus ts) {
     return ts == TASK_RUNNING ? "TASK_RUNNING " :
            ts == TASK_FINISHED_SUCCESS ? "TASK_FINISHED_SUCCESS" :
@@ -24,17 +18,17 @@ static const char* TaskStatusToStr(TaskStatus ts) {
 }
 
 class HAWSTargetMgr {
-    list<pid_t> allPids;
-    unordered_map<pid_t, string> tasksCompleted;
-    unordered_map<pid_t, string> tasksActive;
-    unordered_map<pid_t, TaskStatus> tasksStatus;
-    unordered_map<pid_t, int> tasksStatusCode;
-    unordered_map<pid_t, time_point> tasksStartTime;
-    unordered_map<pid_t, time_point> tasksEndTime;
-    unordered_map<pid_t, int> tasksMaxRAM;
-    unordered_map<pid_t, long> tasksBillableUS;
-    unordered_map<pid_t, ChildHandle*> tasksHandles;
-    unordered_map<pid_t, char*> tasksStdout;
+    std::list<pid_t> allPids;
+    std::unordered_map<pid_t, std::string> tasksCompleted;
+    std::unordered_map<pid_t, std::string> tasksActive;
+    std::unordered_map<pid_t, TaskStatus> tasksStatus;
+    std::unordered_map<pid_t, int> tasksStatusCode;
+    std::unordered_map<pid_t, time_point> tasksStartTime;
+    std::unordered_map<pid_t, time_point> tasksEndTime;
+    std::unordered_map<pid_t, int> tasksMaxRAM;
+    std::unordered_map<pid_t, long> tasksBillableUS;
+    std::unordered_map<pid_t, ChildHandle*> tasksHandles;
+    std::unordered_map<pid_t, char*> tasksStdout;
     std::mutex taskLock; 
     std::mutex completionLock; 
     int activeTasks = 0;
@@ -45,8 +39,8 @@ class HAWSTargetMgr {
 
     private: 
     inline void SanityCheckActiveTasks () { // holding lock
-        unordered_map<int, string>::iterator it = tasksActive.begin();
-        list<pid_t>::iterator allPidIt;
+        std::unordered_map<int, std::string>::iterator it = tasksActive.begin();
+        std::list<pid_t>::iterator allPidIt;
         while (it != tasksActive.end()) {
             pid_t pid = it->first;
             assert(this->tasksStatus[pid] == TASK_RUNNING);
@@ -59,7 +53,7 @@ class HAWSTargetMgr {
         if (tasksCompleted.size() == 0) {
             return;
         }
-        unordered_map<pid_t, string>::iterator it = tasksCompleted.begin();
+        std::unordered_map<pid_t, std::string>::iterator it = tasksCompleted.begin();
         while (it != tasksCompleted.end()) {
             pid_t pid = it->first;
             assert(this->tasksStatus[pid] != TASK_RUNNING);
@@ -80,7 +74,7 @@ class HAWSTargetMgr {
         printf("HWMGR:    billable ms: %ld\n", tasksBillableUS[pid]);  
     }
     void PrintAllProcessesProtected() { // holding lock
-        list<pid_t>::iterator it = allPids.begin();
+        std::list<pid_t>::iterator it = allPids.begin();
         for (it != allPids.begin(); it != allPids.end(); ++it) {
             this->PrintProcessProtected(*it);
         }
@@ -100,31 +94,32 @@ class HAWSTargetMgr {
         tasksBillableUS[pid] = TIMEDIFF_CAST_USEC(tasksEndTime[pid] - tasksStartTime[pid]);
     }
     void CollectChildrenStdout() {
-        unordered_map<pid_t, string>::iterator it = tasksActive.begin();
+        std::unordered_map<pid_t, std::string>::iterator it = tasksActive.begin();
         while (it != tasksActive.end()) {
             pid_t pid = it->first;
             ChildHandle* handle = tasksHandles[pid];
             // Read from child’s stdout
+            /* XXX
             char buffer[1000]; //TODO 
             int pipes[NUM_PIPES][2];
-            count = read(pipes[PARENT_READ_PIPE][READ_FD], buffer, sizeof(buffer)-1);
+            int count = read(pipes[PARENT_READ_PIPE][READ_FD], buffer, sizeof(buffer)-1);
             if (count >= 0) {
                 buffer[count] = 0;
                 printf("%s", buffer);
             } else {
                 printf("readlen 0\n");
-                free(buffer);
-            }
+                //free(buffer);
+            }*/
             it++;
         }
     }
     public:
         HAWSTargetMgr () { }
-        int StartTask(string binpath, string args, int maxRAM) {
+        int StartTask(std::string binpath, std::string args, int maxRAM) {
             char* argv_list[] = { (char*) binpath.c_str(), (char*) args.c_str(), (char*) 0 };
             ChildHandle* handle = start_subprocess_nonblocking(argv_list);
             pid_t pid = handle->pid;
-            time_point start_time = chrono::system_clock::now();
+            time_point start_time = std::chrono::system_clock::now();
             taskLock.lock();
             allPids.insert(allPids.begin(), pid);
             tasksActive[pid] = binpath + " " + args;

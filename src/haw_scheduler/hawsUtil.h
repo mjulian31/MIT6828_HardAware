@@ -5,7 +5,7 @@
 #include <chrono>
 #include <list>
 
-using namespace std;
+//using namespace std;
 
 //list stuff
 #define IN_LIST(list, item) (std::find(list.begin(), list.end(), item) != list.end())
