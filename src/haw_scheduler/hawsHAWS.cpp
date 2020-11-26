@@ -43,10 +43,10 @@ int globalSchedRAMGPUAvail = SCHED_MEM_GPU_MAX;
 list<pid_t> allCPUPids;
 list<pid_t> allGPUPids;
 
-float centsPerUnitTimeCPU = 0.001; // 1 penny per second default
-float centsPerUnitTimeGPU = 0.0015; // 1.5 pennies per second default
-long billableCPUms = 0;
-long billableGPUms = 0;
+float centsPerUnitTimeCPU = 0.000001; // 1 penny per second default
+float centsPerUnitTimeGPU = 0.0000015; // 1.5 pennies per second default
+long billableCPUus = 0;
+long billableGPUus = 0;
 
 time_point hawsStartTime;
 time_point hawsStopTime;
@@ -59,7 +59,7 @@ void HAWS::ReapChildren() {
     int reapedTasks = 0;
     TaskStatus task_status;
     while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
-       long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
+       time_point time_completed = std::chrono::system_clock::now();
        // debugging
        //printf("WAIDPID: PID %d status %d\n", p, status);
        //printf("waitpid() was < 0\n"); 
@@ -87,11 +87,11 @@ void HAWS::ReapChildren() {
     if (reapedTasks > 0) { printf("TARGMGR: subprocesses reaped: %d\n", reapedTasks); }
 }
 
-void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, long time_completed) {
+void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, time_point ended) {
     if (IN_LIST(allCPUPids, pid)) {
        assert(cpuMgr->TaskIsActive(pid));
        assert(NOT_IN_LIST(allGPUPids, pid));
-       billableCPUms += cpuMgr->TaskConclude(pid, task_status, status, time_completed); 
+       billableCPUus += cpuMgr->TaskConclude(pid, task_status, status, ended); 
    } else if (IN_LIST(allGPUPids, pid)) {
        assert(false); //NOT IMPLEMENTED
        assert(gpuMgr->TaskIsActive(pid));
@@ -206,9 +206,9 @@ void HAWS::PrintData() {
     auto elapsedMS = TIMEDIFF_CAST_MSEC(hawsStopTime - hawsStartTime);
     auto elapsedS = TIMEDIFF_CAST_SEC(hawsStopTime - hawsStartTime);
     printf("HAWS: System runtime: %ld us (%ld ms) (%ld s)\n", elapsedUS, elapsedMS, elapsedS);
-    printf("HAWS: Billable CPU ms: %ld\n", billableCPUms);
-    printf("HAWS: Billable CPU cents/ms: %f\n", centsPerUnitTimeCPU);
-    float billableCents = centsPerUnitTimeCPU * billableCPUms;
+    printf("HAWS: Billable CPU us: %ld\n", billableCPUus);
+    printf("HAWS: Billable CPU cents/us: %f\n", centsPerUnitTimeCPU);
+    float billableCents = centsPerUnitTimeCPU * billableCPUus;
     printf("HAWS: Billable CPU cents: %f cents (%f$)\n", billableCents, billableCents / 100);
     cpuMgr->PrintData();
 }

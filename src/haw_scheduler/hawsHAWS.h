@@ -1,12 +1,14 @@
 #ifndef HAWS_H_
 #define HAWS_H_
 
-#include "hawsClientRequest.h"
 #include <mutex>
 #include <queue>
 #include <thread>
 #include <unistd.h>
 #include <assert.h>
+
+#include "hawsClientRequest.h"
+#include "hawsUtil.h"
 
 using namespace std;
 
@@ -38,7 +40,7 @@ class HAWS {
         //SCHEDLOOP THREAD 
         static void ScheduleLoop(); 
         static void ReapChildren();
-        static void DispatchConclusion(pid_t, TaskStatus, int status, long time_completed);
+        static void DispatchConclusion(pid_t, TaskStatus, int status, time_point time_completed);
         static void ProcessClientRequest(HAWSClientRequest* req);
         static void RequeueReq(HAWSClientRequest* req);
         static void StartTaskCPU(HAWSClientRequest* req);
