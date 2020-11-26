@@ -22,7 +22,7 @@ void haws_test_billing(HAWS* haws);
 #define TEST_8K haws_test_v4_8k
 #define TEST_BILLING haws_test_billing
 
-#define SINGLE_TEST TEST_BILLING
+#define SINGLE_TEST TEST_MEMCAP
 
 //rr1 - current verion v4
 //cpu
