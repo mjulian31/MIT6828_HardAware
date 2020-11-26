@@ -2,6 +2,7 @@
 #define CLIENTREQUEST_H
 
 using namespace std;
+#include <cstring>
 #include <string>
 
 class HAWSClientRequest {
@@ -22,8 +23,8 @@ class HAWSClientRequest {
             this->cpuBinRAM = cpuBinRAM;
             this->gpuBinPath = gpuBin;
             this->gpuBinRAM = gpuBinRAM; 
-            this->stdinBuf = stdInBuf;
-            this->stdinBufLen = stdInBuf;
+            this->stdinBuf = stdinBuf;
+            this->stdinBufLen = stdinBufLen;
             taskArgs = args;
         }
         HAWSClientRequest() {
@@ -39,7 +40,7 @@ class HAWSClientRequest {
             gpuBinPath = another->GetGPUBinPath();
             gpuBinRAM  = another->GetGPUBinRAM();
             stdinBufLen = another->stdinBufLen;
-            stdinBuf = malloc(sizeof(stdinBufLen));
+            stdinBuf = (char*) malloc(sizeof(stdinBufLen));
             memcpy(stdinBuf, another->stdinBuf, stdinBufLen);
             taskArgs = another->GetTaskArgs();
         }
