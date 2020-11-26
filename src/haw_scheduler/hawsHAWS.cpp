@@ -130,7 +130,6 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
             free(req); // done processing client request
         }
 
-        ReapChildren(); // collect all completed child processes
         
         //monitor HW targets
         cpuMgr->Monitor(); //update state of processes in cpu manager  
@@ -147,6 +146,7 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
                    (int)(((float) globalSchedRAMGPUAvail / (float) SCHED_MEM_GPU_MAX)*100));
         }
 
+        ReapChildren(); // collect all completed child processes
         usleep(50); // yield CPU
     }
     printf("HAWS: ScheduleLoop ended...\n");
