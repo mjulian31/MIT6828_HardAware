@@ -1,3 +1,4 @@
+
 #include <unistd.h>
 #include <stdio.h>
  
@@ -10,7 +11,9 @@
  
 #define PARENT_WRITE_PIPE  0
 #define PARENT_READ_PIPE   1
- 
+
+using namespace std; 
+
 int pipes[NUM_PIPES][2];
  
 /* always in a pipe[], pipe[0] is for read and 

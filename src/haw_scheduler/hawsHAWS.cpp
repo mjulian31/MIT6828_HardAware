@@ -1,17 +1,21 @@
 
-#include <stdio.h>
-#include <algorithm>
+//#include <stdio.h>
+//#include <algorithm>
+//#include <queue>
+//#include <unistd.h>
+//#include <cstring>
+//#include <unordered_map>
+
+#include <assert.h>
 #include <mutex>
-#include <queue>
 #include <thread>
-#include <unistd.h>
-#include <cstring>
+#include <queue>
+#include <sys/wait.h>
 #include "hawsUtil.h"
 #include "hawsHAWS.h"
 #include "hawsTargetMgr.h"
 #include "hawsGPUMgr.h"
 #include "hawsClientRequest.h"
-#include <unordered_map>
 
 using namespace std;
 

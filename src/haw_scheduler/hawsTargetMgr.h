@@ -3,13 +3,18 @@
 
 #include <list>
 #include <chrono>
-#include <stdio.h>
 #include <unordered_map>
+#include <stdio.h>
+#include <unistd.h>
 
 #include "subprocess.h"
 #include "hawsUtil.h"
 
 using namespace std; 
+
+//extern ssize_t read(int fd, char* buf, int nbytes);
+
+extern ssize_t read(int fd, void* buf, size_t nbytes);
 
 static const char* TaskStatusToStr(TaskStatus ts) {
     return ts == TASK_RUNNING ? "TASK_RUNNING " :
@@ -28,6 +33,8 @@ class HAWSTargetMgr {
     unordered_map<pid_t, time_point> tasksEndTime;
     unordered_map<pid_t, int> tasksMaxRAM;
     unordered_map<pid_t, long> tasksBillableUS;
+    unordered_map<pid_t, ChildHandle*> tasksHandles;
+    unordered_map<pid_t, char*> tasksStdout;
     std::mutex taskLock; 
     std::mutex completionLock; 
     int activeTasks = 0;
@@ -92,6 +99,25 @@ class HAWSTargetMgr {
         this->freedPhysMB += tasksMaxRAM[pid];
         tasksBillableUS[pid] = TIMEDIFF_CAST_USEC(tasksEndTime[pid] - tasksStartTime[pid]);
     }
+    void CollectChildrenStdout() {
+        unordered_map<pid_t, string>::iterator it = tasksActive.begin();
+        while (it != tasksActive.end()) {
+            pid_t pid = it->first;
+            ChildHandle* handle = tasksHandles[pid];
+            // Read from child’s stdout
+            char buffer[1000]; //TODO 
+            int pipes[NUM_PIPES][2];
+            count = read(pipes[PARENT_READ_PIPE][READ_FD], buffer, sizeof(buffer)-1);
+            if (count >= 0) {
+                buffer[count] = 0;
+                printf("%s", buffer);
+            } else {
+                printf("readlen 0\n");
+                free(buffer);
+            }
+            it++;
+        }
+    }
     public:
         HAWSTargetMgr () { }
         int StartTask(string binpath, string args, int maxRAM) {
@@ -107,11 +133,14 @@ class HAWSTargetMgr {
             tasksStartTime[pid] = start_time; 
             tasksMaxRAM[pid] = maxRAM;
             tasksBillableUS[pid] = 0;
+            tasksHandles[pid] = handle;
             taskLock.unlock();
             return pid;
         }
         
         void Monitor () { //SCHEDLOOP THREAD
+            CollectChildrenStdout();
+
             if (throttle % 1000 == 0) { // make sure all invariants are satisfied
                 //printf("-->doing sanity check\n");
                 taskLock.lock();

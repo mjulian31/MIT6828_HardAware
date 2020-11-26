@@ -1,13 +1,18 @@
 #include <stdio.h>
 #include <sys/types.h> 
 #include <unistd.h>  
-#include <stdlib.h> 
+//#include <stdlib.h> 
+#include <cstdlib>
 #include <errno.h>   
 #include <sys/wait.h> 
 #include "subprocess.h"
 
 // stdin / stdout piping stuff from  
 // https://jineshkj.wordpress.com/2006/12/22/how-to-capture-stdin-stdout-and-stderr-of-child-program/
+
+ssize_t subprocess_read(int fd, void *buf, size_t count) {
+    return read(fd, buf, count);
+}
 
 ChildHandle* start_subprocess_nonblocking(char** argv_list) {
     pid_t  pid; 

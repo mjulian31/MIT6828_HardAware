@@ -1,11 +1,10 @@
 #ifndef HAWS_H_
 #define HAWS_H_
 
-#include <mutex>
-#include <queue>
-#include <thread>
-#include <unistd.h>
-#include <assert.h>
+//#include <mutex>
+//#include <queue>
+//#include <unistd.h>
+//#include <assert.h>
 
 #include "hawsClientRequest.h"
 #include "hawsUtil.h"

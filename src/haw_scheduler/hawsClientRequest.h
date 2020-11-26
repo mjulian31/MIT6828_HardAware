@@ -2,6 +2,7 @@
 #define CLIENTREQUEST_H
 
 using namespace std;
+
 #include <cstring>
 #include <string>
 

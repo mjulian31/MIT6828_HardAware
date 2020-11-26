@@ -1,12 +1,8 @@
 #ifndef SUBPROCESS_H
 #define SUBPROCESS_H
 
+#include <unistd.h>
 #include <stdio.h>
-#include <sys/types.h> 
-#include <unistd.h>  
-#include <stdlib.h> 
-#include <errno.h>   
-#include <sys/wait.h> 
 
 /* since pipes are unidirectional, we need two pipes.
    one for data to flow from parent's stdout to child's
@@ -28,6 +24,11 @@ typedef struct ChildHandle {
 #define READ_FD  0
 #define WRITE_FD 1
 
+// production use
+ChildHandle* start_subprocess_nonblocking(char**);
+ssize_t subprocess_read(int fd, void* buf, size_t nchar);
+
+// testing
 // block and wait for child process example
 int start_subprocess_blocking(char**);
 int start_subprocess_blocking_julia_test(char*, char*);
@@ -36,8 +37,5 @@ int start_subprocess_blocking_julia_test(char*, char*);
 int start_subprocess_nonblocking_monitor(char**);
 int start_subprocess_nonblocking_julia_test(char*, char*);
 int start_subprocess_test();
-
-// production use
-ChildHandle* start_subprocess_nonblocking(char**);
 
 #endif
