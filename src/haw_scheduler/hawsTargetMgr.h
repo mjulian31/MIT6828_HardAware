@@ -99,17 +99,15 @@ class HAWSTargetMgr {
             pid_t pid = it->first;
             ChildHandle* handle = tasksHandles[pid];
             // Read from child’s stdout
-            /* XXX
-            char buffer[1000]; //TODO 
-            int pipes[NUM_PIPES][2];
-            int count = read(pipes[PARENT_READ_PIPE][READ_FD], buffer, sizeof(buffer)-1);
+            char* buffer = (char*) malloc(1000);
+            int count = read(handle->pipes[PARENT_READ_PIPE][READ_FD], buffer, sizeof(buffer)-1);
             if (count >= 0) {
                 buffer[count] = 0;
-                printf("%s", buffer);
+                printf("COLLECT %s\n", buffer);
             } else {
                 printf("readlen 0\n");
                 //free(buffer);
-            }*/
+            }
             it++;
         }
     }
@@ -134,7 +132,7 @@ class HAWSTargetMgr {
         }
         
         void Monitor () { //SCHEDLOOP THREAD
-            CollectChildrenStdout();
+            //CollectChildrenStdout();
 
             if (throttle % 1000 == 0) { // make sure all invariants are satisfied
                 //printf("-->doing sanity check\n");
@@ -164,6 +162,21 @@ class HAWSTargetMgr {
         int TaskConclude(pid_t pid, TaskStatus ts, int status_code, 
                          time_point time_completed) { //SCHEDLOOP THREAD
             //printf("locking TaskConclude\n");
+            /*
+            ChildHandle* handle = tasksHandles[pid];
+            char* buffer = (char*) malloc(1000);
+            int count;
+            while (count = read(handle->pipes[PARENT_READ_PIPE][READ_FD], 
+                   buffer, sizeof(buffer)-1) > 0) {
+                if (count >= 0) {
+                    buffer[count] = 0;
+                    printf("CONCLUDE: %s\n", buffer);
+                } else {
+                    printf("readlen 0\n");
+                    //free(buffer);
+                }
+            }*/
+
             taskLock.lock();
             //printf("doing accounting\n");
             this->TaskCompleteAccountingProtected(pid, ts, status_code, time_completed); 

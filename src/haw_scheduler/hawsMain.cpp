@@ -17,10 +17,12 @@ void haws_test_phys_mem_management(HAWS* haws);
 void haws_test_phys_mem_management2(HAWS* haws);
 void haws_test_v4_8k(HAWS* haws);
 void haws_test_billing(HAWS* haws);
+void haws_test_stdout_cap(HAWS* haws);
 
 #define TEST_MEMCAP haws_test_phys_mem_management
 #define TEST_8K haws_test_v4_8k
 #define TEST_BILLING haws_test_billing
+#define TEST_STDOUTCAP haws_test_stdout_cap
 
 #define SINGLE_TEST TEST_MEMCAP
 
@@ -194,7 +196,7 @@ void haws_test_stdout_cap(HAWS* haws) {
         HAWSClientRequest* r  = new HAWSClientRequest("/usr/bin/echo", 1,
                                                       "/usr/bin/echo", 1,
                                                       (char*) "this is my first test\n", 22,
-                                                      "");
+                                                      "12345678987654321");
         haws->HardAwareSchedule(r);
     }
     sleep(1);
