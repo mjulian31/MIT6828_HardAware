@@ -6,6 +6,7 @@
 #include <nvrtc.h>
 #include <builtin_types.h>
 #include <string>
+#include <stdbool.h>
 
 static inline void check_errors(CUresult res, std::string name) {
   if (res != CUDA_SUCCESS) {
@@ -25,6 +26,43 @@ void basic_matmul(double* out, double* A, double* B, int N, int R, int M) {
 	}
 }
 #endif
+
+/**
+ *load matrix from string of the form [1 2 3; 4 5 6] of size NxM
+ *returns the double* to the col-major stored matrix
+ */
+double* load_matrix(char* matrix_string, int N, int M) {
+  char *str1, *str2, *line, *elem;
+  char *saveptr1, *saveptr2;
+  double* matrix = reinterpret_cast<double *>(malloc(sizeof(double) * N * M));
+
+  int col = 0;
+  int row = 0;
+
+  str1 = matrix_string;
+  for (int j = 1; ; j++) {
+    line = strtok_r(str1, "[];", &saveptr1);
+    str1 = NULL;
+    if (line == NULL)
+      break;
+
+    str2 = line;
+    row = 0;
+    while (true) {
+      elem = strtok_r(str2, " ", &saveptr2);
+      str2 = NULL;
+      if (elem == NULL)
+        break;
+
+      matrix[col*N + row] = atoi(elem);
+      row ++;
+    }
+
+    col ++;
+  }
+
+  return matrix;
+}
 
 /**
  * Host main routine
@@ -48,7 +86,18 @@ int main(int argc, char **argv) {
   int N = 1024;
 	int R = 1024;
 	int M = 1024;
-	if (argc >= 4) {
+  char* matstringA = NULL;
+  char* matstringB = NULL;
+  bool rand = true;
+
+  if (argc >= 6) {
+    rand = false;
+    N = atoi(argv[1]);
+		R = atoi(argv[2]);
+		M = atoi(argv[3]);
+    matstringA = argv[4];
+    matstringB = argv[5];
+  } else if (argc >= 4) {
 		N = atoi(argv[1]);
 		R = atoi(argv[2]);
 		M = atoi(argv[3]);
@@ -59,38 +108,52 @@ int main(int argc, char **argv) {
 	}
 	printf("[dims %dx%d %dx%d -> %dx%d]\n", N, R, R, M, N, M);
 
-  // allocate the host matricies
-  double *h_A = reinterpret_cast<double *>(malloc(sizeof(double) * N * R));
-  double *h_B = reinterpret_cast<double *>(malloc(sizeof(double) * R * M));
+  double *h_A;
+  double *h_B;
   double *h_output = reinterpret_cast<double *>(malloc(sizeof(double) * N * M));
   #ifdef ERR_CHECK
   double *h_output_check = reinterpret_cast<double *>(malloc(sizeof(double) * N * M));
-  #endif
-
-  // verify that allocations succeeded
-  if (h_A == NULL || h_B == NULL || h_output == NULL) {
-    fprintf(stderr, "Failed to allocate host vectors!\n");
-    exit(EXIT_FAILURE);
-  }
-
-  // init the host arrays
-  for (int col = 0; col < R; ++col) {
-    for (int row = 0; row < N; ++row) {
-      h_A[col*N + row] = rand() / static_cast<double>(RAND_MAX);
-    }
-  }
+  // init output array
   for (int col = 0; col < M; ++col) {
-    for (int row = 0; row < R; ++row) {
-      h_B[R*col + row] = rand() / static_cast<double>(RAND_MAX);
-    }
-  }
-  #ifdef ERR_CHECK
-	for (int col = 0; col < M; ++col) {
     for (int row = 0; row < N; ++row) {
-			h_output_check[N*col + row] = 0;
+      h_output_check[N*col + row] = 0;
     }
   }
   #endif
+
+  if (rand) {
+    // allocate the host input matricies
+    h_A = reinterpret_cast<double *>(malloc(sizeof(double) * N * R));
+    h_B = reinterpret_cast<double *>(malloc(sizeof(double) * R * M));
+
+    // verify that allocations succeeded
+    if (h_A == NULL || h_B == NULL) {
+      fprintf(stderr, "Failed to allocate host vectors!\n");
+      exit(EXIT_FAILURE);
+    }
+
+    // init the host arrays
+    for (int col = 0; col < R; ++col) {
+      for (int row = 0; row < N; ++row) {
+        h_A[col*N + row] = rand() / static_cast<double>(RAND_MAX);
+      }
+    }
+    for (int col = 0; col < M; ++col) {
+      for (int row = 0; row < R; ++row) {
+        h_B[R*col + row] = rand() / static_cast<double>(RAND_MAX);
+      }
+    }
+  } else {
+    // load matrices from matrix strings
+    h_A = load_matrix(matstringA, N, R);
+    h_B = load_matrix(matstringB, R, M);
+
+    // verify that allocations succeeded
+    if (h_A == NULL || h_B == NULL) {
+      fprintf(stderr, "Failed to allocate host vectors!\n");
+      exit(EXIT_FAILURE);
+    }
+  }
 
   // alloc the device matricies
   CUdeviceptr d_A;
