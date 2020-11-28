@@ -11,18 +11,14 @@ const TILE_DIM = 32
 @show nthreads()
 @show CUDA.version()
 
-function mul_tile!(A::Array{T,2}, B::Array{T,2}, C::Array{T,2}) where {T}
-    @assert size(B,1) == size(A,2)
-    @assert size(A,1) == size(C,1)
-    @assert size(B,2) == size(C,2)
-    @assert size(B) == size(A) == size(C)
-    # assuming square matrix
-    N = size(C)[1]
-    NUM_TILES = Int(N/TILE_DIM)
+function mul_tile!(A::Array{T,2}, B::Array{T,2}, C::Array{T,2}, N, R, M) where {T}
+    NUM_TILES_ROW = div(N + TILE_DIM - N%TILE_DIM, TILE_DIM)
+    NUM_TILES_COL = div(M + TILE_DIM - M%TILE_DIM, TILE_DIM)
+    NUM_TILES = div(R + TILE_DIM - R%TILE_DIM, TILE_DIM)
 
     # loop over all tiles
-    @inbounds @threads for gj in 1:NUM_TILES
-        @inbounds for gi in 1:NUM_TILES
+    @inbounds @simd for gj in 1:NUM_TILES_COL
+        @inbounds @simd for gi in 1:NUM_TILES_ROW
             # loop over tiles needed for this calculation
             tile1 = @MArray zeros(TILE_DIM, TILE_DIM)
             tile2 = @MArray zeros(TILE_DIM, TILE_DIM)
@@ -34,8 +30,16 @@ function mul_tile!(A::Array{T,2}, B::Array{T,2}, C::Array{T,2}) where {T}
                         I = (gi-1) * TILE_DIM + i
                         J = (gj-1) * TILE_DIM + j
                         # get tile1 and tile2 values
-                        tile1[i, j] = A[I, t*TILE_DIM + j]
-                        tile2[i, j] = B[t*TILE_DIM + i, J]
+                        if I <= N && t*TILE_DIM + j <= R
+                            tile1[i, j] = A[I, t*TILE_DIM + j]
+                        else
+                            tile1[i, j] = 0.0
+                        end
+                        if t*TILE_DIM + i <= R && J <= M
+                            tile2[i, j] = B[t*TILE_DIM + i, J]
+                        else
+                            tile2[i, j] = 0.0
+                        end
                     end
                 end
                 # synchronize
@@ -48,13 +52,16 @@ function mul_tile!(A::Array{T,2}, B::Array{T,2}, C::Array{T,2}) where {T}
                             # global tile
                             I = (gi-1) * TILE_DIM + i
                             # add tile1 * tile2
-                            C[I, J] += tile1[i, k] * tile2[k, j]
+                            if I <= N && J <= M
+                                C[I, J] += tile1[i, k] * tile2[k, j]
+                            end
                         end
                     end
                 end
             end
         end
     end
+    return nothing
 end
 
 
