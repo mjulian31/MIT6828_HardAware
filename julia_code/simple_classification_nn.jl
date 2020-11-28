@@ -107,13 +107,20 @@ end
 
 
 # prediction vector
-function onehot(pred, pred_map)
+function onehot_MNIST(pred, pred_map)
     mat = zeros(size(pred, 1), size(pred_map, 1)) # num_preds x num_features
     for i = 1:size(pred, 1)
         index = findall(x->x==pred[i], pred_map)[1]
         mat[i, index] = 1.0
     end
     return mat
+end
+
+function onehot_dogs(pred, pred_map)
+    vec = zeros(1, size(pred_map, 1)) # 1 x num_features
+    index = findall(x->x==pred, pred_map)[1]
+    vec[1, index] = 1.0
+    return vec
 end
 
 
@@ -173,108 +180,108 @@ function net_train(net, x_train, y_train, epochs, learning_rate, batch_size)
 end
 
 
-# # prediction map
-# pred_map = ["Shiba_Dog", "French_bulldog", "Siberian_husky", "malamute", "German_shepherd", "Labrador_retriever", "Australian_Shepherd", "basset", "Yorkshire_terrier", "golden_retriever", "Irish_setter", "Bernese_mountain_dog", "Newfoundland", "Great_Pyrenees", "Bull_mastiff", "Shetland_sheepdog"]
-# num_features = size(pred_map, 1)
-#
-# # size constants
-# const DIM = 64
-# imsize = (DIM, DIM)
-# shape = (1, DIM*DIM)
-#
-# # load training data
-# num_train = 1024
-# x_train = zeros(num_train, DIM*DIM)
-# y_train = zeros(num_train, num_features)
-# image_train_dir = "../images/images_train/"
-# let row_num = 1
-#     for dog_name in readdir(image_train_dir)
-#         if dog_name == ".DS_Store" # skip stupid files
-#             continue
-#         end
-#         full_path = joinpath(image_train_dir, dog_name)
-#         for img_name in readdir(full_path)
-#             if img_name == ".DS_Store" # skip stupid files
-#                 continue
-#             end
-#             img_path = joinpath(full_path, img_name)
-#             img = load(img_path)
-#             img_gray = Gray.(img) # convert to greyscale
-#             img_square = imresize(img_gray, imsize) # resize to square image
-#             img_flat = reshape(img_square, shape) # flatten
-#             img_arr = convert(Array{Float64}, img_flat) # convert to array
-#             x_train[row_num, :] = img_arr # set row to input vector
-#             vec = onehot(dog_name, pred_map) # vector of prediction
-#             y_train[row_num, :] = vec # set row to output vector
-#             row_num += 1
-#             if row_num > num_train
-#                 break
-#             end
-#         end
-#         if row_num > num_train
-#             break
-#         end
-#     end
-# end
-#
-# # load testing data
-# num_test = 128
-# x_test = zeros(num_test, DIM*DIM)
-# y_test = zeros(num_test, num_features)
-# image_test_dir = "../images/images_test/"
-# let row_num = 1
-#     for dog_name in readdir(image_test_dir)
-#         if dog_name == ".DS_Store" # skip stupid files
-#             continue
-#         end
-#         full_path = joinpath(image_test_dir, dog_name)
-#         for img_name in readdir(full_path)
-#             if img_name == ".DS_Store" # skip stupid files
-#                 continue
-#             end
-#             img_path = joinpath(full_path, img_name)
-#             img = load(img_path)
-#             img_gray = Gray.(img) # convert to greyscale
-#             img_square = imresize(img_gray, imsize) # resize to square image
-#             img_flat = reshape(img_square, shape) # flatten
-#             img_arr = convert(Array{Float64}, img_flat) # convert to array
-#             x_test[row_num, :] = img_arr # set row to input vector
-#             vec = onehot(dog_name, pred_map) # vector of prediction
-#             y_test[row_num, :] = vec # set row to output vector
-#             row_num += 1
-#             if row_num > num_test
-#                 break
-#             end
-#         end
-#         if row_num > num_test
-#             break
-#         end
-#     end
-# end
-
-pred_map = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-x_train, y_train = MNIST.traindata(Float64, 1:10000)
-x_test, y_test  = MNIST.testdata(Float64, 1:1000)
-DIM = 28
+# prediction map
+pred_map = ["Shiba_Dog", "French_bulldog", "Siberian_husky", "malamute", "German_shepherd", "Labrador_retriever", "Australian_Shepherd", "basset", "Yorkshire_terrier", "golden_retriever", "Irish_setter", "Bernese_mountain_dog", "Newfoundland", "Great_Pyrenees", "Bull_mastiff", "Shetland_sheepdog"]
 num_features = size(pred_map, 1)
 
-x_train = reshape(x_train, (1, DIM*DIM, :))
-x_train = reshape(x_train, (DIM*DIM, :))
-x_train = transpose(x_train)
-y_train = onehot(y_train, pred_map)
+# size constants
+const DIM = 512
+imsize = (DIM, DIM)
+shape = (1, DIM*DIM)
 
-x_test = reshape(x_test, (1, DIM*DIM, :))
-x_test = reshape(x_test, (DIM*DIM, :))
-x_test = transpose(x_test)
-y_test = onehot(y_test, pred_map)
+# load training data
+num_train = 1024
+x_train = zeros(num_train, DIM*DIM)
+y_train = zeros(num_train, num_features)
+image_train_dir = "../images/images_train/"
+let row_num = 1
+    for dog_name in readdir(image_train_dir)
+        if dog_name == ".DS_Store" # skip stupid files
+            continue
+        end
+        full_path = joinpath(image_train_dir, dog_name)
+        for img_name in readdir(full_path)
+            if img_name == ".DS_Store" # skip stupid files
+                continue
+            end
+            img_path = joinpath(full_path, img_name)
+            img = load(img_path)
+            img_gray = Gray.(img) # convert to greyscale
+            img_square = imresize(img_gray, imsize) # resize to square image
+            img_flat = reshape(img_square, shape) # flatten
+            img_arr = convert(Array{Float64}, img_flat) # convert to array
+            x_train[row_num, :] = img_arr # set row to input vector
+            vec = onehot_dogs(dog_name, pred_map) # vector of prediction
+            y_train[row_num, :] = vec # set row to output vector
+            row_num += 1
+            if row_num > num_train
+                break
+            end
+        end
+        if row_num > num_train
+            break
+        end
+    end
+end
+
+# load testing data
+num_test = 128
+x_test = zeros(num_test, DIM*DIM)
+y_test = zeros(num_test, num_features)
+image_test_dir = "../images/images_test/"
+let row_num = 1
+    for dog_name in readdir(image_test_dir)
+        if dog_name == ".DS_Store" # skip stupid files
+            continue
+        end
+        full_path = joinpath(image_test_dir, dog_name)
+        for img_name in readdir(full_path)
+            if img_name == ".DS_Store" # skip stupid files
+                continue
+            end
+            img_path = joinpath(full_path, img_name)
+            img = load(img_path)
+            img_gray = Gray.(img) # convert to greyscale
+            img_square = imresize(img_gray, imsize) # resize to square image
+            img_flat = reshape(img_square, shape) # flatten
+            img_arr = convert(Array{Float64}, img_flat) # convert to array
+            x_test[row_num, :] = img_arr # set row to input vector
+            vec = onehot_dogs(dog_name, pred_map) # vector of prediction
+            y_test[row_num, :] = vec # set row to output vector
+            row_num += 1
+            if row_num > num_test
+                break
+            end
+        end
+        if row_num > num_test
+            break
+        end
+    end
+end
+
+# pred_map = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+#
+# x_train, y_train = MNIST.traindata(Float64, 1:10000)
+# x_test, y_test  = MNIST.testdata(Float64, 1:1000)
+# DIM = 28
+# num_features = size(pred_map, 1)
+#
+# x_train = reshape(x_train, (1, DIM*DIM, :))
+# x_train = reshape(x_train, (DIM*DIM, :))
+# x_train = transpose(x_train)
+# y_train = onehot_MNIST(y_train, pred_map)
+#
+# x_test = reshape(x_test, (1, DIM*DIM, :))
+# x_test = reshape(x_test, (DIM*DIM, :))
+# x_test = transpose(x_test)
+# y_test = onehot_MNIST(y_test, pred_map)
 
 # set up layers
 fc1 = fc_layer(:none, :none, :none, :none)
-fc_init(fc1, DIM*DIM, 128) # (num_train, DIMxDIM) -> (num_train, 128)
+fc_init(fc1, DIM*DIM, 256) # (num_train, DIMxDIM) -> (num_train, 128)
 act1 = act_layer(elem_tanh, elem_d_tanh, :none, :none)
 fc2 = fc_layer(:none, :none, :none, :none)
-fc_init(fc2, 128, 64) # (num_train, 128) -> (num_train, 64)
+fc_init(fc2, 256, 64) # (num_train, 128) -> (num_train, 64)
 act2 = act_layer(elem_tanh, elem_d_tanh, :none, :none)
 fc3 = fc_layer(:none, :none, :none, :none)
 fc_init(fc3, 64, num_features) # (num_train, 64) -> (num_train, num_features)
@@ -290,10 +297,11 @@ net = network([(fc1, fc_forward, fc_backward),
                 mse, d_mse)
 
 # run training, epochs=50, learning_rate=0.1, and batch_size=16
-net_train(net, x_train, y_train, 100, 0.1, 16)
+net_train(net, x_train, y_train, 100, 0.1, 32)
 
 # test
 out = net_pred(net, x_test, pred_map)
+actual = get_preds(y_test, pred_map)
 
 # calculate percent correct
 print("overall accuracy: ")
