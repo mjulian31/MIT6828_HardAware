@@ -147,25 +147,27 @@ function net_pred(net, input, pred_map)
     return preds
 end
 
-function net_train(net, x_train, y_train, epochs, learning_rate)
+function net_train(net, x_train, y_train, epochs, learning_rate, batch_size)
     for i = 1:epochs
+        err = 0
         # forward prop
-        # x_train, y_train = randomize(x_train, y_train) # randomize data
-        output = x_train # 2d output array
-        for (layer, prop_f, _) in net.layers
-            output = prop_f(layer, output)
-        end
+        for j = 1:batch_size:size(x_train,1)
+            output = x_train[j:j+batch_size-1, :]
+            for (layer, prop_f, _) in net.layers
+                output = prop_f(layer, output)
+            end
 
-        err_arr = net.loss(y_train, output) # error array
+            err += net.loss(y_train[j:j+batch_size-1, :], output)[1] # error array
 
-        # backward prop
-        error = net.d_loss(y_train, output)
-        for (layer, _, prop_b) in reverse(net.layers)
-            error = prop_b(layer, error, learning_rate)
+            # backward prop
+            error = net.d_loss(y_train[j:j+batch_size-1, :], output)
+            for (layer, _, prop_b) in reverse(net.layers)
+                error = prop_b(layer, error, learning_rate)
+            end
         end
 
         # average error
-        err = mean(err_arr)
+        err /= size(x_train, 1)
         @printf("epoch %d/%d error=%f\n", i, epochs, err)
     end
 end
@@ -287,16 +289,11 @@ net = network([(fc1, fc_forward, fc_backward),
                 (act3, act_forward, act_backward)],
                 mse, d_mse)
 
-# run training, epochs=50, and learning_rate=0.1
-net_train(net, x_train, y_train, 100, 0.1)
+# run training, epochs=50, learning_rate=0.1, and batch_size=16
+net_train(net, x_train, y_train, 100, 0.1, 16)
 
 # test
 out = net_pred(net, x_test, pred_map)
-print("\npredicted values: ")
-@show(out)
-print("\n\ntrue values: ")
-actual = get_preds(y_test, pred_map)
-@show(actual)
 
 # calculate percent correct
 print("overall accuracy: ")
