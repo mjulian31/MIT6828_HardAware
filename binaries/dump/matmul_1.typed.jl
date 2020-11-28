@@ -1,17 +1,17 @@
 CodeInfo(
-      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:90 within `coalesced_matmul_kernel!'
+      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:89 within `coalesced_matmul_kernel!'
      ┌ @ essentials.jl:414 within `reinterpret'
 1 ───│ %1   = Base.bitcast(Core.LLVMPtr{Float64,1}, ptr_out)::Core.LLVMPtr{Float64,1}
 │    └
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:91 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:90 within `coalesced_matmul_kernel!'
 │    ┌ @ essentials.jl:414 within `reinterpret'
 │    │ %2   = Base.bitcast(Core.LLVMPtr{Float64,1}, ptr_in1)::Core.LLVMPtr{Float64,1}
 │    └
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:92 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:91 within `coalesced_matmul_kernel!'
 │    ┌ @ essentials.jl:414 within `reinterpret'
 │    │ %3   = Base.bitcast(Core.LLVMPtr{Float64,1}, ptr_in2)::Core.LLVMPtr{Float64,1}
 │    └
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:93 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:92 within `coalesced_matmul_kernel!'
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48
 │    │┌ @ broadcast.jl:837 within `materialize'
 │    ││┌ @ broadcast.jl:1046 within `copy'
@@ -34,7 +34,7 @@ CodeInfo(
 │    │ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48 @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:31
 │    │ %7   = %new(CuDeviceArray{Float64,2,1}, %6, %1)::CuDeviceArray{Float64,2,1}
 │    └
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:94 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:93 within `coalesced_matmul_kernel!'
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48
 │    │┌ @ broadcast.jl:837 within `materialize'
 │    ││┌ @ broadcast.jl:1046 within `copy'
@@ -57,7 +57,7 @@ CodeInfo(
 │    │ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48 @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:31
 │    │ %11  = %new(CuDeviceArray{Float64,2,1}, %10, %2)::CuDeviceArray{Float64,2,1}
 │    └
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:95 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:94 within `coalesced_matmul_kernel!'
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48
 │    │┌ @ broadcast.jl:837 within `materialize'
 │    ││┌ @ broadcast.jl:1046 within `copy'
@@ -80,13 +80,13 @@ CodeInfo(
 │    │ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48 @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:31
 │    │ %15  = %new(CuDeviceArray{Float64,2,1}, %14, %3)::CuDeviceArray{Float64,2,1}
 │    └
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:96 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:95 within `coalesced_matmul_kernel!'
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:77 within `blockIdx'
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_x'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %16  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││ %17  = (%16)($(QuoteNode(Ptr{Nothing} @0x0000000005028ec8)), UInt32, Tuple{})::UInt32
+│    ││││ %17  = (%16)($(QuoteNode(Ptr{Nothing} @0x0000000003aaa378)), UInt32, Tuple{})::UInt32
 │    ││└└
 │    ││┌ @ boot.jl:708 within `Int64'
 │    │││┌ @ boot.jl:632 within `toInt64'
@@ -99,27 +99,27 @@ CodeInfo(
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %20  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%20)($(QuoteNode(Ptr{Nothing} @0x0000000004f85158)), UInt32, Tuple{})::UInt32
+│    ││││        (%20)($(QuoteNode(Ptr{Nothing} @0x0000000000b89208)), UInt32, Tuple{})::UInt32
 │    │└└└
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_z'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %22  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%22)($(QuoteNode(Ptr{Nothing} @0x0000000002d4dff8)), UInt32, Tuple{})::UInt32
+│    ││││        (%22)($(QuoteNode(Ptr{Nothing} @0x0000000001a16408)), UInt32, Tuple{})::UInt32
 │    └└└└
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:97 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:96 within `coalesced_matmul_kernel!'
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:77 within `blockIdx'
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_x'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %24  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%24)($(QuoteNode(Ptr{Nothing} @0x0000000005028ec8)), UInt32, Tuple{})::UInt32
+│    ││││        (%24)($(QuoteNode(Ptr{Nothing} @0x0000000003aaa378)), UInt32, Tuple{})::UInt32
 │    │└└└
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_y'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %26  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││ %27  = (%26)($(QuoteNode(Ptr{Nothing} @0x0000000004f85158)), UInt32, Tuple{})::UInt32
+│    ││││ %27  = (%26)($(QuoteNode(Ptr{Nothing} @0x0000000000b89208)), UInt32, Tuple{})::UInt32
 │    ││└└
 │    ││┌ @ boot.jl:708 within `Int64'
 │    │││┌ @ boot.jl:632 within `toInt64'
@@ -132,15 +132,15 @@ CodeInfo(
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %30  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%30)($(QuoteNode(Ptr{Nothing} @0x0000000002d4dff8)), UInt32, Tuple{})::UInt32
+│    ││││        (%30)($(QuoteNode(Ptr{Nothing} @0x0000000001a16408)), UInt32, Tuple{})::UInt32
 │    └└└└
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:98 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:97 within `coalesced_matmul_kernel!'
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:91 within `threadIdx'
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_x'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %32  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││ %33  = (%32)($(QuoteNode(Ptr{Nothing} @0x00000000031c8ef8)), UInt32, Tuple{})::UInt32
+│    ││││ %33  = (%32)($(QuoteNode(Ptr{Nothing} @0x0000000001c1bc78)), UInt32, Tuple{})::UInt32
 │    ││└└
 │    ││┌ @ boot.jl:708 within `Int64'
 │    │││┌ @ boot.jl:632 within `toInt64'
@@ -153,27 +153,27 @@ CodeInfo(
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %36  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%36)($(QuoteNode(Ptr{Nothing} @0x0000000002d4de58)), UInt32, Tuple{})::UInt32
+│    ││││        (%36)($(QuoteNode(Ptr{Nothing} @0x0000000003c6f5a8)), UInt32, Tuple{})::UInt32
 │    │└└└
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_z'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %38  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%38)($(QuoteNode(Ptr{Nothing} @0x0000000001e52908)), UInt32, Tuple{})::UInt32
+│    ││││        (%38)($(QuoteNode(Ptr{Nothing} @0x0000000003f93048)), UInt32, Tuple{})::UInt32
 │    └└└└
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:99 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:98 within `coalesced_matmul_kernel!'
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:91 within `threadIdx'
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_x'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %40  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%40)($(QuoteNode(Ptr{Nothing} @0x00000000031c8ef8)), UInt32, Tuple{})::UInt32
+│    ││││        (%40)($(QuoteNode(Ptr{Nothing} @0x0000000001c1bc78)), UInt32, Tuple{})::UInt32
 │    │└└└
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_y'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %42  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││ %43  = (%42)($(QuoteNode(Ptr{Nothing} @0x0000000002d4de58)), UInt32, Tuple{})::UInt32
+│    ││││ %43  = (%42)($(QuoteNode(Ptr{Nothing} @0x0000000003c6f5a8)), UInt32, Tuple{})::UInt32
 │    ││└└
 │    ││┌ @ boot.jl:708 within `Int64'
 │    │││┌ @ boot.jl:632 within `toInt64'
@@ -186,144 +186,129 @@ CodeInfo(
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %46  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%46)($(QuoteNode(Ptr{Nothing} @0x0000000001e52908)), UInt32, Tuple{})::UInt32
+│    ││││        (%46)($(QuoteNode(Ptr{Nothing} @0x0000000003f93048)), UInt32, Tuple{})::UInt32
 │    └└└└
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:102 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:101 within `coalesced_matmul_kernel!'
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:24 within `macro expansion'
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:55 within `emit_shmem'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:55 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    │││ %48  = Base.llvmcall::Core.IntrinsicFunction
-│    │││ %49  = (%48)($(QuoteNode(Ptr{Nothing} @0x0000000005087088)), Core.LLVMPtr{Float64,3}, Tuple{})::Core.LLVMPtr{Float64,3}
+│    │││ %49  = (%48)($(QuoteNode(Ptr{Nothing} @0x0000000001a5c888)), Core.LLVMPtr{Float64,3}, Tuple{})::Core.LLVMPtr{Float64,3}
 │    │└└
 │    │ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:25 within `macro expansion'
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:31
 │    ││ %50  = %new(CuDeviceArray{Float64,2,3}, (33, 32), %49)::CuDeviceArray{Float64,2,3}
 │    └└
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:103 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:102 within `coalesced_matmul_kernel!'
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:24 within `macro expansion'
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:55 within `emit_shmem'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:55 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    │││ %51  = Base.llvmcall::Core.IntrinsicFunction
-│    │││ %52  = (%51)($(QuoteNode(Ptr{Nothing} @0x000000000208d008)), Core.LLVMPtr{Float64,3}, Tuple{})::Core.LLVMPtr{Float64,3}
+│    │││ %52  = (%51)($(QuoteNode(Ptr{Nothing} @0x0000000001da1fa8)), Core.LLVMPtr{Float64,3}, Tuple{})::Core.LLVMPtr{Float64,3}
 │    │└└
 │    │ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:25 within `macro expansion'
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:31
 │    ││ %53  = %new(CuDeviceArray{Float64,2,3}, (33, 32), %52)::CuDeviceArray{Float64,2,3}
 │    └└
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:107 within `coalesced_matmul_kernel!'
-│    ┌ @ operators.jl:538 within `max' @ promotion.jl:409
-│    │┌ @ int.jl:82 within `<'
-│    ││ %54  = Base.slt_int(R, N)::Bool
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:106 within `coalesced_matmul_kernel!'
+│     %54  = Main.TILE_DIM::Core.Compiler.Const(32, false)
+│    ┌ @ int.jl:920 within `+'
+│    │┌ @ int.jl:476 within `rem'
+│    ││ %55  = Base.sext_int(Int64, R)::Int64
 │    │└
-│    │ %55  = Base.ifelse(%54, N, R)::Int32
-│    │┌ @ int.jl:82 within `<'
-│    ││ %56  = Base.slt_int(M, %55)::Bool
-│    │└
-│    │ %57  = Base.ifelse(%56, %55, M)::Int32
+│    │ @ int.jl:922 within `+' @ int.jl:86
+│    │ %56  = Base.add_int(%55, %54)::Int64
 │    └
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:108 within `coalesced_matmul_kernel!'
 │    ┌ @ promotion.jl:352 within `rem'
 │    │┌ @ promotion.jl:282 within `promote'
 │    ││┌ @ promotion.jl:259 within `_promote'
 │    │││┌ @ number.jl:7 within `convert'
 │    ││││┌ @ boot.jl:708 within `Int64'
 │    │││││┌ @ boot.jl:627 within `toInt64'
-│    ││││││ %58  = Core.sext_int(Core.Int64, %57)::Int64
+│    ││││││ %57  = Core.sext_int(Core.Int64, R)::Int64
 │    │└└└└└
 │    │ @ promotion.jl:352 within `rem' @ int.jl:261
-│    │ %59  = Base.checked_srem_int(%58, 32)::Int64
+│    │ %58  = Base.checked_srem_int(%57, 32)::Int64
 │    └
-│    ┌ @ promotion.jl:398 within `=='
-│    │ %60  = (%59 === 0)::Bool
-│    └
-└────        goto #3 if not %60
-2 ───        goto #4
-3 ─── %63  = Main.TILE_DIM::Core.Compiler.Const(32, false)
-4 ┄── %64  = φ (#2 => 0, #3 => %63)::Int64
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
-│    ┌ @ int.jl:920 within `+'
-│    │┌ @ int.jl:476 within `rem'
-│    ││ %65  = Base.sext_int(Int64, %57)::Int64
-│    │└
-│    │ @ int.jl:922 within `+' @ int.jl:86
-│    │ %66  = Base.add_int(%65, %64)::Int64
-│    └
-│     %67  = Main.TILE_DIM::Core.Compiler.Const(32, false)
-│    ┌ @ int.jl:260 within `div'
-│    │ %68  = Base.checked_sdiv_int(%66, %67)::Int64
-│    └
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:112 within `coalesced_matmul_kernel!'
 │    ┌ @ int.jl:85 within `-'
-│    │ %69  = Base.sub_int(%68, 1)::Int64
+│    │ %59  = Base.sub_int(%56, %58)::Int64
+│    └
+│     %60  = Main.TILE_DIM::Core.Compiler.Const(32, false)
+│    ┌ @ int.jl:260 within `div'
+│    │ %61  = Base.checked_sdiv_int(%59, %60)::Int64
+│    └
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+│    ┌ @ int.jl:85 within `-'
+│    │ %62  = Base.sub_int(%61, 1)::Int64
 │    └
 │    ┌ @ range.jl:5 within `Colon'
 │    │┌ @ range.jl:280 within `UnitRange'
 │    ││┌ @ range.jl:285 within `unitrange_last'
 │    │││┌ @ operators.jl:350 within `>='
 │    ││││┌ @ int.jl:441 within `<='
-│    │││││ %70  = Base.sle_int(0, %69)::Bool
+│    │││││ %63  = Base.sle_int(0, %62)::Bool
 │    │││└└
-│    │││ %71  = Base.ifelse(%70, %69, -1)::Int64
+│    │││ %64  = Base.ifelse(%63, %62, -1)::Int64
 │    └└└
 │    ┌ @ range.jl:620 within `iterate'
 │    │┌ @ range.jl:503 within `isempty'
 │    ││┌ @ operators.jl:303 within `>'
 │    │││┌ @ int.jl:82 within `<'
-│    ││││ %72  = Base.slt_int(%71, 0)::Bool
+│    ││││ %65  = Base.slt_int(%64, 0)::Bool
 │    │└└└
-└────│        goto #6 if not %72
-5 ───│        goto #7
-6 ───│        goto #7
+└────│        goto #3 if not %65
+2 ───│        goto #4
+3 ───│        goto #4
      └
-7 ┄── %76  = φ (#5 => true, #6 => false)::Bool
-│     %77  = φ (#6 => 0)::Int64
-│     %78  = φ (#6 => 0)::Int64
-│     %79  = Base.not_int(%76)::Bool
-└────        goto #143 if not %79
-8 ┄── %81  = φ (#7 => 0.0, #142 => %512)::Float64
-│     %82  = φ (#7 => %77, #142 => %519)::Int64
-│     %83  = φ (#7 => %78, #142 => %520)::Int64
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:114 within `coalesced_matmul_kernel!'
+4 ┄── %69  = φ (#2 => true, #3 => false)::Bool
+│     %70  = φ (#3 => 0)::Int64
+│     %71  = φ (#3 => 0)::Int64
+│     %72  = Base.not_int(%69)::Bool
+└────        goto #140 if not %72
+5 ┄── %74  = φ (#4 => 0.0, #139 => %505)::Float64
+│     %75  = φ (#4 => %70, #139 => %512)::Int64
+│     %76  = φ (#4 => %71, #139 => %513)::Int64
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:111 within `coalesced_matmul_kernel!'
 │    ┌ @ int.jl:85 within `-'
-│    │ %84  = Base.sub_int(%19, 1)::Int64
+│    │ %77  = Base.sub_int(%19, 1)::Int64
 │    └
-│     %85  = Main.TILE_DIM::Core.Compiler.Const(32, false)
+│     %78  = Main.TILE_DIM::Core.Compiler.Const(32, false)
 │    ┌ @ int.jl:87 within `*'
-│    │ %86  = Base.mul_int(%84, %85)::Int64
+│    │ %79  = Base.mul_int(%77, %78)::Int64
 │    └
 │    ┌ @ int.jl:86 within `+'
-│    │ %87  = Base.add_int(%86, %35)::Int64
+│    │ %80  = Base.add_int(%79, %35)::Int64
+│    └
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:112 within `coalesced_matmul_kernel!'
+│    ┌ @ int.jl:85 within `-'
+│    │ %81  = Base.sub_int(%29, 1)::Int64
+│    └
+│     %82  = Main.TILE_DIM::Core.Compiler.Const(32, false)
+│    ┌ @ int.jl:87 within `*'
+│    │ %83  = Base.mul_int(%81, %82)::Int64
+│    └
+│    ┌ @ int.jl:86 within `+'
+│    │ %84  = Base.add_int(%83, %45)::Int64
 │    └
 │     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:115 within `coalesced_matmul_kernel!'
-│    ┌ @ int.jl:85 within `-'
-│    │ %88  = Base.sub_int(%29, 1)::Int64
-│    └
-│     %89  = Main.TILE_DIM::Core.Compiler.Const(32, false)
-│    ┌ @ int.jl:87 within `*'
-│    │ %90  = Base.mul_int(%88, %89)::Int64
-│    └
-│    ┌ @ int.jl:86 within `+'
-│    │ %91  = Base.add_int(%90, %45)::Int64
-│    └
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:118 within `coalesced_matmul_kernel!'
 │    ┌ @ promotion.jl:350 within `<='
 │    │┌ @ promotion.jl:282 within `promote'
 │    ││┌ @ promotion.jl:259 within `_promote'
 │    │││┌ @ number.jl:7 within `convert'
 │    ││││┌ @ boot.jl:708 within `Int64'
 │    │││││┌ @ boot.jl:627 within `toInt64'
-│    ││││││ %92  = Core.sext_int(Core.Int64, N)::Int64
+│    ││││││ %85  = Core.sext_int(Core.Int64, N)::Int64
 │    │└└└└└
 │    │ @ promotion.jl:350 within `<=' @ int.jl:441
-│    │ %93  = Base.sle_int(%87, %92)::Bool
+│    │ %86  = Base.sle_int(%80, %85)::Bool
 │    └
-└────        goto #10 if not %93
-9 ─── %95  = Main.TILE_DIM::Core.Compiler.Const(32, false)
+└────        goto #7 if not %86
+6 ─── %88  = Main.TILE_DIM::Core.Compiler.Const(32, false)
 │    ┌ @ int.jl:87 within `*'
-│    │ %96  = Base.mul_int(%82, %95)::Int64
+│    │ %89  = Base.mul_int(%75, %88)::Int64
 │    └
 │    ┌ @ int.jl:86 within `+'
-│    │ %97  = Base.add_int(%96, %45)::Int64
+│    │ %90  = Base.add_int(%89, %45)::Int64
 │    └
 │    ┌ @ promotion.jl:350 within `<='
 │    │┌ @ promotion.jl:282 within `promote'
@@ -331,77 +316,77 @@ CodeInfo(
 │    │││┌ @ number.jl:7 within `convert'
 │    ││││┌ @ boot.jl:708 within `Int64'
 │    │││││┌ @ boot.jl:627 within `toInt64'
-│    ││││││ %98  = Core.sext_int(Core.Int64, R)::Int64
+│    ││││││ %91  = Core.sext_int(Core.Int64, R)::Int64
 │    │└└└└└
 │    │ @ promotion.jl:350 within `<=' @ int.jl:441
-│    │ %99  = Base.sle_int(%97, %98)::Bool
+│    │ %92  = Base.sle_int(%90, %91)::Bool
 │    └
-└────        goto #11
-10 ──        nothing::Nothing
-11 ┄─ %102 = φ (#9 => %99, #10 => false)::Bool
-└────        goto #41 if not %102
-      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:119 within `coalesced_matmul_kernel!'
-12 ── %104 = Main.TILE_DIM::Core.Compiler.Const(32, false)
+└────        goto #8
+7 ───        nothing::Nothing
+8 ┄── %95  = φ (#6 => %92, #7 => false)::Bool
+└────        goto #38 if not %95
+      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:116 within `coalesced_matmul_kernel!'
+9 ─── %97  = Main.TILE_DIM::Core.Compiler.Const(32, false)
 │    ┌ @ int.jl:87 within `*'
-│    │ %105 = Base.mul_int(%82, %104)::Int64
+│    │ %98  = Base.mul_int(%75, %97)::Int64
 │    └
 │    ┌ @ int.jl:86 within `+'
-│    │ %106 = Base.add_int(%105, %45)::Int64
+│    │ %99  = Base.add_int(%98, %45)::Int64
 │    └
 │    ┌ @ abstractarray.jl:1060 within `getindex'
 │    │┌ @ abstractarray.jl:1082 within `_getindex'
-└────││        goto #17 if not false
-13 ──││ %108 = Core.tuple(%87, %106)::Tuple{Int64,Int64}
+└────││        goto #14 if not false
+10 ──││ %101 = Core.tuple(%80, %99)::Tuple{Int64,Int64}
 │    ││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:485
 │    │││┌ @ abstractarray.jl:75 within `axes'
 │    ││││┌ @ tuple.jl:158 within `map'
 │    │││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %109 = Base.slt_int(%8, 0)::Bool
+│    ││││││││ %102 = Base.slt_int(%8, 0)::Bool
 │    │││││││└
-│    │││││││ %110 = Base.ifelse(%109, 0, %8)::Int64
+│    │││││││ %103 = Base.ifelse(%102, 0, %8)::Int64
 │    ││││││└
 │    ││││││ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %111 = Base.slt_int(%9, 0)::Bool
+│    ││││││││ %104 = Base.slt_int(%9, 0)::Bool
 │    │││││││└
-│    │││││││ %112 = Base.ifelse(%111, 0, %9)::Int64
+│    │││││││ %105 = Base.ifelse(%104, 0, %9)::Int64
 │    │││└└└└
 │    │││┌ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %113 = Base.sle_int(1, %87)::Bool
-│    ││││││ %114 = Base.sle_int(%87, %110)::Bool
+│    ││││││ %106 = Base.sle_int(1, %80)::Bool
+│    ││││││ %107 = Base.sle_int(%80, %103)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %115 = Base.and_int(%113, %114)::Bool
+│    ││││││ %108 = Base.and_int(%106, %107)::Bool
 │    ││││└└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices' @ abstractarray.jl:532
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %116 = Base.sle_int(1, %106)::Bool
-│    ││││││ %117 = Base.sle_int(%106, %112)::Bool
+│    ││││││ %109 = Base.sle_int(1, %99)::Bool
+│    ││││││ %110 = Base.sle_int(%99, %105)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %118 = Base.and_int(%116, %117)::Bool
+│    ││││││ %111 = Base.and_int(%109, %110)::Bool
 │    ││││└└
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %119 = Base.and_int(%118, true)::Bool
+│    │││││ %112 = Base.and_int(%111, true)::Bool
 │    ││││└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %120 = Base.and_int(%115, %119)::Bool
+│    │││││ %113 = Base.and_int(%108, %112)::Bool
 │    │││└└
 │    │││ @ abstractarray.jl:506 within `checkbounds'
-└────│││        goto #15 if not %120
+└────│││        goto #12 if not %113
      │││ @ abstractarray.jl:507 within `checkbounds'
-14 ──│││        goto #16
+11 ──│││        goto #13
      │││ @ abstractarray.jl:506 within `checkbounds'
-15 ──│││        invoke Base.throw_boundserror(%11::CuDeviceArray{Float64,2,1}, %108::Tuple{Int64,Int64})::Union{}
+12 ──│││        invoke Base.throw_boundserror(%11::CuDeviceArray{Float64,2,1}, %101::Tuple{Int64,Int64})::Union{}
 └────│││        $(Expr(:unreachable))::Union{}
-16 ┄─│││        nothing::Nothing
+13 ┄─│││        nothing::Nothing
      ││└
      ││ @ abstractarray.jl:1083 within `_getindex'
      ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -411,149 +396,149 @@ CodeInfo(
      ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
      │││││││┌ @ promotion.jl:409 within `max'
      ││││││││┌ @ int.jl:82 within `<'
-17 ┄─│││││││││ %126 = Base.slt_int(%8, 0)::Bool
+14 ┄─│││││││││ %119 = Base.slt_int(%8, 0)::Bool
 │    ││││││││└
-│    ││││││││ %127 = Base.ifelse(%126, 0, %8)::Int64
+│    ││││││││ %120 = Base.ifelse(%119, 0, %8)::Int64
 │    ││││└└└└
 │    ││││ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
 │    ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
 │    │││││┌ @ abstractarray.jl:1915 within `nextL'
 │    ││││││┌ @ range.jl:544 within `unsafe_length'
 │    │││││││┌ @ int.jl:85 within `-'
-│    ││││││││ %128 = Base.sub_int(%127, 0)::Int64
+│    ││││││││ %121 = Base.sub_int(%120, 0)::Int64
 │    ││││││└└
 │    ││││││┌ @ int.jl:87 within `*'
-│    │││││││ %129 = Base.mul_int(1, %128)::Int64
+│    │││││││ %122 = Base.mul_int(1, %121)::Int64
 │    │││││└└
 │    │││││┌ @ abstractarray.jl:1918 within `offsetin'
 │    ││││││┌ @ int.jl:85 within `-'
-│    │││││││ %130 = Base.sub_int(%87, 1)::Int64
+│    │││││││ %123 = Base.sub_int(%80, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %131 = Base.mul_int(%130, 1)::Int64
+│    ││││││ %124 = Base.mul_int(%123, 1)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %132 = Base.add_int(1, %131)::Int64
+│    ││││││ %125 = Base.add_int(1, %124)::Int64
 │    │││││└
 │    │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
 │    │││││┌ @ abstractarray.jl:1918 within `offsetin'
 │    ││││││┌ @ int.jl:85 within `-'
-│    │││││││ %133 = Base.sub_int(%106, 1)::Int64
+│    │││││││ %126 = Base.sub_int(%99, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %134 = Base.mul_int(%133, %129)::Int64
+│    ││││││ %127 = Base.mul_int(%126, %122)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %135 = Base.add_int(%132, %134)::Int64
+│    ││││││ %128 = Base.add_int(%125, %127)::Int64
 │    ││└└└└
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:78 within `arrayref'
-└────││││        goto #22 if not false
-18 ──││││ %137 = Core.tuple(%135)::Tuple{Int64}
+└────││││        goto #19 if not false
+15 ──││││ %130 = Core.tuple(%128)::Tuple{Int64}
 │    ││││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:491
 │    │││││┌ @ abstractarray.jl:266 within `eachindex'
 │    ││││││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:60 within `length'
 │    │││││││┌ @ tuple.jl:402 within `prod'
 │    ││││││││┌ @ int.jl:87 within `*'
-│    │││││││││ %138 = Base.mul_int(%8, %9)::Int64
+│    │││││││││ %131 = Base.mul_int(%8, %9)::Int64
 │    ││││││└└└
 │    ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    │││││││┌ @ promotion.jl:409 within `max'
 │    ││││││││┌ @ int.jl:82 within `<'
-│    │││││││││ %139 = Base.slt_int(%138, 0)::Bool
+│    │││││││││ %132 = Base.slt_int(%131, 0)::Bool
 │    ││││││││└
-│    ││││││││ %140 = Base.ifelse(%139, 0, %138)::Int64
+│    ││││││││ %133 = Base.ifelse(%132, 0, %131)::Int64
 │    │││││└└└
 │    │││││┌ @ abstractarray.jl:563 within `checkindex'
 │    ││││││┌ @ int.jl:441 within `<='
-│    │││││││ %141 = Base.sle_int(1, %135)::Bool
-│    │││││││ %142 = Base.sle_int(%135, %140)::Bool
+│    │││││││ %134 = Base.sle_int(1, %128)::Bool
+│    │││││││ %135 = Base.sle_int(%128, %133)::Bool
 │    ││││││└
 │    ││││││┌ @ bool.jl:40 within `&'
-│    │││││││ %143 = Base.and_int(%141, %142)::Bool
+│    │││││││ %136 = Base.and_int(%134, %135)::Bool
 │    │││││└└
 │    │││││ @ abstractarray.jl:506 within `checkbounds'
-└────│││││        goto #20 if not %143
+└────│││││        goto #17 if not %136
      │││││ @ abstractarray.jl:507 within `checkbounds'
-19 ──│││││        goto #21
+16 ──│││││        goto #18
      │││││ @ abstractarray.jl:506 within `checkbounds'
-20 ──│││││        invoke Base.throw_boundserror(%11::CuDeviceArray{Float64,2,1}, %137::Tuple{Int64})::Union{}
+17 ──│││││        invoke Base.throw_boundserror(%11::CuDeviceArray{Float64,2,1}, %130::Tuple{Int64})::Union{}
 └────│││││        $(Expr(:unreachable))::Union{}
-21 ┄─│││││        nothing::Nothing
+18 ┄─│││││        nothing::Nothing
      ││││└
      ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
      ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
      │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
      ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
-22 ┄─│││││││ %149 = Base.llvmcall::Core.IntrinsicFunction
+19 ┄─│││││││ %142 = Base.llvmcall::Core.IntrinsicFunction
 │    │││││││┌ @ int.jl:85 within `-'
-│    ││││││││ %150 = Base.sub_int(%135, 1)::Int64
+│    ││││││││ %143 = Base.sub_int(%128, 1)::Int64
 │    │││││││└
-│    │││││││ %151 = (%149)($(QuoteNode(Ptr{Nothing} @0x0000000002fee738)), Float64, Tuple{Core.LLVMPtr{Float64,1},Int64}, %2, %150)::Float64
+│    │││││││ %144 = (%142)($(QuoteNode(Ptr{Nothing} @0x0000000002616c88)), Float64, Tuple{Core.LLVMPtr{Float64,1},Int64}, %2, %143)::Float64
 │    ││││└└└
-└────││││        goto #23
+└────││││        goto #20
      │││└
-23 ──│││        goto #24
+20 ──│││        goto #21
      ││└
      ││ @ abstractarray.jl:1084 within `_getindex'
-24 ──││        goto #25
+21 ──││        goto #22
      │└
-25 ──│        goto #26
+22 ──│        goto #23
      └
      ┌ @ abstractarray.jl:1153 within `setindex!'
      │┌ @ abstractarray.jl:1175 within `_setindex!'
-26 ──││        goto #31 if not false
-27 ──││ %157 = Core.tuple(%35, %45)::Tuple{Int64,Int64}
+23 ──││        goto #28 if not false
+24 ──││ %150 = Core.tuple(%35, %45)::Tuple{Int64,Int64}
 │    ││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:485
 │    │││┌ @ abstractarray.jl:75 within `axes'
 │    ││││┌ @ tuple.jl:158 within `map'
 │    │││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %158 = Base.slt_int(33, 0)::Bool
+│    ││││││││ %151 = Base.slt_int(33, 0)::Bool
 │    │││││││└
-│    │││││││ %159 = Base.ifelse(%158, 0, 33)::Int64
+│    │││││││ %152 = Base.ifelse(%151, 0, 33)::Int64
 │    ││││││└
 │    ││││││ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %160 = Base.slt_int(32, 0)::Bool
+│    ││││││││ %153 = Base.slt_int(32, 0)::Bool
 │    │││││││└
-│    │││││││ %161 = Base.ifelse(%160, 0, 32)::Int64
+│    │││││││ %154 = Base.ifelse(%153, 0, 32)::Int64
 │    │││└└└└
 │    │││┌ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %162 = Base.sle_int(1, %35)::Bool
-│    ││││││ %163 = Base.sle_int(%35, %159)::Bool
+│    ││││││ %155 = Base.sle_int(1, %35)::Bool
+│    ││││││ %156 = Base.sle_int(%35, %152)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %164 = Base.and_int(%162, %163)::Bool
+│    ││││││ %157 = Base.and_int(%155, %156)::Bool
 │    ││││└└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices' @ abstractarray.jl:532
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %165 = Base.sle_int(1, %45)::Bool
-│    ││││││ %166 = Base.sle_int(%45, %161)::Bool
+│    ││││││ %158 = Base.sle_int(1, %45)::Bool
+│    ││││││ %159 = Base.sle_int(%45, %154)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %167 = Base.and_int(%165, %166)::Bool
+│    ││││││ %160 = Base.and_int(%158, %159)::Bool
 │    ││││└└
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %168 = Base.and_int(%167, true)::Bool
+│    │││││ %161 = Base.and_int(%160, true)::Bool
 │    ││││└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %169 = Base.and_int(%164, %168)::Bool
+│    │││││ %162 = Base.and_int(%157, %161)::Bool
 │    │││└└
 │    │││ @ abstractarray.jl:506 within `checkbounds'
-└────│││        goto #29 if not %169
+└────│││        goto #26 if not %162
      │││ @ abstractarray.jl:507 within `checkbounds'
-28 ──│││        goto #30
+25 ──│││        goto #27
      │││ @ abstractarray.jl:506 within `checkbounds'
-29 ──│││        invoke Base.throw_boundserror(%50::CuDeviceArray{Float64,2,3}, %157::Tuple{Int64,Int64})::Union{}
+26 ──│││        invoke Base.throw_boundserror(%50::CuDeviceArray{Float64,2,3}, %150::Tuple{Int64,Int64})::Union{}
 └────│││        $(Expr(:unreachable))::Union{}
-30 ┄─│││        nothing::Nothing
+27 ┄─│││        nothing::Nothing
      ││└
      ││ @ abstractarray.jl:1176 within `_setindex!'
      ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -561,136 +546,136 @@ CodeInfo(
      ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
      │││││┌ @ abstractarray.jl:1918 within `offsetin'
      ││││││┌ @ int.jl:85 within `-'
-31 ┄─│││││││ %175 = Base.sub_int(%35, 1)::Int64
+28 ┄─│││││││ %168 = Base.sub_int(%35, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %176 = Base.mul_int(%175, 1)::Int64
+│    ││││││ %169 = Base.mul_int(%168, 1)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %177 = Base.add_int(1, %176)::Int64
+│    ││││││ %170 = Base.add_int(1, %169)::Int64
 │    │││││└
 │    │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
 │    │││││┌ @ abstractarray.jl:1918 within `offsetin'
 │    ││││││┌ @ int.jl:85 within `-'
-│    │││││││ %178 = Base.sub_int(%45, 1)::Int64
+│    │││││││ %171 = Base.sub_int(%45, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %179 = Base.mul_int(%178, 33)::Int64
+│    ││││││ %172 = Base.mul_int(%171, 33)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %180 = Base.add_int(%177, %179)::Int64
+│    ││││││ %173 = Base.add_int(%170, %172)::Int64
 │    ││└└└└
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:84 within `arrayset'
-└────││││        goto #36 if not false
-32 ──││││ %182 = Core.tuple(%180)::Tuple{Int64}
+└────││││        goto #33 if not false
+29 ──││││ %175 = Core.tuple(%173)::Tuple{Int64}
 │    ││││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:491
 │    │││││┌ @ abstractarray.jl:266 within `eachindex'
 │    ││││││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:60 within `length'
 │    │││││││┌ @ tuple.jl:402 within `prod'
 │    ││││││││┌ @ int.jl:87 within `*'
-│    │││││││││ %183 = Base.mul_int(33, 32)::Int64
+│    │││││││││ %176 = Base.mul_int(33, 32)::Int64
 │    ││││││└└└
 │    ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    │││││││┌ @ promotion.jl:409 within `max'
 │    ││││││││┌ @ int.jl:82 within `<'
-│    │││││││││ %184 = Base.slt_int(%183, 0)::Bool
+│    │││││││││ %177 = Base.slt_int(%176, 0)::Bool
 │    ││││││││└
-│    ││││││││ %185 = Base.ifelse(%184, 0, %183)::Int64
+│    ││││││││ %178 = Base.ifelse(%177, 0, %176)::Int64
 │    │││││└└└
 │    │││││┌ @ abstractarray.jl:563 within `checkindex'
 │    ││││││┌ @ int.jl:441 within `<='
-│    │││││││ %186 = Base.sle_int(1, %180)::Bool
-│    │││││││ %187 = Base.sle_int(%180, %185)::Bool
+│    │││││││ %179 = Base.sle_int(1, %173)::Bool
+│    │││││││ %180 = Base.sle_int(%173, %178)::Bool
 │    ││││││└
 │    ││││││┌ @ bool.jl:40 within `&'
-│    │││││││ %188 = Base.and_int(%186, %187)::Bool
+│    │││││││ %181 = Base.and_int(%179, %180)::Bool
 │    │││││└└
 │    │││││ @ abstractarray.jl:506 within `checkbounds'
-└────│││││        goto #34 if not %188
+└────│││││        goto #31 if not %181
      │││││ @ abstractarray.jl:507 within `checkbounds'
-33 ──│││││        goto #35
+30 ──│││││        goto #32
      │││││ @ abstractarray.jl:506 within `checkbounds'
-34 ──│││││        invoke Base.throw_boundserror(%50::CuDeviceArray{Float64,2,3}, %182::Tuple{Int64})::Union{}
+31 ──│││││        invoke Base.throw_boundserror(%50::CuDeviceArray{Float64,2,3}, %175::Tuple{Int64})::Union{}
 └────│││││        $(Expr(:unreachable))::Union{}
-35 ┄─│││││        nothing::Nothing
+32 ┄─│││││        nothing::Nothing
      ││││└
      ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
      ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
      │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
      ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
-36 ┄─│││││││ %194 = Base.llvmcall::Core.IntrinsicFunction
+33 ┄─│││││││ %187 = Base.llvmcall::Core.IntrinsicFunction
 │    │││││││┌ @ int.jl:85 within `-'
-│    ││││││││ %195 = Base.sub_int(%180, 1)::Int64
+│    ││││││││ %188 = Base.sub_int(%173, 1)::Int64
 │    │││││││└
-│    │││││││        (%194)($(QuoteNode(Ptr{Nothing} @0x0000000005010ae8)), Nothing, Tuple{Core.LLVMPtr{Float64,3},Float64,Int64}, %49, %151, %195)::Nothing
+│    │││││││        (%187)($(QuoteNode(Ptr{Nothing} @0x0000000001d32ef8)), Nothing, Tuple{Core.LLVMPtr{Float64,3},Float64,Int64}, %49, %144, %188)::Nothing
 │    ││││└└└
 │    ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
-└────││││        goto #37
+└────││││        goto #34
      │││└
-37 ──│││        goto #38
+34 ──│││        goto #35
      ││└
      ││ @ abstractarray.jl:1177 within `_setindex!'
-38 ──││        goto #39
+35 ──││        goto #36
      │└
-39 ──│        goto #40
+36 ──│        goto #37
      └
-40 ──        goto #56
-      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:121 within `coalesced_matmul_kernel!'
+37 ──        goto #53
+      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:118 within `coalesced_matmul_kernel!'
      ┌ @ abstractarray.jl:1153 within `setindex!'
      │┌ @ abstractarray.jl:1175 within `_setindex!'
-41 ──││        goto #46 if not false
-42 ──││ %203 = Core.tuple(%35, %45)::Tuple{Int64,Int64}
+38 ──││        goto #43 if not false
+39 ──││ %196 = Core.tuple(%35, %45)::Tuple{Int64,Int64}
 │    ││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:485
 │    │││┌ @ abstractarray.jl:75 within `axes'
 │    ││││┌ @ tuple.jl:158 within `map'
 │    │││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %204 = Base.slt_int(33, 0)::Bool
+│    ││││││││ %197 = Base.slt_int(33, 0)::Bool
 │    │││││││└
-│    │││││││ %205 = Base.ifelse(%204, 0, 33)::Int64
+│    │││││││ %198 = Base.ifelse(%197, 0, 33)::Int64
 │    ││││││└
 │    ││││││ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %206 = Base.slt_int(32, 0)::Bool
+│    ││││││││ %199 = Base.slt_int(32, 0)::Bool
 │    │││││││└
-│    │││││││ %207 = Base.ifelse(%206, 0, 32)::Int64
+│    │││││││ %200 = Base.ifelse(%199, 0, 32)::Int64
 │    │││└└└└
 │    │││┌ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %208 = Base.sle_int(1, %35)::Bool
-│    ││││││ %209 = Base.sle_int(%35, %205)::Bool
+│    ││││││ %201 = Base.sle_int(1, %35)::Bool
+│    ││││││ %202 = Base.sle_int(%35, %198)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %210 = Base.and_int(%208, %209)::Bool
+│    ││││││ %203 = Base.and_int(%201, %202)::Bool
 │    ││││└└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices' @ abstractarray.jl:532
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %211 = Base.sle_int(1, %45)::Bool
-│    ││││││ %212 = Base.sle_int(%45, %207)::Bool
+│    ││││││ %204 = Base.sle_int(1, %45)::Bool
+│    ││││││ %205 = Base.sle_int(%45, %200)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %213 = Base.and_int(%211, %212)::Bool
+│    ││││││ %206 = Base.and_int(%204, %205)::Bool
 │    ││││└└
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %214 = Base.and_int(%213, true)::Bool
+│    │││││ %207 = Base.and_int(%206, true)::Bool
 │    ││││└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %215 = Base.and_int(%210, %214)::Bool
+│    │││││ %208 = Base.and_int(%203, %207)::Bool
 │    │││└└
 │    │││ @ abstractarray.jl:506 within `checkbounds'
-└────│││        goto #44 if not %215
+└────│││        goto #41 if not %208
      │││ @ abstractarray.jl:507 within `checkbounds'
-43 ──│││        goto #45
+40 ──│││        goto #42
      │││ @ abstractarray.jl:506 within `checkbounds'
-44 ──│││        invoke Base.throw_boundserror(%50::CuDeviceArray{Float64,2,3}, %203::Tuple{Int64,Int64})::Union{}
+41 ──│││        invoke Base.throw_boundserror(%50::CuDeviceArray{Float64,2,3}, %196::Tuple{Int64,Int64})::Union{}
 └────│││        $(Expr(:unreachable))::Union{}
-45 ┄─│││        nothing::Nothing
+42 ┄─│││        nothing::Nothing
      ││└
      ││ @ abstractarray.jl:1176 within `_setindex!'
      ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -698,88 +683,88 @@ CodeInfo(
      ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
      │││││┌ @ abstractarray.jl:1918 within `offsetin'
      ││││││┌ @ int.jl:85 within `-'
-46 ┄─│││││││ %221 = Base.sub_int(%35, 1)::Int64
+43 ┄─│││││││ %214 = Base.sub_int(%35, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %222 = Base.mul_int(%221, 1)::Int64
+│    ││││││ %215 = Base.mul_int(%214, 1)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %223 = Base.add_int(1, %222)::Int64
+│    ││││││ %216 = Base.add_int(1, %215)::Int64
 │    │││││└
 │    │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
 │    │││││┌ @ abstractarray.jl:1918 within `offsetin'
 │    ││││││┌ @ int.jl:85 within `-'
-│    │││││││ %224 = Base.sub_int(%45, 1)::Int64
+│    │││││││ %217 = Base.sub_int(%45, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %225 = Base.mul_int(%224, 33)::Int64
+│    ││││││ %218 = Base.mul_int(%217, 33)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %226 = Base.add_int(%223, %225)::Int64
+│    ││││││ %219 = Base.add_int(%216, %218)::Int64
 │    ││└└└└
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:84 within `arrayset'
-└────││││        goto #51 if not false
-47 ──││││ %228 = Core.tuple(%226)::Tuple{Int64}
+└────││││        goto #48 if not false
+44 ──││││ %221 = Core.tuple(%219)::Tuple{Int64}
 │    ││││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:491
 │    │││││┌ @ abstractarray.jl:266 within `eachindex'
 │    ││││││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:60 within `length'
 │    │││││││┌ @ tuple.jl:402 within `prod'
 │    ││││││││┌ @ int.jl:87 within `*'
-│    │││││││││ %229 = Base.mul_int(33, 32)::Int64
+│    │││││││││ %222 = Base.mul_int(33, 32)::Int64
 │    ││││││└└└
 │    ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    │││││││┌ @ promotion.jl:409 within `max'
 │    ││││││││┌ @ int.jl:82 within `<'
-│    │││││││││ %230 = Base.slt_int(%229, 0)::Bool
+│    │││││││││ %223 = Base.slt_int(%222, 0)::Bool
 │    ││││││││└
-│    ││││││││ %231 = Base.ifelse(%230, 0, %229)::Int64
+│    ││││││││ %224 = Base.ifelse(%223, 0, %222)::Int64
 │    │││││└└└
 │    │││││┌ @ abstractarray.jl:563 within `checkindex'
 │    ││││││┌ @ int.jl:441 within `<='
-│    │││││││ %232 = Base.sle_int(1, %226)::Bool
-│    │││││││ %233 = Base.sle_int(%226, %231)::Bool
+│    │││││││ %225 = Base.sle_int(1, %219)::Bool
+│    │││││││ %226 = Base.sle_int(%219, %224)::Bool
 │    ││││││└
 │    ││││││┌ @ bool.jl:40 within `&'
-│    │││││││ %234 = Base.and_int(%232, %233)::Bool
+│    │││││││ %227 = Base.and_int(%225, %226)::Bool
 │    │││││└└
 │    │││││ @ abstractarray.jl:506 within `checkbounds'
-└────│││││        goto #49 if not %234
+└────│││││        goto #46 if not %227
      │││││ @ abstractarray.jl:507 within `checkbounds'
-48 ──│││││        goto #50
+45 ──│││││        goto #47
      │││││ @ abstractarray.jl:506 within `checkbounds'
-49 ──│││││        invoke Base.throw_boundserror(%50::CuDeviceArray{Float64,2,3}, %228::Tuple{Int64})::Union{}
+46 ──│││││        invoke Base.throw_boundserror(%50::CuDeviceArray{Float64,2,3}, %221::Tuple{Int64})::Union{}
 └────│││││        $(Expr(:unreachable))::Union{}
-50 ┄─│││││        nothing::Nothing
+47 ┄─│││││        nothing::Nothing
      ││││└
      ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
      ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
      │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
      ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
-51 ┄─│││││││ %240 = Base.llvmcall::Core.IntrinsicFunction
+48 ┄─│││││││ %233 = Base.llvmcall::Core.IntrinsicFunction
 │    │││││││┌ @ int.jl:85 within `-'
-│    ││││││││ %241 = Base.sub_int(%226, 1)::Int64
+│    ││││││││ %234 = Base.sub_int(%219, 1)::Int64
 │    │││││││└
-│    │││││││        (%240)($(QuoteNode(Ptr{Nothing} @0x0000000005010ae8)), Nothing, Tuple{Core.LLVMPtr{Float64,3},Float64,Int64}, %49, 0.0, %241)::Nothing
+│    │││││││        (%233)($(QuoteNode(Ptr{Nothing} @0x0000000001d32ef8)), Nothing, Tuple{Core.LLVMPtr{Float64,3},Float64,Int64}, %49, 0.0, %234)::Nothing
 │    ││││└└└
 │    ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
-└────││││        goto #52
+└────││││        goto #49
      │││└
-52 ──│││        goto #53
+49 ──│││        goto #50
      ││└
      ││ @ abstractarray.jl:1177 within `_setindex!'
-53 ──││        goto #54
+50 ──││        goto #51
      │└
-54 ──│        goto #55
-55 ──│        nothing::Nothing
+51 ──│        goto #52
+52 ──│        nothing::Nothing
      └
-      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:123 within `coalesced_matmul_kernel!'
-56 ┄─ %248 = Main.TILE_DIM::Core.Compiler.Const(32, false)
+      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:120 within `coalesced_matmul_kernel!'
+53 ┄─ %241 = Main.TILE_DIM::Core.Compiler.Const(32, false)
 │    ┌ @ int.jl:87 within `*'
-│    │ %249 = Base.mul_int(%82, %248)::Int64
+│    │ %242 = Base.mul_int(%75, %241)::Int64
 │    └
 │    ┌ @ int.jl:86 within `+'
-│    │ %250 = Base.add_int(%249, %35)::Int64
+│    │ %243 = Base.add_int(%242, %35)::Int64
 │    └
 │    ┌ @ promotion.jl:350 within `<='
 │    │┌ @ promotion.jl:282 within `promote'
@@ -787,89 +772,89 @@ CodeInfo(
 │    │││┌ @ number.jl:7 within `convert'
 │    ││││┌ @ boot.jl:708 within `Int64'
 │    │││││┌ @ boot.jl:627 within `toInt64'
-│    ││││││ %251 = Core.sext_int(Core.Int64, R)::Int64
+│    ││││││ %244 = Core.sext_int(Core.Int64, R)::Int64
 │    │└└└└└
 │    │ @ promotion.jl:350 within `<=' @ int.jl:441
-│    │ %252 = Base.sle_int(%250, %251)::Bool
+│    │ %245 = Base.sle_int(%243, %244)::Bool
 │    └
-└────        goto #58 if not %252
+└────        goto #55 if not %245
      ┌ @ promotion.jl:350 within `<='
      │┌ @ promotion.jl:282 within `promote'
      ││┌ @ promotion.jl:259 within `_promote'
      │││┌ @ number.jl:7 within `convert'
      ││││┌ @ boot.jl:708 within `Int64'
      │││││┌ @ boot.jl:627 within `toInt64'
-57 ──││││││ %254 = Core.sext_int(Core.Int64, M)::Int64
+54 ──││││││ %247 = Core.sext_int(Core.Int64, M)::Int64
 │    │└└└└└
 │    │ @ promotion.jl:350 within `<=' @ int.jl:441
-│    │ %255 = Base.sle_int(%91, %254)::Bool
+│    │ %248 = Base.sle_int(%84, %247)::Bool
 │    └
-└────        goto #59
-58 ──        nothing::Nothing
-59 ┄─ %258 = φ (#57 => %255, #58 => false)::Bool
-└────        goto #89 if not %258
-      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:124 within `coalesced_matmul_kernel!'
-60 ── %260 = Main.TILE_DIM::Core.Compiler.Const(32, false)
+└────        goto #56
+55 ──        nothing::Nothing
+56 ┄─ %251 = φ (#54 => %248, #55 => false)::Bool
+└────        goto #86 if not %251
+      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:121 within `coalesced_matmul_kernel!'
+57 ── %253 = Main.TILE_DIM::Core.Compiler.Const(32, false)
 │    ┌ @ int.jl:87 within `*'
-│    │ %261 = Base.mul_int(%82, %260)::Int64
+│    │ %254 = Base.mul_int(%75, %253)::Int64
 │    └
 │    ┌ @ int.jl:86 within `+'
-│    │ %262 = Base.add_int(%261, %35)::Int64
+│    │ %255 = Base.add_int(%254, %35)::Int64
 │    └
 │    ┌ @ abstractarray.jl:1060 within `getindex'
 │    │┌ @ abstractarray.jl:1082 within `_getindex'
-└────││        goto #65 if not false
-61 ──││ %264 = Core.tuple(%262, %91)::Tuple{Int64,Int64}
+└────││        goto #62 if not false
+58 ──││ %257 = Core.tuple(%255, %84)::Tuple{Int64,Int64}
 │    ││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:485
 │    │││┌ @ abstractarray.jl:75 within `axes'
 │    ││││┌ @ tuple.jl:158 within `map'
 │    │││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %265 = Base.slt_int(%12, 0)::Bool
+│    ││││││││ %258 = Base.slt_int(%12, 0)::Bool
 │    │││││││└
-│    │││││││ %266 = Base.ifelse(%265, 0, %12)::Int64
+│    │││││││ %259 = Base.ifelse(%258, 0, %12)::Int64
 │    ││││││└
 │    ││││││ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %267 = Base.slt_int(%13, 0)::Bool
+│    ││││││││ %260 = Base.slt_int(%13, 0)::Bool
 │    │││││││└
-│    │││││││ %268 = Base.ifelse(%267, 0, %13)::Int64
+│    │││││││ %261 = Base.ifelse(%260, 0, %13)::Int64
 │    │││└└└└
 │    │││┌ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %269 = Base.sle_int(1, %262)::Bool
-│    ││││││ %270 = Base.sle_int(%262, %266)::Bool
+│    ││││││ %262 = Base.sle_int(1, %255)::Bool
+│    ││││││ %263 = Base.sle_int(%255, %259)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %271 = Base.and_int(%269, %270)::Bool
+│    ││││││ %264 = Base.and_int(%262, %263)::Bool
 │    ││││└└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices' @ abstractarray.jl:532
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %272 = Base.sle_int(1, %91)::Bool
-│    ││││││ %273 = Base.sle_int(%91, %268)::Bool
+│    ││││││ %265 = Base.sle_int(1, %84)::Bool
+│    ││││││ %266 = Base.sle_int(%84, %261)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %274 = Base.and_int(%272, %273)::Bool
+│    ││││││ %267 = Base.and_int(%265, %266)::Bool
 │    ││││└└
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %275 = Base.and_int(%274, true)::Bool
+│    │││││ %268 = Base.and_int(%267, true)::Bool
 │    ││││└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %276 = Base.and_int(%271, %275)::Bool
+│    │││││ %269 = Base.and_int(%264, %268)::Bool
 │    │││└└
 │    │││ @ abstractarray.jl:506 within `checkbounds'
-└────│││        goto #63 if not %276
+└────│││        goto #60 if not %269
      │││ @ abstractarray.jl:507 within `checkbounds'
-62 ──│││        goto #64
+59 ──│││        goto #61
      │││ @ abstractarray.jl:506 within `checkbounds'
-63 ──│││        invoke Base.throw_boundserror(%15::CuDeviceArray{Float64,2,1}, %264::Tuple{Int64,Int64})::Union{}
+60 ──│││        invoke Base.throw_boundserror(%15::CuDeviceArray{Float64,2,1}, %257::Tuple{Int64,Int64})::Union{}
 └────│││        $(Expr(:unreachable))::Union{}
-64 ┄─│││        nothing::Nothing
+61 ┄─│││        nothing::Nothing
      ││└
      ││ @ abstractarray.jl:1083 within `_getindex'
      ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -879,149 +864,149 @@ CodeInfo(
      ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
      │││││││┌ @ promotion.jl:409 within `max'
      ││││││││┌ @ int.jl:82 within `<'
-65 ┄─│││││││││ %282 = Base.slt_int(%12, 0)::Bool
+62 ┄─│││││││││ %275 = Base.slt_int(%12, 0)::Bool
 │    ││││││││└
-│    ││││││││ %283 = Base.ifelse(%282, 0, %12)::Int64
+│    ││││││││ %276 = Base.ifelse(%275, 0, %12)::Int64
 │    ││││└└└└
 │    ││││ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
 │    ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
 │    │││││┌ @ abstractarray.jl:1915 within `nextL'
 │    ││││││┌ @ range.jl:544 within `unsafe_length'
 │    │││││││┌ @ int.jl:85 within `-'
-│    ││││││││ %284 = Base.sub_int(%283, 0)::Int64
+│    ││││││││ %277 = Base.sub_int(%276, 0)::Int64
 │    ││││││└└
 │    ││││││┌ @ int.jl:87 within `*'
-│    │││││││ %285 = Base.mul_int(1, %284)::Int64
+│    │││││││ %278 = Base.mul_int(1, %277)::Int64
 │    │││││└└
 │    │││││┌ @ abstractarray.jl:1918 within `offsetin'
 │    ││││││┌ @ int.jl:85 within `-'
-│    │││││││ %286 = Base.sub_int(%262, 1)::Int64
+│    │││││││ %279 = Base.sub_int(%255, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %287 = Base.mul_int(%286, 1)::Int64
+│    ││││││ %280 = Base.mul_int(%279, 1)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %288 = Base.add_int(1, %287)::Int64
+│    ││││││ %281 = Base.add_int(1, %280)::Int64
 │    │││││└
 │    │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
 │    │││││┌ @ abstractarray.jl:1918 within `offsetin'
 │    ││││││┌ @ int.jl:85 within `-'
-│    │││││││ %289 = Base.sub_int(%91, 1)::Int64
+│    │││││││ %282 = Base.sub_int(%84, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %290 = Base.mul_int(%289, %285)::Int64
+│    ││││││ %283 = Base.mul_int(%282, %278)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %291 = Base.add_int(%288, %290)::Int64
+│    ││││││ %284 = Base.add_int(%281, %283)::Int64
 │    ││└└└└
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:78 within `arrayref'
-└────││││        goto #70 if not false
-66 ──││││ %293 = Core.tuple(%291)::Tuple{Int64}
+└────││││        goto #67 if not false
+63 ──││││ %286 = Core.tuple(%284)::Tuple{Int64}
 │    ││││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:491
 │    │││││┌ @ abstractarray.jl:266 within `eachindex'
 │    ││││││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:60 within `length'
 │    │││││││┌ @ tuple.jl:402 within `prod'
 │    ││││││││┌ @ int.jl:87 within `*'
-│    │││││││││ %294 = Base.mul_int(%12, %13)::Int64
+│    │││││││││ %287 = Base.mul_int(%12, %13)::Int64
 │    ││││││└└└
 │    ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    │││││││┌ @ promotion.jl:409 within `max'
 │    ││││││││┌ @ int.jl:82 within `<'
-│    │││││││││ %295 = Base.slt_int(%294, 0)::Bool
+│    │││││││││ %288 = Base.slt_int(%287, 0)::Bool
 │    ││││││││└
-│    ││││││││ %296 = Base.ifelse(%295, 0, %294)::Int64
+│    ││││││││ %289 = Base.ifelse(%288, 0, %287)::Int64
 │    │││││└└└
 │    │││││┌ @ abstractarray.jl:563 within `checkindex'
 │    ││││││┌ @ int.jl:441 within `<='
-│    │││││││ %297 = Base.sle_int(1, %291)::Bool
-│    │││││││ %298 = Base.sle_int(%291, %296)::Bool
+│    │││││││ %290 = Base.sle_int(1, %284)::Bool
+│    │││││││ %291 = Base.sle_int(%284, %289)::Bool
 │    ││││││└
 │    ││││││┌ @ bool.jl:40 within `&'
-│    │││││││ %299 = Base.and_int(%297, %298)::Bool
+│    │││││││ %292 = Base.and_int(%290, %291)::Bool
 │    │││││└└
 │    │││││ @ abstractarray.jl:506 within `checkbounds'
-└────│││││        goto #68 if not %299
+└────│││││        goto #65 if not %292
      │││││ @ abstractarray.jl:507 within `checkbounds'
-67 ──│││││        goto #69
+64 ──│││││        goto #66
      │││││ @ abstractarray.jl:506 within `checkbounds'
-68 ──│││││        invoke Base.throw_boundserror(%15::CuDeviceArray{Float64,2,1}, %293::Tuple{Int64})::Union{}
+65 ──│││││        invoke Base.throw_boundserror(%15::CuDeviceArray{Float64,2,1}, %286::Tuple{Int64})::Union{}
 └────│││││        $(Expr(:unreachable))::Union{}
-69 ┄─│││││        nothing::Nothing
+66 ┄─│││││        nothing::Nothing
      ││││└
      ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
      ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
      │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
      ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
-70 ┄─│││││││ %305 = Base.llvmcall::Core.IntrinsicFunction
+67 ┄─│││││││ %298 = Base.llvmcall::Core.IntrinsicFunction
 │    │││││││┌ @ int.jl:85 within `-'
-│    ││││││││ %306 = Base.sub_int(%291, 1)::Int64
+│    ││││││││ %299 = Base.sub_int(%284, 1)::Int64
 │    │││││││└
-│    │││││││ %307 = (%305)($(QuoteNode(Ptr{Nothing} @0x0000000002fee738)), Float64, Tuple{Core.LLVMPtr{Float64,1},Int64}, %3, %306)::Float64
+│    │││││││ %300 = (%298)($(QuoteNode(Ptr{Nothing} @0x0000000002616c88)), Float64, Tuple{Core.LLVMPtr{Float64,1},Int64}, %3, %299)::Float64
 │    ││││└└└
-└────││││        goto #71
+└────││││        goto #68
      │││└
-71 ──│││        goto #72
+68 ──│││        goto #69
      ││└
      ││ @ abstractarray.jl:1084 within `_getindex'
-72 ──││        goto #73
+69 ──││        goto #70
      │└
-73 ──│        goto #74
+70 ──│        goto #71
      └
      ┌ @ abstractarray.jl:1153 within `setindex!'
      │┌ @ abstractarray.jl:1175 within `_setindex!'
-74 ──││        goto #79 if not false
-75 ──││ %313 = Core.tuple(%35, %45)::Tuple{Int64,Int64}
+71 ──││        goto #76 if not false
+72 ──││ %306 = Core.tuple(%35, %45)::Tuple{Int64,Int64}
 │    ││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:485
 │    │││┌ @ abstractarray.jl:75 within `axes'
 │    ││││┌ @ tuple.jl:158 within `map'
 │    │││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %314 = Base.slt_int(33, 0)::Bool
+│    ││││││││ %307 = Base.slt_int(33, 0)::Bool
 │    │││││││└
-│    │││││││ %315 = Base.ifelse(%314, 0, 33)::Int64
+│    │││││││ %308 = Base.ifelse(%307, 0, 33)::Int64
 │    ││││││└
 │    ││││││ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %316 = Base.slt_int(32, 0)::Bool
+│    ││││││││ %309 = Base.slt_int(32, 0)::Bool
 │    │││││││└
-│    │││││││ %317 = Base.ifelse(%316, 0, 32)::Int64
+│    │││││││ %310 = Base.ifelse(%309, 0, 32)::Int64
 │    │││└└└└
 │    │││┌ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %318 = Base.sle_int(1, %35)::Bool
-│    ││││││ %319 = Base.sle_int(%35, %315)::Bool
+│    ││││││ %311 = Base.sle_int(1, %35)::Bool
+│    ││││││ %312 = Base.sle_int(%35, %308)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %320 = Base.and_int(%318, %319)::Bool
+│    ││││││ %313 = Base.and_int(%311, %312)::Bool
 │    ││││└└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices' @ abstractarray.jl:532
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %321 = Base.sle_int(1, %45)::Bool
-│    ││││││ %322 = Base.sle_int(%45, %317)::Bool
+│    ││││││ %314 = Base.sle_int(1, %45)::Bool
+│    ││││││ %315 = Base.sle_int(%45, %310)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %323 = Base.and_int(%321, %322)::Bool
+│    ││││││ %316 = Base.and_int(%314, %315)::Bool
 │    ││││└└
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %324 = Base.and_int(%323, true)::Bool
+│    │││││ %317 = Base.and_int(%316, true)::Bool
 │    ││││└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %325 = Base.and_int(%320, %324)::Bool
+│    │││││ %318 = Base.and_int(%313, %317)::Bool
 │    │││└└
 │    │││ @ abstractarray.jl:506 within `checkbounds'
-└────│││        goto #77 if not %325
+└────│││        goto #74 if not %318
      │││ @ abstractarray.jl:507 within `checkbounds'
-76 ──│││        goto #78
+73 ──│││        goto #75
      │││ @ abstractarray.jl:506 within `checkbounds'
-77 ──│││        invoke Base.throw_boundserror(%53::CuDeviceArray{Float64,2,3}, %313::Tuple{Int64,Int64})::Union{}
+74 ──│││        invoke Base.throw_boundserror(%53::CuDeviceArray{Float64,2,3}, %306::Tuple{Int64,Int64})::Union{}
 └────│││        $(Expr(:unreachable))::Union{}
-78 ┄─│││        nothing::Nothing
+75 ┄─│││        nothing::Nothing
      ││└
      ││ @ abstractarray.jl:1176 within `_setindex!'
      ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -1029,136 +1014,136 @@ CodeInfo(
      ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
      │││││┌ @ abstractarray.jl:1918 within `offsetin'
      ││││││┌ @ int.jl:85 within `-'
-79 ┄─│││││││ %331 = Base.sub_int(%35, 1)::Int64
+76 ┄─│││││││ %324 = Base.sub_int(%35, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %332 = Base.mul_int(%331, 1)::Int64
+│    ││││││ %325 = Base.mul_int(%324, 1)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %333 = Base.add_int(1, %332)::Int64
+│    ││││││ %326 = Base.add_int(1, %325)::Int64
 │    │││││└
 │    │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
 │    │││││┌ @ abstractarray.jl:1918 within `offsetin'
 │    ││││││┌ @ int.jl:85 within `-'
-│    │││││││ %334 = Base.sub_int(%45, 1)::Int64
+│    │││││││ %327 = Base.sub_int(%45, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %335 = Base.mul_int(%334, 33)::Int64
+│    ││││││ %328 = Base.mul_int(%327, 33)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %336 = Base.add_int(%333, %335)::Int64
+│    ││││││ %329 = Base.add_int(%326, %328)::Int64
 │    ││└└└└
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:84 within `arrayset'
-└────││││        goto #84 if not false
-80 ──││││ %338 = Core.tuple(%336)::Tuple{Int64}
+└────││││        goto #81 if not false
+77 ──││││ %331 = Core.tuple(%329)::Tuple{Int64}
 │    ││││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:491
 │    │││││┌ @ abstractarray.jl:266 within `eachindex'
 │    ││││││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:60 within `length'
 │    │││││││┌ @ tuple.jl:402 within `prod'
 │    ││││││││┌ @ int.jl:87 within `*'
-│    │││││││││ %339 = Base.mul_int(33, 32)::Int64
+│    │││││││││ %332 = Base.mul_int(33, 32)::Int64
 │    ││││││└└└
 │    ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    │││││││┌ @ promotion.jl:409 within `max'
 │    ││││││││┌ @ int.jl:82 within `<'
-│    │││││││││ %340 = Base.slt_int(%339, 0)::Bool
+│    │││││││││ %333 = Base.slt_int(%332, 0)::Bool
 │    ││││││││└
-│    ││││││││ %341 = Base.ifelse(%340, 0, %339)::Int64
+│    ││││││││ %334 = Base.ifelse(%333, 0, %332)::Int64
 │    │││││└└└
 │    │││││┌ @ abstractarray.jl:563 within `checkindex'
 │    ││││││┌ @ int.jl:441 within `<='
-│    │││││││ %342 = Base.sle_int(1, %336)::Bool
-│    │││││││ %343 = Base.sle_int(%336, %341)::Bool
+│    │││││││ %335 = Base.sle_int(1, %329)::Bool
+│    │││││││ %336 = Base.sle_int(%329, %334)::Bool
 │    ││││││└
 │    ││││││┌ @ bool.jl:40 within `&'
-│    │││││││ %344 = Base.and_int(%342, %343)::Bool
+│    │││││││ %337 = Base.and_int(%335, %336)::Bool
 │    │││││└└
 │    │││││ @ abstractarray.jl:506 within `checkbounds'
-└────│││││        goto #82 if not %344
+└────│││││        goto #79 if not %337
      │││││ @ abstractarray.jl:507 within `checkbounds'
-81 ──│││││        goto #83
+78 ──│││││        goto #80
      │││││ @ abstractarray.jl:506 within `checkbounds'
-82 ──│││││        invoke Base.throw_boundserror(%53::CuDeviceArray{Float64,2,3}, %338::Tuple{Int64})::Union{}
+79 ──│││││        invoke Base.throw_boundserror(%53::CuDeviceArray{Float64,2,3}, %331::Tuple{Int64})::Union{}
 └────│││││        $(Expr(:unreachable))::Union{}
-83 ┄─│││││        nothing::Nothing
+80 ┄─│││││        nothing::Nothing
      ││││└
      ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
      ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
      │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
      ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
-84 ┄─│││││││ %350 = Base.llvmcall::Core.IntrinsicFunction
+81 ┄─│││││││ %343 = Base.llvmcall::Core.IntrinsicFunction
 │    │││││││┌ @ int.jl:85 within `-'
-│    ││││││││ %351 = Base.sub_int(%336, 1)::Int64
+│    ││││││││ %344 = Base.sub_int(%329, 1)::Int64
 │    │││││││└
-│    │││││││        (%350)($(QuoteNode(Ptr{Nothing} @0x0000000005010ae8)), Nothing, Tuple{Core.LLVMPtr{Float64,3},Float64,Int64}, %52, %307, %351)::Nothing
+│    │││││││        (%343)($(QuoteNode(Ptr{Nothing} @0x0000000001d32ef8)), Nothing, Tuple{Core.LLVMPtr{Float64,3},Float64,Int64}, %52, %300, %344)::Nothing
 │    ││││└└└
 │    ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
-└────││││        goto #85
+└────││││        goto #82
      │││└
-85 ──│││        goto #86
+82 ──│││        goto #83
      ││└
      ││ @ abstractarray.jl:1177 within `_setindex!'
-86 ──││        goto #87
+83 ──││        goto #84
      │└
-87 ──│        goto #88
+84 ──│        goto #85
      └
-88 ──        goto #104
-      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:126 within `coalesced_matmul_kernel!'
+85 ──        goto #101
+      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:123 within `coalesced_matmul_kernel!'
      ┌ @ abstractarray.jl:1153 within `setindex!'
      │┌ @ abstractarray.jl:1175 within `_setindex!'
-89 ──││        goto #94 if not false
-90 ──││ %359 = Core.tuple(%35, %45)::Tuple{Int64,Int64}
+86 ──││        goto #91 if not false
+87 ──││ %352 = Core.tuple(%35, %45)::Tuple{Int64,Int64}
 │    ││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:485
 │    │││┌ @ abstractarray.jl:75 within `axes'
 │    ││││┌ @ tuple.jl:158 within `map'
 │    │││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %360 = Base.slt_int(33, 0)::Bool
+│    ││││││││ %353 = Base.slt_int(33, 0)::Bool
 │    │││││││└
-│    │││││││ %361 = Base.ifelse(%360, 0, 33)::Int64
+│    │││││││ %354 = Base.ifelse(%353, 0, 33)::Int64
 │    ││││││└
 │    ││││││ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %362 = Base.slt_int(32, 0)::Bool
+│    ││││││││ %355 = Base.slt_int(32, 0)::Bool
 │    │││││││└
-│    │││││││ %363 = Base.ifelse(%362, 0, 32)::Int64
+│    │││││││ %356 = Base.ifelse(%355, 0, 32)::Int64
 │    │││└└└└
 │    │││┌ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %364 = Base.sle_int(1, %35)::Bool
-│    ││││││ %365 = Base.sle_int(%35, %361)::Bool
+│    ││││││ %357 = Base.sle_int(1, %35)::Bool
+│    ││││││ %358 = Base.sle_int(%35, %354)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %366 = Base.and_int(%364, %365)::Bool
+│    ││││││ %359 = Base.and_int(%357, %358)::Bool
 │    ││││└└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices' @ abstractarray.jl:532
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %367 = Base.sle_int(1, %45)::Bool
-│    ││││││ %368 = Base.sle_int(%45, %363)::Bool
+│    ││││││ %360 = Base.sle_int(1, %45)::Bool
+│    ││││││ %361 = Base.sle_int(%45, %356)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %369 = Base.and_int(%367, %368)::Bool
+│    ││││││ %362 = Base.and_int(%360, %361)::Bool
 │    ││││└└
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %370 = Base.and_int(%369, true)::Bool
+│    │││││ %363 = Base.and_int(%362, true)::Bool
 │    ││││└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %371 = Base.and_int(%366, %370)::Bool
+│    │││││ %364 = Base.and_int(%359, %363)::Bool
 │    │││└└
 │    │││ @ abstractarray.jl:506 within `checkbounds'
-└────│││        goto #92 if not %371
+└────│││        goto #89 if not %364
      │││ @ abstractarray.jl:507 within `checkbounds'
-91 ──│││        goto #93
+88 ──│││        goto #90
      │││ @ abstractarray.jl:506 within `checkbounds'
-92 ──│││        invoke Base.throw_boundserror(%53::CuDeviceArray{Float64,2,3}, %359::Tuple{Int64,Int64})::Union{}
+89 ──│││        invoke Base.throw_boundserror(%53::CuDeviceArray{Float64,2,3}, %352::Tuple{Int64,Int64})::Union{}
 └────│││        $(Expr(:unreachable))::Union{}
-93 ┄─│││        nothing::Nothing
+90 ┄─│││        nothing::Nothing
      ││└
      ││ @ abstractarray.jl:1176 within `_setindex!'
      ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -1166,145 +1151,145 @@ CodeInfo(
      ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
      │││││┌ @ abstractarray.jl:1918 within `offsetin'
      ││││││┌ @ int.jl:85 within `-'
-94 ┄─│││││││ %377 = Base.sub_int(%35, 1)::Int64
+91 ┄─│││││││ %370 = Base.sub_int(%35, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %378 = Base.mul_int(%377, 1)::Int64
+│    ││││││ %371 = Base.mul_int(%370, 1)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %379 = Base.add_int(1, %378)::Int64
+│    ││││││ %372 = Base.add_int(1, %371)::Int64
 │    │││││└
 │    │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
 │    │││││┌ @ abstractarray.jl:1918 within `offsetin'
 │    ││││││┌ @ int.jl:85 within `-'
-│    │││││││ %380 = Base.sub_int(%45, 1)::Int64
+│    │││││││ %373 = Base.sub_int(%45, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %381 = Base.mul_int(%380, 33)::Int64
+│    ││││││ %374 = Base.mul_int(%373, 33)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %382 = Base.add_int(%379, %381)::Int64
+│    ││││││ %375 = Base.add_int(%372, %374)::Int64
 │    ││└└└└
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:84 within `arrayset'
-└────││││        goto #99 if not false
-95 ──││││ %384 = Core.tuple(%382)::Tuple{Int64}
+└────││││        goto #96 if not false
+92 ──││││ %377 = Core.tuple(%375)::Tuple{Int64}
 │    ││││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:491
 │    │││││┌ @ abstractarray.jl:266 within `eachindex'
 │    ││││││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:60 within `length'
 │    │││││││┌ @ tuple.jl:402 within `prod'
 │    ││││││││┌ @ int.jl:87 within `*'
-│    │││││││││ %385 = Base.mul_int(33, 32)::Int64
+│    │││││││││ %378 = Base.mul_int(33, 32)::Int64
 │    ││││││└└└
 │    ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    │││││││┌ @ promotion.jl:409 within `max'
 │    ││││││││┌ @ int.jl:82 within `<'
-│    │││││││││ %386 = Base.slt_int(%385, 0)::Bool
+│    │││││││││ %379 = Base.slt_int(%378, 0)::Bool
 │    ││││││││└
-│    ││││││││ %387 = Base.ifelse(%386, 0, %385)::Int64
+│    ││││││││ %380 = Base.ifelse(%379, 0, %378)::Int64
 │    │││││└└└
 │    │││││┌ @ abstractarray.jl:563 within `checkindex'
 │    ││││││┌ @ int.jl:441 within `<='
-│    │││││││ %388 = Base.sle_int(1, %382)::Bool
-│    │││││││ %389 = Base.sle_int(%382, %387)::Bool
+│    │││││││ %381 = Base.sle_int(1, %375)::Bool
+│    │││││││ %382 = Base.sle_int(%375, %380)::Bool
 │    ││││││└
 │    ││││││┌ @ bool.jl:40 within `&'
-│    │││││││ %390 = Base.and_int(%388, %389)::Bool
+│    │││││││ %383 = Base.and_int(%381, %382)::Bool
 │    │││││└└
 │    │││││ @ abstractarray.jl:506 within `checkbounds'
-└────│││││        goto #97 if not %390
+└────│││││        goto #94 if not %383
      │││││ @ abstractarray.jl:507 within `checkbounds'
-96 ──│││││        goto #98
+93 ──│││││        goto #95
      │││││ @ abstractarray.jl:506 within `checkbounds'
-97 ──│││││        invoke Base.throw_boundserror(%53::CuDeviceArray{Float64,2,3}, %384::Tuple{Int64})::Union{}
+94 ──│││││        invoke Base.throw_boundserror(%53::CuDeviceArray{Float64,2,3}, %377::Tuple{Int64})::Union{}
 └────│││││        $(Expr(:unreachable))::Union{}
-98 ┄─│││││        nothing::Nothing
+95 ┄─│││││        nothing::Nothing
      ││││└
      ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
      ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
      │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
      ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
-99 ┄─│││││││ %396 = Base.llvmcall::Core.IntrinsicFunction
+96 ┄─│││││││ %389 = Base.llvmcall::Core.IntrinsicFunction
 │    │││││││┌ @ int.jl:85 within `-'
-│    ││││││││ %397 = Base.sub_int(%382, 1)::Int64
+│    ││││││││ %390 = Base.sub_int(%375, 1)::Int64
 │    │││││││└
-│    │││││││        (%396)($(QuoteNode(Ptr{Nothing} @0x0000000005010ae8)), Nothing, Tuple{Core.LLVMPtr{Float64,3},Float64,Int64}, %52, 0.0, %397)::Nothing
+│    │││││││        (%389)($(QuoteNode(Ptr{Nothing} @0x0000000001d32ef8)), Nothing, Tuple{Core.LLVMPtr{Float64,3},Float64,Int64}, %52, 0.0, %390)::Nothing
 │    ││││└└└
 │    ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
-└────││││        goto #100
+└────││││        goto #97
      │││└
-100 ─│││        goto #101
+97 ──│││        goto #98
      ││└
      ││ @ abstractarray.jl:1177 within `_setindex!'
-101 ─││        goto #102
+98 ──││        goto #99
      │└
-102 ─│        goto #103
-103 ─│        nothing::Nothing
+99 ──│        goto #100
+100 ─│        nothing::Nothing
      └
-      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:130 within `coalesced_matmul_kernel!'
+      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:127 within `coalesced_matmul_kernel!'
      ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/synchronization.jl:14 within `sync_threads'
-104 ┄│        $(Expr(:foreigncall, "llvm.nvvm.barrier0", Nothing, svec(), 0, :(:llvmcall)))::Nothing
+101 ┄│        $(Expr(:foreigncall, "llvm.nvvm.barrier0", Nothing, svec(), 0, :(:llvmcall)))::Nothing
 │    └
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:137 within `coalesced_matmul_kernel!'
-└────        goto #138 if not true
-105 ┄ %406 = φ (#104 => %81, #137 => %500)::Float64
-│     %407 = φ (#104 => 1, #137 => %506)::Int64
-│     %408 = φ (#104 => 1, #137 => %507)::Int64
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:138 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:134 within `coalesced_matmul_kernel!'
+└────        goto #135 if not true
+102 ┄ %399 = φ (#101 => %74, #134 => %493)::Float64
+│     %400 = φ (#101 => 1, #134 => %499)::Int64
+│     %401 = φ (#101 => 1, #134 => %500)::Int64
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:135 within `coalesced_matmul_kernel!'
 │    ┌ @ abstractarray.jl:1060 within `getindex'
 │    │┌ @ abstractarray.jl:1082 within `_getindex'
-└────││        goto #110 if not false
-106 ─││ %410 = Core.tuple(%35, %407)::Tuple{Int64,Int64}
+└────││        goto #107 if not false
+103 ─││ %403 = Core.tuple(%35, %400)::Tuple{Int64,Int64}
 │    ││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:485
 │    │││┌ @ abstractarray.jl:75 within `axes'
 │    ││││┌ @ tuple.jl:158 within `map'
 │    │││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %411 = Base.slt_int(33, 0)::Bool
+│    ││││││││ %404 = Base.slt_int(33, 0)::Bool
 │    │││││││└
-│    │││││││ %412 = Base.ifelse(%411, 0, 33)::Int64
+│    │││││││ %405 = Base.ifelse(%404, 0, 33)::Int64
 │    ││││││└
 │    ││││││ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %413 = Base.slt_int(32, 0)::Bool
+│    ││││││││ %406 = Base.slt_int(32, 0)::Bool
 │    │││││││└
-│    │││││││ %414 = Base.ifelse(%413, 0, 32)::Int64
+│    │││││││ %407 = Base.ifelse(%406, 0, 32)::Int64
 │    │││└└└└
 │    │││┌ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %415 = Base.sle_int(1, %35)::Bool
-│    ││││││ %416 = Base.sle_int(%35, %412)::Bool
+│    ││││││ %408 = Base.sle_int(1, %35)::Bool
+│    ││││││ %409 = Base.sle_int(%35, %405)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %417 = Base.and_int(%415, %416)::Bool
+│    ││││││ %410 = Base.and_int(%408, %409)::Bool
 │    ││││└└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices' @ abstractarray.jl:532
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %418 = Base.sle_int(1, %407)::Bool
-│    ││││││ %419 = Base.sle_int(%407, %414)::Bool
+│    ││││││ %411 = Base.sle_int(1, %400)::Bool
+│    ││││││ %412 = Base.sle_int(%400, %407)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %420 = Base.and_int(%418, %419)::Bool
+│    ││││││ %413 = Base.and_int(%411, %412)::Bool
 │    ││││└└
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %421 = Base.and_int(%420, true)::Bool
+│    │││││ %414 = Base.and_int(%413, true)::Bool
 │    ││││└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %422 = Base.and_int(%417, %421)::Bool
+│    │││││ %415 = Base.and_int(%410, %414)::Bool
 │    │││└└
 │    │││ @ abstractarray.jl:506 within `checkbounds'
-└────│││        goto #108 if not %422
+└────│││        goto #105 if not %415
      │││ @ abstractarray.jl:507 within `checkbounds'
-107 ─│││        goto #109
+104 ─│││        goto #106
      │││ @ abstractarray.jl:506 within `checkbounds'
-108 ─│││        invoke Base.throw_boundserror(%50::CuDeviceArray{Float64,2,3}, %410::Tuple{Int64,Int64})::Union{}
+105 ─│││        invoke Base.throw_boundserror(%50::CuDeviceArray{Float64,2,3}, %403::Tuple{Int64,Int64})::Union{}
 └────│││        $(Expr(:unreachable))::Union{}
-109 ┄│││        nothing::Nothing
+106 ┄│││        nothing::Nothing
      ││└
      ││ @ abstractarray.jl:1083 within `_getindex'
      ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -1312,131 +1297,131 @@ CodeInfo(
      ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
      │││││┌ @ abstractarray.jl:1918 within `offsetin'
      ││││││┌ @ int.jl:85 within `-'
-110 ┄│││││││ %428 = Base.sub_int(%35, 1)::Int64
+107 ┄│││││││ %421 = Base.sub_int(%35, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %429 = Base.mul_int(%428, 1)::Int64
+│    ││││││ %422 = Base.mul_int(%421, 1)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %430 = Base.add_int(1, %429)::Int64
+│    ││││││ %423 = Base.add_int(1, %422)::Int64
 │    │││││└
 │    │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
 │    │││││┌ @ abstractarray.jl:1918 within `offsetin'
 │    ││││││┌ @ int.jl:85 within `-'
-│    │││││││ %431 = Base.sub_int(%407, 1)::Int64
+│    │││││││ %424 = Base.sub_int(%400, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %432 = Base.mul_int(%431, 33)::Int64
+│    ││││││ %425 = Base.mul_int(%424, 33)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %433 = Base.add_int(%430, %432)::Int64
+│    ││││││ %426 = Base.add_int(%423, %425)::Int64
 │    ││└└└└
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:78 within `arrayref'
-└────││││        goto #115 if not false
-111 ─││││ %435 = Core.tuple(%433)::Tuple{Int64}
+└────││││        goto #112 if not false
+108 ─││││ %428 = Core.tuple(%426)::Tuple{Int64}
 │    ││││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:491
 │    │││││┌ @ abstractarray.jl:266 within `eachindex'
 │    ││││││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:60 within `length'
 │    │││││││┌ @ tuple.jl:402 within `prod'
 │    ││││││││┌ @ int.jl:87 within `*'
-│    │││││││││ %436 = Base.mul_int(33, 32)::Int64
+│    │││││││││ %429 = Base.mul_int(33, 32)::Int64
 │    ││││││└└└
 │    ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    │││││││┌ @ promotion.jl:409 within `max'
 │    ││││││││┌ @ int.jl:82 within `<'
-│    │││││││││ %437 = Base.slt_int(%436, 0)::Bool
+│    │││││││││ %430 = Base.slt_int(%429, 0)::Bool
 │    ││││││││└
-│    ││││││││ %438 = Base.ifelse(%437, 0, %436)::Int64
+│    ││││││││ %431 = Base.ifelse(%430, 0, %429)::Int64
 │    │││││└└└
 │    │││││┌ @ abstractarray.jl:563 within `checkindex'
 │    ││││││┌ @ int.jl:441 within `<='
-│    │││││││ %439 = Base.sle_int(1, %433)::Bool
-│    │││││││ %440 = Base.sle_int(%433, %438)::Bool
+│    │││││││ %432 = Base.sle_int(1, %426)::Bool
+│    │││││││ %433 = Base.sle_int(%426, %431)::Bool
 │    ││││││└
 │    ││││││┌ @ bool.jl:40 within `&'
-│    │││││││ %441 = Base.and_int(%439, %440)::Bool
+│    │││││││ %434 = Base.and_int(%432, %433)::Bool
 │    │││││└└
 │    │││││ @ abstractarray.jl:506 within `checkbounds'
-└────│││││        goto #113 if not %441
+└────│││││        goto #110 if not %434
      │││││ @ abstractarray.jl:507 within `checkbounds'
-112 ─│││││        goto #114
+109 ─│││││        goto #111
      │││││ @ abstractarray.jl:506 within `checkbounds'
-113 ─│││││        invoke Base.throw_boundserror(%50::CuDeviceArray{Float64,2,3}, %435::Tuple{Int64})::Union{}
+110 ─│││││        invoke Base.throw_boundserror(%50::CuDeviceArray{Float64,2,3}, %428::Tuple{Int64})::Union{}
 └────│││││        $(Expr(:unreachable))::Union{}
-114 ┄│││││        nothing::Nothing
+111 ┄│││││        nothing::Nothing
      ││││└
      ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
      ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
      │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
      ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
-115 ┄│││││││ %447 = Base.llvmcall::Core.IntrinsicFunction
+112 ┄│││││││ %440 = Base.llvmcall::Core.IntrinsicFunction
 │    │││││││┌ @ int.jl:85 within `-'
-│    ││││││││ %448 = Base.sub_int(%433, 1)::Int64
+│    ││││││││ %441 = Base.sub_int(%426, 1)::Int64
 │    │││││││└
-│    │││││││ %449 = (%447)($(QuoteNode(Ptr{Nothing} @0x00000000026453d8)), Float64, Tuple{Core.LLVMPtr{Float64,3},Int64}, %49, %448)::Float64
+│    │││││││ %442 = (%440)($(QuoteNode(Ptr{Nothing} @0x0000000003b9c148)), Float64, Tuple{Core.LLVMPtr{Float64,3},Int64}, %49, %441)::Float64
 │    ││││└└└
-└────││││        goto #116
+└────││││        goto #113
      │││└
-116 ─│││        goto #117
+113 ─│││        goto #114
      ││└
      ││ @ abstractarray.jl:1084 within `_getindex'
-117 ─││        goto #118
+114 ─││        goto #115
      │└
-118 ─│        goto #119
+115 ─│        goto #116
      │┌ @ abstractarray.jl:1082 within `_getindex'
-119 ─││        goto #124 if not false
-120 ─││ %455 = Core.tuple(%407, %45)::Tuple{Int64,Int64}
+116 ─││        goto #121 if not false
+117 ─││ %448 = Core.tuple(%400, %45)::Tuple{Int64,Int64}
 │    ││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:485
 │    │││┌ @ abstractarray.jl:75 within `axes'
 │    ││││┌ @ tuple.jl:158 within `map'
 │    │││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %456 = Base.slt_int(33, 0)::Bool
+│    ││││││││ %449 = Base.slt_int(33, 0)::Bool
 │    │││││││└
-│    │││││││ %457 = Base.ifelse(%456, 0, 33)::Int64
+│    │││││││ %450 = Base.ifelse(%449, 0, 33)::Int64
 │    ││││││└
 │    ││││││ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %458 = Base.slt_int(32, 0)::Bool
+│    ││││││││ %451 = Base.slt_int(32, 0)::Bool
 │    │││││││└
-│    │││││││ %459 = Base.ifelse(%458, 0, 32)::Int64
+│    │││││││ %452 = Base.ifelse(%451, 0, 32)::Int64
 │    │││└└└└
 │    │││┌ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %460 = Base.sle_int(1, %407)::Bool
-│    ││││││ %461 = Base.sle_int(%407, %457)::Bool
+│    ││││││ %453 = Base.sle_int(1, %400)::Bool
+│    ││││││ %454 = Base.sle_int(%400, %450)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %462 = Base.and_int(%460, %461)::Bool
+│    ││││││ %455 = Base.and_int(%453, %454)::Bool
 │    ││││└└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices' @ abstractarray.jl:532
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %463 = Base.sle_int(1, %45)::Bool
-│    ││││││ %464 = Base.sle_int(%45, %459)::Bool
+│    ││││││ %456 = Base.sle_int(1, %45)::Bool
+│    ││││││ %457 = Base.sle_int(%45, %452)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %465 = Base.and_int(%463, %464)::Bool
+│    ││││││ %458 = Base.and_int(%456, %457)::Bool
 │    ││││└└
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %466 = Base.and_int(%465, true)::Bool
+│    │││││ %459 = Base.and_int(%458, true)::Bool
 │    ││││└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %467 = Base.and_int(%462, %466)::Bool
+│    │││││ %460 = Base.and_int(%455, %459)::Bool
 │    │││└└
 │    │││ @ abstractarray.jl:506 within `checkbounds'
-└────│││        goto #122 if not %467
+└────│││        goto #119 if not %460
      │││ @ abstractarray.jl:507 within `checkbounds'
-121 ─│││        goto #123
+118 ─│││        goto #120
      │││ @ abstractarray.jl:506 within `checkbounds'
-122 ─│││        invoke Base.throw_boundserror(%53::CuDeviceArray{Float64,2,3}, %455::Tuple{Int64,Int64})::Union{}
+119 ─│││        invoke Base.throw_boundserror(%53::CuDeviceArray{Float64,2,3}, %448::Tuple{Int64,Int64})::Union{}
 └────│││        $(Expr(:unreachable))::Union{}
-123 ┄│││        nothing::Nothing
+120 ┄│││        nothing::Nothing
      ││└
      ││ @ abstractarray.jl:1083 within `_getindex'
      ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -1444,234 +1429,234 @@ CodeInfo(
      ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
      │││││┌ @ abstractarray.jl:1918 within `offsetin'
      ││││││┌ @ int.jl:85 within `-'
-124 ┄│││││││ %473 = Base.sub_int(%407, 1)::Int64
+121 ┄│││││││ %466 = Base.sub_int(%400, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %474 = Base.mul_int(%473, 1)::Int64
+│    ││││││ %467 = Base.mul_int(%466, 1)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %475 = Base.add_int(1, %474)::Int64
+│    ││││││ %468 = Base.add_int(1, %467)::Int64
 │    │││││└
 │    │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
 │    │││││┌ @ abstractarray.jl:1918 within `offsetin'
 │    ││││││┌ @ int.jl:85 within `-'
-│    │││││││ %476 = Base.sub_int(%45, 1)::Int64
+│    │││││││ %469 = Base.sub_int(%45, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %477 = Base.mul_int(%476, 33)::Int64
+│    ││││││ %470 = Base.mul_int(%469, 33)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %478 = Base.add_int(%475, %477)::Int64
+│    ││││││ %471 = Base.add_int(%468, %470)::Int64
 │    ││└└└└
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:78 within `arrayref'
-└────││││        goto #129 if not false
-125 ─││││ %480 = Core.tuple(%478)::Tuple{Int64}
+└────││││        goto #126 if not false
+122 ─││││ %473 = Core.tuple(%471)::Tuple{Int64}
 │    ││││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:491
 │    │││││┌ @ abstractarray.jl:266 within `eachindex'
 │    ││││││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:60 within `length'
 │    │││││││┌ @ tuple.jl:402 within `prod'
 │    ││││││││┌ @ int.jl:87 within `*'
-│    │││││││││ %481 = Base.mul_int(33, 32)::Int64
+│    │││││││││ %474 = Base.mul_int(33, 32)::Int64
 │    ││││││└└└
 │    ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    │││││││┌ @ promotion.jl:409 within `max'
 │    ││││││││┌ @ int.jl:82 within `<'
-│    │││││││││ %482 = Base.slt_int(%481, 0)::Bool
+│    │││││││││ %475 = Base.slt_int(%474, 0)::Bool
 │    ││││││││└
-│    ││││││││ %483 = Base.ifelse(%482, 0, %481)::Int64
+│    ││││││││ %476 = Base.ifelse(%475, 0, %474)::Int64
 │    │││││└└└
 │    │││││┌ @ abstractarray.jl:563 within `checkindex'
 │    ││││││┌ @ int.jl:441 within `<='
-│    │││││││ %484 = Base.sle_int(1, %478)::Bool
-│    │││││││ %485 = Base.sle_int(%478, %483)::Bool
+│    │││││││ %477 = Base.sle_int(1, %471)::Bool
+│    │││││││ %478 = Base.sle_int(%471, %476)::Bool
 │    ││││││└
 │    ││││││┌ @ bool.jl:40 within `&'
-│    │││││││ %486 = Base.and_int(%484, %485)::Bool
+│    │││││││ %479 = Base.and_int(%477, %478)::Bool
 │    │││││└└
 │    │││││ @ abstractarray.jl:506 within `checkbounds'
-└────│││││        goto #127 if not %486
+└────│││││        goto #124 if not %479
      │││││ @ abstractarray.jl:507 within `checkbounds'
-126 ─│││││        goto #128
+123 ─│││││        goto #125
      │││││ @ abstractarray.jl:506 within `checkbounds'
-127 ─│││││        invoke Base.throw_boundserror(%53::CuDeviceArray{Float64,2,3}, %480::Tuple{Int64})::Union{}
+124 ─│││││        invoke Base.throw_boundserror(%53::CuDeviceArray{Float64,2,3}, %473::Tuple{Int64})::Union{}
 └────│││││        $(Expr(:unreachable))::Union{}
-128 ┄│││││        nothing::Nothing
+125 ┄│││││        nothing::Nothing
      ││││└
      ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
      ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
      │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
      ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
-129 ┄│││││││ %492 = Base.llvmcall::Core.IntrinsicFunction
+126 ┄│││││││ %485 = Base.llvmcall::Core.IntrinsicFunction
 │    │││││││┌ @ int.jl:85 within `-'
-│    ││││││││ %493 = Base.sub_int(%478, 1)::Int64
+│    ││││││││ %486 = Base.sub_int(%471, 1)::Int64
 │    │││││││└
-│    │││││││ %494 = (%492)($(QuoteNode(Ptr{Nothing} @0x00000000026453d8)), Float64, Tuple{Core.LLVMPtr{Float64,3},Int64}, %52, %493)::Float64
+│    │││││││ %487 = (%485)($(QuoteNode(Ptr{Nothing} @0x0000000003b9c148)), Float64, Tuple{Core.LLVMPtr{Float64,3},Int64}, %52, %486)::Float64
 │    ││││└└└
-└────││││        goto #130
+└────││││        goto #127
      │││└
-130 ─│││        goto #131
+127 ─│││        goto #128
      ││└
      ││ @ abstractarray.jl:1084 within `_getindex'
-131 ─││        goto #132
+128 ─││        goto #129
      │└
-132 ─│        goto #133
+129 ─│        goto #130
      └
      ┌ @ float.jl:405 within `*'
-133 ─│ %499 = Base.mul_float(%449, %494)::Float64
+130 ─│ %492 = Base.mul_float(%442, %487)::Float64
 │    └
 │    ┌ @ float.jl:401 within `+'
-│    │ %500 = Base.add_float(%406, %499)::Float64
+│    │ %493 = Base.add_float(%399, %492)::Float64
 │    └
 │    ┌ @ range.jl:624 within `iterate'
 │    │┌ @ promotion.jl:398 within `=='
-│    ││ %501 = (%408 === 32)::Bool
+│    ││ %494 = (%401 === 32)::Bool
 │    │└
-└────│        goto #135 if not %501
-134 ─│        goto #136
+└────│        goto #132 if not %494
+131 ─│        goto #133
      │ @ range.jl:625 within `iterate'
      │┌ @ int.jl:86 within `+'
-135 ─││ %504 = Base.add_int(%408, 1)::Int64
+132 ─││ %497 = Base.add_int(%401, 1)::Int64
 │    │└
 │    │ @ range.jl:626 within `iterate'
-└────│        goto #136
+└────│        goto #133
      └
-136 ┄ %506 = φ (#135 => %504)::Int64
-│     %507 = φ (#135 => %504)::Int64
-│     %508 = φ (#134 => true, #135 => false)::Bool
-│     %509 = Base.not_int(%508)::Bool
-└────        goto #138 if not %509
-137 ─        goto #105
-      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:141 within `coalesced_matmul_kernel!'
-138 ┄ %512 = φ (#136 => %500, #104 => %81)::Float64
+133 ┄ %499 = φ (#132 => %497)::Int64
+│     %500 = φ (#132 => %497)::Int64
+│     %501 = φ (#131 => true, #132 => false)::Bool
+│     %502 = Base.not_int(%501)::Bool
+└────        goto #135 if not %502
+134 ─        goto #102
+      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:138 within `coalesced_matmul_kernel!'
+135 ┄ %505 = φ (#133 => %493, #101 => %74)::Float64
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/synchronization.jl:14 within `sync_threads'
 │    │        $(Expr(:foreigncall, "llvm.nvvm.barrier0", Nothing, svec(), 0, :(:llvmcall)))::Nothing
 │    └
 │    ┌ @ range.jl:624 within `iterate'
 │    │┌ @ promotion.jl:398 within `=='
-│    ││ %514 = (%83 === %71)::Bool
+│    ││ %507 = (%76 === %64)::Bool
 │    │└
-└────│        goto #140 if not %514
-139 ─│        goto #141
+└────│        goto #137 if not %507
+136 ─│        goto #138
      │ @ range.jl:625 within `iterate'
      │┌ @ int.jl:86 within `+'
-140 ─││ %517 = Base.add_int(%83, 1)::Int64
+137 ─││ %510 = Base.add_int(%76, 1)::Int64
 │    │└
 │    │ @ range.jl:626 within `iterate'
-└────│        goto #141
+└────│        goto #138
      └
-141 ┄ %519 = φ (#140 => %517)::Int64
-│     %520 = φ (#140 => %517)::Int64
-│     %521 = φ (#139 => true, #140 => false)::Bool
-│     %522 = Base.not_int(%521)::Bool
-└────        goto #143 if not %522
-142 ─        goto #8
-      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:144 within `coalesced_matmul_kernel!'
-143 ┄ %525 = φ (#141 => %512, #7 => 0.0)::Float64
+138 ┄ %512 = φ (#137 => %510)::Int64
+│     %513 = φ (#137 => %510)::Int64
+│     %514 = φ (#136 => true, #137 => false)::Bool
+│     %515 = Base.not_int(%514)::Bool
+└────        goto #140 if not %515
+139 ─        goto #5
+      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:141 within `coalesced_matmul_kernel!'
+140 ┄ %518 = φ (#138 => %505, #4 => 0.0)::Float64
 │    ┌ @ int.jl:85 within `-'
-│    │ %526 = Base.sub_int(%19, 1)::Int64
+│    │ %519 = Base.sub_int(%19, 1)::Int64
 │    └
-│     %527 = Main.TILE_DIM::Core.Compiler.Const(32, false)
+│     %520 = Main.TILE_DIM::Core.Compiler.Const(32, false)
 │    ┌ @ int.jl:87 within `*'
-│    │ %528 = Base.mul_int(%526, %527)::Int64
+│    │ %521 = Base.mul_int(%519, %520)::Int64
 │    └
 │    ┌ @ int.jl:86 within `+'
-│    │ %529 = Base.add_int(%528, %35)::Int64
+│    │ %522 = Base.add_int(%521, %35)::Int64
 │    └
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:145 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:142 within `coalesced_matmul_kernel!'
 │    ┌ @ int.jl:85 within `-'
-│    │ %530 = Base.sub_int(%29, 1)::Int64
+│    │ %523 = Base.sub_int(%29, 1)::Int64
 │    └
-│     %531 = Main.TILE_DIM::Core.Compiler.Const(32, false)
+│     %524 = Main.TILE_DIM::Core.Compiler.Const(32, false)
 │    ┌ @ int.jl:87 within `*'
-│    │ %532 = Base.mul_int(%530, %531)::Int64
+│    │ %525 = Base.mul_int(%523, %524)::Int64
 │    └
 │    ┌ @ int.jl:86 within `+'
-│    │ %533 = Base.add_int(%532, %45)::Int64
+│    │ %526 = Base.add_int(%525, %45)::Int64
 │    └
-│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:147 within `coalesced_matmul_kernel!'
+│     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:144 within `coalesced_matmul_kernel!'
 │    ┌ @ promotion.jl:350 within `<='
 │    │┌ @ promotion.jl:282 within `promote'
 │    ││┌ @ promotion.jl:259 within `_promote'
 │    │││┌ @ number.jl:7 within `convert'
 │    ││││┌ @ boot.jl:708 within `Int64'
 │    │││││┌ @ boot.jl:627 within `toInt64'
-│    ││││││ %534 = Core.sext_int(Core.Int64, N)::Int64
+│    ││││││ %527 = Core.sext_int(Core.Int64, N)::Int64
 │    │└└└└└
 │    │ @ promotion.jl:350 within `<=' @ int.jl:441
-│    │ %535 = Base.sle_int(%529, %534)::Bool
+│    │ %528 = Base.sle_int(%522, %527)::Bool
 │    └
-└────        goto #145 if not %535
+└────        goto #142 if not %528
      ┌ @ promotion.jl:350 within `<='
      │┌ @ promotion.jl:282 within `promote'
      ││┌ @ promotion.jl:259 within `_promote'
      │││┌ @ number.jl:7 within `convert'
      ││││┌ @ boot.jl:708 within `Int64'
      │││││┌ @ boot.jl:627 within `toInt64'
-144 ─││││││ %537 = Core.sext_int(Core.Int64, M)::Int64
+141 ─││││││ %530 = Core.sext_int(Core.Int64, M)::Int64
 │    │└└└└└
 │    │ @ promotion.jl:350 within `<=' @ int.jl:441
-│    │ %538 = Base.sle_int(%533, %537)::Bool
+│    │ %531 = Base.sle_int(%526, %530)::Bool
 │    └
-└────        goto #146
-145 ─        nothing::Nothing
-146 ┄ %541 = φ (#144 => %538, #145 => false)::Bool
-└────        goto #162 if not %541
-      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:148 within `coalesced_matmul_kernel!'
+└────        goto #143
+142 ─        nothing::Nothing
+143 ┄ %534 = φ (#141 => %531, #142 => false)::Bool
+└────        goto #159 if not %534
+      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:145 within `coalesced_matmul_kernel!'
      ┌ @ abstractarray.jl:1153 within `setindex!'
      │┌ @ abstractarray.jl:1175 within `_setindex!'
-147 ─││        goto #152 if not false
-148 ─││ %544 = Core.tuple(%529, %533)::Tuple{Int64,Int64}
+144 ─││        goto #149 if not false
+145 ─││ %537 = Core.tuple(%522, %526)::Tuple{Int64,Int64}
 │    ││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:485
 │    │││┌ @ abstractarray.jl:75 within `axes'
 │    ││││┌ @ tuple.jl:158 within `map'
 │    │││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %545 = Base.slt_int(%4, 0)::Bool
+│    ││││││││ %538 = Base.slt_int(%4, 0)::Bool
 │    │││││││└
-│    │││││││ %546 = Base.ifelse(%545, 0, %4)::Int64
+│    │││││││ %539 = Base.ifelse(%538, 0, %4)::Int64
 │    ││││││└
 │    ││││││ @ range.jl:326 within `OneTo' @ range.jl:317
 │    ││││││┌ @ promotion.jl:409 within `max'
 │    │││││││┌ @ int.jl:82 within `<'
-│    ││││││││ %547 = Base.slt_int(%5, 0)::Bool
+│    ││││││││ %540 = Base.slt_int(%5, 0)::Bool
 │    │││││││└
-│    │││││││ %548 = Base.ifelse(%547, 0, %5)::Int64
+│    │││││││ %541 = Base.ifelse(%540, 0, %5)::Int64
 │    │││└└└└
 │    │││┌ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %549 = Base.sle_int(1, %529)::Bool
-│    ││││││ %550 = Base.sle_int(%529, %546)::Bool
+│    ││││││ %542 = Base.sle_int(1, %522)::Bool
+│    ││││││ %543 = Base.sle_int(%522, %539)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %551 = Base.and_int(%549, %550)::Bool
+│    ││││││ %544 = Base.and_int(%542, %543)::Bool
 │    ││││└└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices' @ abstractarray.jl:532
 │    ││││┌ @ abstractarray.jl:563 within `checkindex'
 │    │││││┌ @ int.jl:441 within `<='
-│    ││││││ %552 = Base.sle_int(1, %533)::Bool
-│    ││││││ %553 = Base.sle_int(%533, %548)::Bool
+│    ││││││ %545 = Base.sle_int(1, %526)::Bool
+│    ││││││ %546 = Base.sle_int(%526, %541)::Bool
 │    │││││└
 │    │││││┌ @ bool.jl:40 within `&'
-│    ││││││ %554 = Base.and_int(%552, %553)::Bool
+│    ││││││ %547 = Base.and_int(%545, %546)::Bool
 │    ││││└└
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %555 = Base.and_int(%554, true)::Bool
+│    │││││ %548 = Base.and_int(%547, true)::Bool
 │    ││││└
 │    ││││ @ abstractarray.jl:532 within `checkbounds_indices'
 │    ││││┌ @ bool.jl:40 within `&'
-│    │││││ %556 = Base.and_int(%551, %555)::Bool
+│    │││││ %549 = Base.and_int(%544, %548)::Bool
 │    │││└└
 │    │││ @ abstractarray.jl:506 within `checkbounds'
-└────│││        goto #150 if not %556
+└────│││        goto #147 if not %549
      │││ @ abstractarray.jl:507 within `checkbounds'
-149 ─│││        goto #151
+146 ─│││        goto #148
      │││ @ abstractarray.jl:506 within `checkbounds'
-150 ─│││        invoke Base.throw_boundserror(%7::CuDeviceArray{Float64,2,1}, %544::Tuple{Int64,Int64})::Union{}
+147 ─│││        invoke Base.throw_boundserror(%7::CuDeviceArray{Float64,2,1}, %537::Tuple{Int64,Int64})::Union{}
 └────│││        $(Expr(:unreachable))::Union{}
-151 ┄│││        nothing::Nothing
+148 ┄│││        nothing::Nothing
      ││└
      ││ @ abstractarray.jl:1176 within `_setindex!'
      ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -1681,97 +1666,97 @@ CodeInfo(
      ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
      │││││││┌ @ promotion.jl:409 within `max'
      ││││││││┌ @ int.jl:82 within `<'
-152 ┄│││││││││ %562 = Base.slt_int(%4, 0)::Bool
+149 ┄│││││││││ %555 = Base.slt_int(%4, 0)::Bool
 │    ││││││││└
-│    ││││││││ %563 = Base.ifelse(%562, 0, %4)::Int64
+│    ││││││││ %556 = Base.ifelse(%555, 0, %4)::Int64
 │    ││││└└└└
 │    ││││ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
 │    ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
 │    │││││┌ @ abstractarray.jl:1915 within `nextL'
 │    ││││││┌ @ range.jl:544 within `unsafe_length'
 │    │││││││┌ @ int.jl:85 within `-'
-│    ││││││││ %564 = Base.sub_int(%563, 0)::Int64
+│    ││││││││ %557 = Base.sub_int(%556, 0)::Int64
 │    ││││││└└
 │    ││││││┌ @ int.jl:87 within `*'
-│    │││││││ %565 = Base.mul_int(1, %564)::Int64
+│    │││││││ %558 = Base.mul_int(1, %557)::Int64
 │    │││││└└
 │    │││││┌ @ abstractarray.jl:1918 within `offsetin'
 │    ││││││┌ @ int.jl:85 within `-'
-│    │││││││ %566 = Base.sub_int(%529, 1)::Int64
+│    │││││││ %559 = Base.sub_int(%522, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %567 = Base.mul_int(%566, 1)::Int64
+│    ││││││ %560 = Base.mul_int(%559, 1)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %568 = Base.add_int(1, %567)::Int64
+│    ││││││ %561 = Base.add_int(1, %560)::Int64
 │    │││││└
 │    │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
 │    │││││┌ @ abstractarray.jl:1918 within `offsetin'
 │    ││││││┌ @ int.jl:85 within `-'
-│    │││││││ %569 = Base.sub_int(%533, 1)::Int64
+│    │││││││ %562 = Base.sub_int(%526, 1)::Int64
 │    │││││└└
 │    │││││┌ @ int.jl:87 within `*'
-│    ││││││ %570 = Base.mul_int(%569, %565)::Int64
+│    ││││││ %563 = Base.mul_int(%562, %558)::Int64
 │    │││││└
 │    │││││┌ @ int.jl:86 within `+'
-│    ││││││ %571 = Base.add_int(%568, %570)::Int64
+│    ││││││ %564 = Base.add_int(%561, %563)::Int64
 │    ││└└└└
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:84 within `arrayset'
-└────││││        goto #157 if not false
-153 ─││││ %573 = Core.tuple(%571)::Tuple{Int64}
+└────││││        goto #154 if not false
+150 ─││││ %566 = Core.tuple(%564)::Tuple{Int64}
 │    ││││┌ @ abstractarray.jl:506 within `checkbounds' @ abstractarray.jl:491
 │    │││││┌ @ abstractarray.jl:266 within `eachindex'
 │    ││││││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:60 within `length'
 │    │││││││┌ @ tuple.jl:402 within `prod'
 │    ││││││││┌ @ int.jl:87 within `*'
-│    │││││││││ %574 = Base.mul_int(%4, %5)::Int64
+│    │││││││││ %567 = Base.mul_int(%4, %5)::Int64
 │    ││││││└└└
 │    ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
 │    │││││││┌ @ promotion.jl:409 within `max'
 │    ││││││││┌ @ int.jl:82 within `<'
-│    │││││││││ %575 = Base.slt_int(%574, 0)::Bool
+│    │││││││││ %568 = Base.slt_int(%567, 0)::Bool
 │    ││││││││└
-│    ││││││││ %576 = Base.ifelse(%575, 0, %574)::Int64
+│    ││││││││ %569 = Base.ifelse(%568, 0, %567)::Int64
 │    │││││└└└
 │    │││││┌ @ abstractarray.jl:563 within `checkindex'
 │    ││││││┌ @ int.jl:441 within `<='
-│    │││││││ %577 = Base.sle_int(1, %571)::Bool
-│    │││││││ %578 = Base.sle_int(%571, %576)::Bool
+│    │││││││ %570 = Base.sle_int(1, %564)::Bool
+│    │││││││ %571 = Base.sle_int(%564, %569)::Bool
 │    ││││││└
 │    ││││││┌ @ bool.jl:40 within `&'
-│    │││││││ %579 = Base.and_int(%577, %578)::Bool
+│    │││││││ %572 = Base.and_int(%570, %571)::Bool
 │    │││││└└
 │    │││││ @ abstractarray.jl:506 within `checkbounds'
-└────│││││        goto #155 if not %579
+└────│││││        goto #152 if not %572
      │││││ @ abstractarray.jl:507 within `checkbounds'
-154 ─│││││        goto #156
+151 ─│││││        goto #153
      │││││ @ abstractarray.jl:506 within `checkbounds'
-155 ─│││││        invoke Base.throw_boundserror(%7::CuDeviceArray{Float64,2,1}, %573::Tuple{Int64})::Union{}
+152 ─│││││        invoke Base.throw_boundserror(%7::CuDeviceArray{Float64,2,1}, %566::Tuple{Int64})::Union{}
 └────│││││        $(Expr(:unreachable))::Union{}
-156 ┄│││││        nothing::Nothing
+153 ┄│││││        nothing::Nothing
      ││││└
      ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
      ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
      │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
      ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
-157 ┄│││││││ %585 = Base.llvmcall::Core.IntrinsicFunction
+154 ┄│││││││ %578 = Base.llvmcall::Core.IntrinsicFunction
 │    │││││││┌ @ int.jl:85 within `-'
-│    ││││││││ %586 = Base.sub_int(%571, 1)::Int64
+│    ││││││││ %579 = Base.sub_int(%564, 1)::Int64
 │    │││││││└
-│    │││││││        (%585)($(QuoteNode(Ptr{Nothing} @0x0000000005038b88)), Nothing, Tuple{Core.LLVMPtr{Float64,1},Float64,Int64}, %1, %525, %586)::Nothing
+│    │││││││        (%578)($(QuoteNode(Ptr{Nothing} @0x0000000002486be8)), Nothing, Tuple{Core.LLVMPtr{Float64,1},Float64,Int64}, %1, %518, %579)::Nothing
 │    ││││└└└
 │    ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
-└────││││        goto #158
+└────││││        goto #155
      │││└
-158 ─│││        goto #159
+155 ─│││        goto #156
      ││└
      ││ @ abstractarray.jl:1177 within `_setindex!'
-159 ─││        goto #160
+156 ─││        goto #157
      │└
-160 ─│        goto #161
-161 ─│        nothing::Nothing
+157 ─│        goto #158
+158 ─│        nothing::Nothing
      └
-      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:150 within `coalesced_matmul_kernel!'
-162 ┄        return Main.nothing
+      @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:147 within `coalesced_matmul_kernel!'
+159 ┄        return Main.nothing
 ) => Nothing

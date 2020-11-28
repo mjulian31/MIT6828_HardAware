@@ -1,30 +1,35 @@
 
-#include <stdio.h>
-#include <algorithm>
+//#include <stdio.h>
+//#include <algorithm>
+//#include <queue>
+//#include <unistd.h>
+//#include <cstring>
+//#include <unordered_map>
+
+#include <assert.h>
 #include <mutex>
-#include <queue>
 #include <thread>
-#include <unistd.h>
-#include <cstring>
+#include <queue>
+#include <sys/wait.h>
+#include "hawsUtil.h"
 #include "hawsHAWS.h"
 #include "hawsTargetMgr.h"
 #include "hawsGPUMgr.h"
 #include "hawsClientRequest.h"
-#include <unordered_map>
 
-using namespace std;
+//using namespace std;
 
-mutex globalKillFlagLock; // signal to stop schedule loop / running tasks
+std::mutex globalKillFlagLock; // signal to stop schedule loop / running tasks
 bool globalKillFlag;
 
-mutex tasksToStartQueueLock; // synchronizes queue access
-queue<HAWSClientRequest*>* tasksToStartQueue;
+std::mutex tasksToStartQueueLock; // synchronizes queue access
+std::queue<HAWSClientRequest*>* tasksToStartQueue;
 
 HAWSTargetMgr* cpuMgr;
 HAWSTargetMgr* gpuMgr;
 
 // memory control - how much memory can the scheduler use for children?
-mutex globalMemLock;
+std::mutex globalMemLock;
 // physmem control 
 #define SCHED_MEM_MAX_RR1 (1024*58) // use up to 58GB of 64GB phys ram
 #define SCHED_MEM_MAX_CLOUDLAB 62464
@@ -39,13 +44,18 @@ mutex globalMemLock;
 int globalSchedRAMAvail = SCHED_MEM_MAX;
 int globalSchedRAMGPUAvail = SCHED_MEM_GPU_MAX;
 
-list<pid_t> allCPUPids;
-list<pid_t> allGPUPids;
+std::list<pid_t> allCPUPids;
+std::list<pid_t> allGPUPids;
+
+float centsPerUnitTimeCPU = 0.000001; // 1 penny per second default
+float centsPerUnitTimeGPU = 0.0000015; // 1.5 pennies per second default
+long billableCPUus = 0;
+long billableGPUus = 0;
+
+time_point hawsStartTime;
+time_point hawsStopTime;
 
 int throttle = 0;
-
-#define IN_LIST(list, item) (std::find(list.begin(), list.end(), item) != list.end())
-#define NOT_IN_LIST(list, item) (std::find(list.begin(), list.end(), item) == list.end())
 
 void HAWS::ReapChildren() {
     pid_t p;
@@ -53,11 +63,9 @@ void HAWS::ReapChildren() {
     int reapedTasks = 0;
     TaskStatus task_status;
     while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
-       long time_completed = (std::chrono::system_clock::now().time_since_epoch()).count();
-       /* Handle the death of pid p */
-       //printf("SIGCHLD SIGNAL: PID %d status %d\n", p, status);
-
+       time_point time_completed = std::chrono::system_clock::now();
        // debugging
+       //printf("WAIDPID: PID %d status %d\n", p, status);
        //printf("waitpid() was < 0\n"); 
        //printf("errno codes are ECHILD: %d, EINTR: %d, EINVAL %d\n", ECHILD, EINTR, EINVAL);
        //printf("errno was = %d\n", errno);
@@ -73,12 +81,9 @@ void HAWS::ReapChildren() {
                 assert(false);
             } 
             else  {
-                //printf("program terminated normally,"
-                //   " but returned a non-zero status\n");                 
                 task_status = TASK_FINISHED_NONZERO;
             }
        } else {
-           //printf("program didn't terminate normally\n");             
            task_status = TASK_FINISHED_ABNORMAL;
        }
        DispatchConclusion(p, task_status, status, time_completed); 
@@ -86,11 +91,11 @@ void HAWS::ReapChildren() {
     if (reapedTasks > 0) { printf("TARGMGR: subprocesses reaped: %d\n", reapedTasks); }
 }
 
-void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, long time_completed) {
+void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, time_point ended) {
     if (IN_LIST(allCPUPids, pid)) {
        assert(cpuMgr->TaskIsActive(pid));
        assert(NOT_IN_LIST(allGPUPids, pid));
-       cpuMgr->TaskConclude(pid, task_status, status, time_completed); 
+       billableCPUus += cpuMgr->TaskConclude(pid, task_status, status, ended); 
    } else if (IN_LIST(allGPUPids, pid)) {
        assert(false); //NOT IMPLEMENTED
        assert(gpuMgr->TaskIsActive(pid));
@@ -129,7 +134,6 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
             free(req); // done processing client request
         }
 
-        ReapChildren(); // collect all completed child processes
         
         //monitor HW targets
         cpuMgr->Monitor(); //update state of processes in cpu manager  
@@ -146,6 +150,7 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
                    (int)(((float) globalSchedRAMGPUAvail / (float) SCHED_MEM_GPU_MAX)*100));
         }
 
+        ReapChildren(); // collect all completed child processes
         usleep(50); // yield CPU
     }
     printf("HAWS: ScheduleLoop ended...\n");
@@ -192,7 +197,7 @@ HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) {
 
 HAWS::HAWS() {
     printf("HAWS: Constructed\n");
-    tasksToStartQueue = new queue<HAWSClientRequest*>();
+    tasksToStartQueue = new std::queue<HAWSClientRequest*>();
 }
 
 int HAWS::GetNumActiveTasks() {
@@ -201,22 +206,31 @@ int HAWS::GetNumActiveTasks() {
 
 void HAWS::PrintData() {
     printf("HAWS: Hello From PrintData\n");
+    auto elapsedUS = TIMEDIFF_CAST_USEC(hawsStopTime - hawsStartTime);
+    auto elapsedMS = TIMEDIFF_CAST_MSEC(hawsStopTime - hawsStartTime);
+    auto elapsedS = TIMEDIFF_CAST_SEC(hawsStopTime - hawsStartTime);
+    printf("HAWS: System runtime: %ld us (%ld ms) (%ld s)\n", elapsedUS, elapsedMS, elapsedS);
+    printf("HAWS: Billable CPU us: %ld\n", billableCPUus);
+    printf("HAWS: Billable CPU cents/us: %f\n", centsPerUnitTimeCPU);
+    float billableCents = centsPerUnitTimeCPU * billableCPUus;
+    printf("HAWS: Billable CPU cents: %f cents (%f$)\n", billableCents, billableCents / 100);
     cpuMgr->PrintData();
 }
 
 void HAWS::Start() {
-    printf("HAWS: Starting ScheduleLoop\n");
     assert(!schedLoopThreadRunning); // must be stopped before started
-    schedLoopThread = new thread(HAWS::ScheduleLoop); // start schedule loop
+    hawsStartTime = std::chrono::system_clock::now();
+    printf("HAWS: Starting ScheduleLoop\n");
+    schedLoopThread = new std::thread(HAWS::ScheduleLoop); // start schedule loop
     globalKillFlag = false;          // disable killswitch for schedule loop 
     schedLoopThreadRunning = true;   // schedule loop thread active
-
     cpuMgr = new HAWSTargetMgr();
     gpuMgr = new HAWSTargetMgr();
 }
 
 void HAWS::Stop() {
     assert(schedLoopThreadRunning);  // must be started before stopped
+    hawsStopTime = std::chrono::system_clock::now();
     printf("HAWS: Stopping ScheduleLoop\n");
     globalKillFlag = true;           // enable killswitch for schedule loop thread
     schedLoopThread->join();         // block until thread exits and returns

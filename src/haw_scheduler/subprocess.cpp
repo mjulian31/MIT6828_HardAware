@@ -1,10 +1,93 @@
 #include <stdio.h>
 #include <sys/types.h> 
 #include <unistd.h>  
-#include <stdlib.h> 
+//#include <stdlib.h> 
+#include <cstdlib>
 #include <errno.h>   
 #include <sys/wait.h> 
 #include "subprocess.h"
+
+// stdin / stdout piping stuff from  
+// https://jineshkj.wordpress.com/2006/12/22/how-to-capture-stdin-stdout-and-stderr-of-child-program/
+
+ssize_t subprocess_read(int fd, void *buf, size_t count) {
+    return read(fd, buf, count);
+}
+
+ChildHandle* start_subprocess_nonblocking(char** argv_list) {
+    pid_t  pid; 
+    ChildHandle* handle = (ChildHandle*) malloc(sizeof(ChildHandle));
+    int ret = 1; 
+
+    // malloc new pipes 
+    /*
+    int** pipes = new int*[2];
+    for(int i = 0; i < 2; ++i)
+        pipes[i] = new int[2]; */
+
+    // init pipes for parent to write and read
+    //pipe(pipes[PARENT_READ_PIPE]);
+    //pipe(pipes[PARENT_WRITE_PIPE]);
+
+    pid = fork(); 
+  
+    if (pid == -1){ 
+       // pid == -1 means error occured 
+       printf("can't fork, error occured\n"); 
+       exit(EXIT_FAILURE); 
+    } 
+    else if (pid == 0){ 
+       // pid == 0 means child process created 
+       // getpid() returns process id of calling process 
+       // Here It will return process id of child process 
+       //printf("child process, pid = %u\n",getpid()); 
+       // Here It will return Parent of child Process means Parent process it self 
+       //printf("parent of child process, pid = %u\n",getppid());  
+  
+       // the argv list first argument should point to   
+       // filename associated with file being executed, ex argv_list[0] = /bin/ls
+       // next are args to executed file ex. argv_list[1] = '-lrth' and argv_list[2] = "/home"
+       // the array must be terminated by NULL to signal end of command line args
+       // pointer 
+ 
+       // the execv() only return if error occured. 
+       // The return value is -1 
+
+       //dup2(pipes[PARENT_WRITE_PIPE][READ_FD], STDIN_FILENO);
+       //dup2(pipes[PARENT_READ_PIPE][WRITE_FD], STDOUT_FILENO);
+
+       // close fds not required by child. Also, we don't
+       // want the exec'ed program to know these existed 
+       //close(pipes[PARENT_WRITE_PIPE][READ_FD]);
+       //close(pipes[PARENT_WRITE_PIPE][WRITE_FD]);
+       //close(pipes[PARENT_READ_PIPE][READ_FD]);
+       //close(pipes[PARENT_READ_PIPE][WRITE_FD]);
+ 
+       execv(argv_list[0],argv_list); 
+       exit(0);  // not reached?
+    } else{ 
+       // a positive number is returned for the pid of parent process 
+       // getppid() returns process id of parent of calling process 
+       // Here It will return parent of parent process's ID 
+       //printf("Parent Of parent process, pid = %u\n",getppid()); 
+       //printf("parent process, pid = %u\n",getpid());  
+       //printf("caught pid %d\n", pid);
+
+       // close fds not required by parent
+       //close(pipes[PARENT_WRITE_PIPE][READ_FD]);
+       //close(pipes[PARENT_READ_PIPE][WRITE_FD]);
+
+       handle->pid = pid;
+       //handle->pipes[PARENT_WRITE_PIPE][READ_FD] = pipes[PARENT_WRITE_PIPE][READ_FD];
+       //handle->pipes[PARENT_WRITE_PIPE][WRITE_FD] = pipes[PARENT_WRITE_PIPE][WRITE_FD];
+       //handle->pipes[PARENT_READ_PIPE][READ_FD] = pipes[PARENT_READ_PIPE][READ_FD];
+       //handle->pipes[PARENT_READ_PIPE][WRITE_FD] = pipes[PARENT_READ_PIPE][WRITE_FD];
+       return handle;
+   } 
+   return 0;
+}
+
+// early dev code below - unused but kept for debugging 
 
 char* pow8_julia_bin_path= (char*) "/opt/julia/usr/bin/julia";
 char* x86_julia_bin_path= (char*) "/usr/local/bin/julia";
@@ -41,7 +124,8 @@ int start_subprocess_nonblocking_julia_test(char* julia_bin_path, char* julia_sc
 
 pid_t start_subprocess_nonblocking_monitor(char** argv_list) {
    int print_state_throttle = 0;
-   int pid = start_subprocess_nonblocking(argv_list); 
+   ChildHandle *handle = start_subprocess_nonblocking(argv_list); 
+   pid_t pid = handle->pid;
    int status; 
    pid_t state;
 
@@ -88,47 +172,6 @@ pid_t start_subprocess_nonblocking_monitor(char** argv_list) {
     exit(0);
 }
 
-int start_subprocess_nonblocking(char** argv_list) {
-    pid_t  pid; 
-    int ret = 1; 
-    pid = fork(); 
-  
-    if (pid == -1){ 
-       // pid == -1 means error occured 
-       printf("can't fork, error occured\n"); 
-       exit(EXIT_FAILURE); 
-    } 
-    else if (pid == 0){ 
-       // pid == 0 means child process created 
-       // getpid() returns process id of calling process 
-       // Here It will return process id of child process 
-       //printf("child process, pid = %u\n",getpid()); 
-       // Here It will return Parent of child Process means Parent process it self 
-       //printf("parent of child process, pid = %u\n",getppid());  
-  
-       // the argv list first argument should point to   
-       // filename associated with file being executed, ex argv_list[0] = /bin/ls
-       // next are args to executed file ex. argv_list[1] = '-lrth' and argv_list[2] = "/home"
-       // the array must be terminated by NULL to signal end of command line args
-       // pointer 
- 
-       // the execv() only return if error occured. 
-       // The return value is -1 
-       execv(argv_list[0],argv_list); 
-       exit(0); 
-    } else{ 
-       // a positive number is returned for the pid of 
-       // parent process 
-       // getppid() returns process id of parent of  
-       // calling process 
-       // Here It will return parent of parent process's ID 
-       //printf("Parent Of parent process, pid = %u\n",getppid()); 
-       //printf("parent process, pid = %u\n",getpid());  
-       //printf("caught pid %d\n", pid);
-       return pid;
-   } 
-   return 0;
-}
 
 int start_subprocess_blocking_julia_test(char* julia_bin_path, char* julia_script_path) {
     // set up command line strings

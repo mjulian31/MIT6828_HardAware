@@ -1,29 +1,38 @@
 #ifndef CLIENTREQUEST_H
 #define CLIENTREQUEST_H
 
-using namespace std;
+//using namespace std;
+
+#include <cstring>
 #include <string>
 
 class HAWSClientRequest {
     private:
-        string cpuBinPath;
+        std::string cpuBinPath;
         int cpuBinRAM;
-        string gpuBinPath;
+        std::string gpuBinPath;
         int gpuBinRAM;
-        string taskArgs;
+        char* stdinBuf;
+        int stdinBufLen;
+        std::string taskArgs;
 
     public:
-        HAWSClientRequest(string cpuBin, int cpuBinRAM, 
-                          string gpuBin, int gpuBinRAM, string args) { 
+        HAWSClientRequest(std::string cpuBin, int cpuBinRAM, 
+                          std::string gpuBin, int gpuBinRAM, 
+                          char* stdinBuf, int stdinBufLen, std::string args) {
             this->cpuBinPath = cpuBin;
             this->cpuBinRAM = cpuBinRAM;
             this->gpuBinPath = gpuBin;
             this->gpuBinRAM = gpuBinRAM; 
+            this->stdinBuf = stdinBuf;
+            this->stdinBufLen = stdinBufLen;
             taskArgs = args;
         }
         HAWSClientRequest() {
             cpuBinPath = "";
             gpuBinPath = "";
+            stdinBuf = NULL;
+            stdinBufLen = 0;
             taskArgs = "";
         }
         HAWSClientRequest(HAWSClientRequest* another) {
@@ -31,23 +40,28 @@ class HAWSClientRequest {
             cpuBinRAM  = another->GetCPUBinRAM();
             gpuBinPath = another->GetGPUBinPath();
             gpuBinRAM  = another->GetGPUBinRAM();
+            stdinBufLen = another->stdinBufLen;
+            stdinBuf = (char*) malloc(sizeof(stdinBufLen));
+            memcpy(stdinBuf, another->stdinBuf, stdinBufLen);
             taskArgs = another->GetTaskArgs();
         }
         /* destructor disabled
         ~HAWSClientRequest() {
             free(...) 
         } */
-        string GetCPUBinPath()    { return cpuBinPath; }
+        std::string GetCPUBinPath()    { return cpuBinPath; }
         int GetCPUBinRAM()        { return cpuBinRAM; }
-        string GetGPUBinPath()    { return gpuBinPath; }
+        std::string GetGPUBinPath()    { return gpuBinPath; }
         int GetGPUBinRAM()        { return cpuBinRAM; }
-        string GetTaskArgs()      { return taskArgs;      }
-        void SetCPUBinPath(string s) { cpuBinPath = s; }
-        void SetGPUBinPath(string s) { gpuBinPath = s; }
-        void SetTaskArgs(string s) { taskArgs = s; }
-        string ToStr() {
-            return "cpuBin: " + to_string(cpuBinRAM) + "MB RAM:" + cpuBinPath + 
-                   ", gpuBin: " + to_string(gpuBinRAM) + "MB RAM:" + gpuBinPath + 
+        char* GetStdinBuf()       { return stdinBuf; }
+        int GetStdinBufLen()      { return stdinBufLen; }
+        std::string GetTaskArgs()      { return taskArgs;      }
+        void SetCPUBinPath(std::string s) { cpuBinPath = s; }
+        void SetGPUBinPath(std::string s) { gpuBinPath = s; }
+        void SetTaskArgs(std::string s) { taskArgs = s; }
+        std::string ToStr() {
+            return "cpuBin: " + std::to_string(cpuBinRAM) + "MB RAM:" + cpuBinPath + 
+                   ", gpuBin: " + std::to_string(gpuBinRAM) + "MB RAM:" + gpuBinPath + 
                    ", args: " + taskArgs;
         }
 };
