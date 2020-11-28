@@ -4,6 +4,7 @@ using FileIO
 using Colors
 using ImageTransformations
 using Printf
+using MLDatasets
 
 
 # matrix multiplication
@@ -37,7 +38,7 @@ function fc_backward(fc, output_err, learning_rate)
     weights_err = mult(transpose(fc.input), output_err)
     fc.weights -= learning_rate*weights_err
     diff = learning_rate*output_err
-    for i = 1:size(diff)[1]
+    for i = 1:size(diff, 1)
         fc.bias -= diff[i:i,:]
     end
     return input_err
@@ -76,8 +77,8 @@ end
 
 # loss functions
 function mse(y_true, y_pred)
-    err_arr = zeros(size(y_true)[1], 1)
-    for i = 1:size(y_true)[1]
+    err_arr = zeros(size(y_true, 1), 1)
+    for i = 1:size(y_true, 1)
         err_arr[i, :] .= mean((y_true[i, :] .- y_pred[i, :]).^2)
     end
     return err_arr
@@ -86,8 +87,8 @@ end
 
 function d_mse(y_true, y_pred)
     d_err_arr = zeros(size(y_true)...)
-    for i = 1:size(y_true)[1]
-        d_err_arr[i, :] .= 2*(y_true[i, :] .- y_pred[i, :])/size(y_true)[2]
+    for i = 1:size(y_true, 1)
+        d_err_arr[i, :] .= 2*(y_pred[i, :] .- y_true[i, :])/size(y_true, 2)
     end
     return d_err_arr
 end
@@ -96,7 +97,7 @@ end
 # prediction mapping
 function get_preds(estimates, pred_map)
    preds = [] # will be (num_inputs, 1)
-   for row = 1:size(estimates)[1]
+   for row = 1:size(estimates, 1)
        _, index = findmax(estimates[row, :]) # maximum value in row
        pred = pred_map[index[1]] # matching prediction
        push!(preds, pred) # add to list
@@ -104,13 +105,26 @@ function get_preds(estimates, pred_map)
    return preds
 end
 
+
 # prediction vector
 function onehot(pred, pred_map)
-    index = findall(x->x==pred, pred_map)[1]
-    vec = zeros(size(pred_map)[1])
-    vec[index] = 1.0
-    return vec
+    mat = zeros(size(pred, 1), size(pred_map, 1)) # num_preds x num_features
+    for i = 1:size(pred, 1)
+        index = findall(x->x==pred[i], pred_map)[1]
+        mat[i, index] = 1.0
+    end
+    return mat
 end
+
+
+# randomize data
+function randomize(arr1, arr2)
+    len = size(arr1, 2)
+    temp = hcat(arr1, arr2) # shuffle together
+    temp = temp[shuffle(1:end), :] # shuffle rows
+    return temp[:, 1:len], temp[:, len + 1:end]
+end
+
 
 # network functions
 struct network
@@ -136,6 +150,7 @@ end
 function net_train(net, x_train, y_train, epochs, learning_rate)
     for i = 1:epochs
         # forward prop
+        # x_train, y_train = randomize(x_train, y_train) # randomize data
         output = x_train # 2d output array
         for (layer, prop_f, _) in net.layers
             output = prop_f(layer, output)
@@ -156,78 +171,111 @@ function net_train(net, x_train, y_train, epochs, learning_rate)
 end
 
 
-# prediction map
-pred_map = ["Shiba_Dog", "French_bulldog", "Siberian_husky", "malamute", "German_shepherd", "Labrador_retriever", "Australian_Shepherd", "basset", "Yorkshire_terrier", "golden_retriever"]
-num_features = size(pred_map)[1]
+# # prediction map
+# pred_map = ["Shiba_Dog", "French_bulldog", "Siberian_husky", "malamute", "German_shepherd", "Labrador_retriever", "Australian_Shepherd", "basset", "Yorkshire_terrier", "golden_retriever", "Irish_setter", "Bernese_mountain_dog", "Newfoundland", "Great_Pyrenees", "Bull_mastiff", "Shetland_sheepdog"]
+# num_features = size(pred_map, 1)
+#
+# # size constants
+# const DIM = 64
+# imsize = (DIM, DIM)
+# shape = (1, DIM*DIM)
+#
+# # load training data
+# num_train = 1024
+# x_train = zeros(num_train, DIM*DIM)
+# y_train = zeros(num_train, num_features)
+# image_train_dir = "../images/images_train/"
+# let row_num = 1
+#     for dog_name in readdir(image_train_dir)
+#         if dog_name == ".DS_Store" # skip stupid files
+#             continue
+#         end
+#         full_path = joinpath(image_train_dir, dog_name)
+#         for img_name in readdir(full_path)
+#             if img_name == ".DS_Store" # skip stupid files
+#                 continue
+#             end
+#             img_path = joinpath(full_path, img_name)
+#             img = load(img_path)
+#             img_gray = Gray.(img) # convert to greyscale
+#             img_square = imresize(img_gray, imsize) # resize to square image
+#             img_flat = reshape(img_square, shape) # flatten
+#             img_arr = convert(Array{Float64}, img_flat) # convert to array
+#             x_train[row_num, :] = img_arr # set row to input vector
+#             vec = onehot(dog_name, pred_map) # vector of prediction
+#             y_train[row_num, :] = vec # set row to output vector
+#             row_num += 1
+#             if row_num > num_train
+#                 break
+#             end
+#         end
+#         if row_num > num_train
+#             break
+#         end
+#     end
+# end
+#
+# # load testing data
+# num_test = 128
+# x_test = zeros(num_test, DIM*DIM)
+# y_test = zeros(num_test, num_features)
+# image_test_dir = "../images/images_test/"
+# let row_num = 1
+#     for dog_name in readdir(image_test_dir)
+#         if dog_name == ".DS_Store" # skip stupid files
+#             continue
+#         end
+#         full_path = joinpath(image_test_dir, dog_name)
+#         for img_name in readdir(full_path)
+#             if img_name == ".DS_Store" # skip stupid files
+#                 continue
+#             end
+#             img_path = joinpath(full_path, img_name)
+#             img = load(img_path)
+#             img_gray = Gray.(img) # convert to greyscale
+#             img_square = imresize(img_gray, imsize) # resize to square image
+#             img_flat = reshape(img_square, shape) # flatten
+#             img_arr = convert(Array{Float64}, img_flat) # convert to array
+#             x_test[row_num, :] = img_arr # set row to input vector
+#             vec = onehot(dog_name, pred_map) # vector of prediction
+#             y_test[row_num, :] = vec # set row to output vector
+#             row_num += 1
+#             if row_num > num_test
+#                 break
+#             end
+#         end
+#         if row_num > num_test
+#             break
+#         end
+#     end
+# end
 
-# size constants
-const DIM = 512
-imsize = (DIM, DIM)
-shape = (1, DIM*DIM)
+pred_map = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-# load training data
-num_train = 4
-x_train = zeros(num_train, DIM*DIM)
-y_train = zeros(num_train, num_features)
-image_train_dir = "../images/images_train/"
-let row_num = 1
-    for dogdir_name in readdir(image_train_dir)
-        if dogdir_name == ".DS_Store" # skip stupid files
-            continue
-        end
-        full_path = joinpath(image_train_dir, dogdir_name)
-        for img_name in readdir(full_path)
-            img_path = joinpath(full_path, img_name)
-            img = load(img_path)
-            img_gray = Gray.(img) # convert to greyscale
-            img_square = imresize(img_gray, imsize) # resize to square image
-            img_flat = reshape(img_square, shape) # flatten
-            img_arr = convert(Array{Float64}, img_flat) # convert to array
-            x_train[row_num, :] = img_arr # set row to input vector
-            dog_name = rsplit(dogdir_name, "-")[3] # get actual
-            vec = onehot(dog_name, pred_map) # vector of prediction
-            y_train[row_num, :] = vec # set row to output vector
-            row_num += 1
-        end
-    end
-end
+x_train, y_train = MNIST.traindata(Float64, 1:10000)
+x_test, y_test  = MNIST.testdata(Float64, 1:1000)
+DIM = 28
+num_features = size(pred_map, 1)
 
-# load testing data
-num_test = 2
-x_test = zeros(num_test, DIM*DIM)
-y_test = zeros(num_test, num_features)
-image_test_dir = "../images/images_test/"
-let row_num = 1
-    for dogdir_name in readdir(image_test_dir)
-        if dogdir_name == ".DS_Store" # skip stupid files
-            continue
-        end
-        full_path = joinpath(image_test_dir, dogdir_name)
-        for img_name in readdir(full_path)
-            img_path = joinpath(full_path, img_name)
-            img = load(img_path)
-            img_gray = Gray.(img) # convert to greyscale
-            img_square = imresize(img_gray, imsize) # resize to square image
-            img_flat = reshape(img_square, shape) # flatten
-            img_arr = convert(Array{Float64}, img_flat) # convert to array
-            x_test[row_num, :] = img_arr # set row to input vector
-            dog_name = rsplit(dogdir_name, "-")[3] # get actual
-            vec = onehot(dog_name, pred_map) # vector of prediction
-            y_test[row_num, :] = vec # set row to output vector
-            row_num += 1
-        end
-    end
-end
+x_train = reshape(x_train, (1, DIM*DIM, :))
+x_train = reshape(x_train, (DIM*DIM, :))
+x_train = transpose(x_train)
+y_train = onehot(y_train, pred_map)
+
+x_test = reshape(x_test, (1, DIM*DIM, :))
+x_test = reshape(x_test, (DIM*DIM, :))
+x_test = transpose(x_test)
+y_test = onehot(y_test, pred_map)
 
 # set up layers
 fc1 = fc_layer(:none, :none, :none, :none)
-fc_init(fc1, DIM*DIM, 256) # (num_train, DIMxDIM) -> (num_train, 256)
+fc_init(fc1, DIM*DIM, 128) # (num_train, DIMxDIM) -> (num_train, 128)
 act1 = act_layer(elem_tanh, elem_d_tanh, :none, :none)
 fc2 = fc_layer(:none, :none, :none, :none)
-fc_init(fc2, 256, 64) # (num_train, 256) -> (num_train, 64)
+fc_init(fc2, 128, 64) # (num_train, 128) -> (num_train, 64)
 act2 = act_layer(elem_tanh, elem_d_tanh, :none, :none)
 fc3 = fc_layer(:none, :none, :none, :none)
-fc_init(fc3, 64, 10) # (num_train, 64) -> (num_train, 10)
+fc_init(fc3, 64, num_features) # (num_train, 64) -> (num_train, num_features)
 act3 = act_layer(elem_tanh, elem_d_tanh, :none, :none)
 
 # set up network
@@ -240,7 +288,7 @@ net = network([(fc1, fc_forward, fc_backward),
                 mse, d_mse)
 
 # run training, epochs=50, and learning_rate=0.1
-net_train(net, x_train, y_train, 50, 0.1)
+net_train(net, x_train, y_train, 100, 0.1)
 
 # test
 out = net_pred(net, x_test, pred_map)
@@ -252,5 +300,5 @@ actual = get_preds(y_test, pred_map)
 
 # calculate percent correct
 print("overall accuracy: ")
-print(sum(out .== actual)/size(actual)[1]*100)
+print(sum(out .== actual)/size(actual, 1)*100)
 print("%\n")
