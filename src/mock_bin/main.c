@@ -13,8 +13,6 @@ char stdin_buffer[STDIN_BUFFER_SIZE];
 
 int main() {
     fgets(stdin_buffer, STDIN_BUFFER_SIZE, stdin);
-    printf("in%d got %s ^^^", (int) strlen(stdin_buffer), stdin_buffer);
-    fflush(stdout); // must flush stdout to get it all to scheduler
 
     // parse stdin_buffer to set up to do work
 
@@ -42,11 +40,9 @@ int main() {
     
     // prepare output of the operation for reporting back
     int op_output = microseconds / 2;
-
     const char* end_of_output_str = "_$_end"; // signal to scheduler binary is done outputting 
-    printf("%lld,%d,%s\n", microseconds, op_output, end_of_output_str);
-
-    fflush(stdout); // must flush stdout to get it all to scheduler
+    printf("%lld,%d%s\n", microseconds, op_output, end_of_output_str);
+    fflush(stdout); // _must flush_ stdout to get it all to scheduler
 
     // wait until scheduler finishes accounting output and then terminate on next stdin
     while (true) {

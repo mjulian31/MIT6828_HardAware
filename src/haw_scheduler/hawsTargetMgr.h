@@ -19,6 +19,7 @@ static const char* TaskStatusToStr(TaskStatus ts) {
 
 class HAWSTargetMgr {
     std::list<pid_t> allPids;
+    std::list<pid_t> terminatingPids;
     std::unordered_map<pid_t, std::string> tasksCompleted;
     std::unordered_map<pid_t, std::string> tasksActive;
     std::unordered_map<pid_t, TaskStatus> tasksStatus;
@@ -28,13 +29,14 @@ class HAWSTargetMgr {
     std::unordered_map<pid_t, int> tasksMaxRAM;
     std::unordered_map<pid_t, long> tasksBillableUS;
     std::unordered_map<pid_t, ChildHandle*> tasksHandles;
-    std::unordered_map<pid_t, char*> tasksStdout;
+    std::unordered_map<pid_t, std::string> tasksStdout;
     std::mutex taskLock; 
     std::mutex completionLock; 
     int activeTasks = 0;
     int throttle = 0;
     int freedPhysMB = 0;
     char* stdOutBuffer;
+    std::string endOfStdoutStr = "_$_end";
 
     //CPUCostModel cputCostModel; //object TODO
 
@@ -89,22 +91,49 @@ class HAWSTargetMgr {
         tasksEndTime[pid] = ended;
         tasksStatus[pid] = ts;
         tasksStatusCode[pid] = s_code;
-        tasksCompleted[pid] = "STDOUT"; //TODO
+        tasksCompleted[pid] = tasksStdout[pid].substr(0, tasksStdout[pid].find(endOfStdoutStr));
         tasksActive.erase(pid);
         this->freedPhysMB += tasksMaxRAM[pid];
         tasksBillableUS[pid] = TIMEDIFF_CAST_USEC(tasksEndTime[pid] - tasksStartTime[pid]);
+    }
+
+    void SendTermChildStdin(ChildHandle* handle) {
+        terminatingPids.insert(terminatingPids.begin(), handle->pid);
+        write(handle->pipes[PARENT_WRITE_PIPE][WRITE_FD], "_$_term\n", 8);
+        //printf("TERMINATED IT\n");
+    }
+    void ProcessChildStdout(ChildHandle* handle, char* stdOutBuffer) {
+        bool shouldTerm = false;
+        pid_t pid = handle->pid;
+        taskLock.lock(); // needed ?
+        tasksStdout[pid].append(stdOutBuffer);
+        if (tasksStdout[pid].find(endOfStdoutStr) != std::string::npos) {
+            shouldTerm = true;
+        }
+        taskLock.unlock(); // needed ?
+        printf("STDOUT NOW: %s\n", tasksStdout[pid].c_str());
+        if (shouldTerm) {
+            SendTermChildStdin(handle);
+        }
     }
     void CollectChildrenStdout() {
         std::unordered_map<pid_t, std::string>::iterator it = tasksActive.begin();
         while (it != tasksActive.end()) {
             pid_t pid = it->first;
             ChildHandle* handle = tasksHandles[pid];
-            int count = read(handle->pipes[PARENT_READ_PIPE][READ_FD], stdOutBuffer, sizeof(stdOutBuffer)-1);
-            if (count >= 0) {
-                stdOutBuffer[count] = 0;
-                printf("COLLECT %s\n", stdOutBuffer);
-            } else {
-                printf("readlen 0\n");
+            std::list<pid_t>::iterator termIt = terminatingPids.begin();
+            // only collect stdout from children that have not been told to exit
+            if (std::find(terminatingPids.begin(), terminatingPids.end(), handle->pid) == 
+                terminatingPids.end()) {
+                int count = read(handle->pipes[PARENT_READ_PIPE][READ_FD], 
+                                 stdOutBuffer, sizeof(stdOutBuffer)-1);
+                if (count >= 0) {
+                    stdOutBuffer[count] = 0;
+                    printf("COLLECTED %s\n", stdOutBuffer);
+                    ProcessChildStdout(handle, stdOutBuffer);
+                } else {
+                    printf("readlen 0\n");
+                }
             }
             it++;
         }
@@ -205,6 +234,16 @@ class HAWSTargetMgr {
             stdOutBuffer = (char*) malloc(1024 * 3);
         }
         void Stop () {
+            std::list<pid_t>::iterator it = allPids.begin();
+            while (it != allPids.end()) {
+                printf("STDOUT PID %d: %s\n", *it, tasksStdout[*it].c_str());
+                it++;
+            }
+            std::unordered_map<pid_t, std::string>::iterator mit = tasksCompleted.begin();
+            while (mit != tasksCompleted.end()) {
+                printf("COMPLETED PID %d: %s\n", mit->first, mit->second.c_str());
+                mit++;
+            }
             free(stdOutBuffer);
         }
 
