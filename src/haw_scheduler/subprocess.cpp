@@ -20,14 +20,13 @@ ChildHandle* start_subprocess_nonblocking(char** argv_list) {
     int ret = 1; 
 
     // malloc new pipes 
-    /*
     int** pipes = new int*[2];
     for(int i = 0; i < 2; ++i)
-        pipes[i] = new int[2]; */
+        pipes[i] = new int[2];
 
     // init pipes for parent to write and read
-    //pipe(pipes[PARENT_READ_PIPE]);
-    //pipe(pipes[PARENT_WRITE_PIPE]);
+    pipe(pipes[PARENT_READ_PIPE]);
+    pipe(pipes[PARENT_WRITE_PIPE]);
 
     pid = fork(); 
   
@@ -53,15 +52,15 @@ ChildHandle* start_subprocess_nonblocking(char** argv_list) {
        // the execv() only return if error occured. 
        // The return value is -1 
 
-       //dup2(pipes[PARENT_WRITE_PIPE][READ_FD], STDIN_FILENO);
-       //dup2(pipes[PARENT_READ_PIPE][WRITE_FD], STDOUT_FILENO);
+       dup2(pipes[PARENT_WRITE_PIPE][READ_FD], STDIN_FILENO);
+       dup2(pipes[PARENT_READ_PIPE][WRITE_FD], STDOUT_FILENO);
 
        // close fds not required by child. Also, we don't
        // want the exec'ed program to know these existed 
-       //close(pipes[PARENT_WRITE_PIPE][READ_FD]);
-       //close(pipes[PARENT_WRITE_PIPE][WRITE_FD]);
-       //close(pipes[PARENT_READ_PIPE][READ_FD]);
-       //close(pipes[PARENT_READ_PIPE][WRITE_FD]);
+       close(pipes[PARENT_WRITE_PIPE][READ_FD]);
+       close(pipes[PARENT_WRITE_PIPE][WRITE_FD]);
+       close(pipes[PARENT_READ_PIPE][READ_FD]);
+       close(pipes[PARENT_READ_PIPE][WRITE_FD]);
  
        execv(argv_list[0],argv_list); 
        exit(0);  // not reached?
@@ -74,16 +73,16 @@ ChildHandle* start_subprocess_nonblocking(char** argv_list) {
        //printf("caught pid %d\n", pid);
 
        // close fds not required by parent
-       //close(pipes[PARENT_WRITE_PIPE][READ_FD]);
-       //close(pipes[PARENT_READ_PIPE][WRITE_FD]);
+       close(pipes[PARENT_WRITE_PIPE][READ_FD]);
+       close(pipes[PARENT_READ_PIPE][WRITE_FD]);
 
        handle->pid = pid;
-       //handle->pipes[PARENT_WRITE_PIPE][READ_FD] = pipes[PARENT_WRITE_PIPE][READ_FD];
-       //handle->pipes[PARENT_WRITE_PIPE][WRITE_FD] = pipes[PARENT_WRITE_PIPE][WRITE_FD];
-       //handle->pipes[PARENT_READ_PIPE][READ_FD] = pipes[PARENT_READ_PIPE][READ_FD];
-       //handle->pipes[PARENT_READ_PIPE][WRITE_FD] = pipes[PARENT_READ_PIPE][WRITE_FD];
+       handle->pipes[PARENT_WRITE_PIPE][READ_FD] = pipes[PARENT_WRITE_PIPE][READ_FD];
+       handle->pipes[PARENT_WRITE_PIPE][WRITE_FD] = pipes[PARENT_WRITE_PIPE][WRITE_FD];
+       handle->pipes[PARENT_READ_PIPE][READ_FD] = pipes[PARENT_READ_PIPE][READ_FD];
+       handle->pipes[PARENT_READ_PIPE][WRITE_FD] = pipes[PARENT_READ_PIPE][WRITE_FD];
        return handle;
-   } 
+   }
    return 0;
 }
 

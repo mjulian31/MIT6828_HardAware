@@ -34,6 +34,7 @@ class HAWSTargetMgr {
     int activeTasks = 0;
     int throttle = 0;
     int freedPhysMB = 0;
+    char* stdOutBuffer;
 
     //CPUCostModel cputCostModel; //object TODO
 
@@ -98,15 +99,12 @@ class HAWSTargetMgr {
         while (it != tasksActive.end()) {
             pid_t pid = it->first;
             ChildHandle* handle = tasksHandles[pid];
-            // Read from child’s stdout
-            char* buffer = (char*) malloc(1000);
-            int count = read(handle->pipes[PARENT_READ_PIPE][READ_FD], buffer, sizeof(buffer)-1);
+            int count = read(handle->pipes[PARENT_READ_PIPE][READ_FD], stdOutBuffer, sizeof(stdOutBuffer)-1);
             if (count >= 0) {
-                buffer[count] = 0;
-                printf("COLLECT %s\n", buffer);
+                stdOutBuffer[count] = 0;
+                printf("COLLECT %s\n", stdOutBuffer);
             } else {
                 printf("readlen 0\n");
-                //free(buffer);
             }
             it++;
         }
@@ -132,7 +130,7 @@ class HAWSTargetMgr {
         }
         
         void Monitor () { //SCHEDLOOP THREAD
-            //CollectChildrenStdout();
+            CollectChildrenStdout();
 
             if (throttle % 1000 == 0) { // make sure all invariants are satisfied
                 //printf("-->doing sanity check\n");
@@ -197,6 +195,13 @@ class HAWSTargetMgr {
             int size = this->tasksActive.size(); 
             taskLock.unlock();
             return size;
+        }   
+        void Start() {
+            // Read from child’s stdout
+            stdOutBuffer = (char*) malloc(1024 * 3);
+        }
+        void Stop () {
+            free(stdOutBuffer);
         }
 
         // shelved
