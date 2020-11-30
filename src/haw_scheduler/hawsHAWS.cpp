@@ -165,7 +165,8 @@ void HAWS::RequeueReq(HAWSClientRequest* req) {
 void HAWS::StartTaskCPU(HAWSClientRequest* req) {
     int maxRAM = req->GetCPUBinRAM();
     globalSchedRAMAvail -= maxRAM;
-    int pid = cpuMgr->StartTask(req->GetCPUBinPath(), req->GetTaskArgs(), maxRAM);
+    int pid = cpuMgr->StartTask(req->GetCPUBinPath(), 
+                                req->GetTaskArgs(), req->GetStdinBuf(), maxRAM);
     allCPUPids.insert(allCPUPids.begin(), pid);
     //printf("HAWS/SL: CPU got %s\n", req->ToStr().c_str());
 }
@@ -226,6 +227,8 @@ void HAWS::Start() {
     schedLoopThreadRunning = true;   // schedule loop thread active
     cpuMgr = new HAWSTargetMgr();
     gpuMgr = new HAWSTargetMgr();
+    cpuMgr->Start();
+    gpuMgr->Start();
 }
 
 void HAWS::Stop() {
@@ -236,6 +239,8 @@ void HAWS::Stop() {
     schedLoopThread->join();         // block until thread exits and returns
     globalKillFlag = false;          // reset killswitch
     schedLoopThreadRunning = false;  // schedule loop thread gone
+    cpuMgr->Stop();
+    gpuMgr->Stop();
     this->PrintData();
 }
 

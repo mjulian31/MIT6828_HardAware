@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <sys/types.h> 
 #include <unistd.h>  
-//#include <stdlib.h> 
 #include <cstdlib>
 #include <errno.h>   
 #include <sys/wait.h> 
@@ -9,10 +8,6 @@
 
 // stdin / stdout piping stuff from  
 // https://jineshkj.wordpress.com/2006/12/22/how-to-capture-stdin-stdout-and-stderr-of-child-program/
-
-ssize_t subprocess_read(int fd, void *buf, size_t count) {
-    return read(fd, buf, count);
-}
 
 ChildHandle* start_subprocess_nonblocking(char** argv_list) {
     pid_t  pid; 
@@ -58,9 +53,9 @@ ChildHandle* start_subprocess_nonblocking(char** argv_list) {
        // close fds not required by child. Also, we don't
        // want the exec'ed program to know these existed 
        close(pipes[PARENT_WRITE_PIPE][READ_FD]);
-       close(pipes[PARENT_WRITE_PIPE][WRITE_FD]);
-       close(pipes[PARENT_READ_PIPE][READ_FD]);
        close(pipes[PARENT_READ_PIPE][WRITE_FD]);
+       close(pipes[PARENT_READ_PIPE][READ_FD]);
+       close(pipes[PARENT_WRITE_PIPE][WRITE_FD]);
  
        execv(argv_list[0],argv_list); 
        exit(0);  // not reached?
@@ -75,7 +70,9 @@ ChildHandle* start_subprocess_nonblocking(char** argv_list) {
        // close fds not required by parent
        close(pipes[PARENT_WRITE_PIPE][READ_FD]);
        close(pipes[PARENT_READ_PIPE][WRITE_FD]);
-
+        
+       write(pipes[PARENT_WRITE_PIPE][WRITE_FD], "ZYXWVUTSRQPONMLKGIHGFEDCBA\n", 27);
+       //write(pipes[PARENT_WRITE_PIPE][WRITE_FD], "#_$_stdin_end\n", 14);
        handle->pid = pid;
        handle->pipes[PARENT_WRITE_PIPE][READ_FD] = pipes[PARENT_WRITE_PIPE][READ_FD];
        handle->pipes[PARENT_WRITE_PIPE][WRITE_FD] = pipes[PARENT_WRITE_PIPE][WRITE_FD];

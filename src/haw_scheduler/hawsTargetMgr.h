@@ -111,11 +111,11 @@ class HAWSTargetMgr {
     }
     public:
         HAWSTargetMgr () { }
-        int StartTask(std::string binpath, std::string args, int maxRAM) {
+        int StartTask(std::string binpath, std::string args, std::string stdin_buf, int maxRAM) {
             char* argv_list[] = { (char*) binpath.c_str(), (char*) args.c_str(), (char*) 0 };
             ChildHandle* handle = start_subprocess_nonblocking(argv_list);
-            pid_t pid = handle->pid;
             time_point start_time = std::chrono::system_clock::now();
+            pid_t pid = handle->pid;
             taskLock.lock();
             allPids.insert(allPids.begin(), pid);
             tasksActive[pid] = binpath + " " + args;
@@ -126,6 +126,10 @@ class HAWSTargetMgr {
             tasksBillableUS[pid] = 0;
             tasksHandles[pid] = handle;
             taskLock.unlock();
+            // send input to binary
+            //sleep(1);
+            //printf("writing stdin %s \n", "afirsttest\n");
+            //write(handle->pipes[PARENT_WRITE_PIPE][WRITE_FD], "afirsttest\n", 11);
             return pid;
         }
         

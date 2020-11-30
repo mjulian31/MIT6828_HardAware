@@ -18,13 +18,15 @@ void haws_test_phys_mem_management2(HAWS* haws);
 void haws_test_v4_8k(HAWS* haws);
 void haws_test_billing(HAWS* haws);
 void haws_test_stdout_cap(HAWS* haws);
+void haws_test_stdin_stdout_cap(HAWS* haws);
 
 #define TEST_MEMCAP haws_test_phys_mem_management
 #define TEST_8K haws_test_v4_8k
 #define TEST_BILLING haws_test_billing
 #define TEST_STDOUTCAP haws_test_stdout_cap
+#define TEST_STDIN_STDOUT_CAP haws_test_stdin_stdout_cap
 
-#define SINGLE_TEST TEST_MEMCAP
+#define SINGLE_TEST TEST_STDIN_STDOUT_CAP
 
 //rr1 - current verion v4
 //cpu
@@ -190,13 +192,28 @@ void haws_test_billing(HAWS* haws) {
     haws->Stop();
 }
 
+
 void haws_test_stdout_cap(HAWS* haws) {
     haws->Start();
     for (int i = 0; i < 1; i++) {
         HAWSClientRequest* r  = new HAWSClientRequest("/usr/bin/echo", 1,
                                                       "/usr/bin/echo", 1,
                                                       (char*) "this is my first test\n", 22,
-                                                      "12345678987654321");
+                                                      "ABCDEFGHIJ");
+        haws->HardAwareSchedule(r);
+    }
+    sleep(1);
+    while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
+    haws->Stop();
+}
+
+void haws_test_stdin_stdout_cap(HAWS* haws) {
+    haws->Start();
+    for (int i = 0; i < 1; i++) {
+        HAWSClientRequest* r  = new HAWSClientRequest("/opt/haws/bin/mockbin", 12,
+                                                      "/opt/haws/bin/mockbin", 12,
+                                                      (char*) "this is my first test\n", 22,
+                                                      "2 3 4");
         haws->HardAwareSchedule(r);
     }
     sleep(1);
