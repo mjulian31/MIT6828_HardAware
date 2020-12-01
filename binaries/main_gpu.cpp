@@ -5,7 +5,7 @@
 #include <cuda_runtime.h>
 #include <nvrtc.h>
 #include <builtin_types.h>
-#include <string>
+#include <string.h>
 #include <stdbool.h>
 #include <time.h>
 #include <sys/time.h>
