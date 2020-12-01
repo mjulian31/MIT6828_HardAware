@@ -7,7 +7,6 @@
 #include <time.h>
 #include <sys/time.h>
 
-#define TERM_SIGNAL_BUFFER_SIZE 10
 #define STDIN_BUFFER_SIZE (1024 * 1024 * 10) // support 10MB of input
 
 // timing functions (microseconds)
@@ -222,6 +221,18 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "error opening file %s\n", filename);
 		exit(EXIT_FAILURE);
 	}
+	char wall_time[317 + 2];
+	sprintf(wall_time, "%f\n", end_wall - start_wall);
+	if (fputs(wall_time, outfile) < 0) {
+		fprintf(stderr, "error writing to file %s\n", filename);
+		exit(EXIT_FAILURE);
+	}
+	char cpu_time[317 + 2];
+	sprintf(cpu_time, "%f\n", end_cpu - start_cpu);
+	if (fputs(cpu_time, outfile) < 0) {
+		fprintf(stderr, "error writing to file %s\n", filename);
+		exit(EXIT_FAILURE);
+	}
 	if (fputs(matstring_out, outfile) < 0) {
 		fprintf(stderr, "error writing to file %s\n", filename);
 		exit(EXIT_FAILURE);
@@ -240,12 +251,8 @@ int main(int argc, char *argv[]) {
 	free(output_check);
 	#endif
 
-	printf("%f,%f,%i\n", end_wall - start_wall, end_cpu - start_cpu, pid);
-	fflush(stdout); // _must flush_ stdout to get it all to scheduler
-
-	// wait for ok to terminate (next stdin)
-	char end[TERM_SIGNAL_BUFFER_SIZE];
-	scanf("%s", end);
+	printf("wall time %f, cpu time %f, pid %i\n", end_wall - start_wall, end_cpu - start_cpu, pid);
+	fflush(stdout);
 
 	exit(0);
 }
