@@ -41,7 +41,7 @@ int main() {
     
     // prepare output of the operation for reporting back
     int op_output = mypid; //example
-    const char* end_of_output_str = "_$_end"; // signal to scheduler binary is done outputting 
+    const char* end_of_output_str = "@"; // signal to scheduler binary is done outputting 
     printf("%lld,%d%s\n", microseconds, op_output, end_of_output_str);
     fflush(stdout); // _must flush_ stdout to get it all to scheduler
 

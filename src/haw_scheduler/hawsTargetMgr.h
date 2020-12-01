@@ -32,13 +32,14 @@ class HAWSTargetMgr {
     std::unordered_map<pid_t, std::string> tasksStdout;
     std::unordered_map<pid_t, char*> tasksStdoutBuff;
     std::unordered_map<pid_t, int> tasksStdoutBuffLen;
+    std::unordered_map<pid_t, int> tasksStdoutBuffScan;
     std::mutex taskLock; 
     std::mutex completionLock; 
     int activeTasks = 0;
     int throttle = 0;
     int freedPhysMB = 0;
     char* stdOutBuffer;
-    std::string endOfStdoutStr = "_$_end";
+    std::string endOfStdoutStr = "@";
 
     //CPUCostModel cputCostModel; //object TODO
 
@@ -125,11 +126,18 @@ class HAWSTargetMgr {
         tasksStdoutBuffLen[pid] += strlen(stdOutBuffer);
         tasksStdoutBuff[pid][tasksStdoutBuffLen[pid] + 1] = (char) NULL; // terminate new string
 
-        printf("STDOUT NOW: %s\n", tasksStdoutBuff[pid]);
+        //printf("STDOUT NOW: %s\n", tasksStdoutBuff[pid]);
 
-        if (strstr(tasksStdoutBuff[pid], endOfStdoutStr.c_str()) != NULL) {
-            SendTermChildStdin(handle);
+        for (int i = tasksStdoutBuffScan[pid]; i < tasksStdoutBuffLen[pid]; i++) {
+            tasksStdoutBuffScan[pid] = i; 
+            if (tasksStdoutBuff[pid][i] == '@') {
+                SendTermChildStdin(handle);
+                break;
+            }
         }
+
+        //if (strstr(tasksStdoutBuff[pid], endOfStdoutStr.c_str()) != NULL) {
+        //}
     }
     void CollectChildrenStdout() {
         std::unordered_map<pid_t, std::string>::iterator it = tasksActive.begin();
@@ -171,6 +179,7 @@ class HAWSTargetMgr {
             tasksHandles[pid] = handle;
             tasksStdoutBuff[pid] = (char*) malloc(1024);
             tasksStdoutBuffLen[pid] = 0;
+            tasksStdoutBuffScan[pid] = 0;
             taskLock.unlock();
             // send input to binary
             //sleep(1);
