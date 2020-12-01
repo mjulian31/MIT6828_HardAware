@@ -30,6 +30,8 @@ class HAWSTargetMgr {
     std::unordered_map<pid_t, long> tasksBillableUS;
     std::unordered_map<pid_t, ChildHandle*> tasksHandles;
     std::unordered_map<pid_t, std::string> tasksStdout;
+    std::unordered_map<pid_t, char*> tasksStdoutBuff;
+    std::unordered_map<pid_t, int> tasksStdoutBuffLen;
     std::mutex taskLock; 
     std::mutex completionLock; 
     int activeTasks = 0;
@@ -91,6 +93,8 @@ class HAWSTargetMgr {
         tasksEndTime[pid] = ended;
         tasksStatus[pid] = ts;
         tasksStatusCode[pid] = s_code;
+        std::string cppStdOut(tasksStdoutBuff[pid]);
+        tasksStdout[pid] = cppStdOut;
         tasksCompleted[pid] = tasksStdout[pid].substr(0, tasksStdout[pid].find(endOfStdoutStr));
         tasksActive.erase(pid);
         this->freedPhysMB += tasksMaxRAM[pid];
@@ -106,13 +110,24 @@ class HAWSTargetMgr {
         bool shouldTerm = false;
         pid_t pid = handle->pid;
         //taskLock.lock(); // needed ?
-        tasksStdout[pid].append(stdOutBuffer);
-        if (tasksStdout[pid].find(endOfStdoutStr) != std::string::npos) {
+
+        //tasksStdout[pid].append(stdOutBuffer);
+        /*if (tasksStdout[pid].find(endOfStdoutStr) != std::string::npos) {
             shouldTerm = true;
-        }
+        }*/
         //taskLock.unlock(); // needed ?
         //printf("STDOUT NOW: %s\n", tasksStdout[pid].c_str());
-        if (shouldTerm) {
+
+        // append new output to stdout buffer       
+        memcpy(tasksStdoutBuff[pid] + (tasksStdoutBuffLen[pid] * sizeof(char)), 
+               stdOutBuffer, 
+               strlen(stdOutBuffer));
+        tasksStdoutBuffLen[pid] += strlen(stdOutBuffer);
+        tasksStdoutBuff[pid][tasksStdoutBuffLen[pid] + 1] = (char) NULL; // terminate new string
+
+        printf("STDOUT NOW: %s\n", tasksStdoutBuff[pid]);
+
+        if (strstr(tasksStdoutBuff[pid], endOfStdoutStr.c_str()) != NULL) {
             SendTermChildStdin(handle);
         }
     }
@@ -154,6 +169,8 @@ class HAWSTargetMgr {
             tasksMaxRAM[pid] = maxRAM;
             tasksBillableUS[pid] = 0;
             tasksHandles[pid] = handle;
+            tasksStdoutBuff[pid] = (char*) malloc(1024);
+            tasksStdoutBuffLen[pid] = 0;
             taskLock.unlock();
             // send input to binary
             //sleep(1);

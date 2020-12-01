@@ -44,7 +44,8 @@ int main () {
 }
 
 void haws_test_1(HAWS* haws) {
-    HAWSClientRequest* r1 = new HAWSClientRequest("/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
+    HAWSClientRequest* r1 = new HAWSClientRequest("cpu", 
+                                                  "/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
                                                   "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
                                                   (char*) "", 0,
                                                   "4096");
@@ -59,23 +60,28 @@ void haws_test_1(HAWS* haws) {
 }
 
 void haws_test_2(HAWS* haws) {
-    HAWSClientRequest r1("/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
+    HAWSClientRequest r1("cpu",
+                         "/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
                          "/opt/haws/bin/matmul_gpu", gpuBinRAMBase, 
                          (char*) "", 0,
                          "64");
-    HAWSClientRequest r2("/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
+    HAWSClientRequest r2("cpu",
+                         "/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
                          "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
                          (char*) "", 0,
                          "1024");
-    HAWSClientRequest r3("/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
+    HAWSClientRequest r3("cpu",
+                         "/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
                          "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
                          (char*) "", 0,
                          "2048");
-    HAWSClientRequest r4("/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
+    HAWSClientRequest r4("cpu",
+                         "/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
                          "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
                          (char*) "", 0,
                          "2048");
-    HAWSClientRequest r5("/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
+    HAWSClientRequest r5("cpu",
+                         "/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
                          "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
                          (char*) "", 0,
                          "4096"); 
@@ -95,15 +101,18 @@ void haws_test_2(HAWS* haws) {
 }
 
 void haws_test_3(HAWS* haws) {
-    HAWSClientRequest r1("/usr/local/bin/julia", cpuBinRAM2048,
+    HAWSClientRequest r1("cpu",
+                         "/usr/local/bin/julia", cpuBinRAM2048,
                          "/usr/local/bin/julia", gpuBinRAMBase,
                          (char*) "", 0,
                          "/home/local/git/MIT6828_HardAware/julia_code/matrix_multiply.jl");
-    HAWSClientRequest r2("/usr/local/bin/julia", cpuBinRAM2048,
+    HAWSClientRequest r2("cpu",
+                         "/usr/local/bin/julia", cpuBinRAM2048,
                          "/usr/local/bin/julia", gpuBinRAMBase,
                          (char*) "", 0,
                          "/home/local/git/MIT6828_HardAware/julia_code/matrix_multiply.jl");
-    HAWSClientRequest r3("/usr/local/bin/julia", cpuBinRAM2048,
+    HAWSClientRequest r3("cpu",
+                         "/usr/local/bin/julia", cpuBinRAM2048,
                          "/usr/local/bin/julia", gpuBinRAMBase,
                          (char*) "", 0,
                          "/home/local/git/MIT6828_HardAware/julia_code/matrix_multiply.jl");
@@ -120,7 +129,8 @@ void haws_test_3(HAWS* haws) {
 }
 
 void haws_test_4(HAWS* haws) {
-     HAWSClientRequest r1("ls", 1,
+     HAWSClientRequest r1("cpu",
+                          "ls", 1,
                           "ls", 1,
                           (char*) "", 0,
                           (char*) "");
@@ -138,7 +148,8 @@ void haws_test_5(HAWS* haws) {
 void haws_test_phys_mem_management(HAWS* haws) {
     haws->Start();
     for (int i = 0; i < 4000; i++) {
-        HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_cpu_v4", cpuBinRAM2048,
+        HAWSClientRequest* r = new HAWSClientRequest("cpu",
+                                                     "/opt/haws/bin/matmul_cpu_v4", cpuBinRAM2048,
                                                      "/opt/haws/bin/matmul_gpu_v4", gpuBinRAMBase,
                                                      (char*) "", 0,
                                                      "1024");
@@ -153,7 +164,8 @@ void haws_test_phys_mem_management(HAWS* haws) {
 void haws_test_phys_mem_management2(HAWS* haws) {
     haws->Start();
     for (int i = 0; i < 38; i++) {
-        HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_cpu", cpuBinRAM8k,
+        HAWSClientRequest* r = new HAWSClientRequest("cpu",
+                                                     "/opt/haws/bin/matmul_cpu", cpuBinRAM8k,
                                                      "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
                                                      (char*) "", 0,
                                                      "8k");
@@ -167,7 +179,8 @@ void haws_test_phys_mem_management2(HAWS* haws) {
 void haws_test_v4_8k(HAWS* haws) {
     haws->Start();
     for (int i = 0; i < 31; i++) {
-        HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_cpu_v4", cpuBinRAM8k,
+        HAWSClientRequest* r = new HAWSClientRequest("cpu",
+                                                     "/opt/haws/bin/matmul_cpu_v4", cpuBinRAM8k,
                                                      "/opt/haws/bin/matmul_gpu_v4", gpuBinRAMBase,
                                                      (char *) "", 0,
                                                      "8192");
@@ -181,7 +194,8 @@ void haws_test_v4_8k(HAWS* haws) {
 void haws_test_billing(HAWS* haws) {
     haws->Start();
     for (int i = 0; i < 31; i++) {
-        HAWSClientRequest* r  = new HAWSClientRequest("/opt/haws/bin/matmul_cpu_v4", cpuBinRAM1024,
+        HAWSClientRequest* r  = new HAWSClientRequest("cpu",
+                                                      "/opt/haws/bin/matmul_cpu_v4", cpuBinRAM1024,
                                                       "/opt/haws/bin/matmul_gpu_v4", gpuBinRAMBase,
                                                       (char*) "", 0,
                                                       "1024");
@@ -196,7 +210,8 @@ void haws_test_billing(HAWS* haws) {
 void haws_test_stdout_cap(HAWS* haws) {
     haws->Start();
     for (int i = 0; i < 1; i++) {
-        HAWSClientRequest* r  = new HAWSClientRequest("/usr/bin/echo", 1,
+        HAWSClientRequest* r  = new HAWSClientRequest("cpu",
+                                                      "/usr/bin/echo", 1,
                                                       "/usr/bin/echo", 1,
                                                       (char*) "this is my first test\n", 22,
                                                       "ABCDEFGHIJ");
@@ -210,7 +225,8 @@ void haws_test_stdout_cap(HAWS* haws) {
 void haws_test_stdin_stdout_cap(HAWS* haws) {
     haws->Start();
     for (int i = 0; i < 400; i++) {
-        HAWSClientRequest* r  = new HAWSClientRequest("/opt/haws/bin/mockbin", 12,
+        HAWSClientRequest* r  = new HAWSClientRequest("cpu",
+                                                      "/opt/haws/bin/mockbin", 12,
                                                       "/opt/haws/bin/mockbin", 12,
                                                       (char*) "this is my first test\n", 22,
                                                       "2 3 4");
@@ -224,7 +240,8 @@ void haws_test_stdin_stdout_cap(HAWS* haws) {
 void haws_test_gpu_mgmt(HAWS* haws) {
     haws->Start();
     for (int i = 0; i < 100; i++) {
-        HAWSClientRequest* r = new HAWSClientRequest("/opt/haws/bin/matmul_gpu", cpuBinRAMGPUBase,
+        HAWSClientRequest* r = new HAWSClientRequest("gpu",
+                                                     "/opt/haws/bin/matmul_gpu", cpuBinRAMGPUBase,
                                                      "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
                                                      (char*) "", 0,
                                                      "1024");
