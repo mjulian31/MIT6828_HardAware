@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "subprocess.h"
 #include <cstring>
+#include <string>
 
 // stdin / stdout piping stuff from  
 // https://jineshkj.wordpress.com/2006/12/22/how-to-capture-stdin-stdout-and-stderr-of-child-program/
@@ -129,7 +130,7 @@ int start_subprocess_nonblocking_julia_test(char* julia_bin_path, char* julia_sc
 
 pid_t start_subprocess_nonblocking_monitor(char** argv_list) {
    int print_state_throttle = 0;
-   ChildHandle *handle = start_subprocess_nonblocking(argv_list); 
+   ChildHandle *handle = start_subprocess_nonblocking(argv_list, ""); 
    pid_t pid = handle->pid;
    int status; 
    pid_t state;

@@ -6,6 +6,9 @@
 #include <unordered_map>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <fstream>
+#include <string>
 
 #include "subprocess.h"
 #include "hawsUtil.h"
@@ -96,6 +99,10 @@ class HAWSTargetMgr {
                 tasksActive.size(), allPids.size());
         
     }
+    bool FileExists(std::string name) {
+        struct stat buffer;   
+        return (stat (name.c_str(), &buffer) == 0);
+    }
     void TaskCompleteAccountingProtected(pid_t pid, TaskStatus ts, int s_code, time_point ended) {
         tasksEndTime[pid] = ended;
         tasksStatus[pid] = ts;
@@ -104,11 +111,15 @@ class HAWSTargetMgr {
             std::string cppStdOut(tasksStdoutBuff[pid]);
             tasksStdout[pid] = cppStdOut;
         } else if (COMM_FILE) {
-            std::string filepath = "/opt/haws/bin/" + std::to_string(pid) + ".txt";
-            std::ifstream f(filepath);
-            std::stringstream buffer;
-            buffer << f.rdbuf(); 
-            tasksStdout[pid] = buffer.str(); 
+            std::string filepath = "/opt/haws/bin/out/" + std::to_string(pid) + ".txt";
+            char* c_filepath = (char*) filepath.c_str();
+            if (!FileExists(filepath)) {
+                assert(false); // binary did not drop the right outfile
+            }
+            std::ifstream infile(c_filepath);
+            std::string content((std::istreambuf_iterator<char>(infile)),
+                                (std::istreambuf_iterator<char>()));
+            tasksStdout[pid] = content;
         } else {
             assert(false); //not implemented
         }

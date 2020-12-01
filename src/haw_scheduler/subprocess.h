@@ -3,6 +3,7 @@
 
 #include <unistd.h>
 #include <stdio.h>
+#include <string>
 
 /* since pipes are unidirectional, we need two pipes.
    one for data to flow from parent's stdout to child's
@@ -25,8 +26,7 @@ typedef struct ChildHandle {
 #define WRITE_FD 1
 
 // production use
-ChildHandle* start_subprocess_nonblocking(char**);
-ssize_t subprocess_read(int fd, void* buf, size_t nchar);
+ChildHandle* start_subprocess_nonblocking(char** argv_list, std::string stdin_buff);
 
 // testing
 // block and wait for child process example
