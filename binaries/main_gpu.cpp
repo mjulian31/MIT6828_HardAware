@@ -160,6 +160,7 @@ int main(int argc, char **argv) {
 
   // read pid from stdin
   int pid;
+  printf("pid: ")
   scanf("%i", &pid);
 
   // host mem
@@ -321,7 +322,7 @@ int main(int argc, char **argv) {
 	free(h_output_check);
 	#endif
 
-	printf("wall time %f, cpu time %f, pid %i\n", end_wall - start_wall, end_cpu - start_cpu, pid);
+	printf("wall time %f us, cpu time %f us, pid %i\n", end_wall - start_wall, end_cpu - start_cpu, pid);
 	fflush(stdout);
 
 	exit(0);
