@@ -10,7 +10,8 @@
 #include "subprocess.h"
 #include "hawsUtil.h"
 
-bool COMM_STDOUT = true;
+bool COMM_STDOUT = false;
+bool COMM_FILE = true;
 
 static const char* TaskStatusToStr(TaskStatus ts) {
     return ts == TASK_RUNNING ? "TASK_RUNNING " :
@@ -102,6 +103,14 @@ class HAWSTargetMgr {
         if (COMM_STDOUT) {
             std::string cppStdOut(tasksStdoutBuff[pid]);
             tasksStdout[pid] = cppStdOut;
+        } else if (COMM_FILE) {
+            std::string filepath = "/opt/haws/bin/" + std::to_string(pid) + ".txt";
+            std::ifstream f(filepath);
+            std::stringstream buffer;
+            buffer << f.rdbuf(); 
+            tasksStdout[pid] = buffer.str(); 
+        } else {
+            assert(false); //not implemented
         }
         tasksCompleted[pid] = tasksStdout[pid].substr(0, tasksStdout[pid].find(endOfStdoutStr));
         tasksActive.erase(pid);
@@ -168,8 +177,12 @@ class HAWSTargetMgr {
     public:
         HAWSTargetMgr () { }
         int StartTask(std::string binpath, std::string args, std::string stdin_buf, int maxRAM) {
-            char* argv_list[] = { (char*) binpath.c_str(), (char*) args.c_str(), (char*) 0 };
-            ChildHandle* handle = start_subprocess_nonblocking(argv_list);
+            char* argv_list[] = { 
+                (char*) binpath.c_str(), 
+                (char*) args.c_str(), 
+                (char*) 0 
+            };
+            ChildHandle* handle = start_subprocess_nonblocking(argv_list, stdin_buf);
             time_point start_time = std::chrono::system_clock::now();
             pid_t pid = handle->pid;
             taskLock.lock();

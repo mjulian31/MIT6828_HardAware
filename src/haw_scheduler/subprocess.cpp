@@ -11,7 +11,7 @@
 // stdin / stdout piping stuff from  
 // https://jineshkj.wordpress.com/2006/12/22/how-to-capture-stdin-stdout-and-stderr-of-child-program/
 
-ChildHandle* start_subprocess_nonblocking(char** argv_list) {
+ChildHandle* start_subprocess_nonblocking(char** argv_list, std::string stdin_buff) {
     pid_t  pid; 
     ChildHandle* handle = (ChildHandle*) malloc(sizeof(ChildHandle));
     int ret = 1; 
@@ -72,10 +72,14 @@ ChildHandle* start_subprocess_nonblocking(char** argv_list) {
        // close fds not required by parent
        close(pipes[PARENT_WRITE_PIPE][READ_FD]);
        close(pipes[PARENT_READ_PIPE][WRITE_FD]);
-      
+     
+       // write in pid first
        char pidStr[15];
        sprintf(pidStr, "%d\n", pid); 
        write(pipes[PARENT_WRITE_PIPE][WRITE_FD], pidStr, strlen(pidStr));
+
+       // write in formal standardinput
+       write(pipes[PARENT_WRITE_PIPE][WRITE_FD], stdin_buff.c_str(), strlen(stdin_buff.c_str()));
 
        //write(pipes[PARENT_WRITE_PIPE][WRITE_FD], "#_$_stdin_end\n", 14);
        handle->pid = pid;
