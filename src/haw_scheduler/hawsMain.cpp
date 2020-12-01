@@ -209,7 +209,7 @@ void haws_test_stdout_cap(HAWS* haws) {
 
 void haws_test_stdin_stdout_cap(HAWS* haws) {
     haws->Start();
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 400; i++) {
         HAWSClientRequest* r  = new HAWSClientRequest("/opt/haws/bin/mockbin", 12,
                                                       "/opt/haws/bin/mockbin", 12,
                                                       (char*) "this is my first test\n", 22,

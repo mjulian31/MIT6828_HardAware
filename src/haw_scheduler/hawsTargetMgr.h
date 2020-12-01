@@ -105,13 +105,13 @@ class HAWSTargetMgr {
     void ProcessChildStdout(ChildHandle* handle, char* stdOutBuffer) {
         bool shouldTerm = false;
         pid_t pid = handle->pid;
-        taskLock.lock(); // needed ?
+        //taskLock.lock(); // needed ?
         tasksStdout[pid].append(stdOutBuffer);
         if (tasksStdout[pid].find(endOfStdoutStr) != std::string::npos) {
             shouldTerm = true;
         }
-        taskLock.unlock(); // needed ?
-        printf("STDOUT NOW: %s\n", tasksStdout[pid].c_str());
+        //taskLock.unlock(); // needed ?
+        //printf("STDOUT NOW: %s\n", tasksStdout[pid].c_str());
         if (shouldTerm) {
             SendTermChildStdin(handle);
         }
@@ -129,7 +129,7 @@ class HAWSTargetMgr {
                                  stdOutBuffer, sizeof(stdOutBuffer)-1);
                 if (count >= 0) {
                     stdOutBuffer[count] = 0;
-                    printf("COLLECTED %s\n", stdOutBuffer);
+                    //printf("COLLECTED %s\n", stdOutBuffer);
                     ProcessChildStdout(handle, stdOutBuffer);
                 } else {
                     printf("readlen 0\n");

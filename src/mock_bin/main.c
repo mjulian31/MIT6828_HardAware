@@ -14,7 +14,8 @@ char stdin_buffer[STDIN_BUFFER_SIZE];
 int main() {
     fgets(stdin_buffer, STDIN_BUFFER_SIZE, stdin);
 
-    // parse stdin_buffer to set up to do work
+    // parse command line args and stdin_buffer to set up to do work
+    int mypid = atoi(stdin_buffer);
 
     // begin profiled billable work
     auto start = std::chrono::high_resolution_clock::now();
@@ -39,7 +40,7 @@ int main() {
     long long microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
     
     // prepare output of the operation for reporting back
-    int op_output = microseconds / 2;
+    int op_output = mypid; //example
     const char* end_of_output_str = "_$_end"; // signal to scheduler binary is done outputting 
     printf("%lld,%d%s\n", microseconds, op_output, end_of_output_str);
     fflush(stdout); // _must flush_ stdout to get it all to scheduler

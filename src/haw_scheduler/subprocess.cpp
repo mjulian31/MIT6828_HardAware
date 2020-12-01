@@ -4,7 +4,9 @@
 #include <cstdlib>
 #include <errno.h>   
 #include <sys/wait.h> 
+#include <stdlib.h>
 #include "subprocess.h"
+#include <cstring>
 
 // stdin / stdout piping stuff from  
 // https://jineshkj.wordpress.com/2006/12/22/how-to-capture-stdin-stdout-and-stderr-of-child-program/
@@ -70,8 +72,11 @@ ChildHandle* start_subprocess_nonblocking(char** argv_list) {
        // close fds not required by parent
        close(pipes[PARENT_WRITE_PIPE][READ_FD]);
        close(pipes[PARENT_READ_PIPE][WRITE_FD]);
-        
-       write(pipes[PARENT_WRITE_PIPE][WRITE_FD], "ZYXWVUTSRQPONMLKGIHGFEDCBA\n", 27);
+      
+       char pidStr[15];
+       sprintf(pidStr, "%d\n", pid); 
+       write(pipes[PARENT_WRITE_PIPE][WRITE_FD], pidStr, strlen(pidStr));
+
        //write(pipes[PARENT_WRITE_PIPE][WRITE_FD], "#_$_stdin_end\n", 14);
        handle->pid = pid;
        handle->pipes[PARENT_WRITE_PIPE][READ_FD] = pipes[PARENT_WRITE_PIPE][READ_FD];
