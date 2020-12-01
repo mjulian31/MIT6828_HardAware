@@ -160,7 +160,7 @@ int main(int argc, char **argv) {
 
   // read pid from stdin
   int pid;
-  printf("pid: ")
+  printf("pid: ");
   scanf("%i", &pid);
 
   // host mem
