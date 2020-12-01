@@ -224,12 +224,13 @@ void haws_test_stdout_cap(HAWS* haws) {
 
 void haws_test_stdin_stdout_cap(HAWS* haws) {
     haws->Start();
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 500; i++) {
         HAWSClientRequest* r  = new HAWSClientRequest("cpu",
                                                       "/opt/haws/bin/mockbin_file", 12,
                                                       "/opt/haws/bin/mockbin_file", 12,
                                                       (char*) "this is my first test\n", 22,
                                                       "2 3 4");
+        usleep(10);
         haws->HardAwareSchedule(r);
     }
     sleep(1);

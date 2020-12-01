@@ -35,9 +35,11 @@ class HAWSTargetMgr {
     std::unordered_map<pid_t, long> tasksBillableUS;
     std::unordered_map<pid_t, ChildHandle*> tasksHandles;
 
+    // file monitoring - set COMM_FILE true to use
     std::unordered_map<pid_t, std::string> tasksStdout;
     std::unordered_map<pid_t, std::string> tasksCompleted;
 
+    // stdout monitoring - set COMM_STDOUT true to use 
     std::unordered_map<pid_t, char*> tasksStdoutBuff;
     std::unordered_map<pid_t, int> tasksStdoutBuffLen;
     std::unordered_map<pid_t, int> tasksStdoutBuffScan;
@@ -112,14 +114,17 @@ class HAWSTargetMgr {
             tasksStdout[pid] = cppStdOut;
         } else if (COMM_FILE) {
             std::string filepath = "/opt/haws/bin/out/" + std::to_string(pid) + ".txt";
-            char* c_filepath = (char*) filepath.c_str();
             if (!FileExists(filepath)) {
                 assert(false); // binary did not drop the right outfile
             }
-            std::ifstream infile(c_filepath);
+            std::ifstream infile(filepath.c_str());
             std::string content((std::istreambuf_iterator<char>(infile)),
                                 (std::istreambuf_iterator<char>()));
+            assert(content.length() > 0); // there was nothing in the file
             tasksStdout[pid] = content;
+            if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
+                assert(false);
+            }
         } else {
             assert(false); //not implemented
         }

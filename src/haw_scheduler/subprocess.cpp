@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "subprocess.h"
 #include <cstring>
+#include <cassert>
 #include <string>
 
 // stdin / stdout piping stuff from  
@@ -75,9 +76,11 @@ ChildHandle* start_subprocess_nonblocking(char** argv_list, std::string stdin_bu
        close(pipes[PARENT_READ_PIPE][WRITE_FD]);
      
        // write in pid first
-       char pidStr[15];
-       sprintf(pidStr, "%d\n", pid); 
-       write(pipes[PARENT_WRITE_PIPE][WRITE_FD], pidStr, strlen(pidStr));
+       //char pidStr[15];
+       //sprintf(pidStr, "%d\n", pid); 
+       std::string pidStr = std::to_string(pid) + "\n";
+       assert(pidStr.length() > 0);
+       write(pipes[PARENT_WRITE_PIPE][WRITE_FD], pidStr.c_str(), strlen(pidStr.c_str()));
 
        // write in formal standardinput
        write(pipes[PARENT_WRITE_PIPE][WRITE_FD], stdin_buff.c_str(), strlen(stdin_buff.c_str()));
