@@ -1,4 +1,4 @@
-// #include <malloc.h>
+#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -206,8 +206,7 @@ int main(int argc, char *argv[]) {
 	if (count > 0) {
 		fprintf(stderr, "%i wrong of %i\n", count, N*M);
 		exit(EXIT_FAILURE);
-	}
-	else printf("all good!\n");
+	} else printf("all good!\n");
 	#endif
 
 	// load result into matrix string

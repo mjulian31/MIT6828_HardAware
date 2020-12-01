@@ -7,6 +7,25 @@
 #include <builtin_types.h>
 #include <string>
 #include <stdbool.h>
+#include <time.h>
+#include <sys/time.h>
+
+#define STDIN_BUFFER_SIZE (1024 * 1024 * 10) // support 10MB of input
+
+// timing functions (microseconds)
+double get_wall_time(){
+    struct timeval time;
+    if (gettimeofday(&time,NULL)){
+        //  Handle error
+        return 0;
+    }
+    return (double)time.tv_sec * 1e+6 + (double)time.tv_usec;
+}
+
+double get_cpu_time(){
+    return (double)clock() / CLOCKS_PER_SEC * 1e+6;
+}
+
 
 static inline void check_errors(CUresult res, std::string name) {
   if (res != CUDA_SUCCESS) {
@@ -14,6 +33,7 @@ static inline void check_errors(CUresult res, std::string name) {
     exit(EXIT_FAILURE);
   }
 }
+
 
 #ifdef ERR_CHECK
 void basic_matmul(double* out, double* A, double* B, int N, int R, int M) {
@@ -27,13 +47,14 @@ void basic_matmul(double* out, double* A, double* B, int N, int R, int M) {
 }
 #endif
 
+
 /**
  *load matrix from string of the form [1 2 3; 4 5 6] of size NxM
  *returns the double* to the col-major stored matrix
  */
 double* load_matrix(char* matrix_string, int N, int M) {
   char *str1, *str2, *line, *elem;
-  char *saveptr1, *saveptr2;
+  char *saveptr1, *saveptr2, *saveptr3;
   double* matrix = reinterpret_cast<double *>(malloc(sizeof(double) * N * M));
 
   int col = 0;
@@ -54,15 +75,47 @@ double* load_matrix(char* matrix_string, int N, int M) {
       if (elem == NULL)
         break;
 
-      matrix[col*N + row] = atoi(elem);
+      matrix[row*N + col] = strtof(elem, &saveptr3);
       row ++;
     }
-
     col ++;
   }
 
   return matrix;
 }
+
+
+/**
+ * encode column-major matrix of size NxM to string of the form [1 2 3; 4 5 6]
+ * returns the char* to the matrix string representation
+ */
+char* encode_matrix(double* matrix, int N, int M) {
+	// (number of ; N + [] 2 + num spaces M*N + number of numbers N*M * number size sizeof(double) + null terminator)* sizeof(char)
+	char* matrix_string = reinterpret_cast<char *>(malloc((N + 2 + M*N + M*N*sizeof(double) + 1) * sizeof(char)));
+	int NUM_SIZE = sizeof(double) + 2;
+  int i = 0;
+	matrix_string[i] = '[';
+	i++;
+
+	for (int row = 0; row < N; row++) {
+		for (int col = 0; col < M; col++) {
+			char temp_string[NUM_SIZE];
+			sprintf(temp_string, "%f ", matrix[N*col + row]);
+			for (int j = 0; j < NUM_SIZE - 1; j++) {
+				matrix_string[i] = temp_string[j];
+				i ++;
+			}
+		}
+		matrix_string[i] = ';';
+		i ++;
+	}
+	matrix_string[i] = ']';
+	i ++;
+	matrix_string[i] = '\0';
+
+	return matrix_string;
+}
+
 
 /**
  * Host main routine
@@ -86,17 +139,13 @@ int main(int argc, char **argv) {
   int N = 1024;
 	int R = 1024;
 	int M = 1024;
-  char* matstringA = NULL;
-  char* matstringB = NULL;
-  bool rand = true;
+  bool random = true;
 
-  if (argc >= 6) {
-    rand = false;
+  if (argc >= 5) {
     N = atoi(argv[1]);
 		R = atoi(argv[2]);
 		M = atoi(argv[3]);
-    matstringA = argv[4];
-    matstringB = argv[5];
+    if (strcmp(argv[4], "norand") == 0) random = false;
   } else if (argc >= 4) {
 		N = atoi(argv[1]);
 		R = atoi(argv[2]);
@@ -106,8 +155,13 @@ int main(int argc, char **argv) {
 		R = N;
 		M = N;
 	}
-	printf("[dims %dx%d %dx%d -> %dx%d]\n", N, R, R, M, N, M);
+	printf("[dims %dx%d %dx%d -> %dx%d] [random? %i]\n", N, R, R, M, N, M, random);
 
+  // read pid from stdin
+  int pid;
+  scanf("%i", &pid);
+
+  // host mem
   double *h_A;
   double *h_B;
   double *h_output = reinterpret_cast<double *>(malloc(sizeof(double) * N * M));
@@ -121,7 +175,7 @@ int main(int argc, char **argv) {
   }
   #endif
 
-  if (rand) {
+  if (random) {
     // allocate the host input matricies
     h_A = reinterpret_cast<double *>(malloc(sizeof(double) * N * R));
     h_B = reinterpret_cast<double *>(malloc(sizeof(double) * R * M));
@@ -144,9 +198,19 @@ int main(int argc, char **argv) {
       }
     }
   } else {
-    // load matrices from matrix strings
-    h_A = load_matrix(matstringA, N, R);
-    h_B = load_matrix(matstringB, R, M);
+		// read arrays from stdin
+		char* matinput = malloc(sizeof(char) * STDIN_BUFFER_SIZE);
+	  char* matstringA;
+	  char* matstringB;
+		char* rest;
+		printf("matrices: ");
+		scanf("\n");
+		fgets(matinput, STDIN_BUFFER_SIZE, stdin);
+		matstringA = strtok_r(matinput, "[]\n", &rest);
+		matstringB = strtok_r(NULL, "[]\n", &rest);
+		A = load_matrix(matstringA, N, R);
+		B = load_matrix(matstringB, R, M);
+		free(matinput);
 
     // verify that allocations succeeded
     if (h_A == NULL || h_B == NULL) {
@@ -175,6 +239,9 @@ int main(int argc, char **argv) {
   dim3 cudaGridSize(blocksPerRow, blocksPerCol, 1);
 
   void *arr[] = {&d_output, &d_A, &d_B, &N, &R, &M};
+  // call kernel and time function
+  double start_cpu = get_cpu_time();
+	double start_wall = get_wall_time();
   check_errors(cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
                                  cudaGridSize.z, /* grid dim */
                                  cudaBlockSize.x, cudaBlockSize.y,
@@ -183,6 +250,8 @@ int main(int argc, char **argv) {
                                  &arr[0],         /* arguments */
                                  0), "kernel launch");
   check_errors(cuCtxSynchronize(), "sync");
+  double end_cpu = get_cpu_time();
+	double end_wall = get_wall_time();
 
   // copy device result to host
   check_errors(cuMemcpyDtoH(h_output, d_output, sizeof(double) * N * M), "host to device copy");
@@ -204,14 +273,55 @@ int main(int argc, char **argv) {
       }
     }
   }
-	if (count > 0) fprintf(stderr, "%i wrong of %i avg diff %f\n", count, N*M, diff/(N*M));
-	else printf("all good!\n");
+	if (count > 0) {
+		fprintf(stderr, "%i wrong of %i\n", count, N*M);
+		exit(EXIT_FAILURE);
+	} else printf("all good!\n");
   #endif
 
-  // Free host memory
-  free(h_A);
-  free(h_B);
-  free(h_output);
+  // load result into matrix string
+	char* matstring_out = encode_matrix(output, N, M);
 
-  return 0;
+	// save result to out/<pid>.txt
+  char filename[4 + pid/10 + 4 + 1];
+  sprintf(filename, "out/%d.txt", pid);
+	FILE* outfile = fopen(filename, "w+");
+	if (outfile == NULL) {
+		fprintf(stderr, "error opening file %s\n", filename);
+		exit(EXIT_FAILURE);
+	}
+	char wall_time[317 + 2];
+	sprintf(wall_time, "%f\n", end_wall - start_wall);
+	if (fputs(wall_time, outfile) < 0) {
+		fprintf(stderr, "error writing to file %s\n", filename);
+		exit(EXIT_FAILURE);
+	}
+	char cpu_time[317 + 2];
+	sprintf(cpu_time, "%f\n", end_cpu - start_cpu);
+	if (fputs(cpu_time, outfile) < 0) {
+		fprintf(stderr, "error writing to file %s\n", filename);
+		exit(EXIT_FAILURE);
+	}
+	if (fputs(matstring_out, outfile) < 0) {
+		fprintf(stderr, "error writing to file %s\n", filename);
+		exit(EXIT_FAILURE);
+	}
+	if (fclose(outfile) < 0) {
+		fprintf(stderr, "error closing file %s\n", filename);
+		exit(EXIT_FAILURE);
+	}
+
+	// free mem
+	free(matstring_out);
+	free(A);
+	free(B);
+	free(output);
+	#ifdef ERR_CHECK
+	free(output_check);
+	#endif
+
+	printf("wall time %f, cpu time %f, pid %i\n", end_wall - start_wall, end_cpu - start_cpu, pid);
+	fflush(stdout);
+
+	exit(0);
 }
