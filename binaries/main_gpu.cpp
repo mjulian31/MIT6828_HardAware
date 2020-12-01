@@ -5,6 +5,7 @@
 #include <cuda_runtime.h>
 #include <nvrtc.h>
 #include <builtin_types.h>
+#include <string>
 #include <string.h>
 #include <stdbool.h>
 #include <time.h>
@@ -199,7 +200,7 @@ int main(int argc, char **argv) {
     }
   } else {
 		// read arrays from stdin
-		char* matinput = malloc(sizeof(char) * STDIN_BUFFER_SIZE);
+		char* matinput = reinterpret_cast<char *>(malloc(sizeof(char) * STDIN_BUFFER_SIZE));
 	  char* matstringA;
 	  char* matstringB;
 		char* rest;
@@ -208,8 +209,8 @@ int main(int argc, char **argv) {
 		fgets(matinput, STDIN_BUFFER_SIZE, stdin);
 		matstringA = strtok_r(matinput, "[]\n", &rest);
 		matstringB = strtok_r(NULL, "[]\n", &rest);
-		A = load_matrix(matstringA, N, R);
-		B = load_matrix(matstringB, R, M);
+		h_A = load_matrix(matstringA, N, R);
+		h_B = load_matrix(matstringB, R, M);
 		free(matinput);
 
     // verify that allocations succeeded
@@ -280,7 +281,7 @@ int main(int argc, char **argv) {
   #endif
 
   // load result into matrix string
-	char* matstring_out = encode_matrix(output, N, M);
+	char* matstring_out = encode_matrix(h_output, N, M);
 
 	// save result to out/<pid>.txt
   char filename[4 + pid/10 + 4 + 1];
@@ -313,11 +314,11 @@ int main(int argc, char **argv) {
 
 	// free mem
 	free(matstring_out);
-	free(A);
-	free(B);
-	free(output);
+	free(h_A);
+	free(h_B);
+	free(h_output);
 	#ifdef ERR_CHECK
-	free(output_check);
+	free(h_output_check);
 	#endif
 
 	printf("wall time %f, cpu time %f, pid %i\n", end_wall - start_wall, end_cpu - start_cpu, pid);
