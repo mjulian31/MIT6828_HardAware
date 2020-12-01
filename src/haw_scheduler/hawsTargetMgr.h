@@ -10,6 +10,8 @@
 #include "subprocess.h"
 #include "hawsUtil.h"
 
+bool COMM_STDOUT = true;
+
 static const char* TaskStatusToStr(TaskStatus ts) {
     return ts == TASK_RUNNING ? "TASK_RUNNING " :
            ts == TASK_FINISHED_SUCCESS ? "TASK_FINISHED_SUCCESS" :
@@ -20,7 +22,6 @@ static const char* TaskStatusToStr(TaskStatus ts) {
 class HAWSTargetMgr {
     std::list<pid_t> allPids;
     std::list<pid_t> terminatingPids;
-    std::unordered_map<pid_t, std::string> tasksCompleted;
     std::unordered_map<pid_t, std::string> tasksActive;
     std::unordered_map<pid_t, TaskStatus> tasksStatus;
     std::unordered_map<pid_t, int> tasksStatusCode;
@@ -29,10 +30,14 @@ class HAWSTargetMgr {
     std::unordered_map<pid_t, int> tasksMaxRAM;
     std::unordered_map<pid_t, long> tasksBillableUS;
     std::unordered_map<pid_t, ChildHandle*> tasksHandles;
+
     std::unordered_map<pid_t, std::string> tasksStdout;
+    std::unordered_map<pid_t, std::string> tasksCompleted;
+
     std::unordered_map<pid_t, char*> tasksStdoutBuff;
     std::unordered_map<pid_t, int> tasksStdoutBuffLen;
     std::unordered_map<pid_t, int> tasksStdoutBuffScan;
+
     std::mutex taskLock; 
     std::mutex completionLock; 
     int activeTasks = 0;
@@ -94,8 +99,10 @@ class HAWSTargetMgr {
         tasksEndTime[pid] = ended;
         tasksStatus[pid] = ts;
         tasksStatusCode[pid] = s_code;
-        std::string cppStdOut(tasksStdoutBuff[pid]);
-        tasksStdout[pid] = cppStdOut;
+        if (COMM_STDOUT) {
+            std::string cppStdOut(tasksStdoutBuff[pid]);
+            tasksStdout[pid] = cppStdOut;
+        }
         tasksCompleted[pid] = tasksStdout[pid].substr(0, tasksStdout[pid].find(endOfStdoutStr));
         tasksActive.erase(pid);
         this->freedPhysMB += tasksMaxRAM[pid];
@@ -108,36 +115,33 @@ class HAWSTargetMgr {
         //printf("TERMINATED IT\n");
     }
     void ProcessChildStdout(ChildHandle* handle, char* stdOutBuffer) {
-        bool shouldTerm = false;
         pid_t pid = handle->pid;
+        bool useCPPStrs = false;
         //taskLock.lock(); // needed ?
 
-        //tasksStdout[pid].append(stdOutBuffer);
-        /*if (tasksStdout[pid].find(endOfStdoutStr) != std::string::npos) {
-            shouldTerm = true;
-        }*/
-        //taskLock.unlock(); // needed ?
-        //printf("STDOUT NOW: %s\n", tasksStdout[pid].c_str());
-
-        // append new output to stdout buffer       
-        memcpy(tasksStdoutBuff[pid] + (tasksStdoutBuffLen[pid] * sizeof(char)), 
-               stdOutBuffer, 
-               strlen(stdOutBuffer));
-        tasksStdoutBuffLen[pid] += strlen(stdOutBuffer);
-        tasksStdoutBuff[pid][tasksStdoutBuffLen[pid] + 1] = (char) NULL; // terminate new string
-
-        //printf("STDOUT NOW: %s\n", tasksStdoutBuff[pid]);
-
-        for (int i = tasksStdoutBuffScan[pid]; i < tasksStdoutBuffLen[pid]; i++) {
-            tasksStdoutBuffScan[pid] = i; 
-            if (tasksStdoutBuff[pid][i] == '@') {
+        if (useCPPStrs) {
+            tasksStdout[pid].append(stdOutBuffer);
+            //printf("STDOUT NOW: %s\n", tasksStdout[pid].c_str());
+            if (tasksStdout[pid].find(endOfStdoutStr) != std::string::npos) {
                 SendTermChildStdin(handle);
-                break;
+            }
+        } else {
+            // append new output to stdout buffer       
+            memcpy(tasksStdoutBuff[pid] + (tasksStdoutBuffLen[pid] * sizeof(char)), 
+                   stdOutBuffer, 
+                   strlen(stdOutBuffer));
+            tasksStdoutBuffLen[pid] += strlen(stdOutBuffer);
+            tasksStdoutBuff[pid][tasksStdoutBuffLen[pid] + 1] = (char) NULL; // terminate new string
+            //printf("STDOUT NOW: %s\n", tasksStdoutBuff[pid]);
+            for (int i = tasksStdoutBuffScan[pid]; i < tasksStdoutBuffLen[pid]; i++) {
+                tasksStdoutBuffScan[pid] = i; 
+                if (tasksStdoutBuff[pid][i] == '@') {
+                    SendTermChildStdin(handle);
+                    break;
+                }
             }
         }
-
-        //if (strstr(tasksStdoutBuff[pid], endOfStdoutStr.c_str()) != NULL) {
-        //}
+        //taskLock.unlock(); // needed ?
     }
     void CollectChildrenStdout() {
         std::unordered_map<pid_t, std::string>::iterator it = tasksActive.begin();
@@ -189,7 +193,9 @@ class HAWSTargetMgr {
         }
         
         void Monitor () { //SCHEDLOOP THREAD
-            CollectChildrenStdout();
+            if (COMM_STDOUT) {
+                CollectChildrenStdout();
+            }
 
             if (throttle % 1000 == 0) { // make sure all invariants are satisfied
                 //printf("-->doing sanity check\n");
