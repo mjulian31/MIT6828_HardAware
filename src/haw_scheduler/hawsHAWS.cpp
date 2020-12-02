@@ -97,10 +97,9 @@ void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, tim
        assert(NOT_IN_LIST(allGPUPids, pid));
        billableCPUus += cpuMgr->TaskConclude(pid, task_status, status, ended); 
    } else if (IN_LIST(allGPUPids, pid)) {
-       assert(false); //NOT IMPLEMENTED
        assert(gpuMgr->TaskIsActive(pid));
        assert(NOT_IN_LIST(allCPUPids, pid));
-       //gpuMgr->ConcludeTask(p, task_status, status); 
+       billableGPUus += gpuMgr->TaskConclude(pid, task_status, status, ended); 
    }
 }
 
@@ -177,7 +176,7 @@ void HAWS::StartTaskGPU(HAWSClientRequest* req) {
     int maxRAM = req->GetCPUBinRAM();
     //globalSchedRAMAvail -= maxRAM;
     printf("HAWS: Starting GPU Task\n");
-    int pid = cpuMgr->StartTask(req->GetCPUBinPath(),
+    int pid = gpuMgr->StartTask(req->GetCPUBinPath(),
                                 req->GetTaskArgs(),
                                 req->GetStdinBuf(), req->GetStdinBufLen(), maxRAM);
     allGPUPids.insert(allGPUPids.begin(), pid);
@@ -227,6 +226,7 @@ void HAWS::PrintData() {
     float billableCents = centsPerUnitTimeCPU * billableCPUus;
     printf("HAWS: Billable CPU cents: %f cents (%f$)\n", billableCents, billableCents / 100);
     cpuMgr->PrintData();
+    gpuMgr->PrintData();
 }
 
 void HAWS::Start() {
@@ -236,8 +236,8 @@ void HAWS::Start() {
     schedLoopThread = new std::thread(HAWS::ScheduleLoop); // start schedule loop
     globalKillFlag = false;          // disable killswitch for schedule loop 
     schedLoopThreadRunning = true;   // schedule loop thread active
-    cpuMgr = new HAWSTargetMgr();
-    gpuMgr = new HAWSTargetMgr();
+    cpuMgr = new HAWSTargetMgr("cpu");
+    gpuMgr = new HAWSTargetMgr("gpu");
     cpuMgr->Start();
     gpuMgr->Start();
 }

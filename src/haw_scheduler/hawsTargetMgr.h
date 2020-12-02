@@ -24,6 +24,7 @@ static const char* TaskStatusToStr(TaskStatus ts) {
 }
 
 class HAWSTargetMgr {
+    std::string targStr;
     std::list<pid_t> allPids;
     std::list<pid_t> terminatingPids;
     std::unordered_map<pid_t, std::string> tasksActive;
@@ -97,7 +98,7 @@ class HAWSTargetMgr {
         }
     }
     void PrintDataProtected () { // holding lock
-        printf("TARGMGR/CPU | processes %ld/%ld active/all\n", 
+        printf("TARGMGR/%s | processes %ld/%ld active/all\n", this->targStr.c_str(),
                 tasksActive.size(), allPids.size());
         
     }
@@ -190,8 +191,13 @@ class HAWSTargetMgr {
             it++;
         }
     }
+
+    // ------ PUBLIC BELOW ------
+
     public:
-        HAWSTargetMgr () { }
+        HAWSTargetMgr (std::string targStr) { 
+            this->targStr = targStr;
+        }
         int StartTask(std::string binpath, std::string args, 
                       char* stdin_buf, int stdin_buff_len, int maxRAM) {
             printf("HWMGR/CPU: starting subprocess 1\n");
