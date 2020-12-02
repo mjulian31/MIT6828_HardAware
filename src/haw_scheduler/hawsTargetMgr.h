@@ -122,9 +122,9 @@ class HAWSTargetMgr {
                                 (std::istreambuf_iterator<char>()));
             assert(content.length() > 0); // there was nothing in the file
             tasksStdout[pid] = content;
-            //if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
-            //    assert(false);
-            //}
+            if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
+                assert(false);
+            }
         } else {
             assert(false); //not implemented
         }

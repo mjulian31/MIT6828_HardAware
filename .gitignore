@@ -2,3 +2,6 @@
 *.swp
 src/haw_scheduler/haws
 test/large
+binaries/matmul_cpu
+binaries/matmul_gpu
+binaries/matmul_gpu.ptx

@@ -173,6 +173,16 @@ void HAWS::StartTaskCPU(HAWSClientRequest* req) {
     //printf("HAWS/SL: CPU got %s\n", req->ToStr().c_str());
 }
 
+void HAWS::StartTaskGPU(HAWSClientRequest* req) {
+    int maxRAM = req->GetCPUBinRAM();
+    //globalSchedRAMAvail -= maxRAM;
+    printf("HAWS: Starting GPU Task\n");
+    int pid = cpuMgr->StartTask(req->GetCPUBinPath(),
+                                req->GetTaskArgs(),
+                                req->GetStdinBuf(), req->GetStdinBufLen(), maxRAM);
+    allGPUPids.insert(allGPUPids.begin(), pid);
+}
+
 void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
     HAWSHWTarget HWTarget = DetermineReqTarget(req);
     if (HWTarget == TargCPU) {
@@ -182,15 +192,14 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
             StartTaskCPU(req);        
         }
     } else if (HWTarget == TargGPU) {
-        //int success gpuMgr->StartTask(req->GetGPUBinPath(), req->GetTaskArgs());
-        //assert(success == 0);
+        StartTaskGPU(req);
     } else {
         assert(false); // "hardware target not implemented"
     }
 }
 
 HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) {
-    bool shouldUseCPU = true;
+    bool shouldUseCPU = req->GetTarget() == "cpu";
 
     //TODO consult extra hints or profiling info to pick target intelligently
     // do analysis to determine if should use CPU or gpu

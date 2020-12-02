@@ -43,6 +43,7 @@ class HAWS {
         static void ProcessClientRequest(HAWSClientRequest* req);
         static void RequeueReq(HAWSClientRequest* req);
         static void StartTaskCPU(HAWSClientRequest* req);
+        static void StartTaskGPU(HAWSClientRequest* req);
         static HAWSHWTarget DetermineReqTarget(HAWSClientRequest* req);
 
         void ParseFields();
