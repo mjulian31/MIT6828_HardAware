@@ -4,8 +4,20 @@
 #include <stdlib.h> 
 #include <netinet/in.h> 
 #include <string.h> 
- 
-int haws_socket_listen(int port) {
+#include <cassert>
+#include <fcntl.h>
+
+#include "hawsHAWS.h"
+
+
+bool socket_set_blocking(int fd, bool blocking) { // SOCKET THREAD
+   int flags = fcntl(fd, F_GETFL, 0);
+   if (flags == -1) return false;
+   flags = blocking ? (flags & ~O_NONBLOCK) : (flags | O_NONBLOCK);
+   return (fcntl(fd, F_SETFL, flags) == 0) ? true : false;
+}
+
+int haws_socket_listen(int port) { // SOCKET THREAD
     int server_fd, new_socket, valread; 
     struct sockaddr_in address; 
     int opt = 1; 
@@ -28,7 +40,7 @@ int haws_socket_listen(int port) {
     } 
     address.sin_family = AF_INET; 
     address.sin_addr.s_addr = INADDR_ANY; 
-    address.sin_port = htons( PORT ); 
+    address.sin_port = htons( port ); 
        
     // Forcefully attaching socket to the port 8080 
     if (bind(server_fd, (struct sockaddr *)&address,  
@@ -48,24 +60,37 @@ int haws_socket_listen(int port) {
         perror("accept"); 
         exit(EXIT_FAILURE); 
     } 
-    return new_socket
+    int success = socket_set_blocking(new_socket, false);
+    assert(success);
+    printf("SOCKET: accepted\n");
+    return new_socket;
 }
 
-#define SOCKET_READ_BUF_SIZE (1024 * 1024 * 1024 * 50)
-int haws_socket_loop(int socket) { // SOCKET THREAD
-    char* socket_read_buf = (char*) malloc(SOCKET_READ_BUF_SIZE);
-    int socket_fd = haws_socket_listen(socket); // waits until connection opened
-    while true () {
-        int bytes_in = socket_read(socket_fd, socket_read_buf);
-        printf("read: %d - '%s'\n", valread, socket_read_buf); 
-    }
-    free(socket_read_buf);
-}
+// 50MB coming in per request
+uint64_t socket_read_buf_size = ((uint64_t)1024 * (uint64_t)1024 * (uint64_t)1024 * (uint64_t)50);
 
 int socket_read(int socket, char* buffer) { // SOCKET THREAD
-    char *hello = "Hello from server";
-    valread = read(socket, buffer, SOCKET_READ_BUF_SIZE);
+    //char *hello = "Hello from server";
+    //printf("SOCKET: read...\n");
+    int valread = read(socket, buffer, socket_read_buf_size);
+    //printf("SOCKET: ...read %d\n", valread);
     //send(new_socket , hello , strlen(hello) , 0 ); 
     //printf("Hello message sent\n"); 
     return valread; 
 }
+void haws_socket_loop(int socket) { // SOCKET THREAD
+    printf("SOCKET: hello from loop\n");
+    printf("SOCKET: listening...\n");
+    int socket_fd = haws_socket_listen(socket); // blocks until connection opened
+    printf("SOCKET: ...accepted\n");
+    char* socket_read_buf = (char*) malloc(socket_read_buf_size);
+    while (!globalKillFlag) {
+        int bytes_in = socket_read(socket_fd, socket_read_buf);
+        if (bytes_in > 0) {
+            printf("SOCKET: read: %d - '%s'\n", bytes_in, socket_read_buf); 
+        }
+        usleep(1);
+    }
+    free(socket_read_buf);
+}
+

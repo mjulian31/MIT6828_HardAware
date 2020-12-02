@@ -6,10 +6,14 @@
 //#include <assert.h>
 
 #include <mutex>
+#include <thread>
+
 #include "hawsClientRequest.h"
 #include "hawsUtil.h"
 
 //using namespace std;
+
+extern bool globalKillFlag;
 
 enum HAWSHWTarget { TargCPU, TargGPU };
 
@@ -24,6 +28,10 @@ class HAWS {
     private:
         bool schedLoopThreadRunning;
         std::thread* schedLoopThread;
+
+        bool sockThreadClient1Running;
+        std::thread* sockThreadClient1;
+        int portClient1 = 8080;
 
         std::mutex tasksActiveLock;
         //Map cpuTaskIDs[TaskID] -> status

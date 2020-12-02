@@ -2,11 +2,32 @@
 #include <assert.h>
 #include <thread>
 #include <unistd.h>
+//socket stuff
+#include <sys/socket.h> 
+#include <arpa/inet.h> 
+#include <string.h> 
+
 #include "hawsHAWS.h"
 #include "subprocess.h"
 
+#include "hawsTestSocket.h"
+
 //#define NDEBUG  // turn asserts off
 #undef NDEBUG   // turn asserts on
+
+int numTests = 0;
+
+#define FAIL(test_name) \
+    printf("TEST FAIL: test_name\n"); \
+    exit(1);
+
+#define RUN_TEST(test_name) \
+    if ((test_name)() != 0) { \
+        FAIL(test_name); \
+    } else { \
+        printf("TEST PASS: " #test_name "\n"); \
+    } \
+    numTests++;
 
 void haws_test_1(HAWS* haws);
 void haws_test_2(HAWS* haws);
@@ -42,8 +63,12 @@ int cpuBinRAMGPUBase = 2;
 int gpuBinRAMBase = 2;
 
 int main () {
-    HAWS haws;
-    SINGLE_TEST(&haws);
+    //HAWS haws;
+    //SINGLE_TEST(&haws);
+    RUN_TEST(haws_test_socket_bringup);
+
+    printf("\n\n");
+    printf("%d TESTS PASSED\n", numTests);
 }
 
 void haws_test_1(HAWS* haws) {
@@ -285,3 +310,4 @@ void haws_test_matmul_gpu_prod1(HAWS* haws) {
     while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
     haws->Stop();
 }
+

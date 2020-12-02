@@ -8,7 +8,6 @@
 
 #include <assert.h>
 #include <mutex>
-#include <thread>
 #include <queue>
 #include <sys/wait.h>
 #include "hawsUtil.h"
@@ -16,6 +15,7 @@
 #include "hawsTargetMgr.h"
 #include "hawsGPUMgr.h"
 #include "hawsClientRequest.h"
+#include "socket.h"
 
 //using namespace std;
 
@@ -232,10 +232,15 @@ void HAWS::PrintData() {
 void HAWS::Start() {
     assert(!schedLoopThreadRunning); // must be stopped before started
     hawsStartTime = std::chrono::system_clock::now();
+    // start schedule loop
     printf("HAWS: Starting ScheduleLoop\n");
-    schedLoopThread = new std::thread(HAWS::ScheduleLoop); // start schedule loop
-    globalKillFlag = false;          // disable killswitch for schedule loop 
-    schedLoopThreadRunning = true;   // schedule loop thread active
+    schedLoopThread = new std::thread(HAWS::ScheduleLoop);    
+    // start client1 socket loop
+    printf("HAWS: Starting SocketLoop (Client1)\n");
+    sockThreadClient1 = new std::thread(haws_socket_loop, this->portClient1); 
+    globalKillFlag = false;          // disable killswitch for schedule loop and socket loops
+    schedLoopThreadRunning = true;       // schedule loop thread active
+    sockThreadClient1Running = true; // socket loop thread active
     cpuMgr = new HAWSTargetMgr("cpu");
     gpuMgr = new HAWSTargetMgr("gpu");
     cpuMgr->Start();
@@ -244,14 +249,25 @@ void HAWS::Start() {
 
 void HAWS::Stop() {
     assert(schedLoopThreadRunning);  // must be started before stopped
+    assert(sockThreadClient1Running);  // must be started before stopped
+
     hawsStopTime = std::chrono::system_clock::now();
-    printf("HAWS: Stopping ScheduleLoop\n");
+
     globalKillFlag = true;           // enable killswitch for schedule loop thread
-    schedLoopThread->join();         // block until thread exits and returns
-    globalKillFlag = false;          // reset killswitch
-    schedLoopThreadRunning = false;  // schedule loop thread gone
+    printf("HAWS: Stopping ScheduleLoop\n");
+    schedLoopThread->join();              // block until thread exits and returns
+    schedLoopThreadRunning = false;   // schedule loop thread gone
+
+    printf("HAWS: Stopping Socket (Client1)\n");
+    sockThreadClient1->join();            // block until thread exits and returns
+    sockThreadClient1Running = false; // sock loop thread gone
+
+    // stop target managers
     cpuMgr->Stop();
     gpuMgr->Stop();
+
+    globalKillFlag = false;          // reset killswitch
+
     this->PrintData();
 }
 
