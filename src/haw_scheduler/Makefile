@@ -1,10 +1,10 @@
 
 
-haws: hawsMain.o subprocess.o hawsHAWS.o 
-	g++ -o haws hawsMain.o subprocess.o hawsHAWS.o -lpthread
+haws: hawsTest.o subprocess.o hawsHAWS.o 
+	g++ -o haws hawsTest.o subprocess.o hawsHAWS.o -lpthread
 
-hawsMain.o: hawsMain.cpp
-	g++ -c hawsMain.cpp  hawsClientRequest.h 
+hawsTest.o: hawsTest.cpp
+	g++ -c hawsTest.cpp  hawsClientRequest.h 
 
 subprocess.o: subprocess.cpp  subprocess.h
 	g++ -c subprocess.cpp subprocess.h
