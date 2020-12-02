@@ -26,7 +26,8 @@ typedef struct ChildHandle {
 #define WRITE_FD 1
 
 // production use
-ChildHandle* start_subprocess_nonblocking(char** argv_list, char* stdin_buff, int stdin_buff_len);
+ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args, 
+                                          char* stdin_buff, int stdin_buff_len);
 
 // testing
 // block and wait for child process example

@@ -195,16 +195,10 @@ class HAWSTargetMgr {
         int StartTask(std::string binpath, std::string args, 
                       char* stdin_buf, int stdin_buff_len, int maxRAM) {
             printf("HWMGR/CPU: starting subprocess 1\n");
-            char* argv_list[] = { 
-                (char*) binpath.c_str(), 
-                (char*) "3", 
-                (char*) "4",
-                (char*) "2",
-                (char*) "norand",
-                (char*) 0 
-            };
+
             printf("HWMGR/CPU: starting subprocess 2\n");
-            ChildHandle* handle = start_subprocess_nonblocking(argv_list, stdin_buf, stdin_buff_len);
+            ChildHandle* handle = start_subprocess_nonblocking(binpath, args, 
+                                                               stdin_buf, stdin_buff_len);
             time_point start_time = std::chrono::system_clock::now();
             pid_t pid = handle->pid;
             taskLock.lock();

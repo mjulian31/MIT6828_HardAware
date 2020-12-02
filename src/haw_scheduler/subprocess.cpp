@@ -9,30 +9,51 @@
 #include <cstring>
 #include <cassert>
 #include <string>
+#include <iostream>
+#include <vector>
+#include <sstream>
 
 // stdin / stdout piping stuff from  
 // https://jineshkj.wordpress.com/2006/12/22/how-to-capture-stdin-stdout-and-stderr-of-child-program/
 
-ChildHandle* start_subprocess_nonblocking(char** argv_list, char* stdin_buff, int stdin_buff_len) {
+ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,    
+                                          char* stdin_buff, int stdin_buff_len) {
     pid_t  pid; 
     printf("SUBPROCESS: alloc ChildHandle\n");
     ChildHandle* handle = (ChildHandle*) malloc(sizeof(ChildHandle));
     int ret = 1; 
 
-    // malloc new pipes 
+    // set up command line args array
+    std::stringstream ss(args);
+    std::vector<std::string> tokens;
+    std::string temp_str;
+    while (getline(ss, temp_str, ' ')) { // tokenize incoming string
+        tokens.push_back(temp_str);
+    } 
+    // two extra spots; 1 for bin path and 1 for null terminator
+    char** argv_list = (char**) calloc(2 + tokens.size(), sizeof(char*));
+    int i = 0;
+    argv_list[i] = (char*) binpath.c_str();
+    printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]);
+    for (i = i + 1; i <= tokens.size(); i++) {
+        argv_list[i] = (char*) tokens[i - 1].c_str();
+        printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]); 
+    }
+    argv_list[i+1] = (char*) 0;
+    printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]); 
+    //argv_list now has [binpath, arg1, arg2, ..., argN, 0], read for execve
+
+    // malloc new pipes for handle
     int** pipes = new int*[2];
     for(int i = 0; i < 2; ++i)
         pipes[i] = new int[2];
 
     // init pipes for parent to write and read
-    //pipe(pipes[PARENT_READ_PIPE]);
+    //pipe(pipes[PARENT_READ_PIPE]); // leaving stdout routed normally
     pipe(pipes[PARENT_WRITE_PIPE]);
     printf("SUBPROCESS: starting subprocess nonblocking\n");
-    int i = 0; 
-    while (argv_list[i] != NULL) {
-        printf("ARGV[%d] %s\n", i, argv_list[i]);
-        i++;
-    }
+
+    // start child process
     pid = fork(); 
   
     if (pid == -1){ 
@@ -99,13 +120,15 @@ ChildHandle* start_subprocess_nonblocking(char** argv_list, char* stdin_buff, in
        handle->pipes[PARENT_WRITE_PIPE][WRITE_FD] = pipes[PARENT_WRITE_PIPE][WRITE_FD];
        //handle->pipes[PARENT_READ_PIPE][READ_FD] = pipes[PARENT_READ_PIPE][READ_FD];
        //handle->pipes[PARENT_READ_PIPE][WRITE_FD] = pipes[PARENT_READ_PIPE][WRITE_FD];
+
+       free(argv_list); // free command line args that were sent
        return handle;
    }
    return 0;
 }
 
 // early dev code below - unused but kept for debugging 
-
+/*
 char* pow8_julia_bin_path= (char*) "/opt/julia/usr/bin/julia";
 char* x86_julia_bin_path= (char*) "/usr/local/bin/julia";
 
@@ -271,4 +294,4 @@ int start_subprocess_blocking(char** argv_list) {
    } 
    return 0;
 }
-
+*/

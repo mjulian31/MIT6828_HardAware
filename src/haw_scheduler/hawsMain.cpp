@@ -12,7 +12,6 @@ void haws_test_1(HAWS* haws);
 void haws_test_2(HAWS* haws);
 void haws_test_3(HAWS* haws);
 void haws_test_4(HAWS* haws);
-void haws_test_5(HAWS* haws);
 void haws_test_phys_mem_management(HAWS* haws);
 void haws_test_phys_mem_management2(HAWS* haws);
 void haws_test_v4_8k(HAWS* haws);
@@ -141,10 +140,6 @@ void haws_test_4(HAWS* haws) {
      sleep(1);
      while(haws->GetNumActiveTasks() > 0) { usleep(1000); }
      haws->Stop();
-}
-
-void haws_test_5(HAWS* haws) {
-    start_subprocess_test(); 
 }
 
 void haws_test_phys_mem_management(HAWS* haws) {
