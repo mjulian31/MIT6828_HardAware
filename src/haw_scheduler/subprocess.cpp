@@ -13,8 +13,9 @@
 // stdin / stdout piping stuff from  
 // https://jineshkj.wordpress.com/2006/12/22/how-to-capture-stdin-stdout-and-stderr-of-child-program/
 
-ChildHandle* start_subprocess_nonblocking(char** argv_list, std::string stdin_buff) {
+ChildHandle* start_subprocess_nonblocking(char** argv_list, char* stdin_buff, int stdin_buff_len) {
     pid_t  pid; 
+    printf("SUBPROCESS: alloc ChildHandle\n");
     ChildHandle* handle = (ChildHandle*) malloc(sizeof(ChildHandle));
     int ret = 1; 
 
@@ -24,9 +25,14 @@ ChildHandle* start_subprocess_nonblocking(char** argv_list, std::string stdin_bu
         pipes[i] = new int[2];
 
     // init pipes for parent to write and read
-    pipe(pipes[PARENT_READ_PIPE]);
+    //pipe(pipes[PARENT_READ_PIPE]);
     pipe(pipes[PARENT_WRITE_PIPE]);
-
+    printf("SUBPROCESS: starting subprocess nonblocking\n");
+    int i = 0; 
+    while (argv_list[i] != NULL) {
+        printf("ARGV[%d] %s\n", i, argv_list[i]);
+        i++;
+    }
     pid = fork(); 
   
     if (pid == -1){ 
@@ -52,13 +58,13 @@ ChildHandle* start_subprocess_nonblocking(char** argv_list, std::string stdin_bu
        // The return value is -1 
 
        dup2(pipes[PARENT_WRITE_PIPE][READ_FD], STDIN_FILENO);
-       dup2(pipes[PARENT_READ_PIPE][WRITE_FD], STDOUT_FILENO);
+       //dup2(pipes[PARENT_READ_PIPE][WRITE_FD], STDOUT_FILENO);
 
        // close fds not required by child. Also, we don't
        // want the exec'ed program to know these existed 
        close(pipes[PARENT_WRITE_PIPE][READ_FD]);
-       close(pipes[PARENT_READ_PIPE][WRITE_FD]);
-       close(pipes[PARENT_READ_PIPE][READ_FD]);
+       //close(pipes[PARENT_READ_PIPE][WRITE_FD]);
+       //close(pipes[PARENT_READ_PIPE][READ_FD]);
        close(pipes[PARENT_WRITE_PIPE][WRITE_FD]);
  
        execv(argv_list[0],argv_list); 
@@ -73,7 +79,7 @@ ChildHandle* start_subprocess_nonblocking(char** argv_list, std::string stdin_bu
 
        // close fds not required by parent
        close(pipes[PARENT_WRITE_PIPE][READ_FD]);
-       close(pipes[PARENT_READ_PIPE][WRITE_FD]);
+       //close(pipes[PARENT_READ_PIPE][WRITE_FD]);
      
        // write in pid first
        //char pidStr[15];
@@ -83,14 +89,16 @@ ChildHandle* start_subprocess_nonblocking(char** argv_list, std::string stdin_bu
        write(pipes[PARENT_WRITE_PIPE][WRITE_FD], pidStr.c_str(), strlen(pidStr.c_str()));
 
        // write in formal standardinput
-       write(pipes[PARENT_WRITE_PIPE][WRITE_FD], stdin_buff.c_str(), strlen(stdin_buff.c_str()));
+       printf("SUBPROCESS: sending STDIN[%d] '%s'", stdin_buff_len, stdin_buff);    
+       printf("SUBPROCESS: strlen %d\n", (int) strlen(stdin_buff)); 
+       write(pipes[PARENT_WRITE_PIPE][WRITE_FD], stdin_buff, stdin_buff_len);
 
        //write(pipes[PARENT_WRITE_PIPE][WRITE_FD], "#_$_stdin_end\n", 14);
        handle->pid = pid;
        handle->pipes[PARENT_WRITE_PIPE][READ_FD] = pipes[PARENT_WRITE_PIPE][READ_FD];
        handle->pipes[PARENT_WRITE_PIPE][WRITE_FD] = pipes[PARENT_WRITE_PIPE][WRITE_FD];
-       handle->pipes[PARENT_READ_PIPE][READ_FD] = pipes[PARENT_READ_PIPE][READ_FD];
-       handle->pipes[PARENT_READ_PIPE][WRITE_FD] = pipes[PARENT_READ_PIPE][WRITE_FD];
+       //handle->pipes[PARENT_READ_PIPE][READ_FD] = pipes[PARENT_READ_PIPE][READ_FD];
+       //handle->pipes[PARENT_READ_PIPE][WRITE_FD] = pipes[PARENT_READ_PIPE][WRITE_FD];
        return handle;
    }
    return 0;
@@ -133,7 +141,7 @@ int start_subprocess_nonblocking_julia_test(char* julia_bin_path, char* julia_sc
 
 pid_t start_subprocess_nonblocking_monitor(char** argv_list) {
    int print_state_throttle = 0;
-   ChildHandle *handle = start_subprocess_nonblocking(argv_list, ""); 
+   ChildHandle *handle = start_subprocess_nonblocking(argv_list, (char*) "", 0); 
    pid_t pid = handle->pid;
    int status; 
    pid_t state;

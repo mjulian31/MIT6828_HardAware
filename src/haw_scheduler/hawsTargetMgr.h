@@ -122,9 +122,9 @@ class HAWSTargetMgr {
                                 (std::istreambuf_iterator<char>()));
             assert(content.length() > 0); // there was nothing in the file
             tasksStdout[pid] = content;
-            if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
-                assert(false);
-            }
+            //if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
+            //    assert(false);
+            //}
         } else {
             assert(false); //not implemented
         }
@@ -192,13 +192,19 @@ class HAWSTargetMgr {
     }
     public:
         HAWSTargetMgr () { }
-        int StartTask(std::string binpath, std::string args, std::string stdin_buf, int maxRAM) {
+        int StartTask(std::string binpath, std::string args, 
+                      char* stdin_buf, int stdin_buff_len, int maxRAM) {
+            printf("HWMGR/CPU: starting subprocess 1\n");
             char* argv_list[] = { 
                 (char*) binpath.c_str(), 
-                (char*) args.c_str(), 
+                (char*) "3", 
+                (char*) "4",
+                (char*) "2",
+                (char*) "norand",
                 (char*) 0 
             };
-            ChildHandle* handle = start_subprocess_nonblocking(argv_list, stdin_buf);
+            printf("HWMGR/CPU: starting subprocess 2\n");
+            ChildHandle* handle = start_subprocess_nonblocking(argv_list, stdin_buf, stdin_buff_len);
             time_point start_time = std::chrono::system_clock::now();
             pid_t pid = handle->pid;
             taskLock.lock();

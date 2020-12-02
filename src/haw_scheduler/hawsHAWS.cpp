@@ -165,8 +165,10 @@ void HAWS::RequeueReq(HAWSClientRequest* req) {
 void HAWS::StartTaskCPU(HAWSClientRequest* req) {
     int maxRAM = req->GetCPUBinRAM();
     globalSchedRAMAvail -= maxRAM;
+    printf("HAWS: Starting CPU Task\n");
     int pid = cpuMgr->StartTask(req->GetCPUBinPath(), 
-                                req->GetTaskArgs(), req->GetStdinBuf(), maxRAM);
+                                req->GetTaskArgs(), 
+                                req->GetStdinBuf(), req->GetStdinBufLen(), maxRAM);
     allCPUPids.insert(allCPUPids.begin(), pid);
     //printf("HAWS/SL: CPU got %s\n", req->ToStr().c_str());
 }

@@ -44,8 +44,8 @@ class HAWSClientRequest {
             cpuBinRAM  = another->GetCPUBinRAM();
             gpuBinPath = another->GetGPUBinPath();
             gpuBinRAM  = another->GetGPUBinRAM();
+            stdinBuf = another->stdinBuf;
             stdinBufLen = another->stdinBufLen;
-            stdinBuf = (char*) malloc(sizeof(stdinBufLen));
             memcpy(stdinBuf, another->stdinBuf, stdinBufLen);
             taskArgs = another->GetTaskArgs();
         }
