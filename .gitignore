@@ -1,3 +1,4 @@
 *.o
 *.swp
 src/haw_scheduler/haws
+test/large
