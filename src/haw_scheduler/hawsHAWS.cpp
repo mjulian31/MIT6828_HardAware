@@ -219,7 +219,7 @@ HAWS::~HAWS() {
 }
 
 int HAWS::GetNumActiveTasks() {
-    return cpuMgr->GetNumActiveTasks();
+    return cpuMgr->GetNumActiveTasks() + gpuMgr->GetNumActiveTasks();
 }
 
 void HAWS::PrintData() {

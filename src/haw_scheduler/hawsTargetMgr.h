@@ -111,6 +111,7 @@ class HAWSTargetMgr {
         tasksStatus[pid] = ts;
         tasksStatusCode[pid] = s_code;
         if (COMM_STDOUT) {
+            assert(false);
             //std::string cppStdOut(tasksStdoutBuff[pid]);
             //tasksStdout[pid] = cppStdOut;
         } else if (COMM_FILE) {
@@ -135,11 +136,12 @@ class HAWSTargetMgr {
         tasksBillableUS[pid] = TIMEDIFF_CAST_USEC(tasksEndTime[pid] - tasksStartTime[pid]);
     }
 
+    /*
     void SendTermChildStdin(ChildHandle* handle) {
         terminatingPids.insert(terminatingPids.begin(), handle->pid);
         write(handle->pipes[PARENT_WRITE_PIPE][WRITE_FD], "_$_term\n", 8);
         //printf("TERMINATED IT\n");
-    }
+    }*/
 
     /*
     void ProcessChildStdout(ChildHandle* handle, char* stdOutBuffer) {
@@ -203,26 +205,16 @@ class HAWSTargetMgr {
         }
         int StartTask(std::string binpath, std::string args, 
                       char* stdin_buf, int stdin_buff_len, int maxRAM) {
-            printf("HWMGR/CPU: starting task 1\n");
             ChildHandle* handle = start_subprocess_nonblocking(binpath, args, 
                                                                stdin_buf, stdin_buff_len);
-            printf("HWMGR/CPU: starting task 2\n");
             time_point start_time = std::chrono::system_clock::now();
-            printf("HWMGR/CPU: starting task 3\n");
             pid_t pid = handle->pid;
-            printf("HWMGR/CPU: starting task 4\n");
             taskLock.lock();
-            printf("HWMGR/CPU: starting task 5\n");
             allPids.insert(allPids.begin(), pid);
-            printf("HWMGR/CPU: starting task 6\n");
             tasksActive[pid] = binpath + " " + args;
-            printf("HWMGR/CPU: starting task 7\n");
             tasksStatus[pid] = TASK_RUNNING;
-            printf("HWMGR/CPU: starting task 8\n");
             tasksStatusCode[pid] = -1;
-            printf("HWMGR/CPU: starting task 9\n");
             tasksStartTime[pid] = start_time; 
-            printf("HWMGR/CPU: starting task 10\n");
             tasksMaxRAM[pid] = maxRAM;
             tasksBillableUS[pid] = 0;
             tasksHandles[pid] = handle;
@@ -230,12 +222,11 @@ class HAWSTargetMgr {
             tasksStdoutBuffLen[pid] = 0;
             tasksStdoutBuffScan[pid] = 0;
             taskLock.unlock();
-            printf("HWMGR/CPU: starting task 11\n");
             // send input to binary
             //sleep(1);
             //printf("writing stdin %s \n", "afirsttest\n");
             //write(handle->pipes[PARENT_WRITE_PIPE][WRITE_FD], "afirsttest\n", 11);
-            printf("HWMGR/CPU: starting task done\n");
+            printf("HWMGR/%s: starting task done\n", this->targStr.c_str());
             return pid;
         }
         
@@ -271,23 +262,28 @@ class HAWSTargetMgr {
         }
         int TaskConclude(pid_t pid, TaskStatus ts, int status_code, 
                          time_point time_completed) { //SCHEDLOOP THREAD
-            // close pipe to child's stdin
-            int success = subprocess_close_parent_stdin_pipe(tasksHandles[pid]);
-            assert(success == 0);
-
+            
             // free stdout buffer (currently unused)
             //free(tasksStdoutBuff[pid]);
 
             //printf("doing accounting\n");
             taskLock.lock();
+
+            // close pipe to child's stdin
+            int success = subprocess_close_parent_stdin_pipe(tasksHandles[pid]);
+            assert(success == 0);
+
+
             this->TaskCompleteAccountingProtected(pid, ts, status_code, time_completed); 
             int billableUS = tasksBillableUS[pid];
+
+            // free this ChildHandle
+            free(tasksHandles[pid]); 
+            tasksHandles.erase(pid);
+
             taskLock.unlock();
             //printf("done doing accounting\n");
-
             //printf("unlocked TaskConclude\n");
-
-            free(tasksHandles[pid]); // free this ChildHandle
             return billableUS;
         }
         int TaskIsActive(pid_t pid) {
@@ -309,19 +305,25 @@ class HAWSTargetMgr {
         void Stop () {
             std::list<pid_t>::iterator it = allPids.begin();
             while (it != allPids.end()) {
-                printf("STDOUT PID %d: %s\n", *it, tasksStdout[*it].c_str());
+                printf("HWMGR/%s OUTPUT PID %d: %s\n", this->targStr.c_str(),
+                       *it, tasksStdout[*it].c_str()); //TODO rename
                 it++;
             }
             std::unordered_map<pid_t, std::string>::iterator mit = tasksCompleted.begin();
             while (mit != tasksCompleted.end()) {
-                printf("COMPLETED PID %d: %s\n", mit->first, mit->second.c_str());
+                printf("HWMGR/%s COMPLETED PID %d: %s\n", this->targStr.c_str(), 
+                       mit->first, mit->second.c_str());
                 mit++;
             }
             //free(stdOutBuffer);
 
             // clear all member datastructures
+            taskLock.lock();
             allPids.clear();
             terminatingPids.clear();
+            printf("HWMGR/%s tasksActive.size = %ld\n", this->targStr.c_str(), 
+                   tasksActive.size());
+            assert(tasksActive.size() == 0);
             tasksActive.clear();
             tasksStatus.clear();
             tasksStatusCode.clear();
@@ -329,7 +331,11 @@ class HAWSTargetMgr {
             tasksEndTime.clear();
             tasksMaxRAM.clear();
             tasksBillableUS.clear();
+            printf("HWMGR/%s tasksHandles.size = %ld\n", this->targStr.c_str(), 
+                   tasksHandles.size());
+            assert(tasksHandles.size() == 0);
             tasksHandles.clear();
+            taskLock.unlock();
         }
 
         // shelved

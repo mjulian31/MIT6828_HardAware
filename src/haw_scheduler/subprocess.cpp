@@ -28,10 +28,6 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
     int ret = 1; 
 
     // malloc new pipes for handle
-//    printf("SUBPROCESS: alloc pipes\n");
-//    int** pipes = (int**) malloc(sizeof(2 * 2 * sizeof(int)));
-
-    // malloc new pipes for handle
     printf("SUBPROCESS: alloc pipes\n");
     int** pipes = new int*[2];
     printf("SUBPROCESS: alloc pipes 1 \n");
@@ -146,12 +142,13 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        //handle->pipes[PARENT_READ_PIPE][READ_FD] = pipes[PARENT_READ_PIPE][READ_FD];
        //handle->pipes[PARENT_READ_PIPE][WRITE_FD] = pipes[PARENT_READ_PIPE][WRITE_FD];
     
-       printf("SUBPROCESS: freeing argv_list\n");
        // free temporary pipes holder now that its in handle
        for(int j = 0; j < 2; j++) { delete[] pipes[j]; }
        delete[] pipes;
 
+       printf("SUBPROCESS: freeing argv_list\n");
        free(argv_list); // free command line args that were sent
+
        printf("SUBPROCESS: started successfully\n");
        return handle;
    }
