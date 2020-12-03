@@ -131,8 +131,6 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
         if (gotReq) { // schedule removed item
             //printf("HAWS/SL: dequeued %s\n", req->ToStr().c_str());
             ProcessClientRequest(req);
-            req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
-            delete(req); // done processing client request
         }
         
         //monitor HW targets
@@ -190,9 +188,13 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
             RequeueReq(req); // this target doesn't have enough memory to run
         } else {
             StartTaskCPU(req);        
+            free(req->GetStdinBuf()); // FREES FREEABLE STDIN (LARGE)
+            delete(req); // done processing client request
         }
     } else if (HWTarget == TargGPU) {
         StartTaskGPU(req);
+        free(req->GetStdinBuf()); // FREES FREEABLE STDIN (LARGE)
+        delete(req); // done processing client req
     } else {
         assert(false); // "hardware target not implemented"
     }

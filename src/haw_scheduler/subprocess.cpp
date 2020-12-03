@@ -59,6 +59,8 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
         printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]); 
     }
     argv_list[i+1] = (char*) 0;
+    int argv_list_len = i;
+
     printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]); 
     //argv_list now has [binpath, <arg1, arg2, ..., argN,> 0], read for execve
 
@@ -146,8 +148,8 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
     
        printf("SUBPROCESS: freeing argv_list\n");
        // free temporary pipes holder now that its in handle
-       for(int j = 0; j < 2; j++) { delete pipes[j]; }
-       delete pipes;
+       for(int j = 0; j < 2; j++) { delete[] pipes[j]; }
+       delete[] pipes;
 
        free(argv_list); // free command line args that were sent
        printf("SUBPROCESS: started successfully\n");
