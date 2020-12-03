@@ -233,6 +233,10 @@ int HAWS::GetNumActiveTasks() {
     return cpuMgr->GetNumActiveTasks() + gpuMgr->GetNumActiveTasks();
 }
 
+bool HAWS::IsDoingWork() {
+    return GetNumQueuedReqs() > 0 || GetNumActiveTasks() > 0;
+}
+
 void HAWS::PrintData() {
     printf("HAWS: Hello From PrintData\n");
     auto elapsedUS = TIMEDIFF_CAST_USEC(hawsStopTime - hawsStartTime);

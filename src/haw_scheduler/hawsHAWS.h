@@ -72,6 +72,7 @@ class HAWS {
         void HardAwareSchedule(HAWSClientRequest* req);
         int GetNumActiveTasks();
         int GetNumQueuedReqs();
+        bool IsDoingWork();
         //int GetNumActiveTasksGPU();
         void Stop();
         void PrintData();
