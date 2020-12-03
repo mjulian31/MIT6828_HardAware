@@ -16,7 +16,7 @@
 // stdin / stdout piping stuff from  
 // https://jineshkj.wordpress.com/2006/12/22/how-to-capture-stdin-stdout-and-stderr-of-child-program/
 
-int subprocess_close_parent_pipes(ChildHandle* handle) {
+int subprocess_close_parent_stdin_pipe(ChildHandle* handle) {
     return close(handle->pipes[PARENT_WRITE_PIPE][WRITE_FD]);
 }
 

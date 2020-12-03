@@ -259,17 +259,17 @@ class HAWSTargetMgr {
         }
         int TaskConclude(pid_t pid, TaskStatus ts, int status_code, 
                          time_point time_completed) { //SCHEDLOOP THREAD
-            //printf("doing accounting\n");
-            taskLock.lock();
-
-            ChildHandle* handle = tasksHandles[pid]; 
-            int success = subprocess_close_parent_pipes(handle); 
+            // close pipe to child's stdin
+            int success = subprocess_close_parent_stdin_pipe(tasksHandles[pid]);
             assert(success == 0);
 
+            //printf("doing accounting\n");
+            taskLock.lock();
             this->TaskCompleteAccountingProtected(pid, ts, status_code, time_completed); 
             int billableUS = tasksBillableUS[pid];
-            //printf("done doing accounting\n");
             taskLock.unlock();
+            //printf("done doing accounting\n");
+
             //printf("unlocked TaskConclude\n");
             return billableUS;
         }
