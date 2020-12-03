@@ -76,19 +76,27 @@ int main (int argc, char *argv[]) {
 
     // WHITEBOX tests - directly call scheduler 
     // basic tests - no command line args or stdin
-    RUN_TEST(haws_test_1);
-    RUN_TEST(haws_test_1);
+
     RUN_TEST(haws_test_1);
 
-    // test request buffering when out of physical memory
-    RUN_TEST(haws_test_physmem_limit_buffer);
+    bool allWhiteBox = false;
+    if (allWhiteBox) {
+        RUN_TEST(haws_test_1);
+        RUN_TEST(haws_test_1);
 
-    // many parallel actual matrix multiplies
-    RUN_TEST(haws_test_matmul_cpu_prod1);
-    RUN_TEST(haws_test_matmul_gpu_prod1);
+        // test request buffering when out of physical memory
+        RUN_TEST(haws_test_physmem_limit_buffer);
+
+        // many parallel actual matrix multiplies
+        RUN_TEST(haws_test_matmul_cpu_prod1);
+        RUN_TEST(haws_test_matmul_gpu_prod1);
+    }
 
     // BLACKBOX tests - call scheduler through socket
-    RUN_TEST(haws_test_socket_bringup);
+    bool allBlackBox = true;
+    if (allBlackBox) {
+        RUN_TEST(haws_test_socket_bringup);
+    }
     
     haws_help_close_socket(testClientSocket);
     haws.StopSocket();
