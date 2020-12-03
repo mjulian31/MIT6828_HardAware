@@ -9,7 +9,6 @@
 
 #include "hawsHAWS.h"
 #include "subprocess.h"
-
 #include "hawsTestSocket.h"
 
 //#define NDEBUG  // turn asserts off
@@ -32,15 +31,10 @@ int numTests = 0;
 
 
 // physmem control 
-#define SCHED_MEM_MAX_RR1 (1024*58) // use up to 58GB of 64GB phys ram
 #define SCHED_MEM_MAX_CLOUDLAB 62464
 // gpu memory control
-#define SCHED_MEM_GPU_MAX_RR1 (1024*5) // use up to 5GB of 6GB gpu ram
 #define SCHED_MEM_GPU_MAX_CLOUDLAB (1024*6) // update on cloudlab
 
-//must change when on other systems
-#define SCHED_MEM_MAX     SCHED_MEM_MAX_RR1
-#define SCHED_MEM_GPU_MAX SCHED_MEM_GPU_MAX_RR1
 
 void haws_test_2(HAWS* haws);
 void haws_test_3(HAWS* haws);
@@ -58,17 +52,7 @@ int haws_test_physmem_limit_buffer();
 int haws_test_matmul_cpu_prod1();
 int haws_test_matmul_gpu_prod1();
 
-#define TEST_MEMCAP haws_test_phys_mem_management
-#define TEST_8K haws_test_v4_8k
-#define TEST_BILLING haws_test_billing
-#define TEST_STDOUTCAP haws_test_stdout_cap
-#define TEST_STDIN_STDOUT_CAP haws_test_stdin_stdout_cap
-#define TEST_PROD_CPU_MATMUL1 haws_test_matmul_cpu_prod1
-#define TEST_PROD_GPU_MATMUL1 haws_test_matmul_gpu_prod1
-
-#define SINGLE_TEST TEST_PROD_GPU_MATMUL1
-
-//rr1 - current verion v4
+//rr1 - current verion prod1
 //cpu
 int cpuBinRAM1024 = 35;
 int cpuBinRAM2048 = 90;
@@ -79,24 +63,36 @@ int cpuBinRAMGPUBase = 2;
 int gpuBinRAMBase = 2;
 
 HAWS haws;
+int testClientSocket = -1;
 int main (int argc, char *argv[]) {
     // set resource limits
     haws.SetPhysMemLimitMB(atoi(argv[1]));
     haws.SetGPUMemLimitMB(atoi(argv[2]));
     haws.SetGPUSharedMemLimitMB(atoi(argv[3]));
 
-    // basic test - no command line args or stdin
+    haws.StartSocket(); // bringup server socket 
+    testClientSocket = haws_help_open_socket(8080);
+    assert(testClientSocket > 0);
+
+    // WHITEBOX tests - directly call scheduler 
+    // basic tests - no command line args or stdin
     RUN_TEST(haws_test_1);
+    //RUN_TEST(haws_test_1);
+    //RUN_TEST(haws_test_1);
 
     // test request buffering when out of physical memory
-    RUN_TEST(haws_test_physmem_limit_buffer);
+    //RUN_TEST(haws_test_physmem_limit_buffer);
 
     // many parallel actual matrix multiplies
-    RUN_TEST(haws_test_matmul_cpu_prod1);
-    RUN_TEST(haws_test_matmul_gpu_prod1);
+    //RUN_TEST(haws_test_matmul_cpu_prod1);
+    //RUN_TEST(haws_test_matmul_gpu_prod1);
 
-//    RUN_TEST(haws_test_socket_bringup);
-
+    // BLACKBOX tests - call scheduler through socket
+    //RUN_TEST(haws_test_socket_bringup);
+    
+    
+    haws_help_close_socket(testClientSocket);
+    haws.StopSocket();
     printf("\n\n");
     printf("%d TESTS PASSED\n", numTests);
 }

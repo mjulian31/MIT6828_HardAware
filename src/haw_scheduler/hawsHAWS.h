@@ -13,7 +13,7 @@
 
 //using namespace std;
 
-extern bool globalKillFlag;
+extern bool sockLoopKillFlag;
 
 enum HAWSHWTarget { TargCPU, TargGPU };
 
@@ -38,16 +38,9 @@ class HAWS {
         int portClient1 = 8080;
 
         std::mutex tasksActiveLock;
-        //Map cpuTaskIDs[TaskID] -> status
-        //Map cpuBinaryPaths[TaskID] -> string?
         int cpuTasksActive = 0;
-        //Map gpuTaskIDs[TaskID] -> status
-        //Map gpuBinaryPaths[TaskID] -> string?
         int gpuTasksActive = 0;
 
-        //Map workloadTask[TaskID] -> string (args?)
-        //Map offlineStaticAnalysis[TaskID] -> object TODO
-   
         //SCHEDLOOP THREAD 
         static void ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemLimitMB); 
         static void ReapChildren();
@@ -58,7 +51,6 @@ class HAWS {
         static void StartTaskGPU(HAWSClientRequest* req);
         static HAWSHWTarget DetermineReqTarget(HAWSClientRequest* req);
     
-
         //unused
         void ParseFields();
         void StartTaskCPUManager();
@@ -75,6 +67,7 @@ class HAWS {
         void SetPhysMemLimitMB(int limitMB) { this->physMemLimitMB = limitMB; }
         void SetGPUMemLimitMB(int limitMB) { this->gpuMemLimitMB = limitMB; }
         void SetGPUSharedMemLimitMB(int limitMB) { this->gpuSharedMemLimitMB = limitMB; }
+        void StartSocket();
         void Start();
         void HardAwareSchedule(HAWSClientRequest* req);
         int GetNumActiveTasks();
@@ -82,6 +75,7 @@ class HAWS {
         bool IsDoingWork();
         void PrintData();
         void Stop();
+        void StopSocket();
 };
 
 

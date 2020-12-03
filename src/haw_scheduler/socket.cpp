@@ -60,28 +60,40 @@ int haws_socket_listen(int port) { // SOCKET THREAD
         perror("accept"); 
         exit(EXIT_FAILURE); 
     } 
-    int success = socket_set_blocking(new_socket, false);
+    // set socket reusable 
+    int optval = 1;
+    int success = setsockopt(new_socket,SOL_SOCKET,SO_REUSEADDR,&optval,sizeof(int));
+    assert(success == 0);
+    success = socket_set_blocking(new_socket, false);
     assert(success);
     printf("SOCKET: accepted\n");
     return new_socket;
 }
 
 // 50MB coming in per request
-uint64_t socket_read_buf_size = ((uint64_t)1024 * (uint64_t)1024 * (uint64_t)1024 * (uint64_t)50);
+#define SOCKET_READ_BUF_SIZE ((uint64_t)1024 * (uint64_t)1024 * (uint64_t)1024 * (uint64_t)50)
 
+//char socket_read_buf[SOCKET_READ_BUF_SIZE];
 void haws_socket_loop(int socket) { // SOCKET THREAD
     printf("SOCKET: hello from loop\n");
     printf("SOCKET: listening...\n");
     int socket_fd = haws_socket_listen(socket); // blocks until connection opened
+    char* socket_read_buf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
     printf("SOCKET: ...accepted\n");
-    char* socket_read_buf = (char*) malloc(socket_read_buf_size);
-    while (!globalKillFlag) {
-        int bytes_in = read(socket_fd, socket_read_buf, socket_read_buf_size);
-        assert(bytes_in != socket_read_buf_size); // request was too large
+    int throttle = 0;
+    while (!sockLoopKillFlag) {
+        int bytes_in = read(socket_fd, socket_read_buf, SOCKET_READ_BUF_SIZE);
+        assert(bytes_in != SOCKET_READ_BUF_SIZE); // request was too large
         if (bytes_in > 0) {
             printf("SOCKET: read: %d - '%s'\n", bytes_in, socket_read_buf); 
+        } else {
+            if (throttle++ % 1000 == 0) {
+                printf("SOCKET: reading nothing\n");
+            }
         }
-        usleep(1);
+        usleep(1000);
     }
+    shutdown(socket_fd, 2);
+    close(socket_fd);
     free(socket_read_buf);
 }
