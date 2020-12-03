@@ -242,14 +242,16 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "error writing to file %s\n", filename);
         exit(EXIT_FAILURE);
     }
-    if (fsync(fileno(outfile)) != 0) { // flush all data fully to disk
-        fprintf(stderr, "error writing to file %s\n", filename);
-        exit(EXIT_FAILURE);
+    if (false) { // flushing disabled for perf!
+        if (fsync(fileno(outfile)) != 0) { // flush all data fully to disk
+            fprintf(stderr, "error writing to file %s\n", filename);
+            exit(EXIT_FAILURE);
+        }
+        if (fclose(outfile) < 0) {
+            fprintf(stderr, "error closing file %s\n", filename);
+            exit(EXIT_FAILURE);
+        }
     }
-	if (fclose(outfile) < 0) {
-		fprintf(stderr, "error closing file %s\n", filename);
-		exit(EXIT_FAILURE);
-	}
 
 	// free mem
 	free(matstring_out);

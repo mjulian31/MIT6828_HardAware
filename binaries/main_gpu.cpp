@@ -309,13 +309,15 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "error writing to file %s\n", filename);
 		exit(EXIT_FAILURE);
 	}
-    if (fflush(outfile) != 0) {  // flush data to os fully
-        fprintf(stderr, "error fflushing file %s\n", filename);
-        exit(EXIT_FAILURE);
-    }
-    if (fsync(fileno(outfile)) !=  0) { // flush data to disk fully
-        fprintf(stderr, "error fsync file %s\n", filename);
-        exit(EXIT_FAILURE);
+    if (false) { // flushing disabled for perf!
+        if (fflush(outfile) != 0) {  // flush data to os fully
+            fprintf(stderr, "error fflushing file %s\n", filename);
+            exit(EXIT_FAILURE);
+        }
+        if (fsync(fileno(outfile)) !=  0) { // flush data to disk fully
+            fprintf(stderr, "error fsync file %s\n", filename);
+            exit(EXIT_FAILURE);
+        }
     }
 	if (fclose(outfile) < 0) {
 		fprintf(stderr, "error closing file %s\n", filename);
