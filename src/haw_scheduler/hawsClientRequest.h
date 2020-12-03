@@ -46,13 +46,18 @@ class HAWSClientRequest {
             gpuBinRAM  = another->GetGPUBinRAM();
             stdinBuf = another->stdinBuf;
             stdinBufLen = another->stdinBufLen;
-            memcpy(stdinBuf, another->stdinBuf, stdinBufLen);
+            //memcpy(stdinBuf, another->stdinBuf, stdinBufLen); // ??
             taskArgs = another->GetTaskArgs();
         }
-        /* destructor disabled
+        /* gets auto called when a req is popped from queue
         ~HAWSClientRequest() {
-            free(...) 
-        } */
+        }*/
+
+        // manually called to free pointer holding stdin
+        void FreeStdinBuf() {
+            free(this->stdinBuf);
+        }
+
         std::string GetTarget()        { return target;     }
         std::string GetCPUBinPath()    { return cpuBinPath; }
         int GetCPUBinRAM()             { return cpuBinRAM; }

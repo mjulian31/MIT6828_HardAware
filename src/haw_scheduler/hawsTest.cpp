@@ -290,14 +290,18 @@ int haws_test_matmul_cpu_prod1() {
     HAWS* haws = new HAWS();
     haws->Start();
     char* formal_stdin = (char*) "[0.5601922408747706 0.5498457394253573 0.24767881927397717 0.27187891952177856; 0.5730447732822026 0.392712621542896 0.7104079489586148 0.27725616994299096; 0.2728092392852186 0.16275014197633997 0.5345847176860559 0.7135436758420011][0.20318818433657682 0.2268235629705242; 0.5767023795601847 0.8770918376577908; 0.26442460894021313 0.9237210225088366; 0.43515479778688104 0.9401231927424645]\n";
-    printf("TESTMAIN: stdinlen %d\n", (int) strlen(formal_stdin));
+        printf("TESTMAIN: stdinlen %d\n", (int) strlen(formal_stdin));
     for (int i = 0; i < 1000; i++) {
+       // after parsing request, alloc freeable_stdin
+       char* freeable_stdin = (char*) malloc(strlen(formal_stdin) * sizeof(char) + 1);
+       strncpy(freeable_stdin, formal_stdin, strlen(formal_stdin) + 1);
        HAWSClientRequest* r  = new HAWSClientRequest("cpu",
                                                      "/opt/haws/bin/matmul_cpu", cpuBinRAMGPUBase,
                                                      "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
-                                                     (char*) formal_stdin, strlen(formal_stdin),
+                                                     (char*) freeable_stdin, strlen(freeable_stdin),
                                                      "3 4 2 norand");
        haws->HardAwareSchedule(r);
+       // freeable_stdin will be freed after processing
     }
     sleep(1); //let jobs start
     while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
@@ -310,14 +314,20 @@ int haws_test_matmul_gpu_prod1() {
     HAWS* haws = new HAWS();
     haws->Start();
     char* formal_stdin = (char*) "[0.5601922408747706 0.5498457394253573 0.24767881927397717 0.27187891952177856; 0.5730447732822026 0.392712621542896 0.7104079489586148 0.27725616994299096; 0.2728092392852186 0.16275014197633997 0.5345847176860559 0.7135436758420011][0.20318818433657682 0.2268235629705242; 0.5767023795601847 0.8770918376577908; 0.26442460894021313 0.9237210225088366; 0.43515479778688104 0.9401231927424645]\n";
+    
     printf("TESTMAIN: stdinlen %d\n", (int) strlen(formal_stdin));
     for (int i = 0; i < 1000; i++) {
+       // after parsing request, alloc freealbe_stdin
+       char* freeable_stdin = (char*) malloc(strlen(formal_stdin) * sizeof(char) + 1);
+       strncpy(freeable_stdin, formal_stdin, strlen(formal_stdin) + 1);
+    
        HAWSClientRequest* r  = new HAWSClientRequest("gpu",
                                                      "/opt/haws/bin/matmul_cpu", cpuBinRAMGPUBase,
                                                      "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
-                                                     (char*) formal_stdin, strlen(formal_stdin),
+                                                     (char*) freeable_stdin, strlen(freeable_stdin),
                                                      "3 4 2 norand");
        haws->HardAwareSchedule(r);
+       // freeable_stdin will be freed after processing
     }
     sleep(1); //let jobs start
     while (haws->GetNumActiveTasks() > 0) { usleep(1000); }

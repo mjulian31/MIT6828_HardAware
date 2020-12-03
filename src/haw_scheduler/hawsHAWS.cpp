@@ -130,9 +130,9 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
         if (gotReq) { // schedule removed item
             //printf("HAWS/SL: dequeued %s\n", req->ToStr().c_str());
             ProcessClientRequest(req);
+            req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
             delete(req); // done processing client request
         }
-
         
         //monitor HW targets
         cpuMgr->Monitor(); //update state of processes in cpu manager  
@@ -273,11 +273,12 @@ void HAWS::Stop() {
     // stop target managers
     cpuMgr->Stop();
     gpuMgr->Stop();
-    delete cpuMgr;
-    delete gpuMgr;
-    globalKillFlag = false;          // reset killswitch
 
     this->PrintData();
+
+    delete cpuMgr;
+    delete gpuMgr;
+    globalKillFlag = false;          // reset killswitch - scheduler is now off
 }
 
 void HAWS::HardAwareSchedule(HAWSClientRequest* req) {
