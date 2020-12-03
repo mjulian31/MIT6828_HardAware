@@ -233,6 +233,8 @@ class HAWSTargetMgr {
         }
         int StartTask(std::string binpath, std::string args, 
                       char* stdin_buf, int stdin_buff_len, int maxRAM) {
+            assert(strlen(stdin_buf) == stdin_buff_len);
+
             ChildHandle* handle = start_subprocess_nonblocking(binpath, args, 
                                                                stdin_buf, stdin_buff_len);
             time_point start_time = std::chrono::system_clock::now();
@@ -247,7 +249,6 @@ class HAWSTargetMgr {
             tasksMaxRAM[pid] = maxRAM;
             tasksBillableUS[pid] = 0;
             tasksHandles[pid] = handle;
-            //tasksStdoutBuff[pid] = (char*) malloc(1024);
             tasksStdoutBuffLen[pid] = 0;
             tasksStdoutBuffScan[pid] = 0;
             taskLock.unlock();

@@ -70,8 +70,8 @@ int main () {
     RUN_TEST(haws_test_1);
 
     // actual matrix multiplies
-//    RUN_TEST(haws_test_matmul_cpu_prod1);
-//    RUN_TEST(haws_test_matmul_gpu_prod1);
+    RUN_TEST(haws_test_matmul_cpu_prod1);
+    RUN_TEST(haws_test_matmul_gpu_prod1);
 
 //    RUN_TEST(haws_test_socket_bringup);
 
@@ -83,16 +83,12 @@ int haws_test_1() {
     HAWS* haws = new HAWS();
     char* formal_stdin = (char*) "b";
 
-    //char* freeable_stdin = (char*) malloc(strlen(formal_stdin) * sizeof(char) + 1);
-    //strncpy(freeable_stdin, formal_stdin, strlen(formal_stdin) + 1);
-
     HAWSClientRequest* r1 = new HAWSClientRequest("cpu", 
                                                   "/opt/haws/bin/matmul_cpu", cpuBinRAM1024,
                                                   "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
                                                   (char*) "", 0, 
-                                                  "64");
+                                                  "1024");
     printf("r1: %s \n", r1->ToStr().c_str());
-
     haws->Start();
     haws->HardAwareSchedule(r1);
     sleep(1);

@@ -45,19 +45,26 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
     } 
     char** argv_list;
     // two extra spots; 1 for bin path and 1 for null terminator
-    printf("SUBPROCESS: calloc argv_list[%ld]\n", 2 + tokens.size());   
+    printf("SUBPROCESS: calloc argv_list[%ld] (token size is %ld)\n", 
+           2 + tokens.size(), tokens.size());   
     argv_list = (char**) calloc(2 + tokens.size(), sizeof(char*));
     int i = 0;
     argv_list[i] = (char*) binpath.c_str();
     printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]);
-    for (i = i + 1; i <= tokens.size(); i++) {
+    for (i = 1; i <= tokens.size(); i++) {
         argv_list[i] = (char*) tokens[i - 1].c_str();
         printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]); 
     }
-    argv_list[i+1] = (char*) 0;
+    argv_list[i] = (char*) 0;
+    printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i+1, argv_list[i]); 
     int argv_list_len = i;
 
-    printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]); 
+    //TEST TEMPORARY
+    printf("SUBPROCESS: test malloc\n");
+    char* test = (char*) malloc(20);
+    printf("SUBPROCESS: test malloc done\n");
+    free(test);
+    printf("SUBPROCESS: test malloc freed\n");
     //argv_list now has [binpath, <arg1, arg2, ..., argN,> 0], read for execve
 
     // init pipes for parent to write and read
@@ -124,7 +131,7 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        //sprintf(pidStr, "%d\n", pid); 
        std::string pidStr = std::to_string(pid) + "\n";
        assert(pidStr.length() > 0);
-       printf("SUBPROCESS: send PID %s\n", pidStr.c_str());
+       printf("SUBPROCESS: send PID %d\n", pid); 
        write(pipes[PARENT_WRITE_PIPE][WRITE_FD], pidStr.c_str(), strlen(pidStr.c_str()));
 
        // write in formal standardinput
@@ -132,6 +139,8 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
            printf("SUBPROCESS: sending STDIN[%d] '%s'", stdin_buff_len, stdin_buff);    
            printf("SUBPROCESS: strlen %d\n", (int) strlen(stdin_buff)); 
            write(pipes[PARENT_WRITE_PIPE][WRITE_FD], stdin_buff, stdin_buff_len);
+       } else {
+           printf("SUBPROCESS: no stdin to send to bin\n");
        }
 
        //write(pipes[PARENT_WRITE_PIPE][WRITE_FD], "#_$_stdin_end\n", 14);
