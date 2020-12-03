@@ -37,8 +37,8 @@ class HAWSTargetMgr {
     std::unordered_map<pid_t, ChildHandle*> tasksHandles;
 
     // file monitoring - set COMM_FILE true to use
-    std::unordered_map<pid_t, std::string> tasksStdout;
-    std::unordered_map<pid_t, std::string> tasksCompleted;
+    //std::unordered_map<pid_t, std::string> tasksStdout;
+    std::unordered_map<pid_t, char*> tasksCompleted; //LARGE 
 
     // stdout monitoring - set COMM_STDOUT true to use 
     //std::unordered_map<pid_t, char*> tasksStdoutBuff;
@@ -71,7 +71,7 @@ class HAWSTargetMgr {
         if (tasksCompleted.size() == 0) {
             return;
         }
-        std::unordered_map<pid_t, std::string>::iterator it = tasksCompleted.begin();
+        std::unordered_map<pid_t, char*>::iterator it = tasksCompleted.begin();
         while (it != tasksCompleted.end()) {
             pid_t pid = it->first;
             assert(this->tasksStatus[pid] != TASK_RUNNING);
@@ -106,6 +106,11 @@ class HAWSTargetMgr {
         struct stat buffer;   
         return (stat (name.c_str(), &buffer) == 0);
     }
+    long GetFileSize(std::string filename) {
+        struct stat stat_buf;
+        int rc = stat(filename.c_str(), &stat_buf);
+        return rc == 0 ? stat_buf.st_size : -1;
+    }
     void TaskCompleteAccountingProtected(pid_t pid, TaskStatus ts, int s_code, time_point ended) {
         tasksEndTime[pid] = ended;
         tasksStatus[pid] = ts;
@@ -119,18 +124,29 @@ class HAWSTargetMgr {
             if (!FileExists(filepath)) {
                 assert(false); // binary did not drop the right outfile
             }
-            std::ifstream infile(filepath.c_str());
-            std::string content((std::istreambuf_iterator<char>(infile)),
-                                (std::istreambuf_iterator<char>()));
-            assert(content.length() > 0); // there was nothing in the file
-            tasksStdout[pid] = content;
+            long output_bytes = GetFileSize(filepath);
+            assert(output_bytes > 0);
+            char* output = (char*) malloc(1 + output_bytes * sizeof(char));
+            FILE *fp = fopen(filepath.c_str(), "r"); 
+            assert(fp != NULL); 
+            size_t len = fread(output, sizeof(char), output_bytes, fp);
+            assert(ferror(fp) == 0);
+            fclose(fp);
+            output[len++] = '\0'; //just to be safe 
+            
+            //std::ifstream infile(filepath.c_str());
+            //std::string content((std::istreambuf_iterator<char>(infile)),
+            //                    (std::istreambuf_iterator<char>()));
+            //assert(content.length() > 0); // there was nothing in the file
+
+            tasksCompleted[pid] = output;
             if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
                 assert(false);
             }
         } else {
             assert(false); //not implemented
         }
-        tasksCompleted[pid] = tasksStdout[pid].substr(0, tasksStdout[pid].find(endOfStdoutStr));
+        //tasksCompleted[pid] = tasksStdout[pid].substr(0, tasksStdout[pid].find(endOfStdoutStr));
         tasksActive.erase(pid);
         this->freedPhysMB += tasksMaxRAM[pid];
         tasksBillableUS[pid] = TIMEDIFF_CAST_USEC(tasksEndTime[pid] - tasksStartTime[pid]);
@@ -301,16 +317,18 @@ class HAWSTargetMgr {
             //stdOutBuffer = (char*) malloc(1024 * 3);
         }
         void Stop () {
+            /*
             std::list<pid_t>::iterator it = allPids.begin();
             while (it != allPids.end()) {
                 printf("HWMGR/%s OUTPUT PID %d: %s\n", this->targStr.c_str(),
                        *it, tasksStdout[*it].c_str()); //TODO rename
                 it++;
-            }
-            std::unordered_map<pid_t, std::string>::iterator mit = tasksCompleted.begin();
+            }*/
+            std::unordered_map<pid_t, char*>::iterator mit = tasksCompleted.begin();
             while (mit != tasksCompleted.end()) {
                 printf("HWMGR/%s COMPLETED PID %d: %s\n", this->targStr.c_str(), 
-                       mit->first, mit->second.c_str());
+                       mit->first, mit->second);
+                free(mit->second); 
                 mit++;
             }
             //free(stdOutBuffer);
