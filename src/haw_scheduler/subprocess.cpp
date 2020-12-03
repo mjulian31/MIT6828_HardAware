@@ -16,12 +16,20 @@
 // stdin / stdout piping stuff from  
 // https://jineshkj.wordpress.com/2006/12/22/how-to-capture-stdin-stdout-and-stderr-of-child-program/
 
+int subprocess_close_parent_pipes(ChildHandle* handle) {
+    return close(handle->pipes[PARENT_WRITE_PIPE][WRITE_FD]);
+}
+
 ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,    
                                           char* stdin_buff, int stdin_buff_len) {
     pid_t  pid; 
     printf("SUBPROCESS: alloc ChildHandle\n");
     ChildHandle* handle = (ChildHandle*) malloc(sizeof(ChildHandle));
     int ret = 1; 
+
+    // malloc new pipes for handle
+//    printf("SUBPROCESS: alloc pipes\n");
+//    int** pipes = (int**) malloc(sizeof(2 * 2 * sizeof(int)));
 
     // set up command line args array
     std::stringstream ss(args);
@@ -42,13 +50,19 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
     argv_list[i+1] = (char*) 0;
     printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]); 
     //argv_list now has [binpath, arg1, arg2, ..., argN, 0], read for execve
+    //for(int j = 0; j < 2; j++) {
+    //    pipes[j] = (int*) malloc(2 * sizeof(int));
+    //}
 
     // malloc new pipes for handle
+    printf("SUBPROCESS: alloc pipes\n");
     int** pipes = new int*[2];
-    for(int i = 0; i < 2; ++i)
+    for(int i = 0; i < 2; i++) {
         pipes[i] = new int[2];
+    }
 
     // init pipes for parent to write and read
+    printf("SUBPROCESS: init pipes\n");
     //pipe(pipes[PARENT_READ_PIPE]); // leaving stdout routed normally
     pipe(pipes[PARENT_WRITE_PIPE]);
     printf("SUBPROCESS: starting subprocess nonblocking\n");
@@ -78,9 +92,11 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        // the execv() only return if error occured. 
        // The return value is -1 
 
+       printf("CHILD: dup pipe\n");
        dup2(pipes[PARENT_WRITE_PIPE][READ_FD], STDIN_FILENO);
        //dup2(pipes[PARENT_READ_PIPE][WRITE_FD], STDOUT_FILENO);
 
+       printf("CHILD: close pipes\n");
        // close fds not required by child. Also, we don't
        // want the exec'ed program to know these existed 
        close(pipes[PARENT_WRITE_PIPE][READ_FD]);
@@ -88,6 +104,7 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        //close(pipes[PARENT_READ_PIPE][READ_FD]);
        close(pipes[PARENT_WRITE_PIPE][WRITE_FD]);
  
+       printf("CHILD: execv\n");
        execv(argv_list[0],argv_list); 
        exit(0);  // not reached?
     } else{ 
@@ -99,28 +116,34 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        //printf("caught pid %d\n", pid);
 
        // close fds not required by parent
+       printf("SUBPROCESS: close pipes\n");
        close(pipes[PARENT_WRITE_PIPE][READ_FD]);
        //close(pipes[PARENT_READ_PIPE][WRITE_FD]);
      
        // write in pid first
        //char pidStr[15];
        //sprintf(pidStr, "%d\n", pid); 
+       printf("SUBPROCESS: send PID\n");
        std::string pidStr = std::to_string(pid) + "\n";
        assert(pidStr.length() > 0);
        write(pipes[PARENT_WRITE_PIPE][WRITE_FD], pidStr.c_str(), strlen(pidStr.c_str()));
 
        // write in formal standardinput
-       printf("SUBPROCESS: sending STDIN[%d] '%s'", stdin_buff_len, stdin_buff);    
-       printf("SUBPROCESS: strlen %d\n", (int) strlen(stdin_buff)); 
-       write(pipes[PARENT_WRITE_PIPE][WRITE_FD], stdin_buff, stdin_buff_len);
+       if (stdin_buff_len > 0) {
+           printf("SUBPROCESS: sending STDIN[%d] '%s'", stdin_buff_len, stdin_buff);    
+           printf("SUBPROCESS: strlen %d\n", (int) strlen(stdin_buff)); 
+           write(pipes[PARENT_WRITE_PIPE][WRITE_FD], stdin_buff, stdin_buff_len);
+       }
 
        //write(pipes[PARENT_WRITE_PIPE][WRITE_FD], "#_$_stdin_end\n", 14);
+       printf("SUBPROCESS: pipe accounting\n");
        handle->pid = pid;
        handle->pipes[PARENT_WRITE_PIPE][READ_FD] = pipes[PARENT_WRITE_PIPE][READ_FD];
        handle->pipes[PARENT_WRITE_PIPE][WRITE_FD] = pipes[PARENT_WRITE_PIPE][WRITE_FD];
        //handle->pipes[PARENT_READ_PIPE][READ_FD] = pipes[PARENT_READ_PIPE][READ_FD];
        //handle->pipes[PARENT_READ_PIPE][WRITE_FD] = pipes[PARENT_READ_PIPE][WRITE_FD];
-
+    
+       printf("SUBPROCESS: freeing argv_list\n");
        free(argv_list); // free command line args that were sent
        return handle;
    }

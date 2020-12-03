@@ -26,6 +26,7 @@ typedef struct ChildHandle {
 #define WRITE_FD 1
 
 // production use
+int subprocess_close_parent_pipes(ChildHandle* handle);
 ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args, 
                                           char* stdin_buff, int stdin_buff_len);
 

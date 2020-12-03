@@ -22,14 +22,15 @@ int numTests = 0;
     exit(1);
 
 #define RUN_TEST(test_name) \
-    if ((test_name)() != 0) { \
+    printf("TEST START: " #test_name "\n"); \
+    if (test_name() != 0) { \
         FAIL(test_name); \
     } else { \
         printf("TEST PASS: " #test_name "\n"); \
     } \
     numTests++;
 
-void haws_test_1(HAWS* haws);
+int haws_test_1();
 void haws_test_2(HAWS* haws);
 void haws_test_3(HAWS* haws);
 void haws_test_4(HAWS* haws);
@@ -39,8 +40,9 @@ void haws_test_v4_8k(HAWS* haws);
 void haws_test_billing(HAWS* haws);
 void haws_test_stdout_cap(HAWS* haws);
 void haws_test_stdin_stdout_cap(HAWS* haws);
-void haws_test_matmul_cpu_prod1(HAWS* haws);
-void haws_test_matmul_gpu_prod1(HAWS* haws);
+
+int haws_test_matmul_cpu_prod1();
+int haws_test_matmul_gpu_prod1();
 
 #define TEST_MEMCAP haws_test_phys_mem_management
 #define TEST_8K haws_test_v4_8k
@@ -63,20 +65,23 @@ int cpuBinRAMGPUBase = 2;
 int gpuBinRAMBase = 2;
 
 int main () {
-    //HAWS haws;
-    //SINGLE_TEST(&haws);
-    RUN_TEST(haws_test_socket_bringup);
+//    RUN_TEST(haws_test_1);
+    RUN_TEST(haws_test_matmul_cpu_prod1);
+    RUN_TEST(haws_test_matmul_gpu_prod1);
+
+//    RUN_TEST(haws_test_socket_bringup);
 
     printf("\n\n");
     printf("%d TESTS PASSED\n", numTests);
 }
 
-void haws_test_1(HAWS* haws) {
+int haws_test_1() {
+    HAWS* haws = new HAWS();
     HAWSClientRequest* r1 = new HAWSClientRequest("cpu", 
                                                   "/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
                                                   "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
                                                   (char*) "", 0,
-                                                  "4096");
+                                                  "32");
     printf("r1: %s \n", r1->ToStr().c_str());
 
     haws->Start();
@@ -85,6 +90,7 @@ void haws_test_1(HAWS* haws) {
     haws->Stop();
 
     printf("Yay from test1, done!\n");
+    return 0;
 }
 
 void haws_test_2(HAWS* haws) {
@@ -277,7 +283,8 @@ void haws_test_gpu_mgmt(HAWS* haws) {
     haws->Stop();
 }
 
-void haws_test_matmul_cpu_prod1(HAWS* haws) {
+int haws_test_matmul_cpu_prod1() {
+    HAWS* haws = new HAWS();
     haws->Start();
     char* formal_stdin = (char*) "[0.5601922408747706 0.5498457394253573 0.24767881927397717 0.27187891952177856; 0.5730447732822026 0.392712621542896 0.7104079489586148 0.27725616994299096; 0.2728092392852186 0.16275014197633997 0.5345847176860559 0.7135436758420011][0.20318818433657682 0.2268235629705242; 0.5767023795601847 0.8770918376577908; 0.26442460894021313 0.9237210225088366; 0.43515479778688104 0.9401231927424645]\n";
     printf("TESTMAIN: stdinlen %d\n", (int) strlen(formal_stdin));
@@ -292,9 +299,11 @@ void haws_test_matmul_cpu_prod1(HAWS* haws) {
     sleep(1); //let jobs start
     while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
     haws->Stop();
+    return 0;
 }
 
-void haws_test_matmul_gpu_prod1(HAWS* haws) {
+int haws_test_matmul_gpu_prod1() {
+    HAWS* haws = new HAWS();
     haws->Start();
     char* formal_stdin = (char*) "[0.5601922408747706 0.5498457394253573 0.24767881927397717 0.27187891952177856; 0.5730447732822026 0.392712621542896 0.7104079489586148 0.27725616994299096; 0.2728092392852186 0.16275014197633997 0.5345847176860559 0.7135436758420011][0.20318818433657682 0.2268235629705242; 0.5767023795601847 0.8770918376577908; 0.26442460894021313 0.9237210225088366; 0.43515479778688104 0.9401231927424645]\n";
     printf("TESTMAIN: stdinlen %d\n", (int) strlen(formal_stdin));
@@ -309,5 +318,6 @@ void haws_test_matmul_gpu_prod1(HAWS* haws) {
     sleep(1); //let jobs start
     while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
     haws->Stop();
+    return 0;
 }
 
