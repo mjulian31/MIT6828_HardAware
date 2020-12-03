@@ -316,6 +316,18 @@ class HAWSTargetMgr {
                 mit++;
             }
             //free(stdOutBuffer);
+
+            // clear all member datastructures
+            allPids.clear();
+            terminatingPids.clear();
+            tasksActive.clear();
+            tasksStatus.clear();
+            tasksStatusCode.clear();
+            tasksStartTime.clear();
+            tasksEndTime.clear();
+            tasksMaxRAM.clear();
+            tasksBillableUS.clear();
+            tasksHandles.clear();
         }
 
         // shelved
