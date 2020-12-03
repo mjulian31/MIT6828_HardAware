@@ -111,6 +111,40 @@ class HAWSTargetMgr {
         int rc = stat(filename.c_str(), &stat_buf);
         return rc == 0 ? stat_buf.st_size : -1;
     }
+    void TaskCompleteGetDroppedOutputProtected(pid_t pid) {
+        printf("TARGMGR/%s Picking Up Dropped Output\n", this->targStr.c_str());
+
+        std::string filepath = "/opt/haws/bin/out/" + std::to_string(pid) + ".txt";
+        if (!FileExists(filepath)) {
+            assert(false); // binary did not drop the right outfile
+        }
+        long output_bytes = GetFileSize(filepath);
+        assert(output_bytes > 0);
+        printf("TARGMGR/%s Malloc for storing output\n", this->targStr.c_str());
+        char* output = (char*) malloc(1 + output_bytes * sizeof(char));
+        printf("TARGMGR/%s Open file\n", this->targStr.c_str());
+        FILE *fp = fopen(filepath.c_str(), "r"); 
+        assert(fp != NULL); 
+        printf("TARGMGR/%s Read it all \n", this->targStr.c_str());
+        size_t len = fread(output, sizeof(char), output_bytes, fp);
+        assert(ferror(fp) == 0);
+        printf("TARGMGR/%s Close file\n", this->targStr.c_str());
+        fclose(fp);
+        output[len++] = '\0'; //just to be safe 
+        
+        //std::ifstream infile(filepath.c_str());
+        //std::string content((std::istreambuf_iterator<char>(infile)),
+        //                    (std::istreambuf_iterator<char>()));
+        //assert(content.length() > 0); // there was nothing in the file
+        printf("TARGMGR/%s Save pointer\n", this->targStr.c_str());
+        tasksCompleted[pid] = output;
+
+        printf("TARGMGR/%s Delete dropped file\n", this->targStr.c_str());
+        if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
+            assert(false);
+        }
+        printf("TARGMGR/%s Done saving output\n", this->targStr.c_str());
+    }
     void TaskCompleteAccountingProtected(pid_t pid, TaskStatus ts, int s_code, time_point ended) {
         tasksEndTime[pid] = ended;
         tasksStatus[pid] = ts;
@@ -120,29 +154,7 @@ class HAWSTargetMgr {
             //std::string cppStdOut(tasksStdoutBuff[pid]);
             //tasksStdout[pid] = cppStdOut;
         } else if (COMM_FILE) {
-            std::string filepath = "/opt/haws/bin/out/" + std::to_string(pid) + ".txt";
-            if (!FileExists(filepath)) {
-                assert(false); // binary did not drop the right outfile
-            }
-            long output_bytes = GetFileSize(filepath);
-            assert(output_bytes > 0);
-            char* output = (char*) malloc(1 + output_bytes * sizeof(char));
-            FILE *fp = fopen(filepath.c_str(), "r"); 
-            assert(fp != NULL); 
-            size_t len = fread(output, sizeof(char), output_bytes, fp);
-            assert(ferror(fp) == 0);
-            fclose(fp);
-            output[len++] = '\0'; //just to be safe 
-            
-            //std::ifstream infile(filepath.c_str());
-            //std::string content((std::istreambuf_iterator<char>(infile)),
-            //                    (std::istreambuf_iterator<char>()));
-            //assert(content.length() > 0); // there was nothing in the file
-
-            tasksCompleted[pid] = output;
-            if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
-                assert(false);
-            }
+            TaskCompleteGetDroppedOutputProtected(pid);    
         } else {
             assert(false); //not implemented
         }

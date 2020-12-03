@@ -67,11 +67,11 @@ int gpuBinRAMBase = 2;
 
 int main () {
     // in progress
-//    RUN_TEST(haws_test_1);
+    RUN_TEST(haws_test_1);
 
     // actual matrix multiplies
-    RUN_TEST(haws_test_matmul_cpu_prod1);
-    RUN_TEST(haws_test_matmul_gpu_prod1);
+//    RUN_TEST(haws_test_matmul_cpu_prod1);
+//    RUN_TEST(haws_test_matmul_gpu_prod1);
 
 //    RUN_TEST(haws_test_socket_bringup);
 
