@@ -57,7 +57,7 @@ time_point hawsStopTime;
 
 int throttle = 0;
 
-void HAWS::ReapChildren() {
+void HAWS::ReapChildren() { // SCHEDLOOP THREAD
     pid_t p;
     int status;
     int reapedTasks = 0;
@@ -91,6 +91,7 @@ void HAWS::ReapChildren() {
     if (reapedTasks > 0) { printf("TARGMGR: subprocesses reaped: %d\n", reapedTasks); }
 }
 
+// SCHEDLOOP THREAD
 void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, time_point ended) {
     if (IN_LIST(allCPUPids, pid)) {
        assert(cpuMgr->TaskIsActive(pid));
@@ -154,13 +155,13 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
     printf("HAWS: ScheduleLoop ended...\n");
 }
 
-void HAWS::RequeueReq(HAWSClientRequest* req) {
+void HAWS::RequeueReq(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     tasksToStartQueueLock.lock();
     tasksToStartQueue->push(req); //put it back in queue
     tasksToStartQueueLock.unlock();
 }
-
-void HAWS::StartTaskCPU(HAWSClientRequest* req) {
+ 
+void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     int maxRAM = req->GetCPUBinRAM();
     globalSchedRAMAvail -= maxRAM;
     printf("HAWS: Starting CPU Task\n");
@@ -171,7 +172,7 @@ void HAWS::StartTaskCPU(HAWSClientRequest* req) {
     //printf("HAWS/SL: CPU got %s\n", req->ToStr().c_str());
 }
 
-void HAWS::StartTaskGPU(HAWSClientRequest* req) {
+void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     int maxRAM = req->GetCPUBinRAM();
     //globalSchedRAMAvail -= maxRAM;
     printf("HAWS: Starting GPU Task\n");
@@ -200,7 +201,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
     }
 }
 
-HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) {
+HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     bool shouldUseCPU = req->GetTarget() == "cpu";
 
     //TODO consult extra hints or profiling info to pick target intelligently
@@ -209,13 +210,23 @@ HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) {
     return shouldUseCPU ? TargCPU : TargGPU;
 }
 
+// MAIN THREAD BELOW
+
 HAWS::HAWS() {
     printf("HAWS: Constructed\n");
     tasksToStartQueue = new std::queue<HAWSClientRequest*>();
 }
 
 HAWS::~HAWS() {
+    assert(tasksToStartQueue->size() == 0); // shouldn't leave stuff in queue
     delete tasksToStartQueue;
+}
+
+int HAWS::GetNumQueuedReqs() {
+    tasksToStartQueueLock.lock();
+    int size = tasksToStartQueue->size();
+    tasksToStartQueueLock.unlock();
+    return size;
 }
 
 int HAWS::GetNumActiveTasks() {
@@ -259,6 +270,12 @@ void HAWS::Start() {
 }
 
 void HAWS::Stop() {
+    tasksToStartQueueLock.lock();
+    int enqueuedReqs = tasksToStartQueue->size();
+    tasksToStartQueueLock.unlock();
+
+    assert(enqueuedReqs == 0); // should not stop with reqs in flight in queue
+
     assert(schedLoopThreadRunning);  // must be started before stopped
     assert(sockThreadClient1Running);  // must be started before stopped
 

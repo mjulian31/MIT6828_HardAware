@@ -88,7 +88,7 @@ int haws_test_1() {
     haws->Start();
     haws->HardAwareSchedule(r1);
     sleep(1);
-    while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
+    while (haws->GetNumQueuedReqs() > 0 || haws->GetNumActiveTasks() > 0) { usleep(1000); }
     haws->Stop();
 
     printf("Yay from test1, done!\n");
@@ -304,7 +304,7 @@ int haws_test_matmul_cpu_prod1() {
        // freeable_stdin will be freed after processing
     }
     sleep(1); //let jobs start
-    while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
+    while (haws->GetNumQueuedReqs() > 0 || haws->GetNumActiveTasks() > 0) { usleep(1000); }
     haws->Stop();
     delete haws;
     return 0;
@@ -330,7 +330,7 @@ int haws_test_matmul_gpu_prod1() {
        // freeable_stdin will be freed after processing
     }
     sleep(1); //let jobs start
-    while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
+    while (haws->GetNumQueuedReqs() > 0 || haws->GetNumActiveTasks() > 0) { usleep(1000); }
     haws->Stop();
     delete haws;
     return 0;

@@ -56,7 +56,7 @@ class HAWSTargetMgr {
     //CPUCostModel cputCostModel; //object TODO
 
     private: 
-    inline void SanityCheckActiveTasks () { // holding lock
+    inline void SanityCheckActiveTasksProtected () { // holding lock
         std::unordered_map<int, std::string>::iterator it = tasksActive.begin();
         std::list<pid_t>::iterator allPidIt;
         while (it != tasksActive.end()) {
@@ -67,7 +67,7 @@ class HAWSTargetMgr {
             it++;
         }
     }
-    inline void SanityCheckCompletedTasks () { // holding lock
+    inline void SanityCheckCompletedTasksProtected () { // holding lock
         if (tasksCompleted.size() == 0) {
             return;
         }
@@ -209,6 +209,7 @@ class HAWSTargetMgr {
                                                                stdin_buf, stdin_buff_len);
             time_point start_time = std::chrono::system_clock::now();
             pid_t pid = handle->pid;
+
             taskLock.lock();
             allPids.insert(allPids.begin(), pid);
             tasksActive[pid] = binpath + " " + args;
@@ -222,10 +223,7 @@ class HAWSTargetMgr {
             tasksStdoutBuffLen[pid] = 0;
             tasksStdoutBuffScan[pid] = 0;
             taskLock.unlock();
-            // send input to binary
-            //sleep(1);
-            //printf("writing stdin %s \n", "afirsttest\n");
-            //write(handle->pipes[PARENT_WRITE_PIPE][WRITE_FD], "afirsttest\n", 11);
+
             printf("HWMGR/%s: starting task done\n", this->targStr.c_str());
             return pid;
         }
@@ -238,8 +236,8 @@ class HAWSTargetMgr {
             if (throttle % 1000 == 0) { // make sure all invariants are satisfied
                 //printf("-->doing sanity check\n");
                 taskLock.lock();
-                this->SanityCheckActiveTasks(); 
-                this->SanityCheckCompletedTasks();
+                this->SanityCheckActiveTasksProtected(); 
+                this->SanityCheckCompletedTasksProtected();
                 if (throttle % 1000 == 0) {
                     this->PrintDataProtected();
                 }
@@ -291,13 +289,13 @@ class HAWSTargetMgr {
             bool active = this->TaskIsActiveProtected(pid);
             taskLock.unlock();
             return active;
-        }
+        }        
         int GetNumActiveTasks() { 
             taskLock.lock();
             int size = this->tasksActive.size(); 
             taskLock.unlock();
             return size;
-        }   
+        }
         void Start() {
             // Read from child’s stdout
             //stdOutBuffer = (char*) malloc(1024 * 3);

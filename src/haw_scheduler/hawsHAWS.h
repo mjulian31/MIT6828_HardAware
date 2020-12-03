@@ -53,7 +53,9 @@ class HAWS {
         static void StartTaskCPU(HAWSClientRequest* req);
         static void StartTaskGPU(HAWSClientRequest* req);
         static HAWSHWTarget DetermineReqTarget(HAWSClientRequest* req);
+    
 
+        //unused
         void ParseFields();
         void StartTaskCPUManager();
         void StartTaskGPUManager();
@@ -69,6 +71,7 @@ class HAWS {
         void Start();
         void HardAwareSchedule(HAWSClientRequest* req);
         int GetNumActiveTasks();
+        int GetNumQueuedReqs();
         //int GetNumActiveTasksGPU();
         void Stop();
         void PrintData();
