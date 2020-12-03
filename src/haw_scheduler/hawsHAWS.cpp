@@ -295,11 +295,12 @@ void HAWS::Stop() {
     //sockThreadClient1->join();            // block until thread exits and returns
     //sockThreadClient1Running = false; // sock loop thread gone
 
+    // print info once stopped
+    this->PrintData();
+
     // stop target managers
     cpuMgr->Stop();
     gpuMgr->Stop();
-
-    this->PrintData();
 
     delete cpuMgr;
     delete gpuMgr;

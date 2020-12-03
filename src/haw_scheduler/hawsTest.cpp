@@ -30,18 +30,19 @@ int numTests = 0;
     } \
     numTests++;
 
-int haws_test_1();
 void haws_test_2(HAWS* haws);
 void haws_test_3(HAWS* haws);
 void haws_test_4(HAWS* haws);
 void haws_test_phys_mem_management(HAWS* haws);
-void haws_test_phys_mem_management2(HAWS* haws);
 void haws_test_v4_8k(HAWS* haws);
 void haws_test_billing(HAWS* haws);
 void haws_test_stdout_cap(HAWS* haws);
 void haws_test_stdin_stdout_cap(HAWS* haws);
 
-#define MATMUL_PROD1_ITERS 2000
+#define MATMUL_PROD1_ITERS 1000
+
+int haws_test_1();
+int haws_test_physmem_limit_buffer();
 int haws_test_matmul_cpu_prod1();
 int haws_test_matmul_gpu_prod1();
 
@@ -57,7 +58,7 @@ int haws_test_matmul_gpu_prod1();
 
 //rr1 - current verion v4
 //cpu
-int cpuBinRAM1024 = 24;
+int cpuBinRAM1024 = 35;
 int cpuBinRAM2048 = 90;
 int cpuBinRAM4096 = 385;
 int cpuBinRAM8k = 1536;
@@ -68,6 +69,7 @@ int gpuBinRAMBase = 2;
 int main () {
     // in progress
     RUN_TEST(haws_test_1);
+    RUN_TEST(haws_test_physmem_limit_buffer);
 
     // actual matrix multiplies
     RUN_TEST(haws_test_matmul_cpu_prod1);
@@ -183,7 +185,7 @@ void haws_test_phys_mem_management(HAWS* haws) {
     haws->Start();
     for (int i = 0; i < 4000; i++) {
         HAWSClientRequest* r = new HAWSClientRequest("cpu",
-                                                     "/opt/haws/bin/matmul_cpu_v4", cpuBinRAM2048,
+                                                     "/opt/haws/bin/matmul_cpu_v4", cpuBinRAM1024,
                                                      "/opt/haws/bin/matmul_gpu_v4", gpuBinRAMBase,
                                                      (char*) "", 0,
                                                      "1024");
@@ -195,19 +197,20 @@ void haws_test_phys_mem_management(HAWS* haws) {
 }
 
 
-void haws_test_phys_mem_management2(HAWS* haws) {
-    haws->Start();
-    for (int i = 0; i < 38; i++) {
+int haws_test_physmem_limit_buffer() {
+    haws.Start();
+    for (int i = 0; i < 200; i++) {
         HAWSClientRequest* r = new HAWSClientRequest("cpu",
-                                                     "/opt/haws/bin/matmul_cpu", cpuBinRAM8k,
+                                                     "/opt/haws/bin/matmul_cpu", cpuBinRAM1024 * 10,
                                                      "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
                                                      (char*) "", 0,
-                                                     "8k");
-        haws->HardAwareSchedule(r);
+                                                     "1024");
+        haws.HardAwareSchedule(r);
     }
     sleep(1);
-    while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
-    haws->Stop();
+    while (haws.IsDoingWork()) { usleep(1000); }
+    haws.Stop();
+    return 0;
 }
 
 void haws_test_v4_8k(HAWS* haws) {

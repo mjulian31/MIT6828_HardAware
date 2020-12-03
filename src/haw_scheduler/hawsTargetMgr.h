@@ -39,6 +39,7 @@ class HAWSTargetMgr {
     // file monitoring - set COMM_FILE true to use
     //std::unordered_map<pid_t, std::string> tasksStdout;
     std::unordered_map<pid_t, char*> tasksCompleted; //LARGE 
+    std::unordered_map<pid_t, long> tasksOutputLen;
 
     // stdout monitoring - set COMM_STDOUT true to use 
     //std::unordered_map<pid_t, char*> tasksStdoutBuff;
@@ -111,12 +112,18 @@ class HAWSTargetMgr {
         int rc = stat(filename.c_str(), &stat_buf);
         return rc == 0 ? stat_buf.st_size : -1;
     }
-    void TaskCompleteGetDroppedOutputProtected(pid_t pid) {
+    void TaskCompleteGetDroppedOutput(pid_t pid) {
         printf("TARGMGR/%s Picking Up Dropped Output\n", this->targStr.c_str());
-
         std::string filepath = "/opt/haws/bin/out/" + std::to_string(pid) + ".txt";
-        if (!FileExists(filepath)) {
-            assert(false); // binary did not drop the right outfile
+        int timeout = 0;
+        while (!FileExists(filepath)) {
+            //assert(false); // binary did not drop the right outfileA
+            sleep(1); // try again
+            if (timeout == 30) {
+                printf("TARGMGR/%s file %d.txt didn't show up for %ds after bin exited\n", 
+                       this->targStr.c_str(), pid, timeout);
+                assert(false);
+            } timeout++;
         }
         long output_bytes = GetFileSize(filepath);
         assert(output_bytes > 0);
@@ -131,13 +138,16 @@ class HAWSTargetMgr {
         printf("TARGMGR/%s Close file\n", this->targStr.c_str());
         fclose(fp);
         output[len++] = '\0'; //just to be safe 
-        
+         
         //std::ifstream infile(filepath.c_str());
         //std::string content((std::istreambuf_iterator<char>(infile)),
         //                    (std::istreambuf_iterator<char>()));
         //assert(content.length() > 0); // there was nothing in the file
         printf("TARGMGR/%s Save pointer\n", this->targStr.c_str());
+        taskLock.lock();
         tasksCompleted[pid] = output;
+        tasksOutputLen[pid] = len;
+        taskLock.unlock();
 
         printf("TARGMGR/%s Delete dropped file\n", this->targStr.c_str());
         if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
@@ -154,7 +164,7 @@ class HAWSTargetMgr {
             //std::string cppStdOut(tasksStdoutBuff[pid]);
             //tasksStdout[pid] = cppStdOut;
         } else if (COMM_FILE) {
-            TaskCompleteGetDroppedOutputProtected(pid);    
+            //TaskCompleteGetDroppedOutputProtected(pid);    
         } else {
             assert(false); //not implemented
         }
@@ -293,13 +303,14 @@ class HAWSTargetMgr {
             // free stdout buffer (currently unused)
             //free(tasksStdoutBuff[pid]);
 
+            TaskCompleteGetDroppedOutput(pid);    
+
             //printf("doing accounting\n");
             taskLock.lock();
 
             // close pipe to child's stdin
             int success = subprocess_close_parent_stdin_pipe(tasksHandles[pid]);
             assert(success == 0);
-
 
             this->TaskCompleteAccountingProtected(pid, ts, status_code, time_completed); 
             int billableUS = tasksBillableUS[pid];
@@ -337,19 +348,20 @@ class HAWSTargetMgr {
                        *it, tasksStdout[*it].c_str()); //TODO rename
                 it++;
             }*/
-            std::unordered_map<pid_t, char*>::iterator mit = tasksCompleted.begin();
-            while (mit != tasksCompleted.end()) {
-                printf("HWMGR/%s COMPLETED PID %d: %s\n", this->targStr.c_str(), 
-                       mit->first, mit->second);
-                free(mit->second); 
-                mit++;
-            }
             //free(stdOutBuffer);
 
             // clear all member datastructures
             taskLock.lock();
+            std::unordered_map<pid_t, char*>::iterator mit = tasksCompleted.begin();
+            while (mit != tasksCompleted.end()) {
+                printf("HWMGR/%s COMPLETED PID %d: output[%ld]\n", this->targStr.c_str(), 
+                       mit->first, tasksOutputLen[mit->first]);
+                free(mit->second); 
+                mit++;
+            }
             allPids.clear();
-            terminatingPids.clear();
+            terminatingPids.clear(); // rm? 
+            assert(tasksCompleted.size() == tasksOutputLen.size());
             printf("HWMGR/%s tasksActive.size = %ld\n", this->targStr.c_str(), 
                    tasksActive.size());
             assert(tasksActive.size() == 0);

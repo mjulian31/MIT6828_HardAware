@@ -69,15 +69,6 @@ int haws_socket_listen(int port) { // SOCKET THREAD
 // 50MB coming in per request
 uint64_t socket_read_buf_size = ((uint64_t)1024 * (uint64_t)1024 * (uint64_t)1024 * (uint64_t)50);
 
-int socket_read(int socket, char* buffer) { // SOCKET THREAD
-    //char *hello = "Hello from server";
-    //printf("SOCKET: read...\n");
-    int valread = read(socket, buffer, socket_read_buf_size);
-    //printf("SOCKET: ...read %d\n", valread);
-    //send(new_socket , hello , strlen(hello) , 0 ); 
-    //printf("Hello message sent\n"); 
-    return valread; 
-}
 void haws_socket_loop(int socket) { // SOCKET THREAD
     printf("SOCKET: hello from loop\n");
     printf("SOCKET: listening...\n");
@@ -85,7 +76,8 @@ void haws_socket_loop(int socket) { // SOCKET THREAD
     printf("SOCKET: ...accepted\n");
     char* socket_read_buf = (char*) malloc(socket_read_buf_size);
     while (!globalKillFlag) {
-        int bytes_in = socket_read(socket_fd, socket_read_buf);
+        int bytes_in = read(socket_fd, socket_read_buf, socket_read_buf_size);
+        assert(bytes_in != socket_read_buf_size); // request was too large
         if (bytes_in > 0) {
             printf("SOCKET: read: %d - '%s'\n", bytes_in, socket_read_buf); 
         }
@@ -93,4 +85,3 @@ void haws_socket_loop(int socket) { // SOCKET THREAD
     }
     free(socket_read_buf);
 }
-
