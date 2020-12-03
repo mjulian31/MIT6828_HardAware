@@ -5,6 +5,4 @@ test/large
 binaries/matmul_cpu
 binaries/matmul_gpu
 binaries/matmul_gpu.ptx
-src/haw_scheduler/hawsClientRequest.h.gch
-src/haw_scheduler/socket.h.gch
-src/haw_scheduler/subprocess.h.gch
+*.gch
