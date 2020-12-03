@@ -13,7 +13,8 @@ main () {
     local vgrargs=""
     if [ "$1" == "RR1" ]; then
         bincmd="/opt/haws/bin/haws $RR1_PHYSMEM $RR1_GPUMEM $RR1_GPUSHAREDMEM"
-	    vgrargs="--leak-check=full --show-leak-kinds=all --track-origins=yes -s"
+	    #vgrargs="--leak-check=full --show-leak-kinds=all --track-origins=yes -s"
+	    vgrargs="--leak-check=full --show-leak-kinds=all -s"
     elif [ "$1" == "CL" ]; then
         bincmd="/opt/haws/bin/haws $CL_PHYSMEM $CL_GPUMEM $CL_GPUSHAREDMEM"
 	    vgrargs="--leak-check=full --show-leak-kinds=all --track-origins=yes"

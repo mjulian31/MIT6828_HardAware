@@ -284,9 +284,7 @@ void HAWS::Stop() {
     assert(globalPhysMemAvail = this->physMemLimitMB);
     assert(globalGPUMemAvail = this->gpuMemLimitMB);
     assert(globalGPUSharedMemAvail = this->gpuSharedMemLimitMB);
-
     assert(schedLoopThreadRunning);   // must be started before stopped
-    assert(sockThreadClient1Running); // must be started before stopped
 
     schedLoopKillFlag = true; // enable killswitch for schedule loop thread
 
@@ -294,7 +292,6 @@ void HAWS::Stop() {
     schedLoopThread->join();          // block until thread exits and returns
     schedLoopThreadRunning = false;   // schedule loop thread gone
     delete(schedLoopThread);
-
 
     // print info once stopped
     this->PrintData();
@@ -319,6 +316,7 @@ void HAWS::StartSocket() {
 
 void HAWS::StopSocket() {
     printf("HAWS: Stopping Socket (Client1)\n");
+    assert(sockThreadClient1Running); // must be started before stopped
     sockLoopKillFlag = true; // enable killswitch for socket loop thread
     sockThreadClient1->join();            // block until thread exits and returns
     sockThreadClient1Running = false;     // sock loop thread gone
