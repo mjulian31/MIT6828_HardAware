@@ -55,7 +55,9 @@ class HAWSClientRequest {
 
         // manually called to free pointer holding stdin
         void FreeStdinBuf() {
-            free(this->stdinBuf);
+            if (this->stdinBufLen > 0) {
+                free(this->stdinBuf);
+            }
         }
 
         std::string GetTarget()        { return target;     }

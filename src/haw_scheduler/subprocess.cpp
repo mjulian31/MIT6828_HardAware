@@ -122,9 +122,9 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        // write in pid first
        //char pidStr[15];
        //sprintf(pidStr, "%d\n", pid); 
-       printf("SUBPROCESS: send PID\n");
        std::string pidStr = std::to_string(pid) + "\n";
        assert(pidStr.length() > 0);
+       printf("SUBPROCESS: send PID %s\n", pidStr.c_str());
        write(pipes[PARENT_WRITE_PIPE][WRITE_FD], pidStr.c_str(), strlen(pidStr.c_str()));
 
        // write in formal standardinput
