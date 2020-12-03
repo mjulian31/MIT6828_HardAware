@@ -31,6 +31,15 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
 //    printf("SUBPROCESS: alloc pipes\n");
 //    int** pipes = (int**) malloc(sizeof(2 * 2 * sizeof(int)));
 
+    // malloc new pipes for handle
+    printf("SUBPROCESS: alloc pipes\n");
+    int** pipes = new int*[2];
+    printf("SUBPROCESS: alloc pipes 1 \n");
+    for(int j = 0; j < 2; j++) {
+        printf("SUBPROCESS: alloc pipes i=%d \n", j);
+        pipes[j] = new int[2];
+    }
+
     // set up command line args array
     std::stringstream ss(args);
     std::vector<std::string> tokens;
@@ -38,8 +47,10 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
     while (getline(ss, temp_str, ' ')) { // tokenize incoming string
         tokens.push_back(temp_str);
     } 
+    char** argv_list;
     // two extra spots; 1 for bin path and 1 for null terminator
-    char** argv_list = (char**) calloc(2 + tokens.size(), sizeof(char*));
+    printf("SUBPROCESS: calloc argv_list[%ld]\n", 2 + tokens.size());   
+    argv_list = (char**) calloc(2 + tokens.size(), sizeof(char*));
     int i = 0;
     argv_list[i] = (char*) binpath.c_str();
     printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]);
@@ -49,17 +60,7 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
     }
     argv_list[i+1] = (char*) 0;
     printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]); 
-    //argv_list now has [binpath, arg1, arg2, ..., argN, 0], read for execve
-    //for(int j = 0; j < 2; j++) {
-    //    pipes[j] = (int*) malloc(2 * sizeof(int));
-    //}
-
-    // malloc new pipes for handle
-    printf("SUBPROCESS: alloc pipes\n");
-    int** pipes = new int*[2];
-    for(int i = 0; i < 2; i++) {
-        pipes[i] = new int[2];
-    }
+    //argv_list now has [binpath, <arg1, arg2, ..., argN,> 0], read for execve
 
     // init pipes for parent to write and read
     printf("SUBPROCESS: init pipes\n");
@@ -145,8 +146,10 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
     
        printf("SUBPROCESS: freeing argv_list\n");
        free(argv_list); // free command line args that were sent
+       printf("SUBPROCESS: started successfully\n");
        return handle;
    }
+   assert(false); // not reached
    return 0;
 }
 

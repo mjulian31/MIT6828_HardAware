@@ -211,6 +211,10 @@ HAWS::HAWS() {
     tasksToStartQueue = new std::queue<HAWSClientRequest*>();
 }
 
+HAWS::~HAWS() {
+    delete tasksToStartQueue;
+}
+
 int HAWS::GetNumActiveTasks() {
     return cpuMgr->GetNumActiveTasks();
 }
@@ -269,7 +273,8 @@ void HAWS::Stop() {
     // stop target managers
     cpuMgr->Stop();
     gpuMgr->Stop();
-
+    delete cpuMgr;
+    delete gpuMgr;
     globalKillFlag = false;          // reset killswitch
 
     this->PrintData();

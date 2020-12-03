@@ -65,6 +65,7 @@ class HAWS {
         void HotQueryGPUManager();
     public:
         HAWS();
+        ~HAWS();
         void Start();
         void HardAwareSchedule(HAWSClientRequest* req);
         int GetNumActiveTasks();

@@ -41,7 +41,7 @@ class HAWSTargetMgr {
     std::unordered_map<pid_t, std::string> tasksCompleted;
 
     // stdout monitoring - set COMM_STDOUT true to use 
-    std::unordered_map<pid_t, char*> tasksStdoutBuff;
+    //std::unordered_map<pid_t, char*> tasksStdoutBuff;
     std::unordered_map<pid_t, int> tasksStdoutBuffLen;
     std::unordered_map<pid_t, int> tasksStdoutBuffScan;
 
@@ -111,8 +111,8 @@ class HAWSTargetMgr {
         tasksStatus[pid] = ts;
         tasksStatusCode[pid] = s_code;
         if (COMM_STDOUT) {
-            std::string cppStdOut(tasksStdoutBuff[pid]);
-            tasksStdout[pid] = cppStdOut;
+            //std::string cppStdOut(tasksStdoutBuff[pid]);
+            //tasksStdout[pid] = cppStdOut;
         } else if (COMM_FILE) {
             std::string filepath = "/opt/haws/bin/out/" + std::to_string(pid) + ".txt";
             if (!FileExists(filepath)) {
@@ -140,6 +140,8 @@ class HAWSTargetMgr {
         write(handle->pipes[PARENT_WRITE_PIPE][WRITE_FD], "_$_term\n", 8);
         //printf("TERMINATED IT\n");
     }
+
+    /*
     void ProcessChildStdout(ChildHandle* handle, char* stdOutBuffer) {
         pid_t pid = handle->pid;
         bool useCPPStrs = false;
@@ -168,7 +170,8 @@ class HAWSTargetMgr {
             }
         }
         //taskLock.unlock(); // needed ?
-    }
+    }*/
+    /*
     void CollectChildrenStdout() {
         std::unordered_map<pid_t, std::string>::iterator it = tasksActive.begin();
         while (it != tasksActive.end()) {
@@ -190,7 +193,7 @@ class HAWSTargetMgr {
             }
             it++;
         }
-    }
+    }*/
 
     // ------ PUBLIC BELOW ------
 
@@ -200,36 +203,45 @@ class HAWSTargetMgr {
         }
         int StartTask(std::string binpath, std::string args, 
                       char* stdin_buf, int stdin_buff_len, int maxRAM) {
-            printf("HWMGR/CPU: starting subprocess 1\n");
-
-            printf("HWMGR/CPU: starting subprocess 2\n");
+            printf("HWMGR/CPU: starting task 1\n");
             ChildHandle* handle = start_subprocess_nonblocking(binpath, args, 
                                                                stdin_buf, stdin_buff_len);
+            printf("HWMGR/CPU: starting task 2\n");
             time_point start_time = std::chrono::system_clock::now();
+            printf("HWMGR/CPU: starting task 3\n");
             pid_t pid = handle->pid;
+            printf("HWMGR/CPU: starting task 4\n");
             taskLock.lock();
+            printf("HWMGR/CPU: starting task 5\n");
             allPids.insert(allPids.begin(), pid);
+            printf("HWMGR/CPU: starting task 6\n");
             tasksActive[pid] = binpath + " " + args;
+            printf("HWMGR/CPU: starting task 7\n");
             tasksStatus[pid] = TASK_RUNNING;
+            printf("HWMGR/CPU: starting task 8\n");
             tasksStatusCode[pid] = -1;
+            printf("HWMGR/CPU: starting task 9\n");
             tasksStartTime[pid] = start_time; 
+            printf("HWMGR/CPU: starting task 10\n");
             tasksMaxRAM[pid] = maxRAM;
             tasksBillableUS[pid] = 0;
             tasksHandles[pid] = handle;
-            tasksStdoutBuff[pid] = (char*) malloc(1024);
+            //tasksStdoutBuff[pid] = (char*) malloc(1024);
             tasksStdoutBuffLen[pid] = 0;
             tasksStdoutBuffScan[pid] = 0;
             taskLock.unlock();
+            printf("HWMGR/CPU: starting task 11\n");
             // send input to binary
             //sleep(1);
             //printf("writing stdin %s \n", "afirsttest\n");
             //write(handle->pipes[PARENT_WRITE_PIPE][WRITE_FD], "afirsttest\n", 11);
+            printf("HWMGR/CPU: starting task done\n");
             return pid;
         }
         
         void Monitor () { //SCHEDLOOP THREAD
             if (COMM_STDOUT) {
-                CollectChildrenStdout();
+                //CollectChildrenStdout();
             }
 
             if (throttle % 1000 == 0) { // make sure all invariants are satisfied
@@ -262,6 +274,9 @@ class HAWSTargetMgr {
             // close pipe to child's stdin
             int success = subprocess_close_parent_stdin_pipe(tasksHandles[pid]);
             assert(success == 0);
+
+            // free stdout buffer (currently unused)
+            //free(tasksStdoutBuff[pid]);
 
             //printf("doing accounting\n");
             taskLock.lock();

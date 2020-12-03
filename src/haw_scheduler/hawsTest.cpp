@@ -65,10 +65,11 @@ int cpuBinRAMGPUBase = 2;
 int gpuBinRAMBase = 2;
 
 int main () {
-//    RUN_TEST(haws_test_1);
+    // actual matrix multiplies
     RUN_TEST(haws_test_matmul_cpu_prod1);
     RUN_TEST(haws_test_matmul_gpu_prod1);
 
+//    RUN_TEST(haws_test_1);
 //    RUN_TEST(haws_test_socket_bringup);
 
     printf("\n\n");
@@ -78,15 +79,16 @@ int main () {
 int haws_test_1() {
     HAWS* haws = new HAWS();
     HAWSClientRequest* r1 = new HAWSClientRequest("cpu", 
-                                                  "/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
+                                                  "/opt/haws/bin/matmul_cpu", cpuBinRAM1024,
                                                   "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
                                                   (char*) "", 0,
-                                                  "32");
+                                                  "1024");
     printf("r1: %s \n", r1->ToStr().c_str());
 
     haws->Start();
     haws->HardAwareSchedule(r1);
-    sleep(5);
+    sleep(1);
+    while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
     haws->Stop();
 
     printf("Yay from test1, done!\n");
@@ -299,6 +301,7 @@ int haws_test_matmul_cpu_prod1() {
     sleep(1); //let jobs start
     while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
     haws->Stop();
+    free(haws);
     return 0;
 }
 
@@ -318,6 +321,7 @@ int haws_test_matmul_gpu_prod1() {
     sleep(1); //let jobs start
     while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
     haws->Stop();
+    free(haws);
     return 0;
 }
 
