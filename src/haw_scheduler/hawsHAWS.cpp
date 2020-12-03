@@ -123,6 +123,7 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
                 gotReq = false;
             } else {
                 tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
+                delete(next); // next is really gone
                 gotReq = true;
             }
         }
@@ -265,6 +266,7 @@ void HAWS::Stop() {
     printf("HAWS: Stopping ScheduleLoop\n");
     schedLoopThread->join();              // block until thread exits and returns
     schedLoopThreadRunning = false;   // schedule loop thread gone
+    delete(schedLoopThread);
 
     //printf("HAWS: Stopping Socket (Client1)\n");
     //sockThreadClient1->join();            // block until thread exits and returns

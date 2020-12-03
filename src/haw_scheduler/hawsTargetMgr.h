@@ -286,6 +286,8 @@ class HAWSTargetMgr {
             //printf("done doing accounting\n");
 
             //printf("unlocked TaskConclude\n");
+
+            free(tasksHandles[pid]); // free this ChildHandle
             return billableUS;
         }
         int TaskIsActive(pid_t pid) {
