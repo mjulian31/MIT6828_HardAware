@@ -200,6 +200,7 @@ void haws_test_phys_mem_management(HAWS* haws) {
 int haws_test_physmem_limit_buffer() {
     haws.Start();
     for (int i = 0; i < 200; i++) {
+        // fake larger memory requirement to top out physical ram
         HAWSClientRequest* r = new HAWSClientRequest("cpu",
                                                      "/opt/haws/bin/matmul_cpu", cpuBinRAM1024 * 10,
                                                      "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,

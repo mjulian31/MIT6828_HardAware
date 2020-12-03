@@ -107,30 +107,21 @@ void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, tim
 void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
     printf("HAWS/SL: ScheduleLoop started...\n");
     int freedMBRam; // from task completion
-    HAWSClientRequest* req;
     while (!globalKillFlag) {
-        bool gotReq = false;
         tasksToStartQueueLock.lock(); // lock queue
         if (!tasksToStartQueue->empty()) { // check if item is in queue
             HAWSClientRequest* next = tasksToStartQueue->front();
-            req = new HAWSClientRequest(next); // copy it to local req buffer
             // if no binary has enough physmem to run, 
             // leave queue alone until a task completion frees physmem
-            if (globalSchedRAMAvail - req->GetCPUBinRAM() < 0 &&
-                globalSchedRAMAvail - req->GetGPUBinRAM() < 0) {
+            if (globalSchedRAMAvail - next->GetCPUBinRAM() < 0 &&
+                globalSchedRAMAvail - next->GetGPUBinRAM() < 0) {
                 if (throttle % 1000 == 0) {
                     printf("Phys mem at capacity, waiting...\n");
                 }
-                gotReq = false;
+                // do not deque next work and continue for another round to try
             } else {
-                tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
-                delete next; // next is really gone
-                gotReq = true;
+                ProcessClientRequest(next);
             }
-        }
-        if (gotReq) { // schedule removed item
-            //printf("HAWS/SL: dequeued %s\n", req->ToStr().c_str());
-            ProcessClientRequest(req);
         }
         tasksToStartQueueLock.unlock(); // unlock queue
         
@@ -186,16 +177,19 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
     HAWSHWTarget HWTarget = DetermineReqTarget(req);
     if (HWTarget == TargCPU) {
         if (globalSchedRAMAvail - req->GetCPUBinRAM() < 0) {
-            RequeueReq(req); // this target doesn't have enough memory to run
+            //RequeueReq(req); // this target doesn't have enough memory to run
+            return;
         } else {
             StartTaskCPU(req);        
             req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
-            delete(req); // done processing client request
+            tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
+            delete req; // req is really gone
         }
     } else if (HWTarget == TargGPU) {
         StartTaskGPU(req);
         req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
-        delete(req); // done processing client req
+        tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
+        delete req; // done processing client req
     } else {
         assert(false); // "hardware target not implemented"
     }
