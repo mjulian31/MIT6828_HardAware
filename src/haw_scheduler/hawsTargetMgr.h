@@ -302,7 +302,7 @@ class HAWSTargetMgr {
         }   
         void Start() {
             // Read from child’s stdout
-            stdOutBuffer = (char*) malloc(1024 * 3);
+            //stdOutBuffer = (char*) malloc(1024 * 3);
         }
         void Stop () {
             std::list<pid_t>::iterator it = allPids.begin();
@@ -315,7 +315,7 @@ class HAWSTargetMgr {
                 printf("COMPLETED PID %d: %s\n", mit->first, mit->second.c_str());
                 mit++;
             }
-            free(stdOutBuffer);
+            //free(stdOutBuffer);
         }
 
         // shelved

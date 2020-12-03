@@ -145,6 +145,7 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        //handle->pipes[PARENT_READ_PIPE][WRITE_FD] = pipes[PARENT_READ_PIPE][WRITE_FD];
     
        printf("SUBPROCESS: freeing argv_list\n");
+       free(pipes);     // free temporary pipes holder now that its in handle
        free(argv_list); // free command line args that were sent
        printf("SUBPROCESS: started successfully\n");
        return handle;
