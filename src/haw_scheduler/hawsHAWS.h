@@ -26,6 +26,10 @@ enum TaskStatus {
 
 class HAWS {
     private:
+        int physMemLimitMB;
+        int gpuMemLimitMB;
+        int gpuSharedMemLimitMB; 
+    
         bool schedLoopThreadRunning;
         std::thread* schedLoopThread;
 
@@ -45,7 +49,7 @@ class HAWS {
         //Map offlineStaticAnalysis[TaskID] -> object TODO
    
         //SCHEDLOOP THREAD 
-        static void ScheduleLoop(); 
+        static void ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemLimitMB); 
         static void ReapChildren();
         static void DispatchConclusion(pid_t, TaskStatus, int status, time_point time_completed);
         static void ProcessClientRequest(HAWSClientRequest* req);
@@ -68,15 +72,16 @@ class HAWS {
     public:
         HAWS();
         ~HAWS();
+        void SetPhysMemLimitMB(int limitMB) { this->physMemLimitMB = limitMB; }
+        void SetGPUMemLimitMB(int limitMB) { this->gpuMemLimitMB = limitMB; }
+        void SetGPUSharedMemLimitMB(int limitMB) { this->gpuSharedMemLimitMB = limitMB; }
         void Start();
         void HardAwareSchedule(HAWSClientRequest* req);
         int GetNumActiveTasks();
         int GetNumQueuedReqs();
         bool IsDoingWork();
-        //int GetNumActiveTasksGPU();
-        void Stop();
         void PrintData();
-
+        void Stop();
 };
 
 

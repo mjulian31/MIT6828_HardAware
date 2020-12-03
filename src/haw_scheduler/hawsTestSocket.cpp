@@ -6,9 +6,11 @@
 
 #include "hawsHAWS.h"
 
+extern HAWS haws;
+
 int haws_test_socket_bringup() {
-    HAWS* haws = new HAWS(); 
-    haws->Start();
+    //HAWS* haws = new HAWS(); 
+    haws.Start();
 
     printf("TEST: wait\n");    
     sleep(1); // give socket a chance to come up
@@ -49,7 +51,7 @@ int haws_test_socket_bringup() {
     printf("%s\n",buffer ); 
 
     printf("TEST: PLZ STOP\n");
-    haws->Stop();
+    haws.Stop();
     printf("TEST: STOPPED\n");
     return 0;
 }
