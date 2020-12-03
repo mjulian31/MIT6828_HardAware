@@ -128,11 +128,11 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
                 gotReq = true;
             }
         }
-        tasksToStartQueueLock.unlock(); // unlock queue
         if (gotReq) { // schedule removed item
             //printf("HAWS/SL: dequeued %s\n", req->ToStr().c_str());
             ProcessClientRequest(req);
         }
+        tasksToStartQueueLock.unlock(); // unlock queue
         
         //monitor HW targets
         cpuMgr->Monitor(); //update state of processes in cpu manager  
