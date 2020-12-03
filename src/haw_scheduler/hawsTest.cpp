@@ -92,6 +92,7 @@ int haws_test_1() {
     haws->Stop();
 
     printf("Yay from test1, done!\n");
+    delete haws;
     return 0;
 }
 
@@ -301,7 +302,7 @@ int haws_test_matmul_cpu_prod1() {
     sleep(1); //let jobs start
     while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
     haws->Stop();
-    free(haws);
+    delete haws;
     return 0;
 }
 
@@ -321,7 +322,7 @@ int haws_test_matmul_gpu_prod1() {
     sleep(1); //let jobs start
     while (haws->GetNumActiveTasks() > 0) { usleep(1000); }
     haws->Stop();
-    free(haws);
+    delete haws;
     return 0;
 }
 

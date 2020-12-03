@@ -122,7 +122,7 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
                 }
                 gotReq = false;
             } else {
-                tasksToStartQueue->pop();  // calls destructor on object in queue, req gone
+                tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
                 gotReq = true;
             }
         }
@@ -130,7 +130,7 @@ void HAWS::ScheduleLoop() { // SCHEDLOOP THREAD
         if (gotReq) { // schedule removed item
             //printf("HAWS/SL: dequeued %s\n", req->ToStr().c_str());
             ProcessClientRequest(req);
-            free(req); // done processing client request
+            delete(req); // done processing client request
         }
 
         
