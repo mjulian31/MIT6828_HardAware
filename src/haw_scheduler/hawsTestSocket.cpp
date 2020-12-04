@@ -18,19 +18,6 @@ extern int testClientSendSocket;
 char* clientSendBuff;
 char* clientRecvBuff;
 
-int haws_help_open_send_socket(int port) {
-    return socket_open_send_socket(port);
-}
-
-int haws_help_open_recv_socket(int port) {
-    return socket_open_recv_socket(port);
-}
-
-void haws_help_close_socket(int socket) {
-    printf("TEST: close client socket\n");
-    int success = close(socket);
-    assert(success == 0);
-}
 
 long haws_help_load_client_buffer_field(int pos, char* content, int len, bool addDelim) {
     if (pos > 0) {

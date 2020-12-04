@@ -5,6 +5,12 @@
 #include <fcntl.h>
 #include "socket.h"
 
+void socket_close_socket(int socket) {
+    printf("SOCKET: close socket %d\n", socket);
+    int success = close(socket);
+    assert(success == 0);
+}
+
 bool socket_set_blocking(int fd, bool blocking) { // SOCKET THREAD
    int flags = fcntl(fd, F_GETFL, 0);
    if (flags == -1) return false;
@@ -62,7 +68,7 @@ int socket_open_recv_socket(int port) { // SOCKET THREAD uses for req recv, test
     // set socket nonblocking
     success = socket_set_blocking(new_socket, false);
     assert(success);
-    printf("SOCKET: accepted\n");
+    printf("SOCKET: recv accepted (socket %d)\n", new_socket);
     return new_socket;
 }
 
@@ -90,5 +96,6 @@ int socket_open_send_socket(int port) {
         printf("\nConnection Failed \n"); 
         return -1; 
     }
+    printf("SOCKET: send created (socket %d)\n", sock);
     return sock;
 }

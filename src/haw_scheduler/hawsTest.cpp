@@ -2,11 +2,8 @@
 #include <assert.h>
 #include <thread>
 #include <unistd.h>
-//socket stuff
-#include <sys/socket.h> 
-#include <arpa/inet.h> 
-#include <string.h> 
 
+#include "socket.h"
 #include "hawsHAWS.h"
 #include "subprocess.h"
 #include "hawsTestSocket.h"
@@ -99,14 +96,16 @@ int main (int argc, char *argv[]) {
     // BLACKBOX tests - call scheduler through socket
     bool allBlackBox = true;
     if (allBlackBox) {
-        haws.StartSocket(); // bringup server socket 
-        testClientSendSocket = haws_help_open_send_socket(8080);
+        haws.StartSocket(); // bringup server networking
+        testClientSendSocket = socket_open_send_socket(8080);
+        testClientRecvSocket = socket_open_recv_socket(8081);
         assert(testClientSendSocket > 0);
         
         RUN_TEST(haws_test_socket_bringup);
         RUN_TEST(haws_test_socket_many_cpu);
 
-        haws_help_close_socket(testClientSendSocket);
+        socket_close_socket(testClientSendSocket);
+        socket_close_socket(testClientRecvSocket);
         haws.StopSocket();
     }
     printf("\n\n");
