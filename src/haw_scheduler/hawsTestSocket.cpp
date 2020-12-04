@@ -7,74 +7,63 @@
 #include <cassert>
 
 #include "hawsHAWS.h"
+#include "hawsTest.h"
+#include "socket.h"
 
 extern HAWS haws;
-extern int testClientSendSocket;
+extern int numTests;
+
 
 #define CLIENT_SEND_BUFF_SIZE ((uint64_t) 1024 * (uint64_t) 1024 * (uint64_t) 1024 * (uint64_t) 10)
 #define CLIENT_RECV_BUFF_SIZE CLIENT_SEND_BUFF_SIZE
 
+// Req Format
+/* int reqNum,                 // FIELD 2
+   std::string cpuBinPath,     // FIELD 3
+   std::string gpuBinPath,     // FIELD 4
+   std::string jobArgv,        // FIELD 5
+   std::string targHint,       // FIELD 6
+   int cpuJobCPUThreads,       // FIELD 7
+   int gpuJobCPUThreads,       // FIELD 8
+   int gpuJobGPUThreads,       // FIELD 9
+   int cpuJobCPUPhysMB,        // FIELD 10
+   int gpuJobCPUPhysMB,        // FIELD 11
+   int gpuJobGPUPhysMB,        // FIELD 12
+   int gpuJobGPUShMB,          // FIELD 13
+   std::string jobID,          // FIELD 14
+   long stdinLen,              // FIELD 15
+   char* freeableStdin)        // FIELD 16
+*/
+
 char* clientSendBuff;
 char* clientRecvBuff;
 
-int haws_help_open_send_socket(int port) {
-    int sock = 0; 
-    struct sockaddr_in serv_addr; 
-    printf("TEST: send open client socket\n");
-    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
-    { 
-        printf("\n Socket creation error \n"); 
-        return -1;
-    } 
-    serv_addr.sin_family = AF_INET; 
-    serv_addr.sin_port = htons(port); 
-    // Convert IPv4 and IPv6 addresses from text to binary form 
-    printf("TEST: send inet pton \n");
-    if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0)  
-    { 
-        printf("\nInvalid address/ Address not supported \n"); 
-        return -1; 
-    } 
-    printf("TEST: connect\n");
-    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) 
-    { 
-        printf("\nConnection Failed \n"); 
-        return -1; 
-    }
-    return sock;
-}
+bool testGlobalKillFlag;
 
-int haws_help_open_recv_socket(int port) {
-    int sock = 0; 
-    struct sockaddr_in serv_addr; 
-    printf("TEST: recv open client socket\n");
-    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
-    { 
-        printf("\n Socket creation error \n"); 
-        return -1;
-    } 
-    serv_addr.sin_family = AF_INET; 
-    serv_addr.sin_port = htons(port); 
-    // Convert IPv4 and IPv6 addresses from text to binary form 
-    printf("TEST: recv inet pton \n");
-    if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0)  
-    { 
-        printf("\nInvalid address/ Address not supported \n"); 
-        return -1; 
-    } 
-    printf("TEST: recv connect\n");
-    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) 
-    { 
-        printf("\nConnection Failed \n"); 
-        return -1; 
-    }
-    return sock;
-}
+int testClientSendSocket = -1;
+int testClientRecvSocket = -1;
+std::thread* testSockRecvLoop;
 
-void haws_help_close_socket(int socket) {
-    printf("TEST: close client socket\n");
-    int success = close(socket);
-    assert(success == 0);
+int haws_test_socket_bringup();
+int haws_test_socket_many_cpu();
+void haws_test_socket_recv_loop();
+
+void haws_test_socket_all() {
+    // bringup client recv thread
+    testSockRecvLoop = new std::thread(haws_test_socket_recv_loop);
+    haws.StartSocket(); // bringup server networking
+
+    testClientSendSocket = socket_open_send_socket(8080, "TEST/CLIENT");
+    assert(testClientSendSocket > 0);
+    
+    RUN_TEST(haws_test_socket_bringup);
+    RUN_TEST(haws_test_socket_many_cpu);
+
+    socket_close_socket(testClientSendSocket, "TEST/CLIENT");
+    
+    haws.StopSocket();
+    testGlobalKillFlag = true; // stop client recv thread
+    testSockRecvLoop->join();
 }
 
 long haws_help_load_client_buffer_field(int pos, char* content, int len, bool addDelim) {
@@ -176,6 +165,18 @@ int haws_help_load_client_buffer_sample_req(int reqNum) {
     return pos;
 }
 
+void haws_test_socket_recv_loop() {
+    // responses
+    testClientRecvSocket = socket_open_recv_socket(8081, "TEST/CLIENT");
+    printf("TEST: client recv socket connected!\n");
+    while(!testGlobalKillFlag) {
+        // read and dump buffer 
+        sleep(1);
+    }
+    socket_close_socket(testClientRecvSocket, "TEST/CLIENT");
+    printf("TEST: socket recv thread done\n");
+}
+
 int haws_test_socket_bringup() {
     haws.Start();
     clientSendBuff = (char*) malloc(CLIENT_SEND_BUFF_SIZE * sizeof(char));
@@ -208,11 +209,12 @@ int haws_test_socket_many_cpu() {
         send(testClientSendSocket, clientSendBuff, length, 0); 
     }
     printf("TEST: sample requests sent!\n"); 
+
     sleep(60); // give them a chance to be all be received and started
 
     while (haws.IsDoingWork()) { usleep(1000); };
     haws.Stop();
-    
+
     free(clientSendBuff);
     free(clientRecvBuff);
     return 0;

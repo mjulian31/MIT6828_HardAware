@@ -2,52 +2,23 @@
 #include <assert.h>
 #include <thread>
 #include <unistd.h>
-//socket stuff
-#include <sys/socket.h> 
-#include <arpa/inet.h> 
-#include <string.h> 
 
+#include "socket.h"
 #include "hawsHAWS.h"
 #include "subprocess.h"
+#include "hawsTest.h"
 #include "hawsTestSocket.h"
 
 //#define NDEBUG  // turn asserts off
 #undef NDEBUG   // turn asserts on
 
-int numTests = 0;
-
-#define FAIL(test_name) \
-    printf("TEST FAIL: test_name\n"); \
-    exit(1);
-
-#define RUN_TEST(test_name) \
-    printf("TEST START: " #test_name "\n"); \
-    if (test_name() != 0) { \
-        FAIL(test_name); \
-    } else { \
-        printf("TEST PASS: " #test_name "\n"); \
-    } \
-    numTests++;
-
-
 // physmem control 
-#define SCHED_MEM_MAX_CLOUDLAB 62464
+//#define SCHED_MEM_MAX_CLOUDLAB 62464
 // gpu memory control
-#define SCHED_MEM_GPU_MAX_CLOUDLAB (1024*6) // update on cloudlab
-
-
-/*
-void haws_test_2(HAWS* haws);
-void haws_test_3(HAWS* haws);
-void haws_test_4(HAWS* haws);
-void haws_test_phys_mem_management(HAWS* haws);
-void haws_test_v4_8k(HAWS* haws);
-void haws_test_billing(HAWS* haws);
-void haws_test_stdout_cap(HAWS* haws);
-void haws_test_stdin_stdout_cap(HAWS* haws);
-*/
+//#define SCHED_MEM_GPU_MAX_CLOUDLAB (1024*6) // update on cloudlab
 
 #define MATMUL_PROD1_ITERS 1000
+
 
 int haws_test_1();
 int haws_test_physmem_limit_buffer();
@@ -64,27 +35,8 @@ int cpuBinRAM8k = 1536;
 int cpuBinRAMGPUBase = 2;
 int gpuBinRAMBase = 2;
 
+int numTests = 0;
 HAWS haws;
-int testClientSendSocket = -1;
-int testClientRecvSocket = -1;
-
-// Req Format
-/* int reqNum,                 // FIELD 2
-   std::string cpuBinPath,     // FIELD 3
-   std::string gpuBinPath,     // FIELD 4
-   std::string jobArgv,        // FIELD 5
-   std::string targHint,       // FIELD 6
-   int cpuJobCPUThreads,       // FIELD 7
-   int gpuJobCPUThreads,       // FIELD 8
-   int gpuJobGPUThreads,       // FIELD 9
-   int cpuJobCPUPhysMB,        // FIELD 10
-   int gpuJobCPUPhysMB,        // FIELD 11
-   int gpuJobGPUPhysMB,        // FIELD 12
-   int gpuJobGPUShMB,          // FIELD 13
-   std::string jobID,          // FIELD 14
-   long stdinLen,              // FIELD 15
-   char* freeableStdin)        // FIELD 16
-*/
 
 int main (int argc, char *argv[]) {
     // set resource limits
@@ -94,7 +46,7 @@ int main (int argc, char *argv[]) {
 
     // WHITEBOX tests - directly call scheduler 
     // basic tests - no command line args or stdin
-    bool allWhiteBox = false;
+    bool allWhiteBox = true;
     if (allWhiteBox) {
         RUN_TEST(haws_test_1);
         RUN_TEST(haws_test_1);
@@ -111,15 +63,7 @@ int main (int argc, char *argv[]) {
     // BLACKBOX tests - call scheduler through socket
     bool allBlackBox = true;
     if (allBlackBox) {
-        haws.StartSocket(); // bringup server socket 
-        testClientSendSocket = haws_help_open_send_socket(8080);
-        assert(testClientSendSocket > 0);
-        
-        RUN_TEST(haws_test_socket_bringup);
-        RUN_TEST(haws_test_socket_many_cpu);
-
-        haws_help_close_socket(testClientSendSocket);
-        haws.StopSocket();
+        haws_test_socket_all();
     }
     printf("\n\n");
     printf("%d TESTS PASSED\n", numTests);
@@ -143,7 +87,7 @@ int haws_test_1() {
 
 int haws_test_physmem_limit_buffer() {
     haws.Start();
-    for (int i = 0; i < 200; i++) {
+    for (int i = 1; i <= 200; i++) {
         // fake larger memory requirement to top out physical ram
         HAWSClientRequest* r = new HAWSClientRequest(i, "/opt/haws/bin/matmul_cpu", 
                                                         "/opt/haws/bin/matmul_gpu", "1024",
@@ -163,7 +107,7 @@ int haws_test_matmul_cpu_prod1() {
     haws.Start();
     char* formal_stdin = (char*) "[0.5601922408747706 0.5498457394253573 0.24767881927397717 0.27187891952177856; 0.5730447732822026 0.392712621542896 0.7104079489586148 0.27725616994299096; 0.2728092392852186 0.16275014197633997 0.5345847176860559 0.7135436758420011][0.20318818433657682 0.2268235629705242; 0.5767023795601847 0.8770918376577908; 0.26442460894021313 0.9237210225088366; 0.43515479778688104 0.9401231927424645]";
         printf("TESTMAIN: stdinlen %d\n", (int) strlen(formal_stdin));
-    for (int i = 0; i < MATMUL_PROD1_ITERS; i++) {
+    for (int i = 1; i <= MATMUL_PROD1_ITERS; i++) {
        // freeable_stdin will be freed after req is processed 
        char* freeable_stdin = (char*) malloc(strlen(formal_stdin) * sizeof(char) + 1); // TODO RM 1
        strncpy(freeable_stdin, formal_stdin, strlen(formal_stdin) + 1); // TODO RM + 1
@@ -186,7 +130,7 @@ int haws_test_matmul_gpu_prod1() {
     char* formal_stdin = (char*) "[0.5601922408747706 0.5498457394253573 0.24767881927397717 0.27187891952177856; 0.5730447732822026 0.392712621542896 0.7104079489586148 0.27725616994299096; 0.2728092392852186 0.16275014197633997 0.5345847176860559 0.7135436758420011][0.20318818433657682 0.2268235629705242; 0.5767023795601847 0.8770918376577908; 0.26442460894021313 0.9237210225088366; 0.43515479778688104 0.9401231927424645]";
     
     printf("TESTMAIN: stdinlen %d\n", (int) strlen(formal_stdin));
-    for (int i = 0; i < MATMUL_PROD1_ITERS; i++) {
+    for (int i = 1; i <= MATMUL_PROD1_ITERS; i++) {
        // freeable_stdin will be freed after processing
        char* freeable_stdin = (char*) malloc(strlen(formal_stdin) * sizeof(char) + 1); //TODO RM +1
        strncpy(freeable_stdin, formal_stdin, strlen(formal_stdin) + 1); // TODO RM + 1
@@ -203,6 +147,18 @@ int haws_test_matmul_gpu_prod1() {
     haws.Stop();
     return 0;
 }
+
+/* // old, early, no longer used
+void haws_test_2(HAWS* haws);
+void haws_test_3(HAWS* haws);
+void haws_test_4(HAWS* haws);
+void haws_test_phys_mem_management(HAWS* haws);
+void haws_test_v4_8k(HAWS* haws);
+void haws_test_billing(HAWS* haws);
+void haws_test_stdout_cap(HAWS* haws);
+void haws_test_stdin_stdout_cap(HAWS* haws);
+*/
+
 
 /*
 void haws_test_2() { // old, early, no longer used
