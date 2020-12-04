@@ -139,6 +139,7 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
            printf("SUBPROCESS: sending STDIN[%d] '%s'", stdin_buff_len, stdin_buff);    
            printf("SUBPROCESS: strlen %d\n", (int) strlen(stdin_buff)); 
            write(pipes[PARENT_WRITE_PIPE][WRITE_FD], stdin_buff, stdin_buff_len);
+           write(pipes[PARENT_WRITE_PIPE][WRITE_FD], (char*) "\n", 1); // end of input
        } else {
            printf("SUBPROCESS: no stdin to send to bin\n");
        }

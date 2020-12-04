@@ -74,6 +74,12 @@ int haws_socket_listen(int port) { // SOCKET THREAD
 #define SOCKET_READ_BUF_SIZE ((uint64_t)1024 * (uint64_t)1024 * (uint64_t) 1024 * 10)
 //#define SOCKET_READ_BUF_SIZE ((uint64_t)1024 * (uint64_t)1024 * (uint64_t)1024)
 
+/*
+HAWSClientRequest* haws_socket_create_request(char* socket_read_buf, 
+                                              int bytes_in, int max_buf_size) {
+    assert(bytes_in <= SOCKET_READ_BUF_SIZE);
+}*/
+
 //char socket_read_buf[SOCKET_READ_BUF_SIZE];
 void haws_socket_loop(int socket) { // SOCKET THREAD
     printf("SOCKET: hello from loop\n");
