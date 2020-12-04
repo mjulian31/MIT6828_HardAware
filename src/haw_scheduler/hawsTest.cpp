@@ -35,18 +35,6 @@ int numTests = 0;
 // gpu memory control
 #define SCHED_MEM_GPU_MAX_CLOUDLAB (1024*6) // update on cloudlab
 
-
-/*
-void haws_test_2(HAWS* haws);
-void haws_test_3(HAWS* haws);
-void haws_test_4(HAWS* haws);
-void haws_test_phys_mem_management(HAWS* haws);
-void haws_test_v4_8k(HAWS* haws);
-void haws_test_billing(HAWS* haws);
-void haws_test_stdout_cap(HAWS* haws);
-void haws_test_stdin_stdout_cap(HAWS* haws);
-*/
-
 #define MATMUL_PROD1_ITERS 1000
 
 int haws_test_1();
@@ -203,6 +191,18 @@ int haws_test_matmul_gpu_prod1() {
     haws.Stop();
     return 0;
 }
+
+/* // old, early, no longer used
+void haws_test_2(HAWS* haws);
+void haws_test_3(HAWS* haws);
+void haws_test_4(HAWS* haws);
+void haws_test_phys_mem_management(HAWS* haws);
+void haws_test_v4_8k(HAWS* haws);
+void haws_test_billing(HAWS* haws);
+void haws_test_stdout_cap(HAWS* haws);
+void haws_test_stdin_stdout_cap(HAWS* haws);
+*/
+
 
 /*
 void haws_test_2() { // old, early, no longer used
