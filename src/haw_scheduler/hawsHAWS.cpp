@@ -315,18 +315,18 @@ void HAWS::StartSocket() {
     // start client1 socket loop
     printf("HAWS: Starting SocketLoop (Client1)\n");
     sockLoopKillFlag = false; // disable killswitch for socket loop thread
-    sockThreadClient1 = new std::thread(haws_socket_loop, this->portClient1); 
-    sockThreadClient1Running = true; // socket loop thread active
+    sockThreadReqs = new std::thread(haws_socket_loop, this->portReqs); 
+    sockThreadReqsRunning = true; // socket loop thread active
     sleep(1); // give it a chance to start
 }
 
 void HAWS::StopSocket() {
     printf("HAWS: Stopping Socket (Client1)\n");
-    assert(sockThreadClient1Running); // must be started before stopped
+    assert(sockThreadReqsRunning); // must be started before stopped
     sockLoopKillFlag = true; // enable killswitch for socket loop thread
-    sockThreadClient1->join();            // block until thread exits and returns
-    sockThreadClient1Running = false;     // sock loop thread gone
-    delete(sockThreadClient1);
+    sockThreadReqs->join();            // block until thread exits and returns
+    sockThreadReqsRunning = false;     // sock loop thread gone
+    delete(sockThreadReqs);
 }
 
 void HAWS::HardAwareSchedule(HAWSClientRequest* req) {

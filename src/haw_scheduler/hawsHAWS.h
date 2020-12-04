@@ -35,9 +35,9 @@ class HAWS {
         bool schedLoopThreadRunning;
         std::thread* schedLoopThread;
 
-        bool sockThreadClient1Running;
-        std::thread* sockThreadClient1;
-        int portClient1 = 8080;
+        bool sockThreadReqsRunning;
+        std::thread* sockThreadReqs;
+        int portReqs = 8080;
 
         std::mutex tasksActiveLock;
         int cpuTasksActive = 0;
