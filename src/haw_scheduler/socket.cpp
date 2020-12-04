@@ -23,7 +23,7 @@ bool socket_set_blocking(int fd, bool blocking) { // SOCKET THREAD
    return (fcntl(fd, F_SETFL, flags) == 0) ? true : false;
 }
 
-int haws_socket_listen(int port) { // SOCKET THREAD
+int haws_socket_open_recv_socket(int port) { // SOCKET THREAD uses for req recv, tester resp recv
     int server_fd, new_socket, valread; 
     struct sockaddr_in address; 
     int opt = 1; 
@@ -184,7 +184,7 @@ void haws_socket_send_resp(int socket, int reqNum, std::string targRan,
 void haws_socket_loop(int socket) { // SOCKET THREAD
     printf("SOCKET: hello from loop\n");
     printf("SOCKET: listening...\n");
-    int socket_fd = haws_socket_listen(socket); // blocks until connection opened
+    int socket_fd = haws_socket_open_recv_socket(socket); // blocks until connection opened
     char* socket_read_buf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
     char* splitBuf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
     printf("SOCKET: ...accepted\n");

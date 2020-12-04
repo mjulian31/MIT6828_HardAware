@@ -23,6 +23,8 @@ int haws_help_open_send_socket(int port) {
 }
 
 int haws_help_open_recv_socket(int port) {
+    return haws_socket_open_recv_socket(port);
+    /*
     int sock = 0; 
     struct sockaddr_in serv_addr; 
     printf("TEST: recv open client socket\n");
@@ -46,7 +48,7 @@ int haws_help_open_recv_socket(int port) {
         printf("\nConnection Failed \n"); 
         return -1; 
     }
-    return sock;
+    return sock;*/
 }
 
 void haws_help_close_socket(int socket) {

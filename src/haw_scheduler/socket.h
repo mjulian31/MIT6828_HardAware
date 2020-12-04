@@ -3,5 +3,6 @@
 
 void haws_socket_loop(int socket);
 int haws_socket_open_send_socket(int port);
+int haws_socket_open_recv_socket(int port);
 
 #endif
