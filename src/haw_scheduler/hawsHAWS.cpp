@@ -16,6 +16,7 @@
 #include "hawsGPUMgr.h"
 #include "hawsClientRequest.h"
 #include "hawsSocket.h"
+#include "socket.h"
 
 //using namespace std;
 
@@ -31,7 +32,6 @@ HAWSTargetMgr* gpuMgr;
 
 // memory control - how much memory can the scheduler use for children?
 std::mutex globalMemLock;
-
 
 int globalPhysMemAvail = 0;
 int globalGPUMemAvail = 0;
@@ -317,7 +317,8 @@ void HAWS::StartSocket() {
     sockLoopKillFlag = false; // disable killswitch for socket loop thread
     sockThreadReqs = new std::thread(haws_socket_req_loop, this->portReqs); 
     sockThreadReqsRunning = true; // socket loop thread active
-    sleep(1); // give it a chance to start
+    this->sockResp1 = socket_open_send_socket(this->portResp1);
+    sleep(1); // give things a chance to start
 }
 
 void HAWS::StopSocket() {
@@ -326,6 +327,7 @@ void HAWS::StopSocket() {
     sockLoopKillFlag = true; // enable killswitch for socket loop thread
     sockThreadReqs->join();            // block until thread exits and returns
     sockThreadReqsRunning = false;     // sock loop thread gone
+    socket_close_socket(this->portResp1);
     delete(sockThreadReqs);
 }
 

@@ -6,33 +6,19 @@
 #include "socket.h"
 #include "hawsHAWS.h"
 #include "subprocess.h"
+#include "hawsTest.h"
 #include "hawsTestSocket.h"
 
 //#define NDEBUG  // turn asserts off
 #undef NDEBUG   // turn asserts on
 
-int numTests = 0;
-
-#define FAIL(test_name) \
-    printf("TEST FAIL: test_name\n"); \
-    exit(1);
-
-#define RUN_TEST(test_name) \
-    printf("TEST START: " #test_name "\n"); \
-    if (test_name() != 0) { \
-        FAIL(test_name); \
-    } else { \
-        printf("TEST PASS: " #test_name "\n"); \
-    } \
-    numTests++;
-
-
 // physmem control 
-#define SCHED_MEM_MAX_CLOUDLAB 62464
+//#define SCHED_MEM_MAX_CLOUDLAB 62464
 // gpu memory control
-#define SCHED_MEM_GPU_MAX_CLOUDLAB (1024*6) // update on cloudlab
+//#define SCHED_MEM_GPU_MAX_CLOUDLAB (1024*6) // update on cloudlab
 
 #define MATMUL_PROD1_ITERS 1000
+
 
 int haws_test_1();
 int haws_test_physmem_limit_buffer();
@@ -49,27 +35,8 @@ int cpuBinRAM8k = 1536;
 int cpuBinRAMGPUBase = 2;
 int gpuBinRAMBase = 2;
 
+int numTests = 0;
 HAWS haws;
-int testClientSendSocket = -1;
-int testClientRecvSocket = -1;
-
-// Req Format
-/* int reqNum,                 // FIELD 2
-   std::string cpuBinPath,     // FIELD 3
-   std::string gpuBinPath,     // FIELD 4
-   std::string jobArgv,        // FIELD 5
-   std::string targHint,       // FIELD 6
-   int cpuJobCPUThreads,       // FIELD 7
-   int gpuJobCPUThreads,       // FIELD 8
-   int gpuJobGPUThreads,       // FIELD 9
-   int cpuJobCPUPhysMB,        // FIELD 10
-   int gpuJobCPUPhysMB,        // FIELD 11
-   int gpuJobGPUPhysMB,        // FIELD 12
-   int gpuJobGPUShMB,          // FIELD 13
-   std::string jobID,          // FIELD 14
-   long stdinLen,              // FIELD 15
-   char* freeableStdin)        // FIELD 16
-*/
 
 int main (int argc, char *argv[]) {
     // set resource limits
@@ -96,17 +63,7 @@ int main (int argc, char *argv[]) {
     // BLACKBOX tests - call scheduler through socket
     bool allBlackBox = true;
     if (allBlackBox) {
-        haws.StartSocket(); // bringup server networking
-        testClientSendSocket = socket_open_send_socket(8080);
-        testClientRecvSocket = socket_open_recv_socket(8081);
-        assert(testClientSendSocket > 0);
-        
-        RUN_TEST(haws_test_socket_bringup);
-        RUN_TEST(haws_test_socket_many_cpu);
-
-        socket_close_socket(testClientSendSocket);
-        socket_close_socket(testClientRecvSocket);
-        haws.StopSocket();
+        haws_test_socket_all();
     }
     printf("\n\n");
     printf("%d TESTS PASSED\n", numTests);

@@ -6,8 +6,8 @@ haws: hawsTest.o hawsTestSocket.o subprocess.o hawsHAWS.o socket.o hawsSocket.o
 hawsTest.o: hawsTest.cpp hawsTest.h socket.h
 	g++ -c hawsTest.cpp  hawsClientRequest.h hawsTest.h socket.h
 
-hawsTestSocket.o: hawsTestSocket.cpp hawsTestSocket.cpp
-	g++ -c hawsTestSocket.cpp  hawsClientRequest.h  hawsTestSocket.h
+hawsTestSocket.o: hawsTestSocket.cpp 
+	g++ -c hawsTestSocket.cpp  hawsClientRequest.h
 
 subprocess.o: subprocess.cpp  subprocess.h
 	g++ -c subprocess.cpp subprocess.h
