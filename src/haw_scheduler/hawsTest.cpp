@@ -72,17 +72,13 @@ int main (int argc, char *argv[]) {
     haws.SetGPUMemLimitMB(atoi(argv[2]));
     haws.SetGPUSharedMemLimitMB(atoi(argv[3]));
 
-    haws.StartSocket(); // bringup server socket 
-    testClientSendSocket = haws_help_open_send_socket(8080);
-    assert(testClientSendSocket > 0);
+    
 
     // WHITEBOX tests - directly call scheduler 
     // basic tests - no command line args or stdin
-
-    RUN_TEST(haws_test_1);
-
-    bool allWhiteBox = true;
+    bool allWhiteBox = false;
     if (allWhiteBox) {
+        RUN_TEST(haws_test_1);
         RUN_TEST(haws_test_1);
         RUN_TEST(haws_test_1);
 
@@ -95,11 +91,13 @@ int main (int argc, char *argv[]) {
     }
 
     // BLACKBOX tests - call scheduler through socket
+    haws.StartSocket(); // bringup server socket 
+    testClientSendSocket = haws_help_open_send_socket(8080);
+    assert(testClientSendSocket > 0);
     bool allBlackBox = true;
     if (allBlackBox) {
         RUN_TEST(haws_test_socket_bringup);
     }
-    
     haws_help_close_socket(testClientSendSocket);
     haws.StopSocket();
     printf("\n\n");
