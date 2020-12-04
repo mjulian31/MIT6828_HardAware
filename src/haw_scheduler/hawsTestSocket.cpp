@@ -19,36 +19,11 @@ char* clientSendBuff;
 char* clientRecvBuff;
 
 int haws_help_open_send_socket(int port) {
-    return haws_socket_open_send_socket(port);
+    return socket_open_send_socket(port);
 }
 
 int haws_help_open_recv_socket(int port) {
-    return haws_socket_open_recv_socket(port);
-    /*
-    int sock = 0; 
-    struct sockaddr_in serv_addr; 
-    printf("TEST: recv open client socket\n");
-    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
-    { 
-        printf("\n Socket creation error \n"); 
-        return -1;
-    } 
-    serv_addr.sin_family = AF_INET; 
-    serv_addr.sin_port = htons(port); 
-    // Convert IPv4 and IPv6 addresses from text to binary form 
-    printf("TEST: recv inet pton \n");
-    if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0)  
-    { 
-        printf("\nInvalid address/ Address not supported \n"); 
-        return -1; 
-    } 
-    printf("TEST: recv connect\n");
-    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) 
-    { 
-        printf("\nConnection Failed \n"); 
-        return -1; 
-    }
-    return sock;*/
+    return socket_open_recv_socket(port);
 }
 
 void haws_help_close_socket(int socket) {

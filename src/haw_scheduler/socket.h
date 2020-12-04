@@ -6,7 +6,7 @@
 #include <arpa/inet.h> 
 #include <netinet/in.h>
 
-int haws_socket_open_send_socket(int port);
-int haws_socket_open_recv_socket(int port);
+int socket_open_send_socket(int port);
+int socket_open_recv_socket(int port);
 
 #endif

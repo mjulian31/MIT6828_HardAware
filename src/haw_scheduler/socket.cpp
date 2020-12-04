@@ -12,7 +12,7 @@ bool socket_set_blocking(int fd, bool blocking) { // SOCKET THREAD
    return (fcntl(fd, F_SETFL, flags) == 0) ? true : false;
 }
 
-int haws_socket_open_recv_socket(int port) { // SOCKET THREAD uses for req recv, tester resp recv
+int socket_open_recv_socket(int port) { // SOCKET THREAD uses for req recv, tester resp recv
     int server_fd, new_socket, valread; 
     struct sockaddr_in address; 
     int opt = 1; 
@@ -66,7 +66,7 @@ int haws_socket_open_recv_socket(int port) { // SOCKET THREAD uses for req recv,
     return new_socket;
 }
 
-int haws_socket_open_send_socket(int port) {
+int socket_open_send_socket(int port) {
     int sock = 0; 
     struct sockaddr_in serv_addr; 
     printf("SOCKET: open send socket\n");
@@ -92,5 +92,3 @@ int haws_socket_open_send_socket(int port) {
     }
     return sock;
 }
-
-
