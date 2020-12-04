@@ -15,7 +15,7 @@
 #include "hawsTargetMgr.h"
 #include "hawsGPUMgr.h"
 #include "hawsClientRequest.h"
-#include "socket.h"
+#include "hawsSocket.h"
 
 //using namespace std;
 
@@ -315,7 +315,7 @@ void HAWS::StartSocket() {
     // start client1 socket loop
     printf("HAWS: Starting SocketLoop (Client1)\n");
     sockLoopKillFlag = false; // disable killswitch for socket loop thread
-    sockThreadReqs = new std::thread(haws_socket_loop, this->portReqs); 
+    sockThreadReqs = new std::thread(haws_socket_req_loop, this->portReqs); 
     sockThreadReqsRunning = true; // socket loop thread active
     sleep(1); // give it a chance to start
 }

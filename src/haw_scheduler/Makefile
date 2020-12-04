@@ -1,7 +1,7 @@
 
 
-haws: hawsTest.o hawsTestSocket.o subprocess.o hawsHAWS.o socket.o
-	g++ -o haws hawsTest.o hawsTestSocket.o subprocess.o hawsHAWS.o socket.o -lpthread
+haws: hawsTest.o hawsTestSocket.o subprocess.o hawsHAWS.o socket.o hawsSocket.o
+	g++ -o haws hawsTest.o hawsTestSocket.o subprocess.o hawsHAWS.o socket.o hawsSocket.o -lpthread
 
 hawsTest.o: hawsTest.cpp hawsTest.h socket.h
 	g++ -c hawsTest.cpp  hawsClientRequest.h hawsTest.h socket.h
@@ -12,11 +12,16 @@ hawsTestSocket.o: hawsTestSocket.cpp hawsTestSocket.cpp
 subprocess.o: subprocess.cpp  subprocess.h
 	g++ -c subprocess.cpp subprocess.h
 
-hawsHAWS.o: hawsHAWS.cpp hawsHAWS.h hawsUtil.h
-	g++ -c hawsHAWS.cpp
+hawsHAWS.o: hawsHAWS.cpp hawsHAWS.h hawsUtil.h hawsSocket.h
+	g++ -c hawsHAWS.cpp hawsHAWS.h hawsUtil.h hawsSocket.h
 
 socket.o: socket.cpp socket.h
 	g++ -c socket.cpp socket.h
+
+hawsSocket.o: hawsSocket.cpp
+	g++ -c hawsSocket.cpp
+
+
 
 #hawsCPUMgr.o: hawsCPUMgr.cpp
 #	g++ -c hawsCPUMgr.cpp
