@@ -89,29 +89,45 @@ int main (int argc, char *argv[]) {
     }
 
     // BLACKBOX tests - call scheduler through socket
-    haws.StartSocket(); // bringup server socket 
-    testClientSendSocket = haws_help_open_send_socket(8080);
-    assert(testClientSendSocket > 0);
-    bool allBlackBox = true;
+    bool allBlackBox = false;
     if (allBlackBox) {
+        haws.StartSocket(); // bringup server socket 
+        testClientSendSocket = haws_help_open_send_socket(8080);
+        assert(testClientSendSocket > 0);
+        
         RUN_TEST(haws_test_socket_bringup);
+
+        haws_help_close_socket(testClientSendSocket);
+        haws.StopSocket();
     }
-    haws_help_close_socket(testClientSendSocket);
-    haws.StopSocket();
     printf("\n\n");
     printf("%d TESTS PASSED\n", numTests);
 }
 
+/* int reqNum,                 // FIELD 2
+   std::string cpuBinPath,     // FIELD 3
+   std::string gpuBinPath,     // FIELD 4
+   std::string jobArgv,        // FIELD 5
+   std::string targHint,       // FIELD 6
+   int cpuJobCPUThreads,       // FIELD 7
+   int gpuJobCPUThreads,       // FIELD 8
+   int gpuJobGPUThreads,       // FIELD 9
+   int cpuJobCPUPhysMB,        // FIELD 10
+   int gpuJobCPUPhysMB,        // FIELD 11
+   int gpuJobGPUPhysMB,        // FIELD 12
+   int gpuJobGPUShMB,          // FIELD 13
+   std::string jobID,          // FIELD 14
+   long stdinLen,              // FIELD 15
+   char* freeableStdin)        // FIELD 16
+*/
 
 int haws_test_1() {
-    char* formal_stdin = (char*) "b";
-
-    HAWSClientRequest* r1 = new HAWSClientRequest("cpu", 
-                                                  "/opt/haws/bin/matmul_cpu", cpuBinRAM1024,
-                                                  "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
-                                                  (char*) "", 0, 
-                                                  "1024");
-    printf("r1: %s \n", r1->ToStr().c_str());
+    HAWSClientRequest* r1 = new HAWSClientRequest(1, "/opt/haws/bin/matmul_cpu", 
+                                                     "/opt/haws/bin/matmul_gpu", "1024",
+                                                     "cpu-only", 1, 1, 10, 
+                                                     35, 2, 100, 200, 
+                                                     "matmul_1024", 0, (char*) "");
+    r1->Print();
     haws.Start();
     haws.HardAwareSchedule(r1);
     sleep(1);
@@ -124,11 +140,11 @@ int haws_test_physmem_limit_buffer() {
     haws.Start();
     for (int i = 0; i < 200; i++) {
         // fake larger memory requirement to top out physical ram
-        HAWSClientRequest* r = new HAWSClientRequest("cpu",
-                                                     "/opt/haws/bin/matmul_cpu", cpuBinRAM1024 * 10,
-                                                     "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
-                                                     (char*) "", 0,
-                                                     "1024");
+        HAWSClientRequest* r = new HAWSClientRequest(i, "/opt/haws/bin/matmul_cpu", 
+                                                        "/opt/haws/bin/matmul_gpu", "1024",
+                                                        "cpu-only", 1, 1, 10, 
+                                                        (35 * 10), 2, 100, 200, 
+                                                        "matmul_1024", 0, (char*) "");
         haws.HardAwareSchedule(r);
     }
     sleep(1);
@@ -138,22 +154,21 @@ int haws_test_physmem_limit_buffer() {
 }
 
 
-
 int haws_test_matmul_cpu_prod1() {
     haws.Start();
     char* formal_stdin = (char*) "[0.5601922408747706 0.5498457394253573 0.24767881927397717 0.27187891952177856; 0.5730447732822026 0.392712621542896 0.7104079489586148 0.27725616994299096; 0.2728092392852186 0.16275014197633997 0.5345847176860559 0.7135436758420011][0.20318818433657682 0.2268235629705242; 0.5767023795601847 0.8770918376577908; 0.26442460894021313 0.9237210225088366; 0.43515479778688104 0.9401231927424645]";
         printf("TESTMAIN: stdinlen %d\n", (int) strlen(formal_stdin));
     for (int i = 0; i < MATMUL_PROD1_ITERS; i++) {
-       // after parsing request, alloc freeable_stdin
-       char* freeable_stdin = (char*) malloc(strlen(formal_stdin) * sizeof(char) + 1);
-       strncpy(freeable_stdin, formal_stdin, strlen(formal_stdin) + 1);
-       HAWSClientRequest* r  = new HAWSClientRequest("cpu",
-                                                     "/opt/haws/bin/matmul_cpu", cpuBinRAMGPUBase,
-                                                     "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
-                                                     (char*) freeable_stdin, strlen(freeable_stdin),
-                                                     "3 4 2 norand");
+       // freeable_stdin will be freed after req is processed 
+       char* freeable_stdin = (char*) malloc(strlen(formal_stdin) * sizeof(char) + 1); // TODO RM 1
+       strncpy(freeable_stdin, formal_stdin, strlen(formal_stdin) + 1); // TODO RM + 1
+       HAWSClientRequest* r = new HAWSClientRequest(i, "/opt/haws/bin/matmul_cpu", 
+                                                       "/opt/haws/bin/matmul_gpu", "3 4 2 norand",
+                                                       "cpu-only", 1, 1, 10, 
+                                                       20, 2, 100, 200,  //TODO TIGHTEN
+                                                       "matmul_3_4_2", strlen(freeable_stdin), 
+                                                       (char*) freeable_stdin);
        haws.HardAwareSchedule(r);
-       // freeable_stdin will be freed after processing
     }
     sleep(1); //let jobs start
     while (haws.IsDoingWork()) { usleep(1000); }
@@ -167,17 +182,16 @@ int haws_test_matmul_gpu_prod1() {
     
     printf("TESTMAIN: stdinlen %d\n", (int) strlen(formal_stdin));
     for (int i = 0; i < MATMUL_PROD1_ITERS; i++) {
-       // after parsing request, alloc freealbe_stdin
-       char* freeable_stdin = (char*) malloc(strlen(formal_stdin) * sizeof(char) + 1);
-       strncpy(freeable_stdin, formal_stdin, strlen(formal_stdin) + 1);
-    
-       HAWSClientRequest* r  = new HAWSClientRequest("gpu",
-                                                     "/opt/haws/bin/matmul_cpu", cpuBinRAMGPUBase,
-                                                     "/opt/haws/bin/matmul_gpu", gpuBinRAMBase,
-                                                     (char*) freeable_stdin, strlen(freeable_stdin),
-                                                     "3 4 2 norand");
-       haws.HardAwareSchedule(r);
        // freeable_stdin will be freed after processing
+       char* freeable_stdin = (char*) malloc(strlen(formal_stdin) * sizeof(char) + 1); //TODO RM +1
+       strncpy(freeable_stdin, formal_stdin, strlen(formal_stdin) + 1); // TODO RM + 1
+       HAWSClientRequest* r = new HAWSClientRequest(i, "/opt/haws/bin/matmul_cpu", 
+                                                       "/opt/haws/bin/matmul_gpu", "3 4 2 norand",
+                                                       "gpu-only", 1, 1, 10, 
+                                                       20, 2, 100, 200, // TODO TIGHTEN
+                                                       "matmul_3_4_2", strlen(freeable_stdin), 
+                                                       (char*) freeable_stdin);
+       haws.HardAwareSchedule(r);
     }
     sleep(1); //let jobs start
     while (haws.IsDoingWork()) { usleep(1000); }
@@ -185,7 +199,7 @@ int haws_test_matmul_gpu_prod1() {
     return 0;
 }
 
-
+/*
 void haws_test_2() { // old, early, no longer used
     HAWSClientRequest r1("cpu",
                          "/opt/haws/bin/matmul_cpu", cpuBinRAM2048,
@@ -357,4 +371,4 @@ void haws_test_gpu_mgmt() { // old, early, no longer used
     while (haws.GetNumActiveTasks() > 0) { usleep(1000); }
     haws.Stop();
 }
-
+*/

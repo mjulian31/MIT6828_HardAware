@@ -5,53 +5,63 @@
 
 #include <cstring>
 #include <string>
+#include <cassert>
 
 class HAWSClientRequest {
     private:
-        // FIELD 1 
-        int reqNumber;
-        // FIELD 2
-        std::string cpuBinPath;
-        // FIELD 3
-        std::string gpuBinPath;
-        // FIELD 4
-        std::string taskArgs;
-        // FIELD 5
-        std::string targHint;
-        // FIELD 6
-        int cpuJobCPUThreads;
-        // FIELD 7
-        int gpuJobCPUThreads; 
-        // FIELD 8
-        int gpuJobGPUThreads;
-        // FIELD 9
-        int cpuBinRAM;
-        // FIELD 10
-        int gpuBinRAM;
-        // FIELD 11
-        int gpuBinGPURAM;
-        // FIELD 12
-        int gpuBinGPUSharedRAM;
-        // FIELD 13
-        std::string taskID;
-        // FIELD 14
-        int stdinBufLen;
-        // FIELD 15
-        char* stdinBuf;
-
+        int reqNum;                 // FIELD 2
+        std::string cpuBinPath;     // FIELD 3
+        std::string gpuBinPath;     // FIELD 4
+        std::string jobArgv;        // FIELD 5
+        std::string targHint;       // FIELD 6 
+        int cpuJobCPUThreads;       // FIELD 7
+        int gpuJobCPUThreads;       // FIELD 8
+        int gpuJobGPUThreads;       // FIELD 9
+        int cpuJobCPUPhysMB;        // FIELD 10
+        int gpuJobCPUPhysMB;        // FIELD 11
+        int gpuJobGPUPhysMB;        // FIELD 12
+        int gpuJobGPUShMB;          // FIELD 13
+        std::string jobID;          // FIELD 14
+        int stdinLen;               // FIELD 15
+        char* freeableStdin;        // FIELD 16
     public:
-        HAWSClientRequest(std::string targHint, std::string cpuBin, int cpuBinRAM, 
-                          std::string gpuBin, int gpuBinRAM, 
-                          char* stdinBuf, int stdinBufLen, std::string args) {
-            this->targHint = targHint;
-            this->cpuBinPath = cpuBin;
-            this->cpuBinRAM = cpuBinRAM;
-            this->gpuBinPath = gpuBin;
-            this->gpuBinRAM = gpuBinRAM; 
-            this->stdinBuf = stdinBuf;
-            this->stdinBufLen = stdinBufLen;
-            taskArgs = args;
-        }
+          HAWSClientRequest(int reqNum,                 // FIELD 2
+                            std::string cpuBinPath,     // FIELD 3
+                            std::string gpuBinPath,     // FIELD 4
+                            std::string jobArgv,        // FIELD 5
+                            std::string targHint,       // FIELD 6
+                            int cpuJobCPUThreads,       // FIELD 7
+                            int gpuJobCPUThreads,       // FIELD 8
+                            int gpuJobGPUThreads,       // FIELD 9
+                            int cpuJobCPUPhysMB,        // FIELD 10
+                            int gpuJobCPUPhysMB,        // FIELD 11
+                            int gpuJobGPUPhysMB,        // FIELD 12
+                            int gpuJobGPUShMB,          // FIELD 13
+                            std::string jobID,          // FIELD 14
+                            long stdinLen,              // FIELD 15
+                            char* freeableStdin) {      // FIELD 16
+
+            this->reqNum = reqNum;                        // FIELD 2
+            this->cpuBinPath = cpuBinPath;                // FIELD 3
+            this->gpuBinPath = gpuBinPath;                // FIELD 4
+            this->jobArgv = jobArgv;                      // FIELD 5
+            assert(targHint == "cpu-please" || 
+                   targHint == "gpu-please" ||
+                   targHint == "cpu-only"   ||
+                   targHint == "gpu-only"   ||
+                   targHint == "any");
+            this->targHint = targHint;                    // FIELD 6
+            this->cpuJobCPUThreads = cpuJobCPUThreads;    // FIELD 7
+            this->gpuJobCPUThreads = gpuJobCPUThreads;    // FIELD 8
+            this->gpuJobGPUThreads = gpuJobGPUThreads;    // FIELD 9
+            this->cpuJobCPUPhysMB = cpuJobCPUPhysMB;      // FIELD 10
+            this->gpuJobCPUPhysMB = gpuJobCPUPhysMB;      // FIELD 11
+            this->gpuJobGPUPhysMB = gpuJobGPUPhysMB;      // FIELD 12
+            this->gpuJobGPUShMB = gpuJobGPUShMB;          // FIELD 13
+            this->jobID = jobID;                          // FIELD 14
+            this->stdinLen = stdinLen;                    // FIELD 15
+            this->freeableStdin = freeableStdin;          // FIELD 16
+        }/*
         HAWSClientRequest() {
             targHint = "";
             cpuBinPath = "";
@@ -63,44 +73,68 @@ class HAWSClientRequest {
         HAWSClientRequest(HAWSClientRequest* another) {
             targHint = another->GetTarget();
             cpuBinPath = another->GetCPUBinPath();
-            cpuBinRAM  = another->GetCPUBinRAM();
+            cpuJobCPUPhysMB  = another->GetCPUBinRAM();
             gpuBinPath = another->GetGPUBinPath();
-            gpuBinRAM  = another->GetGPUBinRAM();
+            gpuJobCPUPhysMB  = another->GetGPUBinRAM();
             stdinBuf = another->stdinBuf;
             stdinBufLen = another->stdinBufLen;
             //memcpy(stdinBuf, another->stdinBuf, stdinBufLen); // ??
             taskArgs = another->GetTaskArgs();
-        }
+        }*/
         /* gets auto called when a req is popped from queue
         ~HAWSClientRequest() {
         }*/
 
-        // manually called to free pointer holding stdin
+        // manually called to free pointer holding (large) stdin
         void FreeStdinBuf() {
-            if (this->stdinBufLen > 0) {
-                printf("REQ: freeing stdinbuf\n");
-                free(this->stdinBuf);
+            if (this->stdinLen > 0) {
+                printf("REQ: freeing stdin\n");
+                assert(this->freeableStdin != NULL);
+                free(this->freeableStdin);
             }
         }
 
+        /*
         std::string GetTarget()        { return targHint;     }
-        std::string GetCPUBinPath()    { return cpuBinPath; }
-        int GetCPUBinRAM()             { return cpuBinRAM; }
-        std::string GetGPUBinPath()    { return gpuBinPath; }
-        int GetGPUBinRAM()             { return cpuBinRAM; }
+        int GetCPUBinRAM()             { return cpuJobCPUPhysMB; }
+        int GetGPUBinRAM()             { return cpuJobCPUPhysMB; }
         char* GetStdinBuf()            { return stdinBuf; }
         int GetStdinBufLen()           { return stdinBufLen; }
         std::string GetTaskArgs()      { return taskArgs;      }
+        */
 
-        void SetCPUBinPath(std::string s) { cpuBinPath = s; }
-        void SetGPUBinPath(std::string s) { gpuBinPath = s; }
-        void SetTaskArgs(std::string s) { taskArgs = s; }
+        int GetNum()                   { return this->reqNum;           }      // FIELD 2
+        std::string GetCPUBinPath()    { return this->cpuBinPath;       }      // FIELD 3
+        std::string GetGPUBinPath()    { return this->gpuBinPath;       }      // FIELD 4
+        std::string GetJobArgv()       { return this->jobArgv;          }      // FIELD 5
+        std::string GetTargHint()      { return this->targHint;         }      // FIELD 6
+        int GetCPUJobCPUThreads()      { return this->cpuJobCPUThreads; }      // FIELD 7
+        int GetGPUJobCPUThreads()      { return this->gpuJobCPUThreads; }      // FIELD 8
+        int GetGPUJobGPUThreads()      { return this->gpuJobGPUThreads; }      // FIELD 9
+        int GetCPUJobPhysMB()          { return this->cpuJobCPUPhysMB;  }      // FIELD 10
+        int GetGPUJobPhysMB()          { return this->gpuJobCPUPhysMB;  }      // FIELD 11
+        int GetGPUJobGPUPhysMB()       { return this->gpuJobGPUPhysMB;  }      // FIELD 12
+        int GetGPUJobGPUSharedMB()     { return this->gpuJobGPUShMB;    }      // FIELD 13
+        std::string GetJobID()         { return this->jobID;            }      // FIELD 14
+        long GetStdinLen()             { return this->stdinLen;         }      // FIELD 15
+        char* GetStdin()               { return this->freeableStdin;    }      // FIELD 16
 
-        std::string ToStr() {
-            return "targHint: " + targHint + 
-                   ", cpuBin: " + std::to_string(cpuBinRAM) + "TargCPU RAM:" + cpuBinPath + 
-                   ", gpuBin: " + std::to_string(gpuBinRAM) + "TargGPU RAM:" + gpuBinPath + 
-                   ", args: " + taskArgs;
+        void Print() {
+            std::string toStr = std::to_string(this->reqNum) + "," +           // FIELD 2
+                                this->cpuBinPath + "," +                       // FIELD 3
+                                this->gpuBinPath + "," +                       // FIELD 4
+                                this->jobArgv    + "," +                       // FIELD 5
+                                this->targHint   + "," +                       // FIELD 6
+                                std::to_string(this->cpuJobCPUThreads) +","+   // FIELD 7
+                                std::to_string(this->gpuJobCPUThreads) +","+   // FIELD 8
+                                std::to_string(this->gpuJobGPUThreads) +","+   // FIELD 9
+                                std::to_string(this->cpuJobCPUPhysMB)  +","+   // FIELD 10
+                                std::to_string(this->gpuJobCPUPhysMB)  +","+   // FIELD 11
+                                std::to_string(this->gpuJobGPUPhysMB)  +","+   // FIELD 12
+                                std::to_string(this->gpuJobGPUShMB)    +","+   // FIELD 13
+                                this->jobID + "," +                            // FIELD 14
+                                std::to_string(this->stdinLen);                // FIELD 15
+            printf("REQ:%s\n", toStr.c_str());
         }
 };
 #endif
