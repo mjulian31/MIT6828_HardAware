@@ -185,7 +185,7 @@ int haws_test_socket_bringup() {
     printf("TEST:\n\nsample req bytes[%d]:\n\n%s\n\n", length, clientSendBuff);
     printf("TEST: send it\n");
     send(testClientSendSocket, clientSendBuff, length, 0); 
-    sleep(1);
+    sleep(10);
     printf("TEST: sample request sent!\n"); 
 
     while (haws.IsDoingWork()) { usleep(1000); };
@@ -208,7 +208,7 @@ int haws_test_socket_many_cpu() {
         send(testClientSendSocket, clientSendBuff, length, 0); 
     }
     printf("TEST: sample requests sent!\n"); 
-    sleep(300); // give them a chance to be received and started
+    sleep(60); // give them a chance to be all be received and started
 
     while (haws.IsDoingWork()) { usleep(1000); };
     haws.Stop();

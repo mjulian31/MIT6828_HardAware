@@ -280,4 +280,5 @@ void haws_socket_loop(int socket) { // SOCKET THREAD
     shutdown(socket_fd, 2);
     close(socket_fd);
     free(socket_read_buf);
+    free(splitBuf);
 }

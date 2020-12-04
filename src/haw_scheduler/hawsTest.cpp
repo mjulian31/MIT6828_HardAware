@@ -115,7 +115,7 @@ int main (int argc, char *argv[]) {
         testClientSendSocket = haws_help_open_send_socket(8080);
         assert(testClientSendSocket > 0);
         
-        //RUN_TEST(haws_test_socket_bringup);
+        RUN_TEST(haws_test_socket_bringup);
         RUN_TEST(haws_test_socket_many_cpu);
 
         haws_help_close_socket(testClientSendSocket);
