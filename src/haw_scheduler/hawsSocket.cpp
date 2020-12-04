@@ -92,7 +92,7 @@ void haws_socket_send_resp(int socket, int reqNum, std::string targRan,
 void haws_socket_req_loop(int socket) { // SOCKET THREAD
     printf("SOCKET: hello from loop\n");
     printf("SOCKET: listening...\n");
-    int socket_fd = socket_open_recv_socket(socket); // blocks until connection opened
+    int socket_fd = socket_open_recv_socket(socket, "HAWS"); // blocks until connection opened
     char* socket_read_buf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
     char* splitBuf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
     printf("SOCKET: ...accepted\n");

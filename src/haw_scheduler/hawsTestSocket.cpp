@@ -53,14 +53,17 @@ void haws_test_socket_all() {
     testSockRecvLoop = new std::thread(haws_test_socket_recv_loop);
     haws.StartSocket(); // bringup server networking
 
-    testClientSendSocket = socket_open_send_socket(8080);
+    testClientSendSocket = socket_open_send_socket(8080, "TEST/CLIENT");
     assert(testClientSendSocket > 0);
     
     RUN_TEST(haws_test_socket_bringup);
     RUN_TEST(haws_test_socket_many_cpu);
 
-    socket_close_socket(testClientSendSocket);
+    socket_close_socket(testClientSendSocket, "TEST/CLIENT");
+    
     haws.StopSocket();
+    testGlobalKillFlag = true; // stop client recv thread
+    testSockRecvLoop->join();
 }
 
 long haws_help_load_client_buffer_field(int pos, char* content, int len, bool addDelim) {
@@ -164,13 +167,14 @@ int haws_help_load_client_buffer_sample_req(int reqNum) {
 
 void haws_test_socket_recv_loop() {
     // responses
-    testClientRecvSocket = socket_open_recv_socket(8081);
+    testClientRecvSocket = socket_open_recv_socket(8081, "TEST/CLIENT");
     printf("TEST: client recv socket connected!\n");
     while(!testGlobalKillFlag) {
         // read and dump buffer 
         sleep(1);
     }
-    socket_close_socket(testClientRecvSocket);
+    socket_close_socket(testClientRecvSocket, "TEST/CLIENT");
+    printf("TEST: socket recv thread done\n");
 }
 
 int haws_test_socket_bringup() {
@@ -187,8 +191,7 @@ int haws_test_socket_bringup() {
 
     while (haws.IsDoingWork()) { usleep(1000); };
     haws.Stop();
-
-    socket_close_socket(testClientRecvSocket); 
+    
     free(clientSendBuff);
     free(clientRecvBuff);
     return 0;
@@ -207,16 +210,11 @@ int haws_test_socket_many_cpu() {
     }
     printf("TEST: sample requests sent!\n"); 
 
-    // responses
-    testClientRecvSocket = socket_open_recv_socket(8081);
-    printf("TEST: client recv socket connected!\n");
-
     sleep(60); // give them a chance to be all be received and started
 
     while (haws.IsDoingWork()) { usleep(1000); };
     haws.Stop();
 
-    socket_close_socket(testClientRecvSocket);    
     free(clientSendBuff);
     free(clientRecvBuff);
     return 0;

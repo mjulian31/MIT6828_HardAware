@@ -317,7 +317,7 @@ void HAWS::StartSocket() {
     sockLoopKillFlag = false; // disable killswitch for socket loop thread
     sockThreadReqs = new std::thread(haws_socket_req_loop, this->portReqs); 
     sockThreadReqsRunning = true; // socket loop thread active
-    this->sockResp1 = socket_open_send_socket(this->portResp1);
+    this->sockResp1 = socket_open_send_socket(this->portResp1, "HAWS");
     sleep(1); // give things a chance to start
 }
 
@@ -327,7 +327,7 @@ void HAWS::StopSocket() {
     sockLoopKillFlag = true; // enable killswitch for socket loop thread
     sockThreadReqs->join();            // block until thread exits and returns
     sockThreadReqsRunning = false;     // sock loop thread gone
-    socket_close_socket(this->portResp1);
+    socket_close_socket(this->sockResp1, "HAWS");
     delete(sockThreadReqs);
 }
 

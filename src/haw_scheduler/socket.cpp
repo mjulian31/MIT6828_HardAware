@@ -5,8 +5,8 @@
 #include <fcntl.h>
 #include "socket.h"
 
-void socket_close_socket(int socket) {
-    printf("SOCKET: close socket %d\n", socket);
+void socket_close_socket(int socket, std::string callerStr) {
+    printf("SOCKET/%s: close socket %d\n", callerStr.c_str(), socket);
     int success = close(socket);
     assert(success == 0);
 }
@@ -18,7 +18,8 @@ bool socket_set_blocking(int fd, bool blocking) { // SOCKET THREAD
    return (fcntl(fd, F_SETFL, flags) == 0) ? true : false;
 }
 
-int socket_open_recv_socket(int port) { // SOCKET THREAD uses for req recv, tester resp recv
+// SOCKET THREAD uses for req recv, tester resp recv
+int socket_open_recv_socket(int port, std::string callerStr) {
     int server_fd, new_socket, valread; 
     struct sockaddr_in address; 
     int opt = 1; 
@@ -68,14 +69,15 @@ int socket_open_recv_socket(int port) { // SOCKET THREAD uses for req recv, test
     // set socket nonblocking
     success = socket_set_blocking(new_socket, false);
     assert(success);
-    printf("SOCKET: recv accepted (socket %d)\n", new_socket);
+    printf("SOCKET/%s: recv socket created and accepted (socket %d)\n", callerStr.c_str(), 
+           new_socket);
     return new_socket;
 }
 
-int socket_open_send_socket(int port) {
+int socket_open_send_socket(int port, std::string callerStr) {
     int sock = 0; 
     struct sockaddr_in serv_addr; 
-    printf("SOCKET: open send socket\n");
+    printf("SOCKET/%s: open send socket\n", callerStr.c_str());
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
     { 
         printf("\n Socket creation error \n"); 
@@ -84,18 +86,18 @@ int socket_open_send_socket(int port) {
     serv_addr.sin_family = AF_INET; 
     serv_addr.sin_port = htons(port); 
     // Convert IPv4 and IPv6 addresses from text to binary form 
-    printf("SOCKET: send inet pton \n");
+    //printf("SOCKET: send inet pton \n");
     if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0)  
     { 
         printf("\nInvalid address/ Address not supported \n"); 
         return -1; 
     } 
-    printf("SOCKET: send connect\n");
+    printf("SOCKET/%s: send connect\n", callerStr.c_str());
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) 
     { 
         printf("\nConnection Failed \n"); 
         return -1; 
     }
-    printf("SOCKET: send created (socket %d)\n", sock);
+    printf("SOCKET/%s: send created (socket %d)\n", callerStr.c_str(), sock);
     return sock;
 }
