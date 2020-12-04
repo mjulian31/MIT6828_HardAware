@@ -146,33 +146,35 @@ void haws_socket_create_client_request(char* socket_read_buf,
     CSV_BUF_PARSE_CPP_STR(socket_read_buf, cpuBinPath, cpuBinPathCpp);
     // FIELD 4 - gpu-job path
     CSV_BUF_PARSE_CPP_STR(socket_read_buf, gpuBinPath, gpuBinPathCpp);
-    // FIELD 5 - target hint 
+    // FIELD 5 - command line args
+    CSV_BUF_PARSE_CPP_STR(socket_read_buf, cmdLineArgs, cmdLineArgsCpp);
+    // FIELD 6 - target hint 
     CSV_BUF_PARSE_CPP_STR(socket_read_buf, targHint, targHintCpp);
-    // FIELD 6 - cpu job cpu threads
+    // FIELD 7 - cpu job cpu threads
     CSV_BUF_PARSE_INT(socket_read_buf, cpuThreadsCPUStr, cpuThreadsCPUStrCpp, cpuThreadsCPU);
-    // FIELD 7 - gpu job cpu threads
+    // FIELD 8 - gpu job cpu threads
     CSV_BUF_PARSE_INT(socket_read_buf, gpuThreadsCPUStr, gpuThreadsCPUStrCpp, gpuThreadsCPU);
-    // FIELD 8 - gpu job gpu threads
+    // FIELD 9 - gpu job gpu threads
     CSV_BUF_PARSE_INT(socket_read_buf, gpuThreadsGPUStr, gpuThreadsGPUStrCpp, gpuThreadsGPU);
-    // FIELD 9 - cpu job physmem MB
+    // FIELD 10 - cpu job physmem MB
     CSV_BUF_PARSE_INT(socket_read_buf, cpuPhysmemMBStr, cpuPhysmemMBStrCpp, cpuPhysmemMB);
-    // FIELD 10 - gpu job physmem MB
+    // FIELD 11 - gpu job physmem MB
     CSV_BUF_PARSE_INT(socket_read_buf, gpuPhysmemMBStr, gpuPhysmemMBStrCpp, gpuPhysmemMB);
-    // FIELD 11 - gpu job gpu mem MB
+    // FIELD 12 - gpu job gpu mem MB
     CSV_BUF_PARSE_INT(socket_read_buf, gpuMemMBStr, gpuMemMBStrCpp, gpuMemMB);
-    // FIELD 12 - gpu job gpu shared mem MB
+    // FIELD 13 - gpu job gpu shared mem MB
     CSV_BUF_PARSE_INT(socket_read_buf, gpuSharedMemMBStr, gpuSharedMemMBStrCpp, gpuSharedMemMB);
-    // FIELD 13 - task ID
+    // FIELD 14 - task ID
     CSV_BUF_PARSE_CPP_STR(socket_read_buf, taskID, taskIDCpp);
-    // FIELD 14 - task stdin len
+    // FIELD 15 - task stdin len
     CSV_BUF_PARSE_LONG(socket_read_buf, taskStdInLenStr, tasksStdinLenStrCpp, taskStdinLen);
-    // FIELD 15 - task stdin
+    // FIELD 16 - task stdin
     fieldLen = 0;
     startPos = pos;
     for (pos = pos; socket_read_buf[pos] != '$'; pos++) {
         assert(pos < max_buf_size); // end delim wasn't found - did half a request come in?
         fieldLen++; 
-    } pos++; // drop delimiter
+    } pos++; // drop delimiter - FIELD 17
     assert(pos < max_buf_size);
     assert(fieldLen == taskStdinLen); // double check their length calculation
     char* freeable_stdin = (char*) malloc(taskStdinLen * sizeof(char));

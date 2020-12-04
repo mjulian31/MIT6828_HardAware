@@ -8,20 +8,42 @@
 
 class HAWSClientRequest {
     private:
-        std::string target;
+        // FIELD 1 
+        int reqNumber;
+        // FIELD 2
         std::string cpuBinPath;
-        int cpuBinRAM;
+        // FIELD 3
         std::string gpuBinPath;
-        int gpuBinRAM;
-        char* stdinBuf;
-        int stdinBufLen;
+        // FIELD 4
         std::string taskArgs;
+        // FIELD 5
+        std::string targHint;
+        // FIELD 6
+        int cpuJobCPUThreads;
+        // FIELD 7
+        int gpuJobCPUThreads; 
+        // FIELD 8
+        int gpuJobGPUThreads;
+        // FIELD 9
+        int cpuBinRAM;
+        // FIELD 10
+        int gpuBinRAM;
+        // FIELD 11
+        int gpuBinGPURAM;
+        // FIELD 12
+        int gpuBinGPUSharedRAM;
+        // FIELD 13
+        std::string taskID;
+        // FIELD 14
+        int stdinBufLen;
+        // FIELD 15
+        char* stdinBuf;
 
     public:
-        HAWSClientRequest(std::string target, std::string cpuBin, int cpuBinRAM, 
+        HAWSClientRequest(std::string targHint, std::string cpuBin, int cpuBinRAM, 
                           std::string gpuBin, int gpuBinRAM, 
                           char* stdinBuf, int stdinBufLen, std::string args) {
-            this->target = target;
+            this->targHint = targHint;
             this->cpuBinPath = cpuBin;
             this->cpuBinRAM = cpuBinRAM;
             this->gpuBinPath = gpuBin;
@@ -31,7 +53,7 @@ class HAWSClientRequest {
             taskArgs = args;
         }
         HAWSClientRequest() {
-            target = "";
+            targHint = "";
             cpuBinPath = "";
             gpuBinPath = "";
             stdinBuf = NULL;
@@ -39,7 +61,7 @@ class HAWSClientRequest {
             taskArgs = "";
         }
         HAWSClientRequest(HAWSClientRequest* another) {
-            target = another->GetTarget();
+            targHint = another->GetTarget();
             cpuBinPath = another->GetCPUBinPath();
             cpuBinRAM  = another->GetCPUBinRAM();
             gpuBinPath = another->GetGPUBinPath();
@@ -61,7 +83,7 @@ class HAWSClientRequest {
             }
         }
 
-        std::string GetTarget()        { return target;     }
+        std::string GetTarget()        { return targHint;     }
         std::string GetCPUBinPath()    { return cpuBinPath; }
         int GetCPUBinRAM()             { return cpuBinRAM; }
         std::string GetGPUBinPath()    { return gpuBinPath; }
@@ -75,7 +97,7 @@ class HAWSClientRequest {
         void SetTaskArgs(std::string s) { taskArgs = s; }
 
         std::string ToStr() {
-            return "targ: " + target + 
+            return "targHint: " + targHint + 
                    ", cpuBin: " + std::to_string(cpuBinRAM) + "TargCPU RAM:" + cpuBinPath + 
                    ", gpuBin: " + std::to_string(gpuBinRAM) + "TargGPU RAM:" + gpuBinPath + 
                    ", args: " + taskArgs;

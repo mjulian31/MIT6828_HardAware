@@ -109,59 +109,63 @@ int haws_help_load_client_buffer_sample_req() {
     char* gpubinpath = (char*) "/opt/haws/bin/matmul_gpu";
     pos = haws_help_load_client_buffer_field(pos, gpubinpath, strlen(gpubinpath), true);
 
-    // target rec - FIELD 5
+    // job command line args - FIELD 5
+    char* cmdArgs = (char*) "3 4 2";
+    pos = haws_help_load_client_buffer_field(pos, cmdArgs, strlen(cmdArgs), true);
+
+    // target rec - FIELD 6
     char* targetrec = (char*) "cpu-plz";
     pos = haws_help_load_client_buffer_field(pos, targetrec, strlen(targetrec), true);
 
-    // cpu job worst threads - FIELD 6
+    // cpu job worst threads - FIELD 7
     char* cpuJobWorstThreads = (char*) "1";
     pos = haws_help_load_client_buffer_field(pos, cpuJobWorstThreads, 
                                              strlen(cpuJobWorstThreads), true);
 
-    // gpu job worst CPU threads - FIELD 7
+    // gpu job worst CPU threads - FIELD 8
     char* gpuJobWorstCPUThreads = (char*) "2";
     pos = haws_help_load_client_buffer_field(pos, gpuJobWorstCPUThreads, 
                                              strlen(gpuJobWorstCPUThreads), true);
 
-    // gpu job worst GPU threads - FIELD 8
+    // gpu job worst GPU threads - FIELD 9
     char* gpuJobWorstGPUThreads = (char*) "4";
     pos = haws_help_load_client_buffer_field(pos, gpuJobWorstGPUThreads, 
                                              strlen(gpuJobWorstGPUThreads), true);
 
-    // cpu job worst phys MB - FIELD 9
+    // cpu job worst phys MB - FIELD 10
     char* cpuJobWorstPhysMB = (char*) "35";
     pos = haws_help_load_client_buffer_field(pos, cpuJobWorstPhysMB, 
                                              strlen(cpuJobWorstPhysMB), true);
 
-    // gpu job worst phys MB - FIELD 10
+    // gpu job worst phys MB - FIELD 11
     char* gpuJobWorstPhysMB = (char*) "5";
     pos = haws_help_load_client_buffer_field(pos, gpuJobWorstPhysMB,    
                                              strlen(gpuJobWorstPhysMB), true);
 
-    // gpu job worst gpu MB - FIELD 11
+    // gpu job worst gpu MB - FIELD 12
     char* gpuJobWorstGpuMB = (char*) "100";
     pos = haws_help_load_client_buffer_field(pos, gpuJobWorstGpuMB, 
                                              strlen(gpuJobWorstGpuMB), true);
 
-    // gpu job worst gpu shared MB - FIELD 12
+    // gpu job worst gpu shared MB - FIELD 13
     char* gpuJobWorstGpuSharedMB = (char*) "200";
     pos = haws_help_load_client_buffer_field(pos, gpuJobWorstGpuSharedMB, 
                                              strlen(gpuJobWorstGpuSharedMB), true);
 
-    // task id - FIELD 13
+    // task id - FIELD 14
     char* taskID = (char*) "matmul_3_4_2";
     pos = haws_help_load_client_buffer_field(pos, taskID, strlen(taskID), true);
 
-    //task std input len - FIELD 14
+    //task std input len - FIELD 15
     char* stdinBuf = (char*) "[0.5601922408747706 0.5498457394253573 0.24767881927397717 0.27187891952177856; 0.5730447732822026 0.392712621542896 0.7104079489586148 0.27725616994299096; 0.2728092392852186 0.16275014197633997 0.5345847176860559 0.7135436758420011][0.20318818433657682 0.2268235629705242; 0.5767023795601847 0.8770918376577908; 0.26442460894021313 0.9237210225088366; 0.43515479778688104 0.9401231927424645]";
     int stdinBufLen = strlen(stdinBuf);
     std::string stdinBufLenStr = std::to_string(stdinBufLen);
     pos = haws_help_load_client_buffer_field(pos, (char*) stdinBufLenStr.c_str(), 
                                              strlen((char*) stdinBufLenStr.c_str()), true);
-    // task stdin - FIELD 15
+    // task stdin - FIELD 16
     pos = haws_help_load_client_buffer_field(pos, stdinBuf, stdinBufLen, true);
    
-    // end marker - FIELD 16 
+    // end marker - FIELD 17
     pos = haws_help_load_client_buffer_field(pos, (char*) "$", 1, false);
 
     //TEMPORARY

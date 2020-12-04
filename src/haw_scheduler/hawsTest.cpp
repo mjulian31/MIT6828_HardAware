@@ -72,11 +72,9 @@ int main (int argc, char *argv[]) {
     haws.SetGPUMemLimitMB(atoi(argv[2]));
     haws.SetGPUSharedMemLimitMB(atoi(argv[3]));
 
-    
-
     // WHITEBOX tests - directly call scheduler 
     // basic tests - no command line args or stdin
-    bool allWhiteBox = false;
+    bool allWhiteBox = true;
     if (allWhiteBox) {
         RUN_TEST(haws_test_1);
         RUN_TEST(haws_test_1);
