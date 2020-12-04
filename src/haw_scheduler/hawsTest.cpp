@@ -89,7 +89,7 @@ int main (int argc, char *argv[]) {
     }
 
     // BLACKBOX tests - call scheduler through socket
-    bool allBlackBox = false;
+    bool allBlackBox = true;
     if (allBlackBox) {
         haws.StartSocket(); // bringup server socket 
         testClientSendSocket = haws_help_open_send_socket(8080);

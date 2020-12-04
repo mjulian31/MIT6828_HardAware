@@ -8,6 +8,7 @@
 #include <fcntl.h>
 
 #include "hawsHAWS.h"
+#include "hawsTest.h"
 
 
 bool socket_set_blocking(int fd, bool blocking) { // SOCKET THREAD
@@ -126,8 +127,8 @@ int haws_socket_listen(int port) { // SOCKET THREAD
 #define SOCKET_READ_BUF_SIZE ((uint64_t)1024 * (uint64_t)1024 * (uint64_t) 1024 * 10)
 //#define SOCKET_READ_BUF_SIZE ((uint64_t)1024 * (uint64_t)1024 * (uint64_t)1024)
 
-void haws_socket_create_client_request(char* socket_read_buf, 
-                                       long bytes_in, long max_buf_size) {
+HAWSClientRequest* haws_socket_create_client_request(char* socket_read_buf, 
+                                                     long bytes_in, long max_buf_size) {
     assert(bytes_in <= max_buf_size);
 
     long pos = 0;
@@ -180,6 +181,24 @@ void haws_socket_create_client_request(char* socket_read_buf,
     char* freeable_stdin = (char*) malloc(taskStdinLen * sizeof(char));
     memcpy(freeable_stdin, (socket_read_buf + (startPos * sizeof(char))), taskStdinLen);
     printf("CSVPARSER/STDIN: got %ld chars of stdin\n", taskStdinLen);
+
+    HAWSClientRequest* req = new HAWSClientRequest(reqNum,           // FIELD 2
+                                                   cpuBinPathCpp,    // FIELD 3
+                                                   gpuBinPathCpp,    // FIELD 4
+                                                   cmdLineArgsCpp,   // FIELD 5
+                                                   targHintCpp,      // FIELD 6
+                                                   cpuThreadsCPU,    // FIELD 7
+                                                   gpuThreadsCPU,    // FIELD 8
+                                                   gpuThreadsGPU,    // FIELD 9
+                                                   cpuPhysmemMB,     // FIELD 10
+                                                   gpuPhysmemMB,     // FIELD 11
+                                                   gpuMemMB,         // FIELD 12
+                                                   gpuSharedMemMB,   // FIELD 13
+                                                   taskIDCpp,        // FIELD 14
+                                                   taskStdinLen,     // FIELD 15
+                                                   freeable_stdin);  // FIELD 16
+    req->Print();
+    return req;
 }
 
 //char socket_read_buf[SOCKET_READ_BUF_SIZE];
@@ -190,12 +209,14 @@ void haws_socket_loop(int socket) { // SOCKET THREAD
     char* socket_read_buf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
     printf("SOCKET: ...accepted\n");
     int throttle = 0;
+    HAWSClientRequest* req;
     while (!sockLoopKillFlag) {
         int bytes_in = read(socket_fd, socket_read_buf, SOCKET_READ_BUF_SIZE);
         assert(bytes_in != SOCKET_READ_BUF_SIZE); // request was too large
         if (bytes_in > 0) {
             printf("SOCKET: read: %d - '%s'\n", bytes_in, socket_read_buf); 
-            haws_socket_create_client_request(socket_read_buf, bytes_in, SOCKET_READ_BUF_SIZE);
+            req = haws_socket_create_client_request(socket_read_buf, bytes_in, SOCKET_READ_BUF_SIZE);
+            haws.HardAwareSchedule(req);
         } else {
             if (throttle++ % 1000 == 0) {
                 printf("SOCKET: reading nothing\n");

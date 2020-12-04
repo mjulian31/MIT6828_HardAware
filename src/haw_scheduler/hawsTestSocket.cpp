@@ -110,11 +110,11 @@ int haws_help_load_client_buffer_sample_req() {
     pos = haws_help_load_client_buffer_field(pos, gpubinpath, strlen(gpubinpath), true);
 
     // job command line args - FIELD 5
-    char* cmdArgs = (char*) "3 4 2";
+    char* cmdArgs = (char*) "3 4 2 norand";
     pos = haws_help_load_client_buffer_field(pos, cmdArgs, strlen(cmdArgs), true);
 
     // target rec - FIELD 6
-    char* targetrec = (char*) "cpu-plz";
+    char* targetrec = (char*) "cpu-please";
     pos = haws_help_load_client_buffer_field(pos, targetrec, strlen(targetrec), true);
 
     // cpu job worst threads - FIELD 7
@@ -189,11 +189,12 @@ int haws_test_socket_bringup() {
     sleep(1);
     printf("TEST: sample request sent!\n"); 
 
-    printf("TEST: PLZ STOP\n");
-
+    while (haws.IsDoingWork()) { usleep(1000); };
+    printf("TEST: HAWS DONE PLZ STOP!!\n");
+    haws.Stop();
+    
     free(clientSendBuff);
     free(clientRecvBuff);
-    haws.Stop();
     printf("TEST: STOPPED\n");
     return 0;
 }

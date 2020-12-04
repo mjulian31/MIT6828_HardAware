@@ -3,8 +3,8 @@
 haws: hawsTest.o hawsTestSocket.o subprocess.o hawsHAWS.o socket.o
 	g++ -o haws hawsTest.o hawsTestSocket.o subprocess.o hawsHAWS.o socket.o -lpthread
 
-hawsTest.o: hawsTest.cpp
-	g++ -c hawsTest.cpp  hawsClientRequest.h 
+hawsTest.o: hawsTest.cpp hawsTest.h
+	g++ -c hawsTest.cpp  hawsClientRequest.h hawsTest.h
 
 hawsTestSocket.o: hawsTestSocket.cpp hawsTestSocket.cpp
 	g++ -c hawsTestSocket.cpp  hawsClientRequest.h  hawsTestSocket.h
