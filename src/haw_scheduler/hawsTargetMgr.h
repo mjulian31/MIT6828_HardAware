@@ -301,15 +301,12 @@ class HAWSTargetMgr {
             taskLock.unlock();
             return freed;
         }
-        int TaskConclude(pid_t pid, TaskStatus ts, int status_code, 
-                         time_point time_completed) { //SCHEDLOOP THREAD
-            
-            // free stdout buffer (currently unused)
-            //free(tasksStdoutBuff[pid]);
-
+        HAWSConclusion* TaskConclude(pid_t pid, TaskStatus ts, int status_code, 
+                                     time_point time_completed) { //SCHEDLOOP THREAD
             TaskCompleteGetDroppedOutput(pid);    
+            // must be freed by caller
+            HAWSConclusion* conclusion = (HAWSConclusion*) malloc(sizeof(HAWSConclusion));
 
-            //printf("doing accounting\n");
             taskLock.lock();
 
             // close pipe to child's stdin
@@ -317,16 +314,28 @@ class HAWSTargetMgr {
             assert(success == 0);
 
             this->TaskCompleteAccountingProtected(pid, ts, status_code, time_completed); 
-            int billableUS = tasksBillableUS[pid];
-
-            // free this ChildHandle
+           
+            // create conclusion to return 
+            /*
+            conclusion->reqNum = -1; //tasksReqNum[pid];
+            conclusion->targRun = this->targStr;
+            conclusion->wallTime = 0.1; //TODO
+            conclusion->cpuTime = 0.2; //TODO
+            conclusion->exitCode = tasksStatusCode[pid];
+            conclusion->outputLen = tasksOutputLen[pid]; 
+            conclusion->output = std::string(tasksCompleted[pid]); 
+            conclusion->targetRealBillableUS = tasksBillableUS[pid];
+            */
+        
+            // free this task
+            //TODO
+            //free(tasksComplted[pid]); // free temporary stored output
             free(tasksHandles[pid]); 
             tasksHandles.erase(pid);
-
             taskLock.unlock();
             //printf("done doing accounting\n");
             //printf("unlocked TaskConclude\n");
-            return billableUS;
+            return conclusion;
         }
         int TaskIsActive(pid_t pid) {
             taskLock.lock();

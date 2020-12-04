@@ -11,9 +11,9 @@ main () {
     local bincmd=""
     local vgrargs=""
     if [ "$1" == "RR1" ]; then
-        bincmd="/opt/haws/bin/haws $RR1_PHYSMEM $RR1_GPUMEM $RR1_GPUSHAREDMEM"
+        bincmd="/opt/haws/bin/haws test $RR1_PHYSMEM $RR1_GPUMEM $RR1_GPUSHAREDMEM"
     elif [ "$1" == "CL" ]; then
-        bincmd="/opt/haws/bin/haws $CL_PHYSMEM $CL_GPUMEM $CL_GPUSHAREDMEM"
+        bincmd="/opt/haws/bin/haws test $CL_PHYSMEM $CL_GPUMEM $CL_GPUSHAREDMEM"
     else 
         echo "usage: ./run_haws <machine: 'RR1' or 'CL'>"
         exit 1

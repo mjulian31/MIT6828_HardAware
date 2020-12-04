@@ -39,34 +39,50 @@ int numTests = 0;
 HAWS haws;
 
 int main (int argc, char *argv[]) {
+    if (argc != 5) {
+        printf("error: usage ./haws <prod | test>" \
+               "<phys limit mb> <gpu limit mb> <gpu shared limit mb>");
+    }
+
     // set resource limits
-    haws.SetPhysMemLimitMB(atoi(argv[1]));
-    haws.SetGPUMemLimitMB(atoi(argv[2]));
-    haws.SetGPUSharedMemLimitMB(atoi(argv[3]));
+    // memory
+    haws.SetPhysMemLimitMB(atoi(argv[2]));
+    haws.SetGPUMemLimitMB(atoi(argv[3]));
+    haws.SetGPUSharedMemLimitMB(atoi(argv[4]));
+    // threads
+    // TODO
 
-    // WHITEBOX tests - directly call scheduler 
-    // basic tests - no command line args or stdin
-    bool allWhiteBox = true;
-    if (allWhiteBox) {
-        RUN_TEST(haws_test_1);
-        RUN_TEST(haws_test_1);
-        RUN_TEST(haws_test_1);
+    if (strcmp(argv[1], "prod") == 0) {
+        haws.Start();
+        haws.StartSocket();
+    } else if (strcmp(argv[1], "test") == 0) {
+        // WHITEBOX tests - directly call scheduler 
+        // basic tests - no command line args or stdin
+        bool allWhiteBox = true;
+        if (allWhiteBox) {
+            RUN_TEST(haws_test_1);
+            RUN_TEST(haws_test_1);
+            RUN_TEST(haws_test_1);
 
-        // test request buffering when out of physical memory
-        RUN_TEST(haws_test_physmem_limit_buffer);
+            // test request buffering when out of physical memory
+            RUN_TEST(haws_test_physmem_limit_buffer);
 
-        // many parallel actual matrix multiplies
-        RUN_TEST(haws_test_matmul_cpu_prod1);
-        RUN_TEST(haws_test_matmul_gpu_prod1);
+            // many parallel actual matrix multiplies
+            RUN_TEST(haws_test_matmul_cpu_prod1);
+            RUN_TEST(haws_test_matmul_gpu_prod1);
+
+            // BLACKBOX tests - call scheduler through socket
+            bool allBlackBox = true;
+            if (allBlackBox) {
+                haws_test_socket_all();
+            }
+            printf("\n\n");
+            printf("%d TESTS PASSED\n", numTests);
+        }
+    } else {
+        printf("error: usage ./haws <prod | test> <phys limit mb> <gpu limit mb> <gpu shared limit mb>");
+        exit(1);
     }
-
-    // BLACKBOX tests - call scheduler through socket
-    bool allBlackBox = true;
-    if (allBlackBox) {
-        haws_test_socket_all();
-    }
-    printf("\n\n");
-    printf("%d TESTS PASSED\n", numTests);
 }
 
 
