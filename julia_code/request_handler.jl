@@ -1,3 +1,6 @@
+using Sockets
+using Base.Threads
+
 const SEND_PORT = 8080
 const RECEIVE_PORT = 8081
 
@@ -58,9 +61,9 @@ function get_job_id(N, R, M)
     return string("matmul_", N, "_", R, "_", M)
 end
 
-function make_request_string(num, cmd_args, target_pref, cpu_thread, gpu_cpu_thread, gpu_thread, cpu_ram, gpu_ram, gpu_mem, gpu_shared_mem, job_id, stdin_len, stdin_input)
+function make_request_string(req_num, cmd_args, target_pref, cpu_thread, gpu_cpu_thread, gpu_thread, cpu_ram, gpu_ram, gpu_mem, gpu_shared_mem, job_id, stdin_len, stdin_input)
     req_string = string(REQ_START, DELIM,
-                        num, DELIM,
+                        req_num, DELIM,
                         CPU_BINARY, DELIM,
                         GPU_BINARY, DELIM,
                         cmd_args, DELIM,
@@ -94,21 +97,43 @@ function generate_request(a, b, c)
     job_id = get_job_id(N, R, M)
     stdin_len, stdin_input = get_mat_strings(a, b)
 
-    num = request_num # TODO ATOMIC
+    req_num = request_num # TODO ATOMIC
 
-    req_string = make_request_string(num, cmd_args, target_pref, cpu_thread, gpu_cpu_thread, gpu_thread, cpu_ram, gpu_ram, gpu_mem, gpu_shared_mem, job_id, stdin_len, stdin_input)
+    req_string = make_request_string(req_num, cmd_args, target_pref, cpu_thread, gpu_cpu_thread, gpu_thread, cpu_ram, gpu_ram, gpu_mem, gpu_shared_mem, job_id, stdin_len, stdin_input)
 
     return req_string
+end
+
+function send_request(req_string)
+    server = connect(SEND_PORT)
+    print(server, req_string)
+end
+
+function start_reciever()
+    @async begin
+       server = listen(RECEIVE_PORT)
+       while true
+           sock = accept(server)
+           @async while isopen(sock)
+               write(stdout, readline(sock, keep=false))
+           end
+       end
+    end
 end
 
 a = rand(3, 4)
 b = rand(4, 5)
 c = a*b
-print("matrix a:\n")
+println("matrix a:")
 @show a
-print("matrix b:\n")
+println("matrix b:")
 @show b
-print("answer:\n")
+println("answer:")
 @show c
-print("request string:\n")
-print(generate_request(a, b, c))
+println("request string:")
+req = generate_request(a, b, c)
+println(req)
+
+println("sending request & starting receiver")
+send_request()
+start_reciever()

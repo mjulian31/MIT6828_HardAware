@@ -31,7 +31,7 @@ function fc_init(fc, input_size, output_size)
 end
 
 function fc_init_rand(fc, num_rand)
-    fc.rands = [rand(size(fc.weights)...) .* 0.5 .- 0.25 for i = 1:num_rand]
+    fc.rands = [rand(size(fc.weights)...) .* 0.25 .- 0.125 for i = 1:num_rand]
 end
 
 function fc_set_rand(fc, i_rand)
