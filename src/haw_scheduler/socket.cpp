@@ -1,7 +1,8 @@
 #include <unistd.h> 
 #include <stdio.h> 
-#include <sys/socket.h> 
 #include <stdlib.h> 
+#include <sys/socket.h> 
+#include <arpa/inet.h> 
 #include <netinet/in.h> 
 #include <string.h> 
 #include <cassert>
@@ -10,6 +11,10 @@
 #include "hawsHAWS.h"
 #include "hawsTest.h"
 
+// 10MB coming in per request
+#define SOCKET_READ_BUF_SIZE ((uint64_t)1024 * (uint64_t)1024 * (uint64_t) 1024 * 10)
+// 10MB going out per request 
+#define SOCKET_SEND_BUF_SIZE ((uint64_t)1024 * (uint64_t)1024 * (uint64_t) 1024 * 10)
 
 bool socket_set_blocking(int fd, bool blocking) { // SOCKET THREAD
    int flags = fcntl(fd, F_GETFL, 0);
@@ -65,67 +70,12 @@ int haws_socket_listen(int port) { // SOCKET THREAD
     int optval = 1;
     int success = setsockopt(new_socket,SOL_SOCKET,SO_REUSEADDR,&optval,sizeof(int));
     assert(success == 0);
+    // set socket nonblocking
     success = socket_set_blocking(new_socket, false);
     assert(success);
     printf("SOCKET: accepted\n");
     return new_socket;
 }
-
-#define CSV_BUF_PARSE_CPP_STR(buf, cName, cppName) \
-    fieldLen = 0; \
-    startPos = pos; \
-    for (pos = pos; buf[pos] != ','; pos++) { \
-        assert(pos < max_buf_size); \
-        fieldLen++; \
-    } pos++; \
-    char* cName = (char*) malloc(sizeof(char) * (fieldLen + 1)); \
-    memcpy(cName, (buf + (startPos * sizeof(char))), fieldLen); \
-    cName[fieldLen] = '\0'; \
-    std::string cppName(cName); \
-    assert(cppName.length() > 0);  \
-    free(cName); \
-    printf("CSVPARSER/CPPSTR: " #cppName ":'%s'\n", cppName.c_str());
-
-//@dedup
-#define CSV_BUF_PARSE_INT(buf, strName, strNameCpp, intName) \
-    fieldLen = 0; \
-    startPos = pos; \
-    for (pos = pos; buf[pos] != ','; pos++) { \
-        assert(pos < max_buf_size); \
-        fieldLen++;  \
-    } pos++;\
-    char* strName = (char*) malloc(sizeof(char) * (fieldLen + 1)); \
-    memcpy(strName, (buf + (startPos * sizeof(char))), fieldLen); \
-    strName[fieldLen] = '\0'; \
-    printf("CSVPARSER/STRINT: " #strName "[%ld]:%s\n", fieldLen, strName); \
-    std::string strNameCpp(strName); \
-    int intName = std::stoi(strName); \
-    assert(intName > 0); \
-    free(strName); \
-    printf("CSVPARSER/INT: " #strName ":%d\n", intName);
-
-//@dedup
-#define CSV_BUF_PARSE_LONG(buf, strName, strNameCpp, varName) \
-    fieldLen = 0; \
-    startPos = pos; \
-    for (pos = pos; buf[pos] != ','; pos++) { \
-        assert(pos < max_buf_size); \
-        fieldLen++;  \
-    } pos++;\
-    char* strName = (char*) malloc(sizeof(char) * (fieldLen + 1)); \
-    memcpy(strName, (buf + (startPos * sizeof(char))), fieldLen); \
-    strName[fieldLen] = '\0'; \
-    printf("CSVPARSER/STRLONG: " #strName "[%ld]:%s\n", fieldLen, strName); \
-    std::string strNameCpp(strName); \
-    long varName = std::stol(strName); \
-    assert(varName >= 0); \
-    free(strName); \
-    printf("CSVPARSER/LONG: " #strName ":%ld\n", varName);
-
-
-// 10MB coming in per request
-#define SOCKET_READ_BUF_SIZE ((uint64_t)1024 * (uint64_t)1024 * (uint64_t) 1024 * 10)
-//#define SOCKET_READ_BUF_SIZE ((uint64_t)1024 * (uint64_t)1024 * (uint64_t)1024)
 
 HAWSClientRequest* haws_socket_create_client_request(char* socket_read_buf, long max_buf_size) {
     long pos = 0;
@@ -196,6 +146,39 @@ HAWSClientRequest* haws_socket_create_client_request(char* socket_read_buf, long
                                                    freeable_stdin);  // FIELD 16
     req->Print();
     return req;
+}
+
+int haws_socket_open_send_socket(int port) {
+    int sock = 0; 
+    struct sockaddr_in serv_addr; 
+    printf("SOCKET: open send socket\n");
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
+    { 
+        printf("\n Socket creation error \n"); 
+        return -1;
+    } 
+    serv_addr.sin_family = AF_INET; 
+    serv_addr.sin_port = htons(port); 
+    // Convert IPv4 and IPv6 addresses from text to binary form 
+    printf("SOCKET: send inet pton \n");
+    if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0)  
+    { 
+        printf("\nInvalid address/ Address not supported \n"); 
+        return -1; 
+    } 
+    printf("SOCKET: send connect\n");
+    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) 
+    { 
+        printf("\nConnection Failed \n"); 
+        return -1; 
+    }
+    return sock;
+}
+
+void haws_socket_send_resp(int socket, int reqNum, std::string targRan, 
+                           float wallTime, float cpuTime, 
+                           int exitCode, long outputLen, char* output) {
+
 }
 
 void haws_socket_loop(int socket) { // SOCKET THREAD

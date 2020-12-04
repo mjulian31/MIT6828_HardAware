@@ -38,6 +38,7 @@ class HAWS {
         bool sockThreadReqsRunning;
         std::thread* sockThreadReqs;
         int portReqs = 8080;
+        int portResp1 = 8081;
 
         std::mutex tasksActiveLock;
         int cpuTasksActive = 0;
