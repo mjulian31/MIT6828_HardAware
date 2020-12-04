@@ -27,6 +27,9 @@ bool sockLoopKillFlag;
 std::mutex tasksToStartQueueLock; // synchronizes queue access
 std::queue<HAWSClientRequest*>* tasksToStartQueue;
 
+std::mutex conclusionLock;
+std::list<HAWSConclusion*> pendConclusions;
+
 HAWSTargetMgr* cpuMgr;
 HAWSTargetMgr* gpuMgr;
 
@@ -88,15 +91,23 @@ void HAWS::ReapChildren() { // SCHEDLOOP THREAD
 
 // SCHEDLOOP THREAD
 void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, time_point ended) {
+    HAWSConclusion* conclusion;
     if (IN_LIST(allCPUPids, pid)) {
        assert(cpuMgr->TaskIsActive(pid));
        assert(NOT_IN_LIST(allGPUPids, pid));
-       billableCPUus += cpuMgr->TaskConclude(pid, task_status, status, ended); 
+       conclusion = cpuMgr->TaskConclude(pid, task_status, status, ended); 
+       billableCPUus += conclusion->targetRealBillableUS;
    } else if (IN_LIST(allGPUPids, pid)) {
        assert(gpuMgr->TaskIsActive(pid));
        assert(NOT_IN_LIST(allCPUPids, pid));
-       billableGPUus += gpuMgr->TaskConclude(pid, task_status, status, ended); 
+       conclusion = gpuMgr->TaskConclude(pid, task_status, status, ended); 
+       billableGPUus += conclusion->targetRealBillableUS;
    }
+   conclusionLock.lock();
+   pendConclusions.push_back(conclusion);
+   //TODO remove this it's slow
+   printf("HAWS/CONCLUSION: %ld pending conclusions\n", pendConclusions.size());
+   conclusionLock.unlock();
 }
 
 // SCHEDLOOP THREAD
@@ -285,6 +296,13 @@ void HAWS::Stop() {
 
     // should not stop with reqs in flight in queue
     assert(enqueuedReqs == 0); 
+
+    // should not stop with conclusions to be sent back
+    conclusionLock.lock();
+    //assert(pendConclusions.size() == 0);
+    printf("HAWS/CONCLUSION: ended with %ld conclusions generated\n", pendConclusions.size());
+    pendConclusions.clear(); //TODO REMOVE ME MEMLEAK
+    conclusionLock.unlock();
 
     // all memory should be relased from all tasks being completed
     assert(globalPhysMemAvail = this->physMemLimitMB);

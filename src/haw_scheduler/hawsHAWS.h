@@ -11,8 +11,6 @@
 #include "hawsClientRequest.h"
 #include "hawsUtil.h"
 
-//using namespace std;
-
 extern bool sockLoopKillFlag;
 
 enum HAWSHWTarget { TargCPU, TargGPU };
@@ -23,6 +21,18 @@ enum TaskStatus {
     TASK_FINISHED_NONZERO, 
     TASK_FINISHED_ABNORMAL
 };
+
+typedef struct HAWSConclusion {
+    int reqNum;
+    std::string targRun;
+    float wallTime;
+    float cpuTime;
+    int exitCode;
+    int outputLen;
+    std::string output;
+    // cost accumulation stuff
+    long targetRealBillableUS;
+} HAWSResponse;
 
 class HAWS {
     private:
@@ -40,6 +50,7 @@ class HAWS {
         std::thread* sockThreadReqs;
         int portReqs = 8080;
         // responses
+        
         int sockResp1 = -1;
         int portResp1 = 8081;
 
@@ -58,6 +69,7 @@ class HAWS {
         static HAWSHWTarget DetermineReqTarget(HAWSClientRequest* req);
     
         //unused
+        /*
         void ParseFields();
         void StartTaskCPUManager();
         void StartTaskGPUManager();
@@ -67,6 +79,7 @@ class HAWS {
         void ColdQueryGPUManager();
         void HotQueryCPUManager();
         void HotQueryGPUManager();
+        */
     public:
         HAWS();
         ~HAWS();
@@ -83,6 +96,5 @@ class HAWS {
         void Stop();
         void StopSocket();
 };
-
 
 #endif
