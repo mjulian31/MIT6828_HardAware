@@ -107,6 +107,7 @@ end
 function send_request(req_string)
     server = connect(SEND_PORT)
     print(server, req_string)
+    close(server)
 end
 
 function start_reciever()
@@ -135,5 +136,5 @@ req = generate_request(a, b, c)
 println(req)
 
 println("sending request & starting receiver")
-send_request()
 start_reciever()
+send_request()
