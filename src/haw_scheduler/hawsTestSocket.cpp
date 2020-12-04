@@ -181,11 +181,10 @@ int haws_test_socket_bringup() {
     clientSendBuff = (char*) malloc(CLIENT_SEND_BUFF_SIZE * sizeof(char));
     clientRecvBuff = (char*) malloc(CLIENT_RECV_BUFF_SIZE * sizeof(char));
     
-    printf("TEST: go\n");    
-    printf("TEST: send\n");
     int length = haws_help_load_client_buffer_sample_req();
     printf("TEST:\n\nsample req size %d:\n\n%s\n\n", length, clientSendBuff);
-    send(testClientSendSocket, clientSendBuff, length - 1, 0 ); 
+    printf("TEST: send it\n");
+    send(testClientSendSocket, clientSendBuff, length, 0 ); 
     sleep(1);
     printf("TEST: sample request sent!\n"); 
 

@@ -242,8 +242,12 @@ class HAWSTargetMgr {
             this->targStr = targStr;
         }
         int StartTask(std::string binpath, std::string args, 
-                      char* stdin_buf, int stdin_buff_len, int maxRAM) {
-            assert(strlen(stdin_buf) == stdin_buff_len);
+                      char* stdin_buf, long stdin_buff_len, int maxRAM) {
+            //if (strlen(stdin_buf) != stdin_buff_len) {
+            //    printf("HWMGR/%s: STDIN SIZE MISMATCH req says %ld but stdin_buf is %ld\n", 
+            //           this->targStr.c_str(), stdin_buff_len, strlen(stdin_buf));
+            //    assert(strlen(stdin_buf) == stdin_buff_len);
+            //}
 
             ChildHandle* handle = start_subprocess_nonblocking(binpath, args, 
                                                                stdin_buf, stdin_buff_len);

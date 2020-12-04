@@ -66,6 +66,24 @@ HAWS haws;
 int testClientSendSocket = -1;
 int testClientRecvSocket = -1;
 
+// Req Format
+/* int reqNum,                 // FIELD 2
+   std::string cpuBinPath,     // FIELD 3
+   std::string gpuBinPath,     // FIELD 4
+   std::string jobArgv,        // FIELD 5
+   std::string targHint,       // FIELD 6
+   int cpuJobCPUThreads,       // FIELD 7
+   int gpuJobCPUThreads,       // FIELD 8
+   int gpuJobGPUThreads,       // FIELD 9
+   int cpuJobCPUPhysMB,        // FIELD 10
+   int gpuJobCPUPhysMB,        // FIELD 11
+   int gpuJobGPUPhysMB,        // FIELD 12
+   int gpuJobGPUShMB,          // FIELD 13
+   std::string jobID,          // FIELD 14
+   long stdinLen,              // FIELD 15
+   char* freeableStdin)        // FIELD 16
+*/
+
 int main (int argc, char *argv[]) {
     // set resource limits
     haws.SetPhysMemLimitMB(atoi(argv[1]));
@@ -74,7 +92,7 @@ int main (int argc, char *argv[]) {
 
     // WHITEBOX tests - directly call scheduler 
     // basic tests - no command line args or stdin
-    bool allWhiteBox = true;
+    bool allWhiteBox = false;
     if (allWhiteBox) {
         RUN_TEST(haws_test_1);
         RUN_TEST(haws_test_1);
@@ -104,22 +122,6 @@ int main (int argc, char *argv[]) {
     printf("%d TESTS PASSED\n", numTests);
 }
 
-/* int reqNum,                 // FIELD 2
-   std::string cpuBinPath,     // FIELD 3
-   std::string gpuBinPath,     // FIELD 4
-   std::string jobArgv,        // FIELD 5
-   std::string targHint,       // FIELD 6
-   int cpuJobCPUThreads,       // FIELD 7
-   int gpuJobCPUThreads,       // FIELD 8
-   int gpuJobGPUThreads,       // FIELD 9
-   int cpuJobCPUPhysMB,        // FIELD 10
-   int gpuJobCPUPhysMB,        // FIELD 11
-   int gpuJobGPUPhysMB,        // FIELD 12
-   int gpuJobGPUShMB,          // FIELD 13
-   std::string jobID,          // FIELD 14
-   long stdinLen,              // FIELD 15
-   char* freeableStdin)        // FIELD 16
-*/
 
 int haws_test_1() {
     HAWSClientRequest* r1 = new HAWSClientRequest(1, "/opt/haws/bin/matmul_cpu", 
