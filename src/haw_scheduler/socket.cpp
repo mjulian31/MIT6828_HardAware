@@ -83,7 +83,6 @@ void haws_socket_loop(int socket) { // SOCKET THREAD
     printf("SOCKET: ...accepted\n");
     int throttle = 0;
     while (!sockLoopKillFlag) {
-        /*
         int bytes_in = read(socket_fd, socket_read_buf, SOCKET_READ_BUF_SIZE);
         assert(bytes_in != SOCKET_READ_BUF_SIZE); // request was too large
         if (bytes_in > 0) {
@@ -92,7 +91,7 @@ void haws_socket_loop(int socket) { // SOCKET THREAD
             if (throttle++ % 1000 == 0) {
                 printf("SOCKET: reading nothing\n");
             }
-        }*/
+        }
         usleep(1000);
     }
     shutdown(socket_fd, 2);

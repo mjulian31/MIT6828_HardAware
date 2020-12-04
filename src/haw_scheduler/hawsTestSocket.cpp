@@ -9,39 +9,65 @@
 #include "hawsHAWS.h"
 
 extern HAWS haws;
-extern int testClientSocket;
+extern int testClientSendSocket;
 
 #define CLIENT_SEND_BUFF_SIZE ((uint64_t) 1024 * (uint64_t) 1024 * (uint64_t) 1024 * (uint64_t) 10)
-char* clientSendBuff;
+#define CLIENT_RECV_BUFF_SIZE CLIENT_SEND_BUFF_SIZE
 
-int haws_help_open_socket(int port) {
+char* clientSendBuff;
+char* clientRecvBuff;
+
+int haws_help_open_send_socket(int port) {
     int sock = 0; 
     struct sockaddr_in serv_addr; 
-    printf("TEST: open client socket\n");
+    printf("TEST: send open client socket\n");
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
     { 
         printf("\n Socket creation error \n"); 
         return -1;
     } 
-   
     serv_addr.sin_family = AF_INET; 
     serv_addr.sin_port = htons(port); 
-       
     // Convert IPv4 and IPv6 addresses from text to binary form 
-    printf("TEST: inet pton \n");
+    printf("TEST: send inet pton \n");
     if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0)  
     { 
         printf("\nInvalid address/ Address not supported \n"); 
         return -1; 
     } 
-   
     printf("TEST: connect\n");
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) 
     { 
         printf("\nConnection Failed \n"); 
         return -1; 
     }
-     
+    return sock;
+}
+
+int haws_help_open_recv_socket(int port) {
+    int sock = 0; 
+    struct sockaddr_in serv_addr; 
+    printf("TEST: recv open client socket\n");
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
+    { 
+        printf("\n Socket creation error \n"); 
+        return -1;
+    } 
+    serv_addr.sin_family = AF_INET; 
+    serv_addr.sin_port = htons(port); 
+    // Convert IPv4 and IPv6 addresses from text to binary form 
+    printf("TEST: recv inet pton \n");
+    if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0)  
+    { 
+        printf("\nInvalid address/ Address not supported \n"); 
+        return -1; 
+    } 
+    printf("TEST: recv connect\n");
+    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) 
+    { 
+        printf("\nConnection Failed \n"); 
+        return -1; 
+    }
     return sock;
 }
 
@@ -49,8 +75,6 @@ void haws_help_close_socket(int socket) {
     printf("TEST: close client socket\n");
     int success = close(socket);
     assert(success == 0);
-    assert(clientSendBuff != NULL);
-    free(clientSendBuff);
 }
 
 long haws_help_load_client_buffer_field(int pos, char* content, int len, bool addDelim) {
@@ -151,15 +175,20 @@ int haws_test_socket_bringup() {
 
     char* hello = (char*) "Hello from client"; 
     clientSendBuff = (char*) malloc(CLIENT_SEND_BUFF_SIZE * sizeof(char));
+    clientRecvBuff = (char*) malloc(CLIENT_RECV_BUFF_SIZE * sizeof(char));
+    
     printf("TEST: go\n");    
     printf("TEST: send\n");
     int length = haws_help_load_client_buffer_sample_req();
-    printf("TEST: \n\n sample req size %d:\n\n%s\n\n", length, clientSendBuff);
-    //send(testClientSocket, clientSendBuff, length, 0 ); 
-
+    printf("TEST:\n\nsample req size %d:\n\n%s\n\n", length, clientSendBuff);
+    send(testClientSendSocket, clientSendBuff, length - 1, 0 ); 
+    sleep(1);
     printf("TEST: sample request sent!\n"); 
 
     printf("TEST: PLZ STOP\n");
+
+    free(clientSendBuff);
+    free(clientRecvBuff);
     haws.Stop();
     printf("TEST: STOPPED\n");
     return 0;
