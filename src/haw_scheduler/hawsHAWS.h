@@ -26,6 +26,8 @@ enum TaskStatus {
 
 class HAWS {
     private:
+        int reqCounter;
+
         int physMemLimitMB;
         int gpuMemLimitMB;
         int gpuSharedMemLimitMB; 

@@ -37,6 +37,8 @@ int globalPhysMemAvail = 0;
 int globalGPUMemAvail = 0;
 int globalGPUSharedMemAvail = 0;
 
+int reqCounter = 0;
+
 std::list<pid_t> allCPUPids;
 std::list<pid_t> allGPUPids;
 
@@ -204,7 +206,7 @@ HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) { // SCHEDLOOP THR
 
 HAWS::HAWS() {
     printf("HAWS: Constructed\n");
-    
+    this->reqCounter = 0; 
     tasksToStartQueue = new std::queue<HAWSClientRequest*>();
 }
 
@@ -229,21 +231,24 @@ bool HAWS::IsDoingWork() {
 }
 
 void HAWS::PrintData() {
-    printf("HAWS: Hello From PrintData\n");
+    printf("HAWS: PrintData\n");
+    printf("HAWS:   serviced %d requests\n", this->reqCounter);
     auto elapsedUS = TIMEDIFF_CAST_USEC(hawsStopTime - hawsStartTime);
     auto elapsedMS = TIMEDIFF_CAST_MSEC(hawsStopTime - hawsStartTime);
     auto elapsedS = TIMEDIFF_CAST_SEC(hawsStopTime - hawsStartTime);
-    printf("HAWS: System runtime: %ld us (%ld ms) (%ld s)\n", elapsedUS, elapsedMS, elapsedS);
-    printf("HAWS: Billable CPU us: %ld\n", billableCPUus);
-    printf("HAWS: Billable CPU cents/us: %f\n", centsPerUnitTimeCPU);
+    //printf("HAWS: System runtime: %ld us (%ld ms) (%ld s)\n", elapsedUS, elapsedMS, elapsedS);
+    //printf("HAWS: Billable CPU us: %ld\n", billableCPUus);
+    //printf("HAWS: Billable CPU cents/us: %f\n", centsPerUnitTimeCPU);
     float billableCents = centsPerUnitTimeCPU * billableCPUus;
-    printf("HAWS: Billable CPU cents: %f cents (%f$)\n", billableCents, billableCents / 100);
+    //printf("HAWS: Billable CPU cents: %f cents (%f$)\n", billableCents, billableCents / 100);
     cpuMgr->PrintData();
     gpuMgr->PrintData();
 }
 
 void HAWS::Start() {
     hawsStartTime = std::chrono::system_clock::now();
+    
+    this->reqCounter = 0; 
 
     assert(!schedLoopThreadRunning); // must be stopped before started
 
@@ -274,7 +279,6 @@ void HAWS::Start() {
 
 void HAWS::Stop() {
     hawsStopTime = std::chrono::system_clock::now(); // save full stop time
-
     tasksToStartQueueLock.lock();
     int enqueuedReqs = tasksToStartQueue->size();
     tasksToStartQueueLock.unlock();
@@ -326,6 +330,11 @@ void HAWS::StopSocket() {
 }
 
 void HAWS::HardAwareSchedule(HAWSClientRequest* req) {
+    if (this->reqCounter + 1 != req->GetNum()) {
+        printf("reqCounter was at %d, req number in is %d\n", this->reqCounter, req->GetNum());
+        assert(false);
+    } this->reqCounter++;
+
     assert(tasksToStartQueue != NULL);
     tasksToStartQueueLock.lock();
     tasksToStartQueue->push(req);

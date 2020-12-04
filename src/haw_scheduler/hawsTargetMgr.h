@@ -127,15 +127,15 @@ class HAWSTargetMgr {
         }
         long output_bytes = GetFileSize(filepath);
         assert(output_bytes > 0);
-        printf("TARGMGR/%s Malloc for storing output\n", this->targStr.c_str());
+        //printf("TARGMGR/%s Malloc for storing output\n", this->targStr.c_str());
         char* output = (char*) malloc(1 + output_bytes * sizeof(char));
-        printf("TARGMGR/%s Open file\n", this->targStr.c_str());
+        //printf("TARGMGR/%s Open file\n", this->targStr.c_str());
         FILE *fp = fopen(filepath.c_str(), "r"); 
         assert(fp != NULL); 
-        printf("TARGMGR/%s Read it all \n", this->targStr.c_str());
+        //printf("TARGMGR/%s Read it all \n", this->targStr.c_str());
         size_t len = fread(output, sizeof(char), output_bytes, fp);
         assert(ferror(fp) == 0);
-        printf("TARGMGR/%s Close file\n", this->targStr.c_str());
+        //printf("TARGMGR/%s Close file\n", this->targStr.c_str());
         fclose(fp);
         output[len++] = '\0'; //just to be safe 
          

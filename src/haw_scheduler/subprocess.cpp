@@ -23,16 +23,16 @@ int subprocess_close_parent_stdin_pipe(ChildHandle* handle) {
 ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,    
                                           char* stdin_buff, int stdin_buff_len) {
     pid_t  pid; 
-    printf("SUBPROCESS: alloc ChildHandle\n");
+    //printf("SUBPROCESS: alloc ChildHandle\n");
     ChildHandle* handle = (ChildHandle*) malloc(sizeof(ChildHandle));
     int ret = 1; 
 
     // malloc new pipes for handle
-    printf("SUBPROCESS: alloc pipes\n");
+    //printf("SUBPROCESS: alloc pipes\n");
     int** pipes = new int*[2];
-    printf("SUBPROCESS: alloc pipes 1 \n");
+    //printf("SUBPROCESS: alloc pipes 1 \n");
     for(int j = 0; j < 2; j++) {
-        printf("SUBPROCESS: alloc pipes i=%d \n", j);
+        //printf("SUBPROCESS: alloc pipes i=%d \n", j);
         pipes[j] = new int[2];
     }
 
@@ -45,30 +45,32 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
     } 
     char** argv_list;
     // two extra spots; 1 for bin path and 1 for null terminator
-    printf("SUBPROCESS: calloc argv_list[%ld] (token size is %ld)\n", 
-           2 + tokens.size(), tokens.size());   
+    //printf("SUBPROCESS: calloc argv_list[%ld] (token size is %ld)\n", 
+    //       2 + tokens.size(), tokens.size());   
     argv_list = (char**) calloc(2 + tokens.size(), sizeof(char*));
     int i = 0;
     argv_list[i] = (char*) binpath.c_str();
-    printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]);
+    //printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]);
     for (i = 1; i <= tokens.size(); i++) {
         argv_list[i] = (char*) tokens[i - 1].c_str();
-        printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]); 
+        //printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i, argv_list[i]); 
     }
     argv_list[i] = (char*) 0;
-    printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i+1, argv_list[i]); 
+    //printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i+1, argv_list[i]); 
     int argv_list_len = i;
 
-    //TEST TEMPORARY
+    //TEST TEMPORARY 
+    /*
     printf("SUBPROCESS: test malloc\n");
     char* test = (char*) malloc(20);
     printf("SUBPROCESS: test malloc done\n");
     free(test);
     printf("SUBPROCESS: test malloc freed\n");
+    */
     //argv_list now has [binpath, <arg1, arg2, ..., argN,> 0], read for execve
 
     // init pipes for parent to write and read
-    printf("SUBPROCESS: init pipes\n");
+    //printf("SUBPROCESS: init pipes\n");
     //pipe(pipes[PARENT_READ_PIPE]); // leaving stdout routed normally
     pipe(pipes[PARENT_WRITE_PIPE]);
     printf("SUBPROCESS: starting subprocess nonblocking\n");
@@ -98,11 +100,11 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        // the execv() only return if error occured. 
        // The return value is -1 
 
-       printf("CHILD: dup pipe\n");
+       //printf("CHILD: dup pipe\n");
        dup2(pipes[PARENT_WRITE_PIPE][READ_FD], STDIN_FILENO);
        //dup2(pipes[PARENT_READ_PIPE][WRITE_FD], STDOUT_FILENO);
 
-       printf("CHILD: close pipes\n");
+       //printf("CHILD: close pipes\n");
        // close fds not required by child. Also, we don't
        // want the exec'ed program to know these existed 
        close(pipes[PARENT_WRITE_PIPE][READ_FD]);
@@ -110,7 +112,7 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        //close(pipes[PARENT_READ_PIPE][READ_FD]);
        close(pipes[PARENT_WRITE_PIPE][WRITE_FD]);
  
-       printf("CHILD: execv\n");
+       //printf("CHILD: execv\n");
        execv(argv_list[0],argv_list); 
        exit(0);  // not reached?
     } else{ 
@@ -122,7 +124,7 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        //printf("caught pid %d\n", pid);
 
        // close fds not required by parent
-       printf("SUBPROCESS: close pipes\n");
+       //printf("SUBPROCESS: close pipes\n");
        close(pipes[PARENT_WRITE_PIPE][READ_FD]);
        //close(pipes[PARENT_READ_PIPE][WRITE_FD]);
      
@@ -145,7 +147,7 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        }
 
        //write(pipes[PARENT_WRITE_PIPE][WRITE_FD], "#_$_stdin_end\n", 14);
-       printf("SUBPROCESS: pipe accounting\n");
+       //printf("SUBPROCESS: pipe accounting\n");
        handle->pid = pid;
        handle->pipes[PARENT_WRITE_PIPE][READ_FD] = pipes[PARENT_WRITE_PIPE][READ_FD];
        handle->pipes[PARENT_WRITE_PIPE][WRITE_FD] = pipes[PARENT_WRITE_PIPE][WRITE_FD];
@@ -156,7 +158,7 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        for(int j = 0; j < 2; j++) { delete[] pipes[j]; }
        delete[] pipes;
 
-       printf("SUBPROCESS: freeing argv_list\n");
+       //printf("SUBPROCESS: freeing argv_list\n");
        free(argv_list); // free command line args that were sent
 
        printf("SUBPROCESS: started successfully\n");

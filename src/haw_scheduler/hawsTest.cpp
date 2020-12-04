@@ -36,6 +36,7 @@ int numTests = 0;
 #define SCHED_MEM_GPU_MAX_CLOUDLAB (1024*6) // update on cloudlab
 
 
+/*
 void haws_test_2(HAWS* haws);
 void haws_test_3(HAWS* haws);
 void haws_test_4(HAWS* haws);
@@ -44,6 +45,7 @@ void haws_test_v4_8k(HAWS* haws);
 void haws_test_billing(HAWS* haws);
 void haws_test_stdout_cap(HAWS* haws);
 void haws_test_stdin_stdout_cap(HAWS* haws);
+*/
 
 #define MATMUL_PROD1_ITERS 1000
 
@@ -113,7 +115,8 @@ int main (int argc, char *argv[]) {
         testClientSendSocket = haws_help_open_send_socket(8080);
         assert(testClientSendSocket > 0);
         
-        RUN_TEST(haws_test_socket_bringup);
+        //RUN_TEST(haws_test_socket_bringup);
+        RUN_TEST(haws_test_socket_many_cpu);
 
         haws_help_close_socket(testClientSendSocket);
         haws.StopSocket();

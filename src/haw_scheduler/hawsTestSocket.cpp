@@ -91,7 +91,7 @@ long haws_help_load_client_buffer_field(int pos, char* content, int len, bool ad
     return pos;
 }
 
-int haws_help_load_client_buffer_sample_req() {
+int haws_help_load_client_buffer_sample_req(int reqNum) {
     long pos = 0;
     long max_pos = CLIENT_SEND_BUFF_SIZE;
 
@@ -99,7 +99,9 @@ int haws_help_load_client_buffer_sample_req() {
     pos = haws_help_load_client_buffer_field(0, (char*) "^", 1, true);
 
     // request number - FIELD 2
-    pos = haws_help_load_client_buffer_field(pos, (char*) "1", 1, true);
+    std::string reqNumStr = std::to_string(reqNum);
+    pos = haws_help_load_client_buffer_field(pos, 
+                                             (char*) reqNumStr.c_str(), reqNumStr.length(), true);
 
     // cpu bin path - FIELD 3
     char* cpubinpath = (char*) "/opt/haws/bin/matmul_cpu";
@@ -114,7 +116,7 @@ int haws_help_load_client_buffer_sample_req() {
     pos = haws_help_load_client_buffer_field(pos, cmdArgs, strlen(cmdArgs), true);
 
     // target rec - FIELD 6
-    char* targetrec = (char*) "cpu-please";
+    char* targetrec = (char*) "cpu-only";
     pos = haws_help_load_client_buffer_field(pos, targetrec, strlen(targetrec), true);
 
     // cpu job worst threads - FIELD 7
@@ -169,31 +171,50 @@ int haws_help_load_client_buffer_sample_req() {
     pos = haws_help_load_client_buffer_field(pos, (char*) "$", 1, false);
 
     //TEMPORARY
-    pos = haws_help_load_client_buffer_field(pos, (char*) "\0", 1, false);
+    //pos = haws_help_load_client_buffer_field(pos, (char*) "\0", 1, false);
     
     return pos;
 }
 
 int haws_test_socket_bringup() {
     haws.Start();
-
-    char* hello = (char*) "Hello from client"; 
     clientSendBuff = (char*) malloc(CLIENT_SEND_BUFF_SIZE * sizeof(char));
     clientRecvBuff = (char*) malloc(CLIENT_RECV_BUFF_SIZE * sizeof(char));
     
-    int length = haws_help_load_client_buffer_sample_req();
-    printf("TEST:\n\nsample req size %d:\n\n%s\n\n", length, clientSendBuff);
+    int length = haws_help_load_client_buffer_sample_req(1);
+    printf("TEST:\n\nsample req bytes[%d]:\n\n%s\n\n", length, clientSendBuff);
     printf("TEST: send it\n");
-    send(testClientSendSocket, clientSendBuff, length, 0 ); 
+    send(testClientSendSocket, clientSendBuff, length, 0); 
     sleep(1);
     printf("TEST: sample request sent!\n"); 
 
     while (haws.IsDoingWork()) { usleep(1000); };
-    printf("TEST: HAWS DONE PLZ STOP!!\n");
     haws.Stop();
     
     free(clientSendBuff);
     free(clientRecvBuff);
-    printf("TEST: STOPPED\n");
     return 0;
 }
+
+int haws_test_socket_many_cpu() {
+    haws.Start();
+    clientRecvBuff = (char*) malloc(CLIENT_RECV_BUFF_SIZE * sizeof(char));
+    clientSendBuff = (char*) malloc(CLIENT_SEND_BUFF_SIZE * sizeof(char));
+
+    for (int i = 1; i <= 1000; i++) { 
+        int length = haws_help_load_client_buffer_sample_req(i);
+        //printf("TEST:\n\nsample req#%d bytes[%d]:\n\n%s\n\n", i, length, clientSendBuff);
+        //printf("TEST: send it\n");
+        send(testClientSendSocket, clientSendBuff, length, 0); 
+    }
+    printf("TEST: sample requests sent!\n"); 
+    sleep(300); // give them a chance to be received and started
+
+    while (haws.IsDoingWork()) { usleep(1000); };
+    haws.Stop();
+    
+    free(clientSendBuff);
+    free(clientRecvBuff);
+    return 0;
+}
+
