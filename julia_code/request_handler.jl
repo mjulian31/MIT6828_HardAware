@@ -185,10 +185,12 @@ function start_reciever()
                response_str = readline(sock, keep=true)
                response = parse_response_string(response_str)
                if response != BAD_RESPONSE
+                   println("got good response")
                    # remove line from socket
                    readline(sock, keep=false)
                    println(responses)
                else
+                   println("got bad response")
                    # got a bad response, continue waiting
                    continue
                end
