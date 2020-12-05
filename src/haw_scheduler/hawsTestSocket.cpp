@@ -60,7 +60,7 @@ void haws_test_socket_all() {
     printf("TEST/CLIENT: waiting 5 seconds after handshake...\n");
     sleep(5);
     RUN_TEST(haws_test_socket_simple_send_recv);
-    RUN_TEST(haws_test_socket_many_cpu);
+    //RUN_TEST(haws_test_socket_many_cpu);
 
     socket_close_socket(testClientSendSocket, "TEST/CLIENT/SEND");
     haws.StopSocket();

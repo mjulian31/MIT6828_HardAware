@@ -490,7 +490,7 @@ void HAWS::StartSocket() {
     // start client1 socket loop
     printf("HAWS: Starting SocketLoop (Client1)\n");
     sockLoopKillFlag = false; // disable killswitch for socket loop thread
-    sockThreadReqs = new std::thread(haws_socket_req_loop, this->portReqs); 
+    sockThreadReqs = new std::thread(haws_socket_req_loop2, this->portReqs); 
     sockThreadReqsRunning = true; // socket loop thread active
     sleep(1); // give things a chance to start
 }
