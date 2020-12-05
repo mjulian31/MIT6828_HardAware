@@ -100,12 +100,12 @@ function make_request_string(req_num, cmd_args, target_pref, cpu_thread, gpu_cpu
 end
 
 function parse_matrix_output(matrix_string)
-    lines = split(matrix_string, "[];")
-    out = zeros(size(lines, 1), size(split(lines[1], " "), 1))
+    lines = split(matrix_string, (';', '[', ']'), keepempty=false)
+    out = zeros(Float64, size(lines, 1), size(split(lines[1], " ", keepempty=false), 1))
     for (row, line) in enumerate(lines)
-        elems = split(line, " ")
+        elems = split(line, " ", keepempty=false)
         for (col, elem) in enumerate(elems)
-            out[row][col] = elem
+            out[row, col] = parse(Float64, elem)
         end
     end
     return out
