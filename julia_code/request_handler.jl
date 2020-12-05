@@ -112,10 +112,10 @@ function parse_matrix_output(matrix_string)
     return out
 end
 
-function parse_response_string(response)
+function parse_response_string(response_str)
     println("parsing func called!")
-    @show response
-    req_arr = split(response, (DELIM, '\n'), keepempty=false)
+    @show response_str
+    req_arr = split(response_str, (DELIM, '\n'), keepempty=false)
     @show req_arr
     println("split string!")
     if req_arr[1] != REQ_START # checks right start
