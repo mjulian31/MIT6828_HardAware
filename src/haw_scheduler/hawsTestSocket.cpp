@@ -8,14 +8,15 @@
 
 #include "hawsHAWS.h"
 #include "hawsTest.h"
+#include "hawsSocket.h"
 #include "socket.h"
 
 extern HAWS haws;
 extern int numTests;
 
 
-#define CLIENT_SEND_BUFF_SIZE ((uint64_t) 1024 * (uint64_t) 1024 * (uint64_t) 1024 * (uint64_t) 10)
-#define CLIENT_RECV_BUFF_SIZE CLIENT_SEND_BUFF_SIZE
+#define CLIENT_SEND_BUFF_SIZE SOCKET_SEND_BUF_SIZE
+#define CLIENT_RECV_BUFF_SIZE SOCKET_READ_BUF_SIZE 
 
 // Req Format
 /* int reqNum,                 // FIELD 2
@@ -53,21 +54,21 @@ void haws_test_socket_all() {
     testSockRecvLoop = new std::thread(haws_test_socket_recv_loop);
     haws.StartSocket(); // bringup server networking
 
-    testClientSendSocket = socket_open_send_socket(8080, "TEST/CLIENT");
+    testClientSendSocket = socket_open_send_socket(8080, "TEST/CLIENT/SEND");
     assert(testClientSendSocket > 0);
 
     printf("TEST/CLIENT: waiting 5 seconds after handshake...\n");
     sleep(5);
-    //RUN_TEST(haws_test_socket_simple_send_recv);
+    RUN_TEST(haws_test_socket_simple_send_recv);
     //RUN_TEST(haws_test_socket_many_cpu);
 
-    socket_close_socket(testClientSendSocket, "TEST/CLIENT");
+    socket_close_socket(testClientSendSocket, "TEST/CLIENT/SEND");
     haws.StopSocket();
     testGlobalKillFlag = true; // stop client recv thread
-    printf("TEST/CLIENT: Stopping Receive Loop...\n");
+    printf("TEST/CLIENT: stopping recv loop...\n");
     testSockRecvLoop->join();
     delete(testSockRecvLoop);
-    printf("TEST/CLIENT: Stopped Receive Loop\n");
+    printf("TEST/CLIENT: stopped recv loop\n");
 }
 
 long haws_help_load_client_buffer_field(int pos, char* content, int len, bool addDelim) {
@@ -173,15 +174,19 @@ int haws_help_load_client_buffer_sample_req(int reqNum) {
 void haws_test_socket_recv_loop() {
     // responses
     clientRecvBuff = (char*) malloc(CLIENT_RECV_BUFF_SIZE * sizeof(char));
-    testClientRecvSocket = socket_open_recv_socket(8081, false, "TEST/CLIENT/RECV");
-    printf("TEST/CLIENT/RECV: client recv socket connected!\n");
+    testClientRecvSocket = socket_open_recv_socket(8081, false, "TEST/CLIENT/RECVLOOP");
+    printf("TEST/CLIENT/RECVLOOP: client recv socket connected!\n");
     int bytes_in = 0;
     int throttle = 0;
     while(!testGlobalKillFlag) {
         // read and dump buffer 
         bytes_in = read(testClientRecvSocket, clientRecvBuff, CLIENT_RECV_BUFF_SIZE);
         if (bytes_in > 0) {
-            printf("TEST/CLIENT/RECV: recv %d bytes:%s\n", bytes_in, clientRecvBuff);
+            printf("TEST/CLIENT/RECVLOOP: recv %d bytes:\n", bytes_in);
+            printf("TEST/CLIENT/RECVLOOP buf[%d]:", bytes_in);
+            for (int i = 0; i < bytes_in; i++) {
+                printf("%c", clientRecvBuff[i]); 
+            }
 
             // do any response processing
 
@@ -189,15 +194,15 @@ void haws_test_socket_recv_loop() {
             memset(clientRecvBuff, 0, sizeof(CLIENT_RECV_BUFF_SIZE)); 
         } else {
             if (throttle++ % 10000 == 0) {
-                printf("TEST/CLIENT/RECV: receving nothing\n");
+                printf("TEST/CLIENT/RECVLOOP: receving nothing\n");
             }
         }
         usleep(1000); // yield
     }
-    socket_close_socket(testClientRecvSocket, "TEST/CLIENT/RECV");
-    printf("TEST/CLIENT/RECV: freeing client recv buffer\n");
+    socket_close_socket(testClientRecvSocket, "TEST/CLIENT/RECVLOOP");
+    printf("TEST/CLIENT/RECVLOOP: freeing client recv buffer\n");
     free(clientRecvBuff);
-    printf("TEST/CLIENT/RECV: socket recv thread done\n");
+    printf("TEST/CLIENT/RECVLOOP: socket recv thread done\n");
 }
 
 int haws_test_socket_simple_send_recv() {
@@ -205,11 +210,14 @@ int haws_test_socket_simple_send_recv() {
     clientSendBuff = (char*) malloc(CLIENT_SEND_BUFF_SIZE * sizeof(char));
     
     int length = haws_help_load_client_buffer_sample_req(1);
-    printf("TEST:\n\nsample req bytes[%d]:\n\n%s\n\n", length, clientSendBuff);
-    printf("TEST: send it\n");
+    printf("TEST/CLIENT:\n\nsample req bytes[%d]:", length);
+    for (int i = 0; i < length; i++) { // safe print buff
+        printf("%c", clientSendBuff[i]);
+    }
+    printf("TEST/CLIENT: send it\n");
     send(testClientSendSocket, clientSendBuff, length, 0); 
-    printf("TEST: sample request sent!\n"); 
-    sleep(5);
+    printf("TEST/CLIENT: sample request sent!\n"); 
+    sleep(10);
     while (haws.IsDoingWork()) { usleep(1000); };
     haws.Stop();
     

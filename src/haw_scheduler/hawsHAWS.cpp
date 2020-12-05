@@ -329,12 +329,6 @@ void HAWS::Stop() {
     schedLoopThreadRunning = false;   
     delete(schedLoopThread);
 
-    if (threadRespLoopRunning) {
-        printf("HAWS: Stoping Response Loop Thread\n");
-        threadRespLoop->join();
-        threadRespLoopRunning = false; 
-        delete(threadRespLoop);
-    }
 
     // print info once stopped
     this->PrintData();
@@ -373,18 +367,19 @@ bool HAWS::IsRespLoopRunning() {
 
 // RESPONSE HANDLER THREAD
 void HAWS::RespLoop(int portResp1) {
-    printf("HAWS/RESPONSE: response loop running\n");
+    printf("HAWS/RESPLOOP: response loop running\n");
     assert(threadRespLoopRunning);
     int sockResp1 = socket_open_send_socket(portResp1, "HAWS/RESP");
-    char* sendBuf = (char*) malloc(sizeof(char) * SOCKET_SEND_BUF_SIZE);
-    printf("HAWS/RESPONSE: connected to client\n");
+    int sendBufSize = sizeof(char) * SOCKET_SEND_BUF_SIZE;
+    char* sendBuf = (char*) malloc(sendBufSize);
+    printf("HAWS/RESPLOOP: connected to client\n");
     std::list<HAWSConclusion*>::iterator it;
     int numSent = 0;
     while (!schedLoopKillFlag) {
         numSent = 0;
         conclusionLock.lock();
         if (pendConclusions.size() > 0) {
-            memset(sendBuf, 0, sizeof(char) * SOCKET_SEND_BUF_SIZE); // zero to start
+            memset(sendBuf, 0, sendBufSize); // zero to start
             for (it = pendConclusions.begin(); it != pendConclusions.end(); it++) {
                 SendConclusion(sockResp1, sendBuf, SOCKET_SEND_BUF_SIZE, *it);
                 free((*it)->freeableOutput);
@@ -399,8 +394,12 @@ void HAWS::RespLoop(int portResp1) {
         }
         usleep(1000); // yield
     }
+    printf("HAWS/RESPLOOP: saw stop request\n");
+    printf("HAWS/RESPLOOP: freeing response buffer\n");
     free(sendBuf);
+    printf("HAWS/RESPLOOP: closing socket\n");
     socket_close_socket(sockResp1, "HAWS/RESP");
+    printf("HAWS/RESPLOOP: stopped\n");
 }
 
 // REQUEST HANDLER THREAD (starts the response loop)
@@ -422,14 +421,22 @@ void HAWS::StartSocket() {
 
 // MAIN THREAD
 void HAWS::StopSocket() {
-    printf("HAWS/RECV: Stopping Requst Loop\n");
+    printf("HAWS: Stopping Socket Loops\n");
+    printf("HAWS: Stopping Requst Loop\n");
     assert(sockThreadReqsRunning); // must be started before stopped
     sockLoopKillFlag = true; // enable killswitch for socket loop thread
-    printf("HAWS/RECV: waiting on req thread\n");
+    printf("HAWS: waiting on req thread\n");
     sockThreadReqs->join();            // block until thread exits and returns
     sockThreadReqsRunning = false;     // sock loop thread gone
     delete(sockThreadReqs);
-    printf("HAWS/RECV: Stopped Request Loop\n");
+    printf("HAWS: Stopped Request Loop\n");
+
+    assert(threadRespLoopRunning);
+    printf("HAWS: Stoping Response Loop\n");
+    threadRespLoop->join();
+    threadRespLoopRunning = false; 
+    delete(threadRespLoop);
+    printf("HAWS: Stopped Socket Loops\n");
 }
 
 // REQUEST HANDLER THREAD / MAIN THREAD (in test mode)

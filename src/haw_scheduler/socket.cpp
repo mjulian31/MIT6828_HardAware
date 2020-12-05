@@ -6,7 +6,7 @@
 #include "socket.h"
 
 void socket_close_socket(int socket, std::string callerStr) {
-    printf("SOCKET/%s: close socket %d\n", callerStr.c_str(), socket);
+    printf("%s/SOCK: close socket %d\n", callerStr.c_str(), socket);
     int success = close(socket);
     assert(success == 0);
 }
@@ -74,7 +74,7 @@ int socket_open_recv_socket(int port, bool isBlocking, std::string callerStr) {
     // set socket nonblocking
     int success = socket_set_blocking(new_socket, isBlocking);
     assert(success);
-    printf("SOCKET/%s: recv socket created and accepted (socket %d)\n", callerStr.c_str(), 
+    printf("%s/SOCK: recv socket created and accepted (socket %d)\n", callerStr.c_str(), 
            new_socket);
     return new_socket;
 }
@@ -82,7 +82,7 @@ int socket_open_recv_socket(int port, bool isBlocking, std::string callerStr) {
 int socket_open_send_socket(int port, std::string callerStr) {
     int sock = 0; 
     struct sockaddr_in serv_addr; 
-    printf("SOCKET/%s: open send socket\n", callerStr.c_str());
+    printf("%s/SOCK: open send socket\n", callerStr.c_str());
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
     { 
         printf("\n Socket creation error \n"); 
@@ -99,13 +99,13 @@ int socket_open_send_socket(int port, std::string callerStr) {
         assert(false);
         return -1; 
     } 
-    printf("SOCKET/%s: send connect\n", callerStr.c_str());
+    printf("%s/SOCK: send connect\n", callerStr.c_str());
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) 
     { 
         printf("\nConnection Failed \n"); 
         assert(false);
         return -1; 
     }
-    printf("SOCKET/%s: send created (socket %d)\n", callerStr.c_str(), sock);
+    printf("%s/SOCK: send created (socket %d)\n", callerStr.c_str(), sock);
     return sock;
 }
