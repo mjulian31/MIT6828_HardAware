@@ -53,9 +53,14 @@ int main (int argc, char *argv[]) {
     // TODO
 
     if (strcmp(argv[1], "prod") == 0) {
+        printf("HAWS: Standalone mode\n");
         haws.Start();
         haws.StartSocket();
+        while (true) {
+            // run until killed
+        }
     } else if (strcmp(argv[1], "test") == 0) {
+        printf("HAWS: Running tests\n");
         // WHITEBOX tests - directly call scheduler 
         // basic tests - no command line args or stdin
         bool allWhiteBox = false;

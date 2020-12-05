@@ -124,7 +124,7 @@ void HAWS::ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemL
             // leave queue alone until a task completion frees physmem
             if (globalPhysMemAvail - next->GetCPUJobPhysMB() < 0 &&
                 globalPhysMemAvail - next->GetGPUJobPhysMB() < 0) {
-                if (throttle % 1000 == 0) {
+                if (throttle % 10000 == 0) {
                     printf("Phys mem at capacity, waiting...\n");
                 }
                 // do not deque next work and continue for another round to try
@@ -142,7 +142,7 @@ void HAWS::ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemL
         globalPhysMemAvail += gpuMgr->GetFreedMBRam(); // replenish physmem
         //globalGPUMemAvail += gpuMgr->GetFreedGPUMBRam();
 
-        if (throttle++ % 1000 == 0) {
+        if (throttle++ % 10000 == 0) {
             printf("HAWS/SL: free phys mem %dMB (%d%%)\n", globalPhysMemAvail, 
                    (int)(((float) globalPhysMemAvail / (float) physMemLimitMB)*100));
             printf("HAWS/SL: free gpu mem %dMB (%d%%)\n", globalGPUMemAvail, 
@@ -354,7 +354,10 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
                       std::to_string(resp->exitCode) + "," +
                       std::to_string(resp->outputLen) + "," +
                       std::string(resp->output) + ",$";
-    printf("HAWS/RESPONSE: SAMPLE RESPONSE:%s\n", response.c_str());
+    int len = response.length(); 
+    memcpy(buf, response.c_str(), len); 
+    printf("HAWS/RESPONSE: SEND:%s\n", response.c_str());
+    send(socket, buf, len, 0);
 }
 
 // RESPONSE HANDLER THREAD

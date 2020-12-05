@@ -341,7 +341,7 @@ class HAWSTargetMgr {
                 taskLock.lock();
                 this->SanityCheckActiveTasksProtected(); 
                 this->SanityCheckCompletedTasksProtected();
-                if (throttle % 1000 == 0) {
+                if (throttle % 10000 == 0) {
                     this->PrintDataProtected();
                 }
                 taskLock.unlock();

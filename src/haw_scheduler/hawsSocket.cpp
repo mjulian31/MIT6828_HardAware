@@ -16,7 +16,7 @@ HAWSClientRequest* haws_socket_create_client_request(char* socket_read_buf, long
     pos = 0;
     assert(socket_read_buf[pos] == '^'); 
     pos++; // drop char
-    pos++; // drop delimiter // TODO REMOVE THIS IN NEW VERSION
+    //pos++; // drop delimiter // TODO REMOVE THIS IN NEW VERSION
 
     // FIELD 2 - request number
     CSV_BUF_PARSE_INT(socket_read_buf, reqNumStr, reqNumStrCpp, reqNum);
