@@ -12,7 +12,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-#define STDIN_BUFFER_SIZE (1024 * 1024 * 10) // support 10MB of input
+#define STDIN_BUFFER_SIZE (1024 * 1024 * 30) // support 30MB of input
 
 // timing functions (microseconds)
 double get_wall_time(){
