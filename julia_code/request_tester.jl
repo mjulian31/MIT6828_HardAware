@@ -10,6 +10,8 @@ function mult(x, y)
     return get(responses, req_num, :none)
 end
 
+start_reciever()
+
 println("test 1...")
 a = rand(10, 10)
 b = rand(10, 10)
@@ -27,3 +29,5 @@ a = rand(4098, 10)
 b = rand(10, 124)
 @assert mult(a, b) == a*b
 println("done.")
+
+close_sender()

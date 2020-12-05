@@ -190,18 +190,3 @@ function start_reciever()
        end
     end
 end
-
-a = rand(3, 4)
-b = rand(4, 5)
-c = a*b
-println("matrix a:")
-@show a
-println("matrix b:")
-@show b
-println("answer:")
-@show c
-
-println("sending request & starting receiver")
-start_reciever()
-num, req = send_request(a, b)
-close_sender()
