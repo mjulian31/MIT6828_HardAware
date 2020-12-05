@@ -137,4 +137,4 @@ println(req)
 
 println("sending request & starting receiver")
 start_reciever()
-send_request()
+send_request(req)
