@@ -21,6 +21,9 @@ const BAD_RESPONSE = response(0, :none, 0, 0, 1, 0, :none)
 
 request_lock = ReentrantLock()
 server = connect(SEND_PORT)
+function close_sender()
+    close(server)
+end
 atexit(close_sender)
 
 const CPU_BINARY = "/opt/haws/bin/matmul_cpu"
@@ -99,9 +102,9 @@ end
 function parse_matrix_output(matrix_string, matrix_sizes_string)
     lines = split(matrix_string, "[];")
     out = zeros(size(lines, 1), size(split(lines[1], " "), 1))
-    for row, line in enumerate(lines)
+    for (row, line) in enumerate(lines)
         elems = split(line, " ")
-        for col, elem in enumerate(elems)
+        for (col, elem) in enumerate(elems)
             out[row][col] = elem
         end
     end
@@ -113,10 +116,10 @@ function parse_response_string(response)
     if req_arr[1] != REQ_START
         println("error parsing bad start!")
         return BAD_RESPONSE
-    else if req_arr[-1] != REQ_END
+    elseif req_arr[-1] != REQ_END
         println("error parsing bad end!")
         return BAD_RESPONSE
-    else if size(req_arr, 1) != RESPONSE_LEN
+    elseif size(req_arr, 1) != RESPONSE_LEN
         return BAD_RESPONSE
     else
         # good headers, parse
@@ -146,8 +149,9 @@ function send_request(a, b)
     job_id = get_job_id(N, R, M)
     stdin_len, stdin_input = get_mat_strings(a, b)
 
+    req_num = 0
     while true
-        req_num = request_num
+        req_num = request_num[]
         if atomic_cas!(request_num, req_num, req_num + 1) === req_num
             # we aquired a request number
             break
@@ -164,10 +168,6 @@ function send_request(a, b)
 
     # report back request sent
     return req_num, req_string
-end
-
-function close_sender()
-    close(server)
 end
 
 function start_reciever()
@@ -200,11 +200,8 @@ println("matrix b:")
 @show b
 println("answer:")
 @show c
-println("request string:")
-req = generate_request(a, b)
-println(req)
 
 println("sending request & starting receiver")
 start_reciever()
-send_request()
+num, req = send_request(a, b)
 close_sender()
