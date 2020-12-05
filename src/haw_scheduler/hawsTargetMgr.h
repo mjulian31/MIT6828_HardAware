@@ -188,7 +188,7 @@ class HAWSTargetMgr {
             wallTimeBuffer[pos] = allOutput[pos];
             bufPos++;
         } assert(pos != tasksOutputLen[pid]); // didn't find a newline
-        printf("HACK: test wall time got STR:%s\n", wallTimeBuffer); 
+        //printf("FILE: test wall time got STR:%s\n", wallTimeBuffer); 
         tasksOutWallTime[pid] = wallTimeBuffer; // freeable after resp send
         tasksOutWallTimeLen[pid] = bufPos;
 
@@ -213,7 +213,7 @@ class HAWSTargetMgr {
             cpuTimeBuffer[bufPos] = allOutput[pos];
             bufPos++;
         } assert(pos != tasksOutputLen[pid]); // didn't find a newline
-        printf("HACK: test cpu time got STR:%s\n", cpuTimeBuffer); 
+        //printf("FILE: test cpu time got STR:%s\n", cpuTimeBuffer); 
         tasksOutCPUTime[pid] = cpuTimeBuffer; // freeable after resp send
         tasksOutCPUTimeLen[pid] = bufPos;
 

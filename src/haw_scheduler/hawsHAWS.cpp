@@ -124,6 +124,7 @@ void HAWS::ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemL
             next = tasksToStartQueue->front();
             // if no binary has enough physmem to run, 
             // leave queue alone until a task completion frees physmem
+            /*
             if (globalPhysMemAvail - next->GetCPUJobPhysMB() < 0 &&
                 globalPhysMemAvail - next->GetGPUJobPhysMB() < 0) {
                 if (throttle % 10000 == 0) {
@@ -131,8 +132,9 @@ void HAWS::ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemL
                 }
                 // do not deque next work and continue for another round to try
             } else {
+            */
                 ProcessClientRequest(next);
-            }
+            //}
         }
         tasksToStartQueueLock.unlock(); // unlock queue
         
@@ -166,7 +168,7 @@ void HAWS::RequeueReq(HAWSClientRequest* req) { // SCHEDLOOP THREAD
 
 // SCHEDLOOP THREAD 
 void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
-    int maxRAM = req->GetCPUJobPhysMB();
+    int maxRAM = req->GetCPUJobPhysMB() / (1024 * 1024);
     globalPhysMemAvail -= maxRAM;
     printf("HAWS: Starting CPU Task\n");
     int pid = cpuMgr->StartTask(req->GetNum(),
@@ -179,7 +181,7 @@ void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
 
 // SCHEDLOOP THREAD
 void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
-    int maxRAM = req->GetCPUJobPhysMB();
+    int maxRAM = req->GetCPUJobPhysMB() / (1024 * 1024);
     globalPhysMemAvail -= maxRAM;
     printf("HAWS: Starting GPU Task\n");
     int pid = gpuMgr->StartTask(req->GetNum(), 
@@ -193,15 +195,15 @@ void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
 void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
     HAWSHWTarget HWTarget = DetermineReqTarget(req);
     if (HWTarget == TargCPU) {
-        if (globalPhysMemAvail - req->GetCPUJobPhysMB() < 0) {
+        //if (globalPhysMemAvail - req->GetCPUJobPhysMB() < 0) {
             //RequeueReq(req); // this target doesn't have enough memory to run
-            return;
-        } else {
+        //    return;
+        //} else {
             StartTaskCPU(req);        
             req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
             tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
             delete req; // req is really gone
-        }
+        //}
     } else if (HWTarget == TargGPU) {
         StartTaskGPU(req);
         req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
@@ -410,7 +412,7 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
 
     //printf("pos is %ld\n", pos);
     memcpy(buf + (pos * sizeof(char)), resp->output, resp->outputLen);
-    printf("STRLEN of resp->output is %ld\n", strlen(resp->output));
+    //printf("STRLEN of resp->output is %ld\n", strlen(resp->output));
     pos += resp->outputLen;
     
     buf[pos] = ',';
@@ -426,10 +428,9 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
             printf("null byte in send buffer at spot %d\n", i);
             assert(false); 
         }
-        printf("%c", buf[i]); 
+        //printf("%c", buf[i]); 
     }
     printf("\n");
-    printf("HACK: buffer %s", buf); 
     assert(pos < max_bytes);
     send(socket, buf, pos, 0); // send it!
 }
