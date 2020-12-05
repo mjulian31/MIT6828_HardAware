@@ -115,6 +115,8 @@ end
 function parse_response_string(response)
     println("parsing func called!")
     req_arr = split(response, DELIM)
+    println("split string!")
+    @show req_arr
     if req_arr[1] != REQ_START
         println("error parsing bad start!")
         return BAD_RESPONSE
