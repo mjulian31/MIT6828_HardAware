@@ -19,7 +19,7 @@
 
 #define MATMUL_PROD1_ITERS 1000
 
-
+int haws_test_small();
 int haws_test_1();
 int haws_test_physmem_limit_buffer();
 int haws_test_matmul_cpu_prod1();
@@ -58,8 +58,9 @@ int main (int argc, char *argv[]) {
     } else if (strcmp(argv[1], "test") == 0) {
         // WHITEBOX tests - directly call scheduler 
         // basic tests - no command line args or stdin
-        bool allWhiteBox = true;
+        bool allWhiteBox = false;
         if (allWhiteBox) {
+            RUN_TEST(haws_test_small);
             RUN_TEST(haws_test_1);
             RUN_TEST(haws_test_1);
             RUN_TEST(haws_test_1);
@@ -70,15 +71,15 @@ int main (int argc, char *argv[]) {
             // many parallel actual matrix multiplies
             RUN_TEST(haws_test_matmul_cpu_prod1);
             RUN_TEST(haws_test_matmul_gpu_prod1);
-
-            // BLACKBOX tests - call scheduler through socket
-            bool allBlackBox = true;
-            if (allBlackBox) {
-                haws_test_socket_all();
-            }
-            printf("\n\n");
-            printf("%d TESTS PASSED\n", numTests);
         }
+
+        // BLACKBOX tests - call scheduler through socket
+        bool allBlackBox = true;
+        if (allBlackBox) {
+            haws_test_socket_all();
+        }
+        printf("\n\n");
+        printf("%d TESTS PASSED\n", numTests);
     } else {
         printf("error: usage ./haws <prod | test> " \
                "<phys limit mb> <gpu limit mb> <gpu shared limit mb>");
@@ -86,6 +87,22 @@ int main (int argc, char *argv[]) {
     }
 }
 
+int haws_test_small() {
+   HAWSClientRequest* r1 = new HAWSClientRequest(1, "/opt/haws/bin/matmul_cpu", 
+                                                     "/opt/haws/bin/matmul_gpu", "4",
+                                                     "cpu-only", 1, 1, 10, 
+                                                     35, 2, 100, 200, 
+                                                     "matmul_4", 0, (char*) "");
+    r1->Print();
+    haws.Start();
+    haws.HardAwareSchedule(r1);
+    sleep(1);
+    while (haws.IsDoingWork()) { usleep(1000); }
+    haws.Stop();
+    return 0;
+
+
+}
 
 int haws_test_1() {
     HAWSClientRequest* r1 = new HAWSClientRequest(1, "/opt/haws/bin/matmul_cpu", 

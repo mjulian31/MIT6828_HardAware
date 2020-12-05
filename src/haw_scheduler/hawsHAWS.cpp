@@ -309,7 +309,7 @@ void HAWS::Stop() {
     printf("HAWS/CONCLUSION: ended with %ld conclusions generated\n", pendConclusions.size());
     //conclusionLock.lock();
     //assert(pendConclusions.size() == 0);
-    pendConclusions.clear(); //TODO REMOVE ME -- MEMLEAK
+    //pendConclusions.clear(); //TODO REMOVE ME -- MEMLEAK
     //conclusionLock.unlock();
 
     // all memory should be relased from all tasks being completed
@@ -358,8 +358,14 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
 }
 
 // RESPONSE HANDLER THREAD
+bool HAWS::IsRespLoopRunning() {
+    return threadRespLoopRunning;
+}
+
+// RESPONSE HANDLER THREAD
 void HAWS::RespLoop(int portResp1) {
     printf("HAWS/RESPONSE: response loop running\n");
+    assert(threadRespLoopRunning);
     int sockResp1 = socket_open_send_socket(portResp1, "HAWS/RESP");
     char* sendBuf = (char*) malloc(sizeof(char) * SOCKET_SEND_BUF_SIZE);
     printf("HAWS/RESPONSE: connected to client\n");
@@ -383,7 +389,8 @@ void HAWS::RespLoop(int portResp1) {
 }
 
 // REQUEST HANDLER THREAD (starts the response loop)
-void HAWS::StartRespLoopThread() {
+void HAWS::StartRespLoop() {
+    assert(!threadRespLoopRunning);
     threadRespLoopRunning = true;
     threadRespLoop = new std::thread(RespLoop, 8081);
 }

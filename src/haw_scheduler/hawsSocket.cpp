@@ -89,7 +89,6 @@ void haws_socket_req_loop(int socket) { // SOCKET THREAD
     printf("HAWS/RECV: listening...\n");
     int socket_fd = socket_open_recv_socket(socket, "HAWS/RECV"); // blocks until connection opened
     printf("HAWS/RECV: ...client connected!");
-    haws.StartRespLoopThread();
     char* socket_read_buf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
     char* splitBuf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
     int throttle = 0;
@@ -101,6 +100,9 @@ void haws_socket_req_loop(int socket) { // SOCKET THREAD
         int bytes_in = read(socket_fd, socket_read_buf, SOCKET_READ_BUF_SIZE);
         assert(bytes_in != SOCKET_READ_BUF_SIZE); // request was too large - use workBuf for partial
         if (bytes_in > 0) {
+            if (!haws.IsRespLoopRunning()) { // connect to client if haven't already
+                haws.StartRespLoop();
+            }
             int pos = 0;
             printf("SOCKET: read: %d - '%s'\n", bytes_in, socket_read_buf); 
             if (splitReqPending) {            

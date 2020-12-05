@@ -210,7 +210,7 @@ int haws_test_socket_many_cpu() {
     }
     printf("TEST: sample requests sent!\n"); 
 
-    sleep(60); // give them a chance to be all be received and started
+    sleep(120); // give them a chance to be all be received and started
 
     while (haws.IsDoingWork()) { usleep(1000); };
     haws.Stop();

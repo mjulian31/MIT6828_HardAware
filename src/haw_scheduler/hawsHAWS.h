@@ -24,12 +24,13 @@ enum TaskStatus {
 
 typedef struct HAWSConclusion {
     int reqNum;
-    std::string targRan;
+    char* targRan;
     float wallTime;
     float cpuTime;
     int exitCode;
     int outputLen;
-    std::string output;
+    char* freeableOutput;
+    char* output;
     // cost accumulation stuff
     long targetRealBillableUS;
 } HAWSResponse;
@@ -89,7 +90,8 @@ class HAWS {
         void Start();
         void StartSocket();
         void HardAwareSchedule(HAWSClientRequest* req);
-        static void StartRespLoopThread();
+        static bool IsRespLoopRunning(); 
+        static void StartRespLoop();
         int GetNumActiveTasks();
         int GetNumQueuedReqs();
         bool IsDoingWork();
