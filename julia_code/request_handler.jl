@@ -121,16 +121,20 @@ function parse_response_string(response)
         println("error parsing bad end!")
         return BAD_RESPONSE
     elseif size(req_arr, 1) != RESPONSE_LEN
+        println("size mismatch!")
         return BAD_RESPONSE
     else
+        println("good response!")
         # good headers, parse
         req_num = req_arr[2]
         matrix_string = req_arr[-2]
         output = parse_matrix_output(matrix_string)
         resp = response(req_arr[2:-3]..., output)
         dict[req_num] = resp
+        println("saved response!")
         # notify waiting thread that we have the response saved
         notify(dict[req_num])
+        println("notified!")
         return resp
     end
 end
