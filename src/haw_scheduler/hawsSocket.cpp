@@ -1,16 +1,11 @@
 
 
 #include "socket.h"
+#include "hawsSocket.h"
 #include "hawsClientRequest.h"
 #include "hawsUtil.h"
 #include "hawsHAWS.h"
 #include "hawsTest.h"
-
-
-// 10MB coming in per request
-#define SOCKET_READ_BUF_SIZE ((uint64_t)1024 * (uint64_t)1024 * (uint64_t) 1024 * 10)
-// 10MB going out per request 
-#define SOCKET_SEND_BUF_SIZE ((uint64_t)1024 * (uint64_t)1024 * (uint64_t) 1024 * 10)
 
 HAWSClientRequest* haws_socket_create_client_request(char* socket_read_buf, long max_buf_size) {
     long pos = 0;
@@ -21,7 +16,7 @@ HAWSClientRequest* haws_socket_create_client_request(char* socket_read_buf, long
     pos = 0;
     assert(socket_read_buf[pos] == '^'); 
     pos++; // drop char
-    pos++; // drop delimiter
+    //pos++; // drop delimiter // TODO REMOVE THIS IN NEW VERSION
 
     // FIELD 2 - request number
     CSV_BUF_PARSE_INT(socket_read_buf, reqNumStr, reqNumStrCpp, reqNum);
@@ -90,12 +85,13 @@ void haws_socket_send_resp(int socket, int reqNum, std::string targRan,
 }
 
 void haws_socket_req_loop(int socket) { // SOCKET THREAD
-    printf("SOCKET: hello from loop\n");
-    printf("SOCKET: listening...\n");
-    int socket_fd = socket_open_recv_socket(socket, "HAWS"); // blocks until connection opened
+    printf("HAWS/RECV: hello from RequestLoop Thread\n");
+    printf("HAWS/RECV: listening...\n");
+    // blocks here until connection opened
+    int socket_fd = socket_open_recv_socket(socket, false, "HAWS/RECV"); // non blocking reads
+    printf("HAWS/RECV: ...client connected!");
     char* socket_read_buf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
     char* splitBuf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
-    printf("SOCKET: ...accepted\n");
     int throttle = 0;
     HAWSClientRequest* req;
     bool splitReqPending = false;
@@ -105,6 +101,9 @@ void haws_socket_req_loop(int socket) { // SOCKET THREAD
         int bytes_in = read(socket_fd, socket_read_buf, SOCKET_READ_BUF_SIZE);
         assert(bytes_in != SOCKET_READ_BUF_SIZE); // request was too large - use workBuf for partial
         if (bytes_in > 0) {
+            if (!haws.IsRespLoopRunning()) { // connect to client if haven't already
+                haws.StartRespLoop();
+            }
             int pos = 0;
             printf("SOCKET: read: %d - '%s'\n", bytes_in, socket_read_buf); 
             if (splitReqPending) {            

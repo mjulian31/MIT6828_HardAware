@@ -19,7 +19,7 @@ bool socket_set_blocking(int fd, bool blocking) { // SOCKET THREAD
 }
 
 // SOCKET THREAD uses for req recv, tester resp recv
-int socket_open_recv_socket(int port, std::string callerStr) {
+int socket_open_recv_socket(int port, bool isBlocking, std::string callerStr) {
     int server_fd, new_socket, valread; 
     struct sockaddr_in address; 
     int opt = 1; 
@@ -67,7 +67,7 @@ int socket_open_recv_socket(int port, std::string callerStr) {
     int success = setsockopt(new_socket,SOL_SOCKET,SO_REUSEADDR,&optval,sizeof(int));
     assert(success == 0);
     // set socket nonblocking
-    success = socket_set_blocking(new_socket, false);
+    success = socket_set_blocking(new_socket, isBlocking);
     assert(success);
     printf("SOCKET/%s: recv socket created and accepted (socket %d)\n", callerStr.c_str(), 
            new_socket);
