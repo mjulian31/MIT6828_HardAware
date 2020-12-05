@@ -30,6 +30,7 @@ int socket_open_recv_socket(int port, bool isBlocking, std::string callerStr) {
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) 
     { 
         perror("socket failed"); 
+        assert(false);
         exit(EXIT_FAILURE); 
     } 
        
@@ -38,6 +39,7 @@ int socket_open_recv_socket(int port, bool isBlocking, std::string callerStr) {
                                                   &opt, sizeof(opt))) 
     { 
         perror("setsockopt"); 
+        assert(false);
         exit(EXIT_FAILURE); 
     } 
     address.sin_family = AF_INET; 
@@ -49,25 +51,28 @@ int socket_open_recv_socket(int port, bool isBlocking, std::string callerStr) {
                                  sizeof(address))<0) 
     { 
         perror("bind failed"); 
+        assert(false);
         exit(EXIT_FAILURE); 
     } 
     if (listen(server_fd, 3) < 0) 
     { 
         perror("listen"); 
+        assert(false);
         exit(EXIT_FAILURE); 
     } 
     if ((new_socket = accept(server_fd, (struct sockaddr *)&address,  
                        (socklen_t*)&addrlen))<0) 
     { 
         perror("accept"); 
+        assert(false); 
         exit(EXIT_FAILURE); 
     } 
     // set socket reusable 
-    int optval = 1;
-    int success = setsockopt(new_socket,SOL_SOCKET,SO_REUSEADDR,&optval,sizeof(int));
-    assert(success == 0);
+    //int optval = 1;
+    //int success = setsockopt(new_socket,SOL_SOCKET,SO_REUSEADDR,&optval,sizeof(int));
+    //assert(success == 0);
     // set socket nonblocking
-    success = socket_set_blocking(new_socket, isBlocking);
+    int success = socket_set_blocking(new_socket, isBlocking);
     assert(success);
     printf("SOCKET/%s: recv socket created and accepted (socket %d)\n", callerStr.c_str(), 
            new_socket);
@@ -81,6 +86,7 @@ int socket_open_send_socket(int port, std::string callerStr) {
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 
     { 
         printf("\n Socket creation error \n"); 
+        assert(false);
         return -1;
     } 
     serv_addr.sin_family = AF_INET; 
@@ -90,12 +96,14 @@ int socket_open_send_socket(int port, std::string callerStr) {
     if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0)  
     { 
         printf("\nInvalid address/ Address not supported \n"); 
+        assert(false);
         return -1; 
     } 
     printf("SOCKET/%s: send connect\n", callerStr.c_str());
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) 
     { 
         printf("\nConnection Failed \n"); 
+        assert(false);
         return -1; 
     }
     printf("SOCKET/%s: send created (socket %d)\n", callerStr.c_str(), sock);

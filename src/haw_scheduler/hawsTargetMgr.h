@@ -26,7 +26,7 @@ static const char* TaskStatusToStr(TaskStatus ts) {
 class HAWSTargetMgr {
     std::string targStr;
     std::list<pid_t> allPids;
-    std::list<pid_t> terminatingPids;
+    //std::list<pid_t> terminatingPids;
     std::unordered_map<pid_t, int> tasksReqNum;
     std::unordered_map<pid_t, std::string> tasksActive;
     std::unordered_map<pid_t, TaskStatus> tasksStatus;
@@ -384,13 +384,13 @@ class HAWSTargetMgr {
             conclusion->cpuTime = tasksOutCPUTime[pid];
             conclusion->exitCode = tasksStatusCode[pid];
             conclusion->outputLen = tasksFormalOutputLen[pid]; 
-            conclusion->freeableOutput = tasksCompleted[pid];
-            conclusion->output = tasksFormalOutput[pid];
+            conclusion->freeableOutput = tasksCompleted[pid]; // NOT FREED YET
+            conclusion->output = tasksFormalOutput[pid]; // NOT FREED YET, freed from freeableOutput
             conclusion->targetRealBillableUS = tasksBillableUS[pid];
         
             // free this task
             //TODO erase more
-            free(tasksHandles[pid]); 
+            free(tasksHandles[pid]);
             tasksCompleted.erase(pid);
             tasksHandles.erase(pid);
             taskLock.unlock();
@@ -434,10 +434,8 @@ class HAWSTargetMgr {
                 mit++;
             }
             allPids.clear();
-            terminatingPids.clear(); // rm? 
-            assert(tasksCompleted.size() == tasksOutputLen.size());
-            printf("HWMGR/%s tasksActive.size = %ld\n", this->targStr.c_str(), 
-                   tasksActive.size());
+            //terminatingPids.clear(); // rm? 
+            assert(tasksCompleted.size() == 0); 
             assert(tasksActive.size() == 0);
             tasksActive.clear();
             tasksStatus.clear();

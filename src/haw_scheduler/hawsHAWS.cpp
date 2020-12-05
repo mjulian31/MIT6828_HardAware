@@ -397,7 +397,7 @@ void HAWS::RespLoop(int portResp1) {
         if (numSent > 0) {
             printf("HAWS/RESP: sent %d response(s)\n", numSent);
         }
-        usleep(10); // yield
+        usleep(1000); // yield
     }
     free(sendBuf);
     socket_close_socket(sockResp1, "HAWS/RESP");

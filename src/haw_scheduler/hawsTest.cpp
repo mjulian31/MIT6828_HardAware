@@ -42,6 +42,7 @@ int main (int argc, char *argv[]) {
     if (argc != 5) {
         printf("error: usage ./haws <prod | test>" \
                "<phys limit mb> <gpu limit mb> <gpu shared limit mb>");
+        exit(1);
     }
 
     // set resource limits

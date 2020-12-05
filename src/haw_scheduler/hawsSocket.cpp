@@ -94,20 +94,28 @@ void haws_socket_req_loop(int socket) { // SOCKET THREAD
     char* splitBuf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
     int throttle = 0;
     HAWSClientRequest* req;
-    bool splitReqPending = false;
+    int bytes_in = 0; 
+
     int splitBufPos = 0;
+    bool splitReqPending = false;
+    bool handledSplit = false;
+    int pos = 0;
+    int validate = 0;
+    bool fullReqFound = 0;
+    int bytesRemaining = 0;
+    
     while (!sockLoopKillFlag) {
         memset(socket_read_buf, 0, SOCKET_READ_BUF_SIZE); // start with zero buffer for debugging
-        int bytes_in = read(socket_fd, socket_read_buf, SOCKET_READ_BUF_SIZE);
+        bytes_in = read(socket_fd, socket_read_buf, SOCKET_READ_BUF_SIZE);
         assert(bytes_in != SOCKET_READ_BUF_SIZE); // request was too large - use workBuf for partial
         if (bytes_in > 0) {
             if (!haws.IsRespLoopRunning()) { // connect to client if haven't already
                 haws.StartRespLoop();
             }
-            int pos = 0;
+            pos = 0;
             printf("SOCKET: read: %d - '%s'\n", bytes_in, socket_read_buf); 
             if (splitReqPending) {            
-                bool handledSplit = false;
+                handledSplit = false;
                 assert(splitBufPos > 0);
                 for (int lingerBytes = 0; lingerBytes < bytes_in; lingerBytes++) {
                     if (socket_read_buf[lingerBytes] == '$') {
@@ -136,8 +144,8 @@ void haws_socket_req_loop(int socket) { // SOCKET THREAD
                     printf("socket_read_buf[pos]=%c\n", socket_read_buf[pos]);
                     assert(false); // didn't find next request
                 }
-                bool fullReqFound = false;
-                int validate = pos;
+                fullReqFound = false;
+                validate = pos;
                 for (validate = pos; validate < bytes_in; validate++) {
                     if (socket_read_buf[validate] == '$') {
                         fullReqFound = true;
@@ -151,7 +159,7 @@ void haws_socket_req_loop(int socket) { // SOCKET THREAD
                     pos = validate;
                 } else {
                     // copy remaining part of request to other buffer
-                    int bytesRemaining = bytes_in - pos;
+                    bytesRemaining = bytes_in - pos;
                     memset(splitBuf, 0, SOCKET_READ_BUF_SIZE); // reset splitbuffer 
                     memcpy(splitBuf, socket_read_buf + pos, bytesRemaining);
                     splitBufPos = bytesRemaining;

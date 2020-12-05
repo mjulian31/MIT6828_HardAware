@@ -63,6 +63,7 @@ void haws_test_socket_all() {
     haws.StopSocket();
     testGlobalKillFlag = true; // stop client recv thread
     testSockRecvLoop->join();
+    delete(testSockRecvLoop);
 }
 
 long haws_help_load_client_buffer_field(int pos, char* content, int len, bool addDelim) {
@@ -170,10 +171,11 @@ void haws_test_socket_recv_loop() {
     clientRecvBuff = (char*) malloc(CLIENT_RECV_BUFF_SIZE * sizeof(char));
     testClientRecvSocket = socket_open_recv_socket(8081, true, "TEST/CLIENT/RECV");
     printf("TEST/CLIENT/RECV: client recv socket connected!\n");
+    int bytes_in = 0;
     while(!testGlobalKillFlag) {
         // read and dump buffer 
         memset(clientRecvBuff, 0, sizeof(CLIENT_RECV_BUFF_SIZE));
-        int bytes_in = read(testClientRecvSocket, clientRecvBuff, CLIENT_RECV_BUFF_SIZE);
+        bytes_in = read(testClientRecvSocket, clientRecvBuff, CLIENT_RECV_BUFF_SIZE);
         if (bytes_in > 0) {
             printf("TEST/CLIENT/RECV: recv %d bytes:%s\n", bytes_in, clientRecvBuff);
         }
