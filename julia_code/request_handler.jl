@@ -99,7 +99,7 @@ function make_request_string(req_num, cmd_args, target_pref, cpu_thread, gpu_cpu
     return req_string
 end
 
-function parse_matrix_output(matrix_string, matrix_sizes_string)
+function parse_matrix_output(matrix_string)
     lines = split(matrix_string, "[];")
     out = zeros(size(lines, 1), size(split(lines[1], " "), 1))
     for (row, line) in enumerate(lines)
