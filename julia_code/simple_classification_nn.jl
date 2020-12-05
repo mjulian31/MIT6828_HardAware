@@ -7,12 +7,16 @@ using Printf
 using MLDatasets
 using Base.Threads
 
-import request_handler.jl
+include("request_handler.jl")
 
 # matrix multiplication
 function mult(x, y)
-    out = x*y
-    return out
+    req_num, _ = send_request(x, y)
+    while !haskey(responses, req_num)
+        # wait for response to come back
+    end
+    # got response, return matrix
+    return get(responses, req_num, :none)
 end
 
 
