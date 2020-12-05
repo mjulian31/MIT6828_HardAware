@@ -40,6 +40,7 @@ CPU_ONLY = "cpu-only"
 request_num = Atomic{Int}(1)
 responses = Dict([]) # request_num -> response
 RESPONSE_LEN = 9
+notifiers = Dict([]) # request_num -> notifier
 
 function get_gpu_threads(N, M)
     blocks_row = div(N + TILE_DIM - N%TILE_DIM, TILE_DIM)
@@ -123,16 +124,20 @@ function parse_response_string(response)
         return BAD_RESPONSE
     else
         # good headers, parse
-        req_num = req_arr[2]
-        matrix_string = req_arr[-2]
-        output = parse_matrix_output(matrix_string)
-        resp = response(req_arr[2:-3]..., output)
-        dict[req_num] = resp
-        return resp
+        @async begin
+            req_num = req_arr[2]
+            matrix_string = req_arr[-2]
+            output = parse_matrix_output(matrix_string)
+            resp = response(req_arr[2:-3]..., output)
+            dict[req_num] = resp
+            # notify waiting thread that we have the response saved
+            notify(dict[req_num])
+            return resp
+        end
     end
 end
 
-function send_request(a, b)
+function send_request(a, b, req_notifier)
     N = size(a, 1)
     R = size(a, 2)
     M = size(b, 2)
@@ -160,6 +165,9 @@ function send_request(a, b)
 
     # make the request string
     req_string = make_request_string(req_num, cmd_args, target_pref, cpu_thread, gpu_cpu_thread, gpu_thread, cpu_ram, gpu_ram, gpu_mem, gpu_shared_mem, job_id, stdin_len, stdin_input)
+
+    # save the notifier for later
+    notifiers[req_num] = req_notifier
 
     # send request to server (locked operation)
     lock(request_lock)
