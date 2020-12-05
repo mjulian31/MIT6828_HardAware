@@ -104,6 +104,7 @@ char* encode_matrix(float* matrix, int N, int M) {
 			char temp_string[NUM_SIZE];
 			sprintf(temp_string, "%f ", matrix[N*col + row]);
 			for (int j = 0; j < NUM_SIZE - 1; j++) {
+        if (temp_string[j] == '\0') break;
 				matrix_string[i] = temp_string[j];
 				i ++;
 			}
