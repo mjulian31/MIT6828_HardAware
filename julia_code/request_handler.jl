@@ -166,6 +166,7 @@ function start_reciever()
                if response != BAD_RESPONSE
                    # remove line from socket
                    readline(sock, keep=false)
+                   println(responses)
                else
                    # got a bad response, continue waiting
                    continue
