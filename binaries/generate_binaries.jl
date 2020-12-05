@@ -28,7 +28,7 @@ function Base.setindex!(A::CArray, val, i)
 end
 
 
-function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}, N::Cint, R::Cint, M::Cint)
+function mul_tile!(ptr_C::Ptr{Cfloat}, ptr_A::Ptr{Cfloat}, ptr_B::Ptr{Cfloat}, N::Cint, R::Cint, M::Cint)
     NUM_TILES_ROW = div(N + TILE_DIM - N%TILE_DIM, TILE_DIM)
     NUM_TILES_COL = div(M + TILE_DIM - M%TILE_DIM, TILE_DIM)
     NUM_TILES = div(R + TILE_DIM - R%TILE_DIM, TILE_DIM)
@@ -85,10 +85,10 @@ function mul_tile!(ptr_C::Ptr{Cdouble}, ptr_A::Ptr{Cdouble}, ptr_B::Ptr{Cdouble}
 end
 
 
-function coalesced_matmul_kernel!(ptr_out::Ptr{Cdouble}, ptr_in1::Ptr{Cdouble}, ptr_in2::Ptr{Cdouble}, N::Cint, R::Cint, M::Cint)
-    dptr_out = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_out)
-    dptr_in1 = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_in1)
-    dptr_in2 = reinterpret(Core.LLVMPtr{Cdouble,1}, ptr_in2)
+function coalesced_matmul_kernel!(ptr_out::Ptr{Cfloat}, ptr_in1::Ptr{Cfloat}, ptr_in2::Ptr{Cfloat}, N::Cint, R::Cint, M::Cint)
+    dptr_out = reinterpret(Core.LLVMPtr{Cfloat,1}, ptr_out)
+    dptr_in1 = reinterpret(Core.LLVMPtr{Cfloat,1}, ptr_in1)
+    dptr_in2 = reinterpret(Core.LLVMPtr{Cfloat,1}, ptr_in2)
     output = CuDeviceArray((N,M), dptr_out)
     input1 = CuDeviceArray((N,R), dptr_in1)
     input2 = CuDeviceArray((R,M), dptr_in2)
@@ -176,7 +176,7 @@ end
 println("done.")
 
 print("generating cpu binary...")
-job, kwargs = mcjob(mul_tile!, (Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Cint, Cint, Cint))
+job, kwargs = mcjob(mul_tile!, (Ptr{Cfloat}, Ptr{Cfloat}, Ptr{Cfloat}, Cint, Cint, Cint))
 ir, func = GPUCompiler.compile(:llvm, job; kwargs...)
 name!(func, "matmul")
 GPUCompiler.finish_module!(job, ir)
@@ -194,13 +194,13 @@ print("generating gpu binary...")
 DIM = 1024
 a = CuArray{Float64}(undef, (DIM, DIM))
 da = CUDA.cudaconvert(a)
-aptr = reinterpret(Ptr{Cdouble}, da.ptr)
+aptr = reinterpret(Ptr{Cfloat}, da.ptr)
 b = CuArray{Float64}(undef, (DIM, DIM))
 db = CUDA.cudaconvert(b)
-bptr = reinterpret(Ptr{Cdouble}, db.ptr)
+bptr = reinterpret(Ptr{Cfloat}, db.ptr)
 c = CuArray{Float64}(undef, (DIM, DIM))
 dc = CUDA.cudaconvert(c)
-cptr = reinterpret(Ptr{Cdouble}, dc.ptr)
+cptr = reinterpret(Ptr{Cfloat}, dc.ptr)
 n = Cint(DIM)
 r = Cint(DIM)
 m = Cint(DIM)
