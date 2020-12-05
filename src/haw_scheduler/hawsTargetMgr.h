@@ -169,11 +169,13 @@ class HAWSTargetMgr {
         // find wall time
         int pos = 0;
         //float wallTime = 0.0;
+        int bufPos = 0;
         int wallTimeLen = 0; 
         char* wallTimeBuffer = (char*) malloc(100*sizeof(char));
+        memset(wallTimeBuffer, 0, 100);
         for(pos = 0; pos < tasksOutputLen[pid]; pos++) {
             if (allOutput[pos] == '\n') {
-                wallTimeBuffer[pos] == '\0'; // null terminate  
+                wallTimeBuffer[bufPos + 1] == '\0'; // null terminate  
                 //wallTime = strtof(wallTimeBuffer, NULL);
                 //assert(wallTime > 0.0);
                 //std::string wallClock(wallTimeBuffer);
@@ -184,20 +186,21 @@ class HAWSTargetMgr {
                 break;
             }
             wallTimeBuffer[pos] = allOutput[pos];
-            wallTimeLen++;
+            bufPos++;
         } assert(pos != tasksOutputLen[pid]); // didn't find a newline
-        //printf("HACK: test wall time got FLOAT:%f\n", wallTime); 
+        printf("HACK: test wall time got STR:%s\n", wallTimeBuffer); 
         tasksOutWallTime[pid] = wallTimeBuffer; // freeable after resp send
-        tasksOutWallTimeLen[pid] = wallTimeLen;
+        tasksOutWallTimeLen[pid] = bufPos;
 
         // find cpu time
         float cpuTime = 0.0;
         char* cpuTimeBuffer = (char*) malloc(100*sizeof(char));
-        int bufPos = 0;
+        bufPos = 0;
         int cpuTimeLen = 0;
+        memset(cpuTimeBuffer, 0, 100);
         for(pos = pos; pos < tasksOutputLen[pid]; pos++) {
             if (allOutput[pos] == '\n') {
-                cpuTimeBuffer[pos] == '\0'; // null terminate  
+                cpuTimeBuffer[bufPos + 1] == '\0'; // null terminate  
                 //std::string cpuClock(cpuTimeBuffer);
                 //cpuTime = strtof(cpuTimeBuffer, NULL);
                 //assert(cpuTime > 0.0);
@@ -208,17 +211,17 @@ class HAWSTargetMgr {
                 break;
             }
             cpuTimeBuffer[bufPos] = allOutput[pos];
-            cpuTimeLen++;
             bufPos++;
         } assert(pos != tasksOutputLen[pid]); // didn't find a newline
+        printf("HACK: test cpu time got STR:%s\n", cpuTimeBuffer); 
         tasksOutCPUTime[pid] = cpuTimeBuffer; // freeable after resp send
-        tasksOutCPUTimeLen[pid] = cpuTimeLen;
+        tasksOutCPUTimeLen[pid] = bufPos;
 
         // store pointer to start of formal output
         tasksFormalOutput[pid] = allOutput + (pos * sizeof(char));
 
         // update after discounting wall and cpu time
-        tasksFormalOutputLen[pid] = tasksOutputLen[pid] - pos; 
+        tasksFormalOutputLen[pid] = tasksOutputLen[pid] - pos - 1; 
 
         //printf("HAWS/ACCOUNTING: test cpu time got FLOAT:%f\n", cpuTime); 
         //printf("HAWS/ACCOUNTING: output len: %ld\n", tasksOutputLen[pid]);

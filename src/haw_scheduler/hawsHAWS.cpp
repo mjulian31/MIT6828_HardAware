@@ -346,10 +346,23 @@ void HAWS::Stop() {
 void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion* resp) {
     memset(buf, 0, max_bytes);
 
+    printf("HAWS/SEND: conclusion: \n");
+    printf("HAWS/SEND:        reqNum: %d\n", resp->reqNum);
+    printf("HAWS/SEND:       targRan: %s\n", resp->targRan);
+    printf("HAWS/SEND:   wallTimeLen: %d\n", resp->wallTimeLen);
+    printf("HAWS/SEND:      wallTime: %s\n", resp->wallTime);
+    printf("HAWS/SEND:    cpuTimeLen: %d\n", resp->cpuTimeLen);
+    printf("HAWS/SEND:       cpuTime: %s\n", resp->cpuTime);
+    printf("HAWS/SEND:     exit code: %d\n", resp->exitCode);
+    printf("HAWS/SEND:    output len: %d\n", resp->outputLen);
+    printf("HAWS/SEND:        output: %s\n", resp->output);
+
+
     long pos = 0;
     buf[pos] = '^';
     pos++;
     buf[pos] = ',';
+    pos++;
     
     std::string reqNum = std::to_string(resp->reqNum);
     memcpy(buf + (pos * sizeof(char)), reqNum.c_str(), reqNum.length());
@@ -385,24 +398,39 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
 
     std::string outLen = std::to_string(resp->outputLen);
     memcpy(buf + (pos * sizeof(char)), outLen.c_str(), outLen.length());
+    //printf("outlen is %ld\n", outLen.length());
+    //printf("pos is %ld\n", pos);
     pos += outLen.length();
+    //printf("pos is %ld\n", pos);
+    //pos++;
+    //printf("pos is %ld\n", pos);
     
-    buf[pos] + ',';
+    buf[pos] = ',';
     pos++;
 
+    //printf("pos is %ld\n", pos);
     memcpy(buf + (pos * sizeof(char)), resp->output, resp->outputLen);
+    printf("STRLEN of resp->output is %ld\n", strlen(resp->output));
     pos += resp->outputLen;
     
     buf[pos] = ',';
     pos++;
     buf[pos] = '$';
     pos++;
+    buf[pos] = '\n';
+    pos++;
 
     printf("HAWS/RESP: SEND[%ld]:", pos);
     for (int i = 0; i < pos; i++) {
-        printf("%c", buf[pos]); 
+        if (buf[i] == '\0') {
+            printf("null byte in send buffer at spot %d\n", i);
+            assert(false); 
+        }
+        printf("%c", buf[i]); 
     }
     printf("\n");
+    printf("HACK: buffer %s", buf); 
+    assert(pos < max_bytes);
     send(socket, buf, pos, 0); // send it!
 }
 
