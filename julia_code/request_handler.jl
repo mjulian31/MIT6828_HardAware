@@ -114,14 +114,14 @@ end
 
 function parse_response_string(response)
     println("parsing func called!")
-    req_arr = split(response, (DELIM, '\n'))
+    req_arr = split(response, (DELIM, '\n'), keepempty=false)
     println("split string!")
     @show req_arr
-    @show req_arr[1], req_arr[-1], size(req_arr, 1) # all the checks
+    @show req_arr[1], req_arr[end], size(req_arr, 1) # all the checks
     if req_arr[1] != REQ_START # checks right start
         println("error parsing bad start!")
         return BAD_RESPONSE
-    elseif req_arr[-1] != REQ_END # checks right end
+    elseif req_arr[end] != REQ_END # checks right end
         println("error parsing bad end!")
         return BAD_RESPONSE
     elseif size(req_arr, 1) != RESPONSE_LEN # checks splits on DELIM
