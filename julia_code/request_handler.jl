@@ -136,6 +136,7 @@ function parse_response_string(response)
         @show output
         println("parsed matrix")
         @show req_arr[2:end-2]..., output
+        @show response(req_arr[2:end-2]..., output)
         resp = response(req_arr[2:end-2]..., output)
         println("made response")
         dict[req_num] = resp
