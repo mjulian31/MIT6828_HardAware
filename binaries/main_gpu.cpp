@@ -257,7 +257,7 @@ int main(int argc, char **argv) {
 	double end_wall = get_wall_time();
 
   // copy device result to host
-  check_errors(cuMemcpyDtoH(h_output, d_output, sizeof() * N * M), "host to device copy");
+  check_errors(cuMemcpyDtoH(h_output, d_output, sizeof(float) * N * M), "host to device copy");
 
   // free device global memory
   check_errors(cuMemFree(d_A), "free device a");
