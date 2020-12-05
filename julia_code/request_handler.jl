@@ -136,6 +136,7 @@ function parse_response_string(response)
         @show output
         println("parsed matrix")
         @show req_num, req_arr[3:end-2]..., output
+        @show size(req_arr, 1), size(req_arr[3:end-2], 1)
         @show response(req_num, req_arr[3:end-2]..., output)
         resp = response(req_num, req_arr[3:end-2]..., output)
         println("made response")
