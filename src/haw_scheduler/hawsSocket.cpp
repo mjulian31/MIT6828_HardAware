@@ -146,11 +146,12 @@ void haws_socket_req_loop2(int socket) { // SOCKET THREAD
     close(socket_fd);
     printf("HAWS/RECVLOOP: free read buf\n");
     free(socket_read_buf);
-    printf("HAWS/RECVLOOP: free split buf\n");
+    printf("HAWS/RECVLOOP: free req buf\n");
     free(reqBuf);
     printf("HAWS/RECVLOOP: freed buffers\n");
 }
 
+/* old version only handling 1 split 
 void haws_socket_req_loop(int socket) { // SOCKET THREAD
     printf("HAWS/RECVLOOP: hello from request loop thread\n");
     printf("HAWS/RECVLOOP: listening...\n");
@@ -256,3 +257,4 @@ void haws_socket_req_loop(int socket) { // SOCKET THREAD
     free(splitBuf);
     printf("HAWS/RECVLOOP: freed buffers\n");
 }
+*/
