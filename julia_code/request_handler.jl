@@ -124,16 +124,14 @@ function parse_response_string(response)
         return BAD_RESPONSE
     else
         # good headers, parse
-        @async begin
-            req_num = req_arr[2]
-            matrix_string = req_arr[-2]
-            output = parse_matrix_output(matrix_string)
-            resp = response(req_arr[2:-3]..., output)
-            dict[req_num] = resp
-            # notify waiting thread that we have the response saved
-            notify(dict[req_num])
-            return resp
-        end
+        req_num = req_arr[2]
+        matrix_string = req_arr[-2]
+        output = parse_matrix_output(matrix_string)
+        resp = response(req_arr[2:-3]..., output)
+        dict[req_num] = resp
+        # notify waiting thread that we have the response saved
+        notify(dict[req_num])
+        return resp
     end
 end
 
