@@ -27,6 +27,7 @@ class HAWSTargetMgr {
     std::string targStr;
     std::list<pid_t> allPids;
     std::list<pid_t> terminatingPids;
+    std::unordered_map<pid_t, int> tasksReqNum;
     std::unordered_map<pid_t, std::string> tasksActive;
     std::unordered_map<pid_t, TaskStatus> tasksStatus;
     std::unordered_map<pid_t, int> tasksStatusCode;
@@ -154,9 +155,9 @@ class HAWSTargetMgr {
         taskLock.unlock();
 
         printf("TARGMGR/%s Delete dropped file\n", this->targStr.c_str());
-        if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
-            assert(false);
-        }
+        //if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
+        //    assert(false);
+        //}
         printf("TARGMGR/%s Done saving output\n", this->targStr.c_str());
     }
     void TaskCompleteAccountingProtected(pid_t pid, TaskStatus ts, int s_code, time_point ended) {
@@ -301,7 +302,7 @@ class HAWSTargetMgr {
         HAWSTargetMgr (std::string targStr) { 
             this->targStr = targStr;
         }
-        int StartTask(std::string binpath, std::string args, 
+        int StartTask(int reqNum, std::string binpath, std::string args, 
                       char* stdin_buf, long stdin_buff_len, int maxRAM) {
             //if (strlen(stdin_buf) != stdin_buff_len) {
             //    printf("HWMGR/%s: STDIN SIZE MISMATCH req says %ld but stdin_buf is %ld\n", 
@@ -316,6 +317,7 @@ class HAWSTargetMgr {
 
             taskLock.lock();
             allPids.insert(allPids.begin(), pid);
+            tasksReqNum[pid] = reqNum;
             tasksActive[pid] = binpath + " " + args;
             tasksStatus[pid] = TASK_RUNNING;
             tasksStatusCode[pid] = -1;
@@ -376,7 +378,7 @@ class HAWSTargetMgr {
             this->TaskCompleteAccountingProtected(pid, ts, status_code, time_completed); 
            
             // create conclusion to return 
-            conclusion->reqNum = -1; //tasksReqNum[pid];
+            conclusion->reqNum = tasksReqNum[pid];
             conclusion->targRan = (char*) this->targStr.c_str();
             conclusion->wallTime = tasksOutWallTime[pid];
             conclusion->cpuTime = tasksOutCPUTime[pid];

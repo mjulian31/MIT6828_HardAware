@@ -167,7 +167,8 @@ void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     int maxRAM = req->GetCPUJobPhysMB();
     globalPhysMemAvail -= maxRAM;
     printf("HAWS: Starting CPU Task\n");
-    int pid = cpuMgr->StartTask(req->GetCPUBinPath(), 
+    int pid = cpuMgr->StartTask(req->GetNum(),
+                                req->GetCPUBinPath(), 
                                 req->GetJobArgv(), 
                                 req->GetStdin(), req->GetStdinLen(), maxRAM);
     allCPUPids.insert(allCPUPids.begin(), pid);
@@ -179,7 +180,8 @@ void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     int maxRAM = req->GetCPUJobPhysMB();
     globalPhysMemAvail -= maxRAM;
     printf("HAWS: Starting GPU Task\n");
-    int pid = gpuMgr->StartTask(req->GetCPUBinPath(),
+    int pid = gpuMgr->StartTask(req->GetNum(), 
+                                req->GetCPUBinPath(),
                                 req->GetJobArgv(),
                                 req->GetStdin(), req->GetStdinLen(), maxRAM);
     allGPUPids.insert(allGPUPids.begin(), pid);
@@ -353,10 +355,12 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
                       std::to_string(resp->cpuTime) + "," +
                       std::to_string(resp->exitCode) + "," +
                       std::to_string(resp->outputLen) + "," +
-                      std::string(resp->output) + ",$";
+                      std::string(resp->output) + ",$\n";
     int len = response.length(); 
+    memset(buf, 0, max_bytes);
     memcpy(buf, response.c_str(), len); 
-    printf("HAWS/RESPONSE: SEND:%s\n", response.c_str());
+    printf("HAWS/RESP: SEND[%ld]:%s\n", strlen(response.c_str()), response.c_str());
+    printf("HAWS/RESP: buffer is %s\n", buf);
     send(socket, buf, len, 0);
 }
 
