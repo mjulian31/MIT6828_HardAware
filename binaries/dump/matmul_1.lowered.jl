@@ -3,13 +3,13 @@ CodeInfo(
 │           Core.NewvarNode(:(I))
 │           Core.NewvarNode(:(J))
 │    %4   = Core.LLVMPtr
-│    %5   = Core.apply_type(%4, Main.Cdouble, 1)
+│    %5   = Core.apply_type(%4, Main.Cfloat, 1)
 │           dptr_out = Main.reinterpret(%5, ptr_out)
 │    %7   = Core.LLVMPtr
-│    %8   = Core.apply_type(%7, Main.Cdouble, 1)
+│    %8   = Core.apply_type(%7, Main.Cfloat, 1)
 │           dptr_in1 = Main.reinterpret(%8, ptr_in1)
 │    %10  = Core.LLVMPtr
-│    %11  = Core.apply_type(%10, Main.Cdouble, 1)
+│    %11  = Core.apply_type(%10, Main.Cfloat, 1)
 │           dptr_in2 = Main.reinterpret(%11, ptr_in2)
 │    %13  = Core.tuple(N, M)
 │           output = Main.CuDeviceArray(%13, dptr_out)

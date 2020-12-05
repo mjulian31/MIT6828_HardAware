@@ -3,14 +3,14 @@ source_filename = "julia"
 target datalayout = "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v16:16:16-v32:32:32-v64:64:64-v128:128:128-n16:32:64"
 target triple = "nvptx64-nvidia-cuda"
 
-@__static_shmem_285 = internal unnamed_addr addrspace(3) global [1056 x double] zeroinitializer, align 32
-@__static_shmem_286 = internal unnamed_addr addrspace(3) global [1056 x double] zeroinitializer, align 32
+@__static_shmem_285 = internal unnamed_addr addrspace(3) global [1056 x float] zeroinitializer, align 32
+@__static_shmem_286 = internal unnamed_addr addrspace(3) global [1056 x float] zeroinitializer, align 32
 
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:88 within `coalesced_matmul_kernel!'
-define dso_local ptx_kernel void @_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1_(i64, i64, i64, i32, i32, i32) local_unnamed_addr !dbg !11 {
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:88 within `coalesced_matmul_kernel!'
+define dso_local ptx_kernel void @_Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1_(i64, i64, i64, i32, i32, i32) local_unnamed_addr !dbg !11 {
 top:
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:92 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:38 within `CuDeviceArray' @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:48
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:92 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48
 ; │┌ @ broadcast.jl:837 within `materialize'
 ; ││┌ @ broadcast.jl:1046 within `copy'
 ; │││┌ @ ntuple.jl:42 within `ntuple'
@@ -21,8 +21,8 @@ top:
 ; ││││││││┌ @ boot.jl:627 within `toInt64'
            %6 = sext i32 %3 to i64, !dbg !13
 ; └└└└└└└└└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:94 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:38 within `CuDeviceArray' @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:48
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:94 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48
 ; │┌ @ broadcast.jl:837 within `materialize'
 ; ││┌ @ broadcast.jl:1046 within `copy'
 ; │││┌ @ ntuple.jl:42 within `ntuple'
@@ -33,47 +33,47 @@ top:
 ; ││││││││┌ @ boot.jl:627 within `toInt64'
            %7 = sext i32 %4 to i64, !dbg !37
 ; └└└└└└└└└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:95 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:77 within `blockIdx'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:57 within `blockIdx_x'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:95 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:77 within `blockIdx'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_x'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %8 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.x(), !dbg !48, !range !61
 ; ││└└
 ; ││┌ @ int.jl:86 within `+'
      %narrow = add nuw nsw i32 %8, 1, !dbg !62
      %9 = zext i32 %narrow to i64, !dbg !62
 ; └└└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:96 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:77 within `blockIdx'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:57 within `blockIdx_y'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:96 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:77 within `blockIdx'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_y'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %10 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.y(), !dbg !65, !range !72
 ; └└└└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:97 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:91 within `threadIdx'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:47 within `threadIdx_x'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:97 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:91 within `threadIdx'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_x'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %11 = call i32 @llvm.nvvm.read.ptx.sreg.tid.x(), !dbg !73, !range !81
 ; ││└└
 ; ││┌ @ int.jl:86 within `+'
      %narrow58 = add nuw nsw i32 %11, 1, !dbg !82
      %12 = zext i32 %narrow58 to i64, !dbg !82
 ; └└└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:98 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:91 within `threadIdx'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:47 within `threadIdx_y'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:98 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:91 within `threadIdx'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_y'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %13 = call i32 @llvm.nvvm.read.ptx.sreg.tid.y(), !dbg !83, !range !81
 ; ││└└
 ; ││┌ @ int.jl:86 within `+'
      %narrow59 = add nuw nsw i32 %13, 1, !dbg !90
      %14 = zext i32 %narrow59 to i64, !dbg !90
 ; └└└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:106 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:106 within `coalesced_matmul_kernel!'
 ; ┌ @ int.jl:922 within `+' @ int.jl:86
    %15 = add nsw i64 %7, 32, !dbg !91
 ; └
@@ -86,7 +86,7 @@ top:
 ; ┌ @ int.jl:260 within `div'
    %18 = sdiv i64 %17, 32, !dbg !101
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
 ; ┌ @ int.jl:85 within `-'
    %19 = add nsw i64 %18, -1, !dbg !103
 ; └
@@ -108,21 +108,21 @@ top:
   %.pre68 = shl nuw nsw i32 %10, 5, !dbg !119
   %.pre70 = add nuw nsw i32 %narrow59, %.pre68, !dbg !119
   %.pre71 = zext i32 %.pre70 to i64, !dbg !119
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
   br i1 %22, label %top.L518_crit_edge, label %L74.preheader, !dbg !104
 
 top.L518_crit_edge:                               ; preds = %top
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:144 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:144 within `coalesced_matmul_kernel!'
   %.pre73 = sext i32 %5 to i64, !dbg !120
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
   br label %L518, !dbg !104
 
 L74.preheader:                                    ; preds = %top
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:115 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:115 within `coalesced_matmul_kernel!'
 ; ┌ @ promotion.jl:350 within `<=' @ int.jl:0
    %23 = icmp sgt i64 %.pre66, %6, !dbg !121
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:116 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:116 within `coalesced_matmul_kernel!'
 ; ┌ @ abstractarray.jl:1060 within `getindex'
 ; │┌ @ abstractarray.jl:1083 within `_getindex'
 ; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -145,12 +145,12 @@ L74.preheader:                                    ; preds = %top
 ; │││││┌ @ int.jl within `+'
         %27 = add nsw i64 %.pre66, -1, !dbg !145
 ; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:99 within `getindex'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:80 within `arrayref'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:79 within `unsafe_load'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `pointerref'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:0
-         %28 = inttoptr i64 %1 to double addrspace(1)*, !dbg !150
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:0
+         %28 = inttoptr i64 %1 to float addrspace(1)*, !dbg !150
 ; └└└└└└└
 ; ┌ @ abstractarray.jl:1153 within `setindex!'
 ; │┌ @ abstractarray.jl:1176 within `_setindex!'
@@ -163,31 +163,31 @@ L74.preheader:                                    ; preds = %top
 ; │││││┌ @ int.jl within `+'
         %30 = add nsw i64 %12, -34, !dbg !173
 ; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:101 within `setindex!'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:86 within `arrayset'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:82 within `unsafe_store!'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `pointerset'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 ; │││││││┌ @ int.jl within `-'
           %31 = add nsw i64 %30, %29, !dbg !174
 ; │││││││└
-; │││││││ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:0
-         %32 = getelementptr inbounds [1056 x double], [1056 x double] addrspace(3)* @__static_shmem_285, i64 0, i64 %31, !dbg !185
-         %33 = bitcast double addrspace(3)* %32 to i64 addrspace(3)*, !dbg !185
+; │││││││ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:0
+         %32 = getelementptr inbounds [1056 x float], [1056 x float] addrspace(3)* @__static_shmem_285, i64 0, i64 %31, !dbg !185
+         %33 = bitcast float addrspace(3)* %32 to i32 addrspace(3)*, !dbg !185
 ; └└└└└└└
   %34 = sext i32 %5 to i64, !dbg !119
   %35 = icmp sle i64 %.pre71, %34, !dbg !119
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:123 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:123 within `coalesced_matmul_kernel!'
 ; ┌ @ abstractarray.jl:1153 within `setindex!'
 ; │┌ @ abstractarray.jl:1176 within `_setindex!'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:101 within `setindex!'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:86 within `arrayset'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:82 within `unsafe_store!'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `pointerset'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:0
-         %36 = getelementptr inbounds [1056 x double], [1056 x double] addrspace(3)* @__static_shmem_286, i64 0, i64 %31, !dbg !186
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:0
+         %36 = getelementptr inbounds [1056 x float], [1056 x float] addrspace(3)* @__static_shmem_286, i64 0, i64 %31, !dbg !186
 ; └└└└└└└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:121 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:121 within `coalesced_matmul_kernel!'
 ; ┌ @ abstractarray.jl:1060 within `getindex'
 ; │┌ @ abstractarray.jl:1083 within `_getindex'
 ; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -219,23 +219,23 @@ L74.preheader:                                    ; preds = %top
 ; │││││┌ @ int.jl within `+'
         %42 = add nsw i64 %41, %40, !dbg !213
 ; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:99 within `getindex'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:80 within `arrayref'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:79 within `unsafe_load'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `pointerref'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:0
-         %43 = inttoptr i64 %2 to double addrspace(1)*, !dbg !214
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:0
+         %43 = inttoptr i64 %2 to float addrspace(1)*, !dbg !214
 ; └└└└└└└
 ; ┌ @ abstractarray.jl:1153 within `setindex!'
 ; │┌ @ abstractarray.jl:1176 within `_setindex!'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:101 within `setindex!'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:86 within `arrayset'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:82 within `unsafe_store!'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `pointerset'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:0
-         %44 = bitcast double addrspace(3)* %36 to i64 addrspace(3)*, !dbg !220
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:0
+         %44 = bitcast float addrspace(3)* %36 to i32 addrspace(3)*, !dbg !220
 ; └└└└└└└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:135 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:135 within `coalesced_matmul_kernel!'
 ; ┌ @ abstractarray.jl:1060 within `getindex'
 ; │┌ @ abstractarray.jl:1083 within `_getindex'
 ; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -244,14 +244,14 @@ L74.preheader:                                    ; preds = %top
 ; │││││┌ @ int.jl within `+'
         %45 = add nsw i64 %29, -34, !dbg !228
 ; └└└└└└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:115 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:115 within `coalesced_matmul_kernel!'
   br label %L74, !dbg !124
 
 L74:                                              ; preds = %L505, %L74.preheader
-  %value_phi5 = phi double [ %78, %L505 ], [ 0.000000e+00, %L74.preheader ]
+  %value_phi5 = phi float [ %78, %L505 ], [ 0.000000e+00, %L74.preheader ]
   %value_phi6 = phi i64 [ %82, %L505 ], [ 0, %L74.preheader ]
   %.pre75 = shl i64 %value_phi6, 5, !dbg !119
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:115 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:115 within `coalesced_matmul_kernel!'
 ; ┌ @ int.jl:86 within `+'
    %46 = add i64 %.pre75, %14, !dbg !237
 ; └
@@ -262,7 +262,7 @@ L74:                                              ; preds = %L505, %L74.preheade
   br i1 %or.cond, label %L214, label %L97, !dbg !124
 
 L97:                                              ; preds = %L74
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:116 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:116 within `coalesced_matmul_kernel!'
 ; ┌ @ abstractarray.jl:1060 within `getindex'
 ; │┌ @ abstractarray.jl:1083 within `_getindex'
 ; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -275,45 +275,45 @@ L97:                                              ; preds = %L74
 ; │││││┌ @ int.jl:87 within `*'
         %49 = mul i64 %48, %25, !dbg !241
 ; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:99 within `getindex'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:80 within `arrayref'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:79 within `unsafe_load'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `pointerref'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 ; │││││││┌ @ int.jl:85 within `-'
           %50 = add i64 %27, %49, !dbg !242
 ; │││││││└
-         %51 = getelementptr inbounds double, double addrspace(1)* %28, i64 %50, !dbg !243
-         %52 = bitcast double addrspace(1)* %51 to i64 addrspace(1)*, !dbg !243
-         %53 = load i64, i64 addrspace(1)* %52, align 8, !dbg !243, !tbaa !244
+         %51 = getelementptr inbounds float, float addrspace(1)* %28, i64 %50, !dbg !243
+         %52 = bitcast float addrspace(1)* %51 to i32 addrspace(1)*, !dbg !243
+         %53 = load i32, i32 addrspace(1)* %52, align 4, !dbg !243, !tbaa !244
 ; └└└└└└└
 ; ┌ @ abstractarray.jl:1153 within `setindex!'
 ; │┌ @ abstractarray.jl:1176 within `_setindex!'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:101 within `setindex!'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:86 within `arrayset'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:82 within `unsafe_store!'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `pointerset'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-         store i64 %53, i64 addrspace(3)* %33, align 8, !dbg !175, !tbaa !247
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+         store i32 %53, i32 addrspace(3)* %33, align 4, !dbg !175, !tbaa !247
 ; └└└└└└└
   br label %L241, !dbg !143
 
 L214:                                             ; preds = %L74
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:118 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:118 within `coalesced_matmul_kernel!'
 ; ┌ @ abstractarray.jl:1153 within `setindex!'
 ; │┌ @ abstractarray.jl:1176 within `_setindex!'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:101 within `setindex!'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:86 within `arrayset'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:82 within `unsafe_store!'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `pointerset'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-         store double 0.000000e+00, double addrspace(3)* %32, align 8, !dbg !249, !tbaa !247
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+         store float 0.000000e+00, float addrspace(3)* %32, align 4, !dbg !249, !tbaa !247
 ; │└└└└└└
    br label %L241, !dbg !256
 
 L241:                                             ; preds = %L214, %L97
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:120 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:120 within `coalesced_matmul_kernel!'
 ; ┌ @ int.jl:86 within `+'
    %54 = add i64 %.pre75, %12, !dbg !258
 ; └
@@ -324,60 +324,60 @@ L241:                                             ; preds = %L214, %L97
   br i1 %value_phi9.off0, label %L253, label %L370, !dbg !259
 
 L253:                                             ; preds = %L241
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:121 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:121 within `coalesced_matmul_kernel!'
 ; ┌ @ abstractarray.jl:1060 within `getindex'
 ; │┌ @ abstractarray.jl:1083 within `_getindex'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:99 within `getindex'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:80 within `arrayref'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:79 within `unsafe_load'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `pointerref'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 ; │││││││┌ @ int.jl:85 within `-'
           %56 = add i64 %42, %.pre75, !dbg !262
 ; │││││││└
-         %57 = getelementptr inbounds double, double addrspace(1)* %43, i64 %56, !dbg !263
-         %58 = bitcast double addrspace(1)* %57 to i64 addrspace(1)*, !dbg !263
-         %59 = load i64, i64 addrspace(1)* %58, align 8, !dbg !263, !tbaa !244
+         %57 = getelementptr inbounds float, float addrspace(1)* %43, i64 %56, !dbg !263
+         %58 = bitcast float addrspace(1)* %57 to i32 addrspace(1)*, !dbg !263
+         %59 = load i32, i32 addrspace(1)* %58, align 4, !dbg !263, !tbaa !244
 ; └└└└└└└
 ; ┌ @ abstractarray.jl:1153 within `setindex!'
 ; │┌ @ abstractarray.jl:1176 within `_setindex!'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:101 within `setindex!'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:86 within `arrayset'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:82 within `unsafe_store!'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `pointerset'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-         store i64 %59, i64 addrspace(3)* %44, align 8, !dbg !264, !tbaa !247
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+         store i32 %59, i32 addrspace(3)* %44, align 4, !dbg !264, !tbaa !247
 ; └└└└└└└
   br label %L397, !dbg !204
 
 L370:                                             ; preds = %L241
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:123 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:123 within `coalesced_matmul_kernel!'
 ; ┌ @ abstractarray.jl:1153 within `setindex!'
 ; │┌ @ abstractarray.jl:1176 within `_setindex!'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:101 within `setindex!'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:86 within `arrayset'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:82 within `unsafe_store!'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `pointerset'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-         store double 0.000000e+00, double addrspace(3)* %36, align 8, !dbg !265, !tbaa !247
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+         store float 0.000000e+00, float addrspace(3)* %36, align 4, !dbg !265, !tbaa !247
 ; │└└└└└└
    br label %L397, !dbg !193
 
 L397:                                             ; preds = %L370, %L253
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:127 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/synchronization.jl:14 within `sync_threads'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:127 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/synchronization.jl:14 within `sync_threads'
    call void @llvm.nvvm.barrier0(), !dbg !266
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
 ; ┌ @ range.jl:620 within `iterate'
    br label %L399, !dbg !117
 
 L399:                                             ; preds = %L399, %L397
-   %value_phi10 = phi double [ %value_phi5, %L397 ], [ %78, %L399 ]
+   %value_phi10 = phi float [ %value_phi5, %L397 ], [ %78, %L399 ]
    %value_phi11 = phi i64 [ 1, %L397 ], [ %80, %L399 ]
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:135 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:135 within `coalesced_matmul_kernel!'
 ; ┌ @ abstractarray.jl:1060 within `getindex'
 ; │┌ @ abstractarray.jl:1083 within `_getindex'
 ; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -386,27 +386,27 @@ L399:                                             ; preds = %L399, %L397
 ; │││││┌ @ int.jl:87 within `*'
         %60 = mul nuw nsw i64 %value_phi11, 33, !dbg !270
 ; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:99 within `getindex'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:80 within `arrayref'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:79 within `unsafe_load'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `pointerref'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 ; │││││││┌ @ int.jl:85 within `-'
           %61 = add i64 %30, %60, !dbg !271
 ; │││││││└
-         %62 = getelementptr inbounds [1056 x double], [1056 x double] addrspace(3)* @__static_shmem_285, i64 0, i64 %61, !dbg !272
-         %63 = load double, double addrspace(3)* %62, align 8, !dbg !272, !tbaa !247
+         %62 = getelementptr inbounds [1056 x float], [1056 x float] addrspace(3)* @__static_shmem_285, i64 0, i64 %61, !dbg !272
+         %63 = load float, float addrspace(3)* %62, align 4, !dbg !272, !tbaa !247
 ; │││││││┌ @ int.jl:85 within `-'
           %64 = add i64 %45, %value_phi11, !dbg !271
 ; │││││││└
-         %65 = getelementptr inbounds [1056 x double], [1056 x double] addrspace(3)* @__static_shmem_286, i64 0, i64 %64, !dbg !272
-         %66 = load double, double addrspace(3)* %65, align 8, !dbg !272, !tbaa !247
+         %65 = getelementptr inbounds [1056 x float], [1056 x float] addrspace(3)* @__static_shmem_286, i64 0, i64 %64, !dbg !272
+         %66 = load float, float addrspace(3)* %65, align 4, !dbg !272, !tbaa !247
 ; └└└└└└└
-; ┌ @ float.jl:405 within `*'
-   %67 = fmul double %63, %66, !dbg !278
+; ┌ @ float.jl:404 within `*'
+   %67 = fmul float %63, %66, !dbg !278
 ; └
-; ┌ @ float.jl:401 within `+'
-   %68 = fadd double %value_phi10, %67, !dbg !281
+; ┌ @ float.jl:400 within `+'
+   %68 = fadd float %value_phi10, %67, !dbg !281
 ; └
 ; ┌ @ range.jl:624 within `iterate'
    %69 = add nuw nsw i64 %value_phi11, 1, !dbg !283
@@ -419,27 +419,27 @@ L399:                                             ; preds = %L399, %L397
 ; │││││┌ @ int.jl:87 within `*'
         %70 = mul nuw nsw i64 %69, 33, !dbg !270
 ; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:99 within `getindex'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:80 within `arrayref'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:79 within `unsafe_load'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `pointerref'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 ; │││││││┌ @ int.jl:85 within `-'
           %71 = add i64 %30, %70, !dbg !271
 ; │││││││└
-         %72 = getelementptr inbounds [1056 x double], [1056 x double] addrspace(3)* @__static_shmem_285, i64 0, i64 %71, !dbg !272
-         %73 = load double, double addrspace(3)* %72, align 8, !dbg !272, !tbaa !247
+         %72 = getelementptr inbounds [1056 x float], [1056 x float] addrspace(3)* @__static_shmem_285, i64 0, i64 %71, !dbg !272
+         %73 = load float, float addrspace(3)* %72, align 4, !dbg !272, !tbaa !247
 ; │││││││┌ @ int.jl:85 within `-'
           %74 = add i64 %45, %69, !dbg !271
 ; │││││││└
-         %75 = getelementptr inbounds [1056 x double], [1056 x double] addrspace(3)* @__static_shmem_286, i64 0, i64 %74, !dbg !272
-         %76 = load double, double addrspace(3)* %75, align 8, !dbg !272, !tbaa !247
+         %75 = getelementptr inbounds [1056 x float], [1056 x float] addrspace(3)* @__static_shmem_286, i64 0, i64 %74, !dbg !272
+         %76 = load float, float addrspace(3)* %75, align 4, !dbg !272, !tbaa !247
 ; └└└└└└└
-; ┌ @ float.jl:405 within `*'
-   %77 = fmul double %73, %76, !dbg !278
+; ┌ @ float.jl:404 within `*'
+   %77 = fmul float %73, %76, !dbg !278
 ; └
-; ┌ @ float.jl:401 within `+'
-   %78 = fadd double %68, %77, !dbg !281
+; ┌ @ float.jl:400 within `+'
+   %78 = fadd float %68, %77, !dbg !281
 ; └
 ; ┌ @ range.jl:624 within `iterate'
 ; │┌ @ promotion.jl:398 within `=='
@@ -450,8 +450,8 @@ L399:                                             ; preds = %L399, %L397
   br i1 %79, label %L505, label %L399, !dbg !236
 
 L505:                                             ; preds = %L399
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:138 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/synchronization.jl:14 within `sync_threads'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:138 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/synchronization.jl:14 within `sync_threads'
    call void @llvm.nvvm.barrier0(), !dbg !286
 ; └
 ; ┌ @ range.jl:624 within `iterate'
@@ -463,9 +463,9 @@ L505:                                             ; preds = %L399
   br i1 %81, label %L518, label %L74, !dbg !287
 
 L518:                                             ; preds = %L505, %top.L518_crit_edge
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:144 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:144 within `coalesced_matmul_kernel!'
   %.pre-phi74 = phi i64 [ %.pre73, %top.L518_crit_edge ], [ %34, %L505 ], !dbg !120
-  %value_phi20 = phi double [ 0.000000e+00, %top.L518_crit_edge ], [ %78, %L505 ]
+  %value_phi20 = phi float [ 0.000000e+00, %top.L518_crit_edge ], [ %78, %L505 ]
 ; ┌ @ promotion.jl:350 within `<=' @ int.jl:441
    %83 = icmp sgt i64 %.pre66, %6, !dbg !290
 ; └
@@ -474,7 +474,7 @@ L518:                                             ; preds = %L505, %top.L518_cri
   br i1 %value_phi21.off0, label %L586, label %L555, !dbg !120
 
 L555:                                             ; preds = %L518
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:145 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:145 within `coalesced_matmul_kernel!'
 ; ┌ @ abstractarray.jl:1153 within `setindex!'
 ; │┌ @ abstractarray.jl:1176 within `_setindex!'
 ; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
@@ -498,23 +498,23 @@ L555:                                             ; preds = %L518
 ; │││││┌ @ int.jl:86 within `+'
         %89 = add nsw i64 %.pre66, -1, !dbg !308
 ; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:101 within `setindex!'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:86 within `arrayset'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:82 within `unsafe_store!'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `pointerset'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 ; │││││││┌ @ int.jl:85 within `-'
           %90 = add nsw i64 %89, %88, !dbg !309
 ; │││││││└
-         %91 = inttoptr i64 %0 to double addrspace(1)*, !dbg !310
-         %92 = getelementptr inbounds double, double addrspace(1)* %91, i64 %90, !dbg !310
-         store double %value_phi20, double addrspace(1)* %92, align 8, !dbg !310, !tbaa !244
+         %91 = inttoptr i64 %0 to float addrspace(1)*, !dbg !310
+         %92 = getelementptr inbounds float, float addrspace(1)* %91, i64 %90, !dbg !310
+         store float %value_phi20, float addrspace(1)* %92, align 4, !dbg !310, !tbaa !244
 ; │└└└└└└
    br label %L586, !dbg !300
 
 L586:                                             ; preds = %L555, %L518
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:147 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:147 within `coalesced_matmul_kernel!'
   ret void, !dbg !316
 }
 
@@ -543,15 +543,15 @@ attributes #1 = { convergent nounwind }
 !0 = !{i32 2, !"Dwarf Version", i32 4}
 !1 = !{i32 1, !"Debug Info Version", i32 3}
 !2 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !3, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
-!3 = !DIFile(filename: "/users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl", directory: ".")
+!3 = !DIFile(filename: "/home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl", directory: ".")
 !4 = !{}
 !5 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !6, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
 !6 = !DIFile(filename: "abstractarray.jl", directory: ".")
 !7 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !6, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
 !8 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !6, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
 !9 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !6, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
-!10 = !{void (i64, i64, i64, i32, i32, i32)* @_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1_, !"kernel", i32 1}
-!11 = distinct !DISubprogram(name: "coalesced_matmul_kernel!", linkageName: "julia_coalesced_matmul_kernel!_3825", scope: null, file: !3, line: 88, type: !12, scopeLine: 88, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!10 = !{void (i64, i64, i64, i32, i32, i32)* @_Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1_, !"kernel", i32 1}
+!11 = distinct !DISubprogram(name: "coalesced_matmul_kernel!", linkageName: "julia_coalesced_matmul_kernel!_3454", scope: null, file: !3, line: 88, type: !12, scopeLine: 88, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
 !12 = !DISubroutineType(types: !4)
 !13 = !DILocation(line: 627, scope: !14, inlinedAt: !16)
 !14 = distinct !DISubprogram(name: "toInt64;", linkageName: "toInt64", scope: !15, file: !15, type: !12, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
@@ -574,7 +574,7 @@ attributes #1 = { convergent nounwind }
 !31 = distinct !DISubprogram(name: "materialize;", linkageName: "materialize", scope: !20, file: !20, type: !12, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
 !32 = !DILocation(line: 48, scope: !33, inlinedAt: !35)
 !33 = distinct !DISubprogram(name: "CuDeviceArray;", linkageName: "CuDeviceArray", scope: !34, file: !34, type: !12, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!34 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl", directory: ".")
+!34 = !DIFile(filename: "/home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl", directory: ".")
 !35 = !DILocation(line: 38, scope: !33, inlinedAt: !36)
 !36 = !DILocation(line: 92, scope: !11)
 !37 = !DILocation(line: 627, scope: !14, inlinedAt: !38)
@@ -590,10 +590,10 @@ attributes #1 = { convergent nounwind }
 !47 = !DILocation(line: 94, scope: !11)
 !48 = !DILocation(line: 80, scope: !49, inlinedAt: !51)
 !49 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !50, file: !50, type: !12, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!50 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl", directory: ".")
+!50 = !DIFile(filename: "/home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl", directory: ".")
 !51 = !DILocation(line: 7, scope: !52, inlinedAt: !54)
 !52 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !53, file: !53, type: !12, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!53 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl", directory: ".")
+!53 = !DIFile(filename: "/home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl", directory: ".")
 !54 = !DILocation(line: 7, scope: !55, inlinedAt: !56)
 !55 = distinct !DISubprogram(name: "_index;", linkageName: "_index", scope: !53, file: !53, type: !12, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
 !56 = !DILocation(line: 57, scope: !57, inlinedAt: !58)
@@ -693,7 +693,7 @@ attributes #1 = { convergent nounwind }
 !150 = !DILocation(line: 0, scope: !49, inlinedAt: !151)
 !151 = !DILocation(line: 7, scope: !152, inlinedAt: !154)
 !152 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !153, file: !153, type: !12, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!153 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl", directory: ".")
+!153 = !DIFile(filename: "/home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl", directory: ".")
 !154 = !DILocation(line: 7, scope: !155, inlinedAt: !156)
 !155 = distinct !DISubprogram(name: "pointerref;", linkageName: "pointerref", scope: !153, file: !153, type: !12, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
 !156 = !DILocation(line: 79, scope: !157, inlinedAt: !158)
@@ -808,7 +808,7 @@ attributes #1 = { convergent nounwind }
 !265 = !DILocation(line: 80, scope: !49, inlinedAt: !187)
 !266 = !DILocation(line: 14, scope: !267, inlinedAt: !269)
 !267 = distinct !DISubprogram(name: "sync_threads;", linkageName: "sync_threads", scope: !268, file: !268, type: !12, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!268 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/synchronization.jl", directory: ".")
+!268 = !DIFile(filename: "/home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/synchronization.jl", directory: ".")
 !269 = !DILocation(line: 127, scope: !11)
 !270 = !DILocation(line: 87, scope: !163, inlinedAt: !229)
 !271 = !DILocation(line: 85, scope: !100, inlinedAt: !272)
@@ -818,10 +818,10 @@ attributes #1 = { convergent nounwind }
 !275 = !DILocation(line: 79, scope: !157, inlinedAt: !276)
 !276 = !DILocation(line: 80, scope: !159, inlinedAt: !277)
 !277 = !DILocation(line: 99, scope: !161, inlinedAt: !234)
-!278 = !DILocation(line: 405, scope: !279, inlinedAt: !236)
+!278 = !DILocation(line: 404, scope: !279, inlinedAt: !236)
 !279 = distinct !DISubprogram(name: "*;", linkageName: "*", scope: !280, file: !280, type: !12, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
 !280 = !DIFile(filename: "float.jl", directory: ".")
-!281 = !DILocation(line: 401, scope: !282, inlinedAt: !236)
+!281 = !DILocation(line: 400, scope: !282, inlinedAt: !236)
 !282 = distinct !DISubprogram(name: "+;", linkageName: "+", scope: !280, file: !280, type: !12, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
 !283 = !DILocation(line: 624, scope: !118, inlinedAt: !236)
 !284 = !DILocation(line: 398, scope: !285, inlinedAt: !283)

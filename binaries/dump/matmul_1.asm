@@ -3,35 +3,35 @@
 //
 
 .version 6.0
-.target sm_60
+.target sm_61
 .address_size 64
 
-	// .globl	_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1_ // -- Begin function _Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1_
+	// .globl	_Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1_ // -- Begin function _Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1_
 // __static_shmem_285 has been demoted
 // __static_shmem_286 has been demoted
 .weak .global .align 8 .u64 exception_flag;
-                                        // @_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1_
-.visible .entry _Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1_(
-	.param .u64 _Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1__param_0,
-	.param .u64 _Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1__param_1,
-	.param .u64 _Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1__param_2,
-	.param .u32 _Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1__param_3,
-	.param .u32 _Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1__param_4,
-	.param .u32 _Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1__param_5
+                                        // @_Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1_
+.visible .entry _Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1_(
+	.param .u64 _Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1__param_0,
+	.param .u64 _Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1__param_1,
+	.param .u64 _Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1__param_2,
+	.param .u32 _Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1__param_3,
+	.param .u32 _Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1__param_4,
+	.param .u32 _Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1__param_5
 )
 {
 	.reg .pred 	%p<15>;
-	.reg .b32 	%r<11>;
-	.reg .f64 	%fd<15>;
-	.reg .b64 	%rd<83>;
+	.reg .f32 	%f<15>;
+	.reg .b32 	%r<15>;
+	.reg .b64 	%rd<79>;
 	// demoted variable
-	.shared .align 32 .b8 __static_shmem_285[8448];
+	.shared .align 32 .b8 __static_shmem_285[4224];
 	// demoted variable
-	.shared .align 32 .b8 __static_shmem_286[8448];
+	.shared .align 32 .b8 __static_shmem_286[4224];
 // %bb.0:                               // %top
-	ld.param.u32 	%r2, [_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1__param_5];
-	ld.param.s32 	%rd1, [_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1__param_3];
-	ld.param.s32 	%rd2, [_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1__param_4];
+	ld.param.u32 	%r2, [_Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1__param_5];
+	ld.param.s32 	%rd1, [_Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1__param_3];
+	ld.param.s32 	%rd2, [_Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1__param_4];
 	mov.u32 	%r3, %ctaid.x;
 	add.s32 	%r4, %r3, 1;
 	mov.u32 	%r5, %ctaid.y;
@@ -57,39 +57,40 @@
 	add.s32 	%r10, %r8, %r9;
 	cvt.u64.u32 	%rd8, %r10;
 	setp.gt.s64 	%p14, %rd7, %rd1;
-	max.s64 	%rd76, %rd1, 0;
-	add.s64 	%rd77, %rd8, -1;
-	cvt.u64.u32 	%rd78, %r1;
+	max.s64 	%rd72, %rd1, 0;
+	add.s64 	%rd73, %rd8, -1;
+	cvt.u64.u32 	%rd74, %r1;
 	@%p2 bra 	LBB0_2;
 	bra.uni 	LBB0_1;
 LBB0_2:                                 // %L74.preheader
-	ld.param.u64 	%rd30, [_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1__param_2];
-	ld.param.u64 	%rd29, [_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1__param_1];
+	ld.param.u64 	%rd30, [_Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1__param_2];
+	ld.param.u64 	%rd29, [_Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1__param_1];
 	cvt.u64.u32 	%rd4, %r8;
 	mul.lo.s64 	%rd40, %rd4, 33;
-	add.s64 	%rd41, %rd78, %rd40;
-	shl.b64 	%rd42, %rd41, 3;
-	add.s64 	%rd43, %rd42, -272;
+	add.s64 	%rd41, %rd74, %rd40;
+	shl.b64 	%rd42, %rd41, 2;
+	add.s64 	%rd43, %rd42, -136;
 	mov.u64 	%rd44, __static_shmem_285;
 	add.s64 	%rd12, %rd44, %rd43;
-	cvt.s64.s32 	%rd82, %r2;
+	cvt.s64.s32 	%rd78, %r2;
 	mov.u64 	%rd45, __static_shmem_286;
 	add.s64 	%rd14, %rd45, %rd43;
 	max.s64 	%rd46, %rd2, 0;
-	mul.lo.s64 	%rd15, %rd77, %rd46;
-	mul.wide.u32 	%rd48, %r1, 8;
+	mul.lo.s64 	%rd15, %rd73, %rd46;
+	mul.wide.u32 	%rd48, %r1, 4;
 	add.s64 	%rd21, %rd44, %rd48;
-	shl.b64 	%rd49, %rd40, 3;
+	shl.b64 	%rd49, %rd40, 2;
 	add.s64 	%rd50, %rd49, %rd45;
-	add.s64 	%rd17, %rd50, -256;
-	mov.u64 	%rd79, 0;
-	mov.f64 	%fd13, 0d0000000000000000;
-	setp.gt.s64 	%p6, %rd8, %rd82;
-	add.s64 	%rd61, %rd78, %rd15;
+	add.s64 	%rd17, %rd50, -128;
+	mov.u64 	%rd75, 0;
+	mov.f32 	%f13, 0f00000000;
+	mov.u32 	%r12, 0;
+	setp.gt.s64 	%p6, %rd8, %rd78;
+	add.s64 	%rd58, %rd74, %rd15;
 LBB0_3:                                 // %L74
                                         // =>This Loop Header: Depth=1
                                         //     Child Loop BB0_10 Depth 2
-	shl.b64 	%rd19, %rd79, 5;
+	shl.b64 	%rd19, %rd75, 5;
 	add.s64 	%rd20, %rd19, %rd4;
 	setp.gt.s64 	%p4, %rd20, %rd2;
 	or.pred  	%p5, %p14, %p4;
@@ -97,79 +98,77 @@ LBB0_3:                                 // %L74
 	bra.uni 	LBB0_4;
 LBB0_5:                                 // %L214
                                         //   in Loop: Header=BB0_3 Depth=1
-	mov.u64 	%rd58, 0;
-	st.shared.u64 	[%rd12+8], %rd58;
+	st.shared.u32 	[%rd12+4], %r12;
 	bra.uni 	LBB0_6;
 LBB0_4:                                 // %L97
                                         //   in Loop: Header=BB0_3 Depth=1
 	add.s64 	%rd51, %rd20, -1;
-	mul.lo.s64 	%rd52, %rd51, %rd76;
-	add.s64 	%rd53, %rd78, %rd6;
+	mul.lo.s64 	%rd52, %rd51, %rd72;
+	add.s64 	%rd53, %rd74, %rd6;
 	add.s64 	%rd54, %rd53, %rd52;
-	shl.b64 	%rd55, %rd54, 3;
+	shl.b64 	%rd55, %rd54, 2;
 	add.s64 	%rd56, %rd55, %rd29;
-	ld.global.u64 	%rd57, [%rd56+-256];
-	st.shared.u64 	[%rd12+8], %rd57;
+	ld.global.u32 	%r11, [%rd56+-128];
+	st.shared.u32 	[%rd12+4], %r11;
 LBB0_6:                                 // %L241
                                         //   in Loop: Header=BB0_3 Depth=1
-	add.s64 	%rd59, %rd19, %rd3;
-	setp.gt.s64 	%p7, %rd59, %rd2;
+	add.s64 	%rd57, %rd19, %rd3;
+	setp.gt.s64 	%p7, %rd57, %rd2;
 	or.pred  	%p8, %p6, %p7;
 	@%p8 bra 	LBB0_8;
 // %bb.7:                               // %L253
                                         //   in Loop: Header=BB0_3 Depth=1
-	add.s64 	%rd62, %rd61, %rd19;
-	shl.b64 	%rd63, %rd62, 3;
-	add.s64 	%rd64, %rd63, %rd30;
-	ld.global.u64 	%rd65, [%rd64];
-	st.shared.u64 	[%rd14+8], %rd65;
+	add.s64 	%rd59, %rd58, %rd19;
+	shl.b64 	%rd60, %rd59, 2;
+	add.s64 	%rd61, %rd60, %rd30;
+	ld.global.u32 	%r14, [%rd61];
+	st.shared.u32 	[%rd14+4], %r14;
 	bra.uni 	LBB0_9;
 LBB0_8:                                 // %L370
                                         //   in Loop: Header=BB0_3 Depth=1
-	mov.u64 	%rd60, 0;
-	st.shared.u64 	[%rd14+8], %rd60;
+	st.shared.u32 	[%rd14+4], %r12;
 LBB0_9:                                 // %L397
                                         //   in Loop: Header=BB0_3 Depth=1
 	bar.sync 	0;
-	mov.u64 	%rd80, 0;
-	mov.u64 	%rd81, %rd21;
+	mov.u64 	%rd76, 0;
+	mov.u64 	%rd77, %rd21;
 LBB0_10:                                // %L399
                                         //   Parent Loop BB0_3 Depth=1
                                         // =>  This Inner Loop Header: Depth=2
-	ld.shared.f64 	%fd6, [%rd81];
-	add.s64 	%rd67, %rd17, %rd80;
-	ld.shared.f64 	%fd7, [%rd67+-8];
-	fma.rn.f64 	%fd8, %fd6, %fd7, %fd13;
-	ld.shared.f64 	%fd9, [%rd81+264];
-	ld.shared.f64 	%fd10, [%rd67];
-	fma.rn.f64 	%fd13, %fd9, %fd10, %fd8;
-	add.s64 	%rd81, %rd81, 528;
-	add.s64 	%rd80, %rd80, 16;
-	setp.ne.s64 	%p9, %rd80, 256;
+	ld.shared.f32 	%f6, [%rd77];
+	add.s64 	%rd63, %rd17, %rd76;
+	ld.shared.f32 	%f7, [%rd63+-4];
+	fma.rn.f32 	%f8, %f6, %f7, %f13;
+	ld.shared.f32 	%f9, [%rd77+132];
+	ld.shared.f32 	%f10, [%rd63];
+	fma.rn.f32 	%f13, %f9, %f10, %f8;
+	add.s64 	%rd77, %rd77, 264;
+	add.s64 	%rd76, %rd76, 8;
+	setp.ne.s64 	%p9, %rd76, 128;
 	@%p9 bra 	LBB0_10;
 // %bb.11:                              // %L505
                                         //   in Loop: Header=BB0_3 Depth=1
 	bar.sync 	0;
-	add.s64 	%rd26, %rd79, 1;
-	setp.ne.s64 	%p10, %rd79, %rd5;
-	mov.u64 	%rd79, %rd26;
+	add.s64 	%rd26, %rd75, 1;
+	setp.ne.s64 	%p10, %rd75, %rd5;
+	mov.u64 	%rd75, %rd26;
 	@%p10 bra 	LBB0_3;
 	bra.uni 	LBB0_12;
 LBB0_1:                                 // %top.L518_crit_edge
-	cvt.s64.s32 	%rd82, %r2;
-	mov.f64 	%fd13, 0d0000000000000000;
+	cvt.s64.s32 	%rd78, %r2;
+	mov.f32 	%f13, 0f00000000;
 LBB0_12:                                // %L518
-	setp.lt.s64 	%p12, %rd82, %rd8;
+	setp.lt.s64 	%p12, %rd78, %rd8;
 	or.pred  	%p13, %p14, %p12;
 	@%p13 bra 	LBB0_14;
 // %bb.13:                              // %L555
-	ld.param.u64 	%rd28, [_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1__param_0];
-	mul.lo.s64 	%rd70, %rd77, %rd76;
-	add.s64 	%rd72, %rd78, %rd6;
-	add.s64 	%rd73, %rd72, %rd70;
-	shl.b64 	%rd74, %rd73, 3;
-	add.s64 	%rd75, %rd74, %rd28;
-	st.global.f64 	[%rd75+-256], %fd13;
+	ld.param.u64 	%rd28, [_Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1__param_0];
+	mul.lo.s64 	%rd66, %rd73, %rd72;
+	add.s64 	%rd68, %rd74, %rd6;
+	add.s64 	%rd69, %rd68, %rd66;
+	shl.b64 	%rd70, %rd69, 2;
+	add.s64 	%rd71, %rd70, %rd28;
+	st.global.f32 	[%rd71+-128], %f13;
 LBB0_14:                                // %L586
 	ret;
                                         // -- End function
