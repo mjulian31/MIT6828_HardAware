@@ -219,9 +219,10 @@ function start_reciever()
                 println()
                 showerror(stderr, err, bt)
             end
-            while !istaskdone(t)
-                println("server is running...")
-                sleep(1)
-            end
+        end
+        while !istaskdone(t)
+            println("server is running...")
+            sleep(1)
+        end
     end
 end
