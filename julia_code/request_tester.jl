@@ -16,6 +16,7 @@ a = rand(10, 10)
 b = rand(10, 10)
 res = mult(a, b)
 @show res
+@show a*b
 @assert isapprox(res, a*b)
 println("done.")
 
@@ -33,6 +34,7 @@ a = rand(4098, 10)
 b = rand(10, 124)
 res = mult(a, b)
 @show res
+@show a*b
 @assert isapprox(res, a*b)
 println("done.")
 
@@ -44,6 +46,7 @@ println("test 1...")
     b = rand(10, 10)
     res = mult(a, b)
     @show res
+    @show a*b
     @assert isapprox(res, a*b)
 end
 println("done.")
@@ -54,6 +57,7 @@ println("test 2...")
     b = rand(1024, 1008)
     res = mult(a, b)
     @show res
+    @show a*b
     @assert isapprox(res, a*b)
 end
 println("done.")
@@ -64,6 +68,7 @@ println("test 3...")
     b = rand(1024, 53)
     res = mult(a, b)
     @show res
+    @show a*b
     @assert isapprox(res, a*b)
 end
 println("done.")
