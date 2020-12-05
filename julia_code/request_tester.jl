@@ -2,12 +2,13 @@ include("request_handler.jl")
 
 # matrix multiplication
 function mult(x, y)
-    req_num, _ = send_request(x, y)
-    while !haskey(responses, req_num)
-        # wait for response to come back
+    @async begin
+        notifier = Condition()
+        req_num, _ = send_request(x, y, notifier)
+        wait(notifier)
+        # got response, return matrix
+        return responses[req_num]
     end
-    # got response, return matrix
-    return get(responses, req_num, :none)
 end
 
 start_reciever()
