@@ -357,7 +357,7 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
     printf("HAWS/SEND:       cpuTime: %s\n", resp->cpuTime);
     printf("HAWS/SEND:     exit code: %d\n", resp->exitCode);
     printf("HAWS/SEND:    output len: %d\n", resp->outputLen);
-    printf("HAWS/SEND:        output: %s\n", resp->output);
+    //printf("HAWS/SEND:        output: %s\n", resp->output);
 
 
     long pos = 0;
