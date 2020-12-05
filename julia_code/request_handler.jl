@@ -113,11 +113,7 @@ function parse_matrix_output(matrix_string)
 end
 
 function parse_response_string(response_str)
-    println("parsing func called!")
-    @show response_str
     req_arr = split(response_str, (DELIM, '\n'), keepempty=false)
-    @show req_arr
-    println("split string!")
     if req_arr[1] != REQ_START # checks right start
         println("error parsing bad start!")
         return BAD_RESPONSE
@@ -133,19 +129,13 @@ function parse_response_string(response_str)
         req_num = parse(Int, req_arr[2])
         println(req_num)
         matrix_string = req_arr[end-1]
-        println("got string")
         output = parse_matrix_output(matrix_string)
         @show output
-        println("parsed matrix")
-        @show req_num, req_arr[3:end-2]..., output
-        @show size(req_arr, 1), size(req_arr[3:end-2], 1)
-        @show response(req_num, req_arr[3:end-2]..., output)
         resp = response(req_num, req_arr[3:end-2]..., output)
-        println("made response")
         dict[req_num] = resp
         println("saved response!")
         # notify waiting thread that we have the response saved
-        notify(dict[req_num])
+        notify(responses[req_num])
         println("notified!")
         return resp
     end
