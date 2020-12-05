@@ -24,6 +24,7 @@ a = rand(1024, 1000)
 b = rand(1000, 1020)
 res = mult(a, b)
 @show res
+@show a*b
 @assert isapprox(res, a*b)
 println("done.")
 
