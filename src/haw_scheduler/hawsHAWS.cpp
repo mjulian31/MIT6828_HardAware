@@ -62,8 +62,9 @@ void HAWS::ReapChildren() { // SCHEDLOOP THREAD
     int status;
     int reapedTasks = 0;
     TaskStatus task_status;
+    time_point time_completed;
     while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
-       time_point time_completed = std::chrono::system_clock::now();
+       time_completed = std::chrono::system_clock::now();
        // debugging
        //printf("WAIDPID: PID %d status %d\n", p, status);
        //printf("waitpid() was < 0\n"); 
@@ -116,10 +117,11 @@ void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, tim
 void HAWS::ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemLimitMB) { 
     printf("HAWS/SL: ScheduleLoop started...\n");
     int freedMBRam; // from task completion
+    HAWSClientRequest* next;
     while (!schedLoopKillFlag) {
         tasksToStartQueueLock.lock(); // lock queue
         if (!tasksToStartQueue->empty()) { // check if item is in queue
-            HAWSClientRequest* next = tasksToStartQueue->front();
+            next = tasksToStartQueue->front();
             // if no binary has enough physmem to run, 
             // leave queue alone until a task completion frees physmem
             if (globalPhysMemAvail - next->GetCPUJobPhysMB() < 0 &&
@@ -377,15 +379,16 @@ void HAWS::RespLoop(int portResp1) {
     char* sendBuf = (char*) malloc(sizeof(char) * SOCKET_SEND_BUF_SIZE);
     printf("HAWS/RESPONSE: connected to client\n");
     std::list<HAWSConclusion*>::iterator it;
+    int numSent = 0;
     while (!schedLoopKillFlag) {
-        int numSent = 0;
+        numSent = 0;
         conclusionLock.lock();
         if (pendConclusions.size() > 0) {
             memset(sendBuf, 0, sizeof(char) * SOCKET_SEND_BUF_SIZE); // zero to start
             for (it = pendConclusions.begin(); it != pendConclusions.end(); it++) {
                 SendConclusion(sockResp1, sendBuf, SOCKET_SEND_BUF_SIZE, *it);
-                //free(*it->freeableOutput) // free binary output
-                //free(*it); // TODO free conclusion
+                free((*it)->freeableOutput);
+                free(*it);
                 numSent++;
             }
             pendConclusions.clear(); //TODO 
@@ -396,6 +399,7 @@ void HAWS::RespLoop(int portResp1) {
         }
         usleep(10); // yield
     }
+    free(sendBuf);
     socket_close_socket(sockResp1, "HAWS/RESP");
 }
 

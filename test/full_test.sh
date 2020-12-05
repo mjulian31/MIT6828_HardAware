@@ -27,7 +27,7 @@ main () {
     sleep 3
     pushd `pwd` > /dev/null
     cd /opt/haws/bin # run from within /opt/haws/bin and then switch back 
-    $bincmd && \
+    #$bincmd && \
     valgrind $vgrargs $bincmd &&
     echo "TEST: FULL TEST PASS"
     popd > /dev/null

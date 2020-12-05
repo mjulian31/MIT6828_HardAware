@@ -389,9 +389,9 @@ class HAWSTargetMgr {
             conclusion->targetRealBillableUS = tasksBillableUS[pid];
         
             // free this task
-            //TODO
-            //free(tasksComplted[pid]); // free temporary stored output
+            //TODO erase more
             free(tasksHandles[pid]); 
+            tasksCompleted.erase(pid);
             tasksHandles.erase(pid);
             taskLock.unlock();
             //printf("done doing accounting\n");

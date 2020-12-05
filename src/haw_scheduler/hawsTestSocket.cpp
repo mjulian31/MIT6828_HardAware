@@ -192,9 +192,8 @@ int haws_test_socket_bringup() {
     printf("TEST:\n\nsample req bytes[%d]:\n\n%s\n\n", length, clientSendBuff);
     printf("TEST: send it\n");
     send(testClientSendSocket, clientSendBuff, length, 0); 
-    sleep(10);
     printf("TEST: sample request sent!\n"); 
-
+    sleep(120);
     while (haws.IsDoingWork()) { usleep(1000); };
     haws.Stop();
     
