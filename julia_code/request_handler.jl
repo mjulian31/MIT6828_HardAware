@@ -114,7 +114,7 @@ end
 
 function parse_response_string(response)
     println("parsing func called!")
-    @show reponse
+    @show response
     req_arr = split(response, (DELIM, '\n'), keepempty=false)
     @show req_arr
     println("split string!")
