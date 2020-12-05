@@ -344,20 +344,66 @@ void HAWS::Stop() {
 
 // RESPONSE HANDLER THREAD
 void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion* resp) {
-    std::string response;
-    response = "^," + std::to_string(resp->reqNum) + "," +
-                      resp->targRan + "," +
-                      std::string(resp->wallTime) + "," +
-                      std::string(resp->cpuTime) + "," +
-                      std::to_string(resp->exitCode) + "," +
-                      std::to_string(resp->outputLen) + "," +
-                      std::string(resp->output) + ",$\n";
-    int len = response.length(); 
     memset(buf, 0, max_bytes);
-    memcpy(buf, response.c_str(), len); 
-    printf("HAWS/RESP: SEND[%ld]:%s\n", strlen(response.c_str()), response.c_str());
-    printf("HAWS/RESP: buffer is %s\n", buf);
-    send(socket, buf, len, 0);
+
+    long pos = 0;
+    buf[pos] = '^';
+    pos++;
+    buf[pos] = ',';
+    
+    std::string reqNum = std::to_string(resp->reqNum);
+    memcpy(buf + (pos * sizeof(char)), reqNum.c_str(), reqNum.length());
+    pos += reqNum.length();
+
+    buf[pos] = ',';
+    pos++;
+
+    memcpy(buf + (pos * sizeof(char)), resp->targRan, resp->targRanLen);
+    pos += resp->targRanLen;
+    
+    buf[pos] = ',';
+    pos++;
+
+    memcpy(buf + (pos * sizeof(char)), resp->wallTime, resp->wallTimeLen);
+    pos += resp->wallTimeLen;
+    
+    buf[pos] = ',';
+    pos++;
+
+    memcpy(buf + (pos * sizeof(char)), resp->cpuTime, resp->cpuTimeLen);
+    pos += resp->cpuTimeLen;
+    
+    buf[pos] = ',';
+    pos++;
+
+    std::string exitCode = std::to_string(resp->exitCode);
+    memcpy(buf + (pos * sizeof(char)), exitCode.c_str(), exitCode.length());
+    pos += exitCode.length();
+
+    buf[pos] = ',';
+    pos++;
+
+    std::string outLen = std::to_string(resp->outputLen);
+    memcpy(buf + (pos * sizeof(char)), outLen.c_str(), outLen.length());
+    pos += outLen.length();
+    
+    buf[pos] + ',';
+    pos++;
+
+    memcpy(buf + (pos * sizeof(char)), resp->output, resp->outputLen);
+    pos += resp->outputLen;
+    
+    buf[pos] = ',';
+    pos++;
+    buf[pos] = '$';
+    pos++;
+
+    printf("HAWS/RESP: SEND[%ld]:", pos);
+    for (int i = 0; i < pos; i++) {
+        printf("%c", buf[pos]); 
+    }
+    printf("\n");
+    send(socket, buf, pos, 0); // send it!
 }
 
 // RESPONSE HANDLER THREAD

@@ -42,7 +42,9 @@ class HAWSTargetMgr {
     std::unordered_map<pid_t, char*> tasksCompleted; //freeable, LARGE 
     std::unordered_map<pid_t, long> tasksFormalOutputLen;
     std::unordered_map<pid_t, char*> tasksFormalOutput; //pointer into tasksCompleted, LARGE 
+    std::unordered_map<pid_t, int> tasksOutWallTimeLen;
     std::unordered_map<pid_t, char*> tasksOutWallTime; // freeable 
+    std::unordered_map<pid_t, int> tasksOutCPUTimeLen;
     std::unordered_map<pid_t, char*> tasksOutCPUTime; // freeable
     std::unordered_map<pid_t, long> tasksOutputLen;
 
@@ -166,7 +168,8 @@ class HAWSTargetMgr {
 
         // find wall time
         int pos = 0;
-        float wallTime = 0.0;
+        //float wallTime = 0.0;
+        int wallTimeLen = 0; 
         char* wallTimeBuffer = (char*) malloc(100*sizeof(char));
         for(pos = 0; pos < tasksOutputLen[pid]; pos++) {
             if (allOutput[pos] == '\n') {
@@ -181,14 +184,17 @@ class HAWSTargetMgr {
                 break;
             }
             wallTimeBuffer[pos] = allOutput[pos];
+            wallTimeLen++;
         } assert(pos != tasksOutputLen[pid]); // didn't find a newline
         //printf("HACK: test wall time got FLOAT:%f\n", wallTime); 
         tasksOutWallTime[pid] = wallTimeBuffer; // freeable after resp send
+        tasksOutWallTimeLen[pid] = wallTimeLen;
 
         // find cpu time
         float cpuTime = 0.0;
         char* cpuTimeBuffer = (char*) malloc(100*sizeof(char));
         int bufPos = 0;
+        int cpuTimeLen = 0;
         for(pos = pos; pos < tasksOutputLen[pid]; pos++) {
             if (allOutput[pos] == '\n') {
                 cpuTimeBuffer[pos] == '\0'; // null terminate  
@@ -202,9 +208,11 @@ class HAWSTargetMgr {
                 break;
             }
             cpuTimeBuffer[bufPos] = allOutput[pos];
+            cpuTimeLen++;
             bufPos++;
         } assert(pos != tasksOutputLen[pid]); // didn't find a newline
         tasksOutCPUTime[pid] = cpuTimeBuffer; // freeable after resp send
+        tasksOutCPUTimeLen[pid] = cpuTimeLen;
 
         // store pointer to start of formal output
         tasksFormalOutput[pid] = allOutput + (pos * sizeof(char));
@@ -381,13 +389,25 @@ class HAWSTargetMgr {
            
             // create conclusion to return 
             conclusion->reqNum = tasksReqNum[pid];
+            
+            // targ ran
+            conclusion->targRanLen = this->targStr.length();
             conclusion->targRan = (char*) this->targStr.c_str();
             conclusion->exitCode = tasksStatusCode[pid];
-            conclusion->outputLen = tasksFormalOutputLen[pid]; 
+
+            // wall time
+            conclusion->wallTimeLen = tasksOutWallTimeLen[pid];
             conclusion->wallTime = tasksOutWallTime[pid];
+
+            // cpu time
+            conclusion->cpuTimeLen = tasksOutCPUTimeLen[pid];
             conclusion->cpuTime = tasksOutCPUTime[pid]; // freeable after resp send
+    
+            // formal output 
+            conclusion->outputLen = tasksFormalOutputLen[pid]; 
             conclusion->freeableOutput = tasksCompleted[pid]; // freeable after resp send
             conclusion->output = tasksFormalOutput[pid]; // freed as part of tasksCompleted
+
             conclusion->targetRealBillableUS = tasksBillableUS[pid];
 
         
