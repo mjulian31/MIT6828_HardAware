@@ -113,6 +113,7 @@ function parse_matrix_output(matrix_string)
 end
 
 function parse_response_string(response)
+    println("parsing func called!")
     req_arr = split(response, DELIM)
     if req_arr[1] != REQ_START
         println("error parsing bad start!")
