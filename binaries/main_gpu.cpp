@@ -38,7 +38,7 @@ static inline void check_errors(CUresult res, std::string name) {
 
 
 #ifdef ERR_CHECK
-void basic_matmul(double* out, double* A, double* B, int N, int R, int M) {
+void basic_matmul(float* out, float* A, float* B, int N, int R, int M) {
 	for (int i = 0; i < N; ++i) {
 		for (int j = 0; j < M; ++j) {
 			for (int k = 0; k < R; ++k) {
@@ -52,12 +52,12 @@ void basic_matmul(double* out, double* A, double* B, int N, int R, int M) {
 
 /**
  *load matrix from string of the form [1 2 3; 4 5 6] of size NxM
- *returns the double* to the col-major stored matrix
+ *returns the float* to the col-major stored matrix
  */
-double* load_matrix(char* matrix_string, int N, int M) {
+float* load_matrix(char* matrix_string, int N, int M) {
   char *str1, *str2, *line, *elem;
   char *saveptr1, *saveptr2, *saveptr3;
-  double* matrix = reinterpret_cast<double *>(malloc(sizeof(double) * N * M));
+  float* matrix = reinterpret_cast<float *>(malloc(sizeof(float) * N * M));
 
   int col = 0;
   int row = 0;
@@ -91,10 +91,10 @@ double* load_matrix(char* matrix_string, int N, int M) {
  * encode column-major matrix of size NxM to string of the form [1 2 3; 4 5 6]
  * returns the char* to the matrix string representation
  */
-char* encode_matrix(double* matrix, int N, int M) {
-	// (number of ; N + [] 2 + num spaces M*N + number of numbers N*M * number size sizeof(double) + null terminator)* sizeof(char)
-	char* matrix_string = reinterpret_cast<char *>(malloc((N + 2 + M*N + M*N*sizeof(double) + 1) * sizeof(char)));
-	int NUM_SIZE = sizeof(double) + 2;
+char* encode_matrix(float* matrix, int N, int M) {
+	// (number of ; N + [] 2 + num spaces M*N + number of numbers N*M * number size sizeof(float) + null terminator)* sizeof(char)
+	char* matrix_string = reinterpret_cast<char *>(malloc((N + 2 + M*N + M*N*sizeof(float) + 1) * sizeof(char)));
+	int NUM_SIZE = sizeof(float) + 2;
   int i = 0;
 	matrix_string[i] = '[';
 	i++;
@@ -165,11 +165,11 @@ int main(int argc, char **argv) {
   scanf("%i", &pid);
 
   // host mem
-  double *h_A;
-  double *h_B;
-  double *h_output = reinterpret_cast<double *>(malloc(sizeof(double) * N * M));
+  float *h_A;
+  float *h_B;
+  float *h_output = reinterpret_cast<float *>(malloc(sizeof(float) * N * M));
   #ifdef ERR_CHECK
-  double *h_output_check = reinterpret_cast<double *>(malloc(sizeof(double) * N * M));
+  float *h_output_check = reinterpret_cast<float *>(malloc(sizeof(float) * N * M));
   // init output array
   for (int col = 0; col < M; ++col) {
     for (int row = 0; row < N; ++row) {
@@ -180,8 +180,8 @@ int main(int argc, char **argv) {
 
   if (random) {
     // allocate the host input matricies
-    h_A = reinterpret_cast<double *>(malloc(sizeof(double) * N * R));
-    h_B = reinterpret_cast<double *>(malloc(sizeof(double) * R * M));
+    h_A = reinterpret_cast<float *>(malloc(sizeof(float) * N * R));
+    h_B = reinterpret_cast<float *>(malloc(sizeof(float) * R * M));
 
     // verify that allocations succeeded
     if (h_A == NULL || h_B == NULL) {
@@ -192,12 +192,12 @@ int main(int argc, char **argv) {
     // init the host arrays
     for (int col = 0; col < R; ++col) {
       for (int row = 0; row < N; ++row) {
-        h_A[col*N + row] = rand() / static_cast<double>(RAND_MAX);
+        h_A[col*N + row] = rand() / static_cast<float>(RAND_MAX);
       }
     }
     for (int col = 0; col < M; ++col) {
       for (int row = 0; row < R; ++row) {
-        h_B[R*col + row] = rand() / static_cast<double>(RAND_MAX);
+        h_B[R*col + row] = rand() / static_cast<float>(RAND_MAX);
       }
     }
   } else {
@@ -224,15 +224,15 @@ int main(int argc, char **argv) {
 
   // alloc the device matricies
   CUdeviceptr d_A;
-  check_errors(cuMemAlloc(&d_A, sizeof(double) * N * R), "device input a alloc");
+  check_errors(cuMemAlloc(&d_A, sizeof(float) * N * R), "device input a alloc");
   CUdeviceptr d_B;
-  check_errors(cuMemAlloc(&d_B, sizeof(double) * R * M), "device input b alloc");
+  check_errors(cuMemAlloc(&d_B, sizeof(float) * R * M), "device input b alloc");
   CUdeviceptr d_output;
-  check_errors(cuMemAlloc(&d_output, sizeof(double) * N * M), "device output alloc");
+  check_errors(cuMemAlloc(&d_output, sizeof(float) * N * M), "device output alloc");
 
   // copy the host matricies to device
-  check_errors(cuMemcpyHtoD(d_A, h_A, sizeof(double) * N * R), "device copy a");
-  check_errors(cuMemcpyHtoD(d_B, h_B, sizeof(double) * R * M), "device copy b");
+  check_errors(cuMemcpyHtoD(d_A, h_A, sizeof(float) * N * R), "device copy a");
+  check_errors(cuMemcpyHtoD(d_B, h_B, sizeof(float) * R * M), "device copy b");
 
   // launch the matmul CUDA Kernel
   int threadsPerBlock = 32;
@@ -257,7 +257,7 @@ int main(int argc, char **argv) {
 	double end_wall = get_wall_time();
 
   // copy device result to host
-  check_errors(cuMemcpyDtoH(h_output, d_output, sizeof(double) * N * M), "host to device copy");
+  check_errors(cuMemcpyDtoH(h_output, d_output, sizeof() * N * M), "host to device copy");
 
   // free device global memory
   check_errors(cuMemFree(d_A), "free device a");
@@ -267,7 +267,7 @@ int main(int argc, char **argv) {
   #ifdef ERR_CHECK
   basic_matmul(h_output_check, h_A, h_B, N, R, M);
 	int count = 0;
-  double diff = 0.0;
+   diff = 0.0;
 	for (int i = 0; i < N; ++i) {
     for (int j = 0; j < M; ++j) {
       if (fabs(h_output[N*j + i] - h_output_check[M*i + j]) > 1e-9) {

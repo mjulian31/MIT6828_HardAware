@@ -25,11 +25,11 @@ double get_cpu_time(){
 }
 
 
-void matmul(double* out, double* A, double* B, int N, int R, int M);
+void matmul(float* out, float* A, float* B, int N, int R, int M);
 
 
 #ifdef ERR_CHECK
-void basic_matmul(double* out, double* A, double* B, int N, int R, int M) {
+void basic_matmul(float* out, float* A, float* B, int N, int R, int M) {
 	for (int i = 0; i < N; ++i) {
 		for (int j = 0; j < M; ++j) {
 			for (int k = 0; k < R; ++k) {
@@ -43,12 +43,12 @@ void basic_matmul(double* out, double* A, double* B, int N, int R, int M) {
 
 /**
  * load matrix from string of the form [1 2 3; 4 5 6] of size NxM
- * returns the double* to the col-major stored matrix
+ * returns the float* to the col-major stored matrix
  */
-double* load_matrix(char* matrix_string, int N, int M) {
+float* load_matrix(char* matrix_string, int N, int M) {
   char *str1, *str2, *line, *elem;
   char *saveptr1, *saveptr2, *saveptr3;
-  double* matrix = (double*)(malloc(sizeof(double) * N * M));
+  float* matrix = (float*)(malloc(sizeof(float) * N * M));
 
   int col = 0;
   int row = 0;
@@ -82,10 +82,10 @@ double* load_matrix(char* matrix_string, int N, int M) {
  * encode column-major matrix of size NxM to string of the form [1 2 3; 4 5 6]
  * returns the char* to the matrix string representation
  */
-char* encode_matrix(double* matrix, int N, int M) {
-	// (number of ; N + [] 2 + num spaces M*N + number of numbers N*M * number size sizeof(double) + null terminator)* sizeof(char)
-	char* matrix_string = (char*)(malloc((N + 2 + M*N + M*N*sizeof(double) + 1) * sizeof(char)));
-	int NUM_SIZE = sizeof(double) + 2;
+char* encode_matrix(float* matrix, int N, int M) {
+	// (number of ; N + [] 2 + num spaces M*N + number of numbers N*M * number size sizeof(float) + null terminator)* sizeof(char)
+	char* matrix_string = (char*)(malloc((N + 2 + M*N + M*N*sizeof(float) + 1) * sizeof(char)));
+	int NUM_SIZE = sizeof(float) + 2;
   int i = 0;
 	matrix_string[i] = '[';
 	i++;
@@ -139,26 +139,26 @@ int main(int argc, char *argv[]) {
 	scanf("%i", &pid);
 
 	// alloc mem
-	double* A;
-	double* B;
-	double* output = malloc(sizeof(double) * N * M);
+	float* A;
+	float* B;
+	float* output = malloc(sizeof(float) * N * M);
 	#ifdef ERR_CHECK
-	double* output_check = malloc(sizeof(double) * N * M);
+	float* output_check = malloc(sizeof(float) * N * M);
 	#endif
 
 	// init arrays
 	if (random) {
-		A = malloc(sizeof(double) * N * R);
-		B = malloc(sizeof(double) * R * M);
+		A = malloc(sizeof(float) * N * R);
+		B = malloc(sizeof(float) * R * M);
 
 	  for (int col = 0; col < R; ++col) {
 			for (int row = 0; row < N; ++row) {
-				A[N*col + row] = rand() / (double)(RAND_MAX);
+				A[N*col + row] = rand() / (float)(RAND_MAX);
 	    }
 	  }
 		for (int col = 0; col < M; ++col) {
 	    for (int row = 0; row < R; ++row) {
-	      B[R*col + row] = rand() / (double)(RAND_MAX);
+	      B[R*col + row] = rand() / (float)(RAND_MAX);
 	    }
 	  }
 	} else {
