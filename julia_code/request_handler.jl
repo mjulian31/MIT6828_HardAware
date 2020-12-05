@@ -16,7 +16,7 @@ end
 
 const REQ_START = "^"
 const REQ_END = "\$"
-const DELIM = ","
+const DELIM = ','
 const BAD_RESPONSE = response(0, :none, 0, 0, 1, 0, :none)
 
 request_lock = ReentrantLock()
@@ -114,7 +114,7 @@ end
 
 function parse_response_string(response)
     println("parsing func called!")
-    req_arr = split(response, DELIM)
+    req_arr = split(response, (DELIM, '\n'))
     println("split string!")
     @show req_arr
     @show req_arr[1], req_arr[-1], size(req_arr, 1) # all the checks
