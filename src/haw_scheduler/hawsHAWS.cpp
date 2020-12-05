@@ -380,13 +380,17 @@ void HAWS::RespLoop(int portResp1) {
             memset(sendBuf, 0, sizeof(char) * SOCKET_SEND_BUF_SIZE); // zero to start
             for (it = pendConclusions.begin(); it != pendConclusions.end(); it++) {
                 SendConclusion(sockResp1, sendBuf, SOCKET_SEND_BUF_SIZE, *it);
+                //free(*it->freeableOutput) // free binary output
                 //free(*it); // TODO free conclusion
                 numSent++;
             }
-            //pendConclusions.clear(); //TODO 
+            pendConclusions.clear(); //TODO 
         }
         conclusionLock.unlock();
-        printf("HAWS/RESP: sent %d response(s)\n", numSent);
+        if (numSent > 0) {
+            printf("HAWS/RESP: sent %d response(s)\n", numSent);
+        }
+        usleep(10); // yield
     }
     socket_close_socket(sockResp1, "HAWS/RESP");
 }

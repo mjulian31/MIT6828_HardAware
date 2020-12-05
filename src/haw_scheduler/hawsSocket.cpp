@@ -87,7 +87,8 @@ void haws_socket_send_resp(int socket, int reqNum, std::string targRan,
 void haws_socket_req_loop(int socket) { // SOCKET THREAD
     printf("HAWS/RECV: hello from RequestLoop Thread\n");
     printf("HAWS/RECV: listening...\n");
-    int socket_fd = socket_open_recv_socket(socket, "HAWS/RECV"); // blocks until connection opened
+    // blocks here until connection opened
+    int socket_fd = socket_open_recv_socket(socket, false, "HAWS/RECV"); // non blocking reads
     printf("HAWS/RECV: ...client connected!");
     char* socket_read_buf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
     char* splitBuf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
