@@ -117,16 +117,17 @@ function parse_response_string(response)
     req_arr = split(response, DELIM)
     println("split string!")
     @show req_arr
-    if req_arr[1] != REQ_START
+    @show req_arr[1], req_arr[-1], size(req_arr, 1) # all the checks
+    if req_arr[1] != REQ_START # checks right start
         println("error parsing bad start!")
         return BAD_RESPONSE
-    elseif req_arr[-1] != REQ_END
+    elseif req_arr[-1] != REQ_END # checks right end
         println("error parsing bad end!")
         return BAD_RESPONSE
-    elseif size(req_arr, 1) != RESPONSE_LEN
+    elseif size(req_arr, 1) != RESPONSE_LEN # checks splits on DELIM
         println("size mismatch!")
         return BAD_RESPONSE
-    else
+    else # good response
         println("good response!")
         # good headers, parse
         req_num = req_arr[2]
