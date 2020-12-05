@@ -25,8 +25,8 @@ enum TaskStatus {
 typedef struct HAWSConclusion {
     int reqNum;
     char* targRan;
-    float wallTime;
-    float cpuTime;
+    char* wallTime;
+    char* cpuTime;
     int exitCode;
     int outputLen;
     char* freeableOutput;

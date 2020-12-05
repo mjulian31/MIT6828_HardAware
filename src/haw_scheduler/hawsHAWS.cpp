@@ -347,8 +347,8 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
     std::string response;
     response = "^," + std::to_string(resp->reqNum) + "," +
                       resp->targRan + "," +
-                      std::to_string(resp->wallTime) + "," +
-                      std::to_string(resp->cpuTime) + "," +
+                      std::string(resp->wallTime) + "," +
+                      std::string(resp->cpuTime) + "," +
                       std::to_string(resp->exitCode) + "," +
                       std::to_string(resp->outputLen) + "," +
                       std::string(resp->output) + ",$\n";
@@ -382,6 +382,8 @@ void HAWS::RespLoop(int portResp1) {
             memset(sendBuf, 0, sendBufSize); // zero to start
             for (it = pendConclusions.begin(); it != pendConclusions.end(); it++) {
                 SendConclusion(sockResp1, sendBuf, SOCKET_SEND_BUF_SIZE, *it);
+                free((*it)->wallTime);
+                free((*it)->cpuTime);
                 free((*it)->freeableOutput);
                 free(*it);
                 numSent++;

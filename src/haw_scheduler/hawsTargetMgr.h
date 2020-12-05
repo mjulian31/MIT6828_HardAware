@@ -39,11 +39,11 @@ class HAWSTargetMgr {
 
     // file monitoring - set COMM_FILE true to use
     //std::unordered_map<pid_t, std::string> tasksStdout;
-    std::unordered_map<pid_t, char*> tasksCompleted; //LARGE 
+    std::unordered_map<pid_t, char*> tasksCompleted; //freeable, LARGE 
     std::unordered_map<pid_t, long> tasksFormalOutputLen;
-    std::unordered_map<pid_t, char*> tasksFormalOutput; //LARGE 
-    std::unordered_map<pid_t, float> tasksOutWallTime;
-    std::unordered_map<pid_t, float> tasksOutCPUTime;
+    std::unordered_map<pid_t, char*> tasksFormalOutput; //pointer into tasksCompleted, LARGE 
+    std::unordered_map<pid_t, char*> tasksOutWallTime; // freeable 
+    std::unordered_map<pid_t, char*> tasksOutCPUTime; // freeable
     std::unordered_map<pid_t, long> tasksOutputLen;
 
     // stdout monitoring - set COMM_STDOUT true to use 
@@ -171,18 +171,19 @@ class HAWSTargetMgr {
         for(pos = 0; pos < tasksOutputLen[pid]; pos++) {
             if (allOutput[pos] == '\n') {
                 wallTimeBuffer[pos] == '\0'; // null terminate  
-                std::string wallClock(wallTimeBuffer);
-                assert(wallClock.length() > 0);
-                free(wallTimeBuffer);
-                wallTime = std::stof(wallClock);
+                //wallTime = strtof(wallTimeBuffer, NULL);
+                //assert(wallTime > 0.0);
+                //std::string wallClock(wallTimeBuffer);
+                //assert(wallClock.length() > 0);
+                //free(wallTimeBuffer);
+                //wallTime = std::stof(wallClock);
                 pos++; // get off newline
                 break;
             }
             wallTimeBuffer[pos] = allOutput[pos];
         } assert(pos != tasksOutputLen[pid]); // didn't find a newline
         //printf("HACK: test wall time got FLOAT:%f\n", wallTime); 
-        assert(wallTime > 0.0);
-        tasksOutWallTime[pid] = wallTime; 
+        tasksOutWallTime[pid] = wallTimeBuffer; // freeable after resp send
 
         // find cpu time
         float cpuTime = 0.0;
@@ -191,18 +192,19 @@ class HAWSTargetMgr {
         for(pos = pos; pos < tasksOutputLen[pid]; pos++) {
             if (allOutput[pos] == '\n') {
                 cpuTimeBuffer[pos] == '\0'; // null terminate  
-                std::string cpuClock(cpuTimeBuffer);
-                assert(cpuClock.length() > 0);
-                free(cpuTimeBuffer);
-                cpuTime = std::stof(cpuClock);
+                //std::string cpuClock(cpuTimeBuffer);
+                //cpuTime = strtof(cpuTimeBuffer, NULL);
+                //assert(cpuTime > 0.0);
+                //assert(cpuClock.length() > 0);
+                //free(cpuTimeBuffer);
+                //cpuTime = std::stof(cpuClock);
                 pos++; // get off newline
                 break;
             }
             cpuTimeBuffer[bufPos] = allOutput[pos];
             bufPos++;
         } assert(pos != tasksOutputLen[pid]); // didn't find a newline
-        assert(cpuTime > 0.0);
-        tasksOutCPUTime[pid] = cpuTime;
+        tasksOutCPUTime[pid] = cpuTimeBuffer; // freeable after resp send
 
         // store pointer to start of formal output
         tasksFormalOutput[pid] = allOutput + (pos * sizeof(char));
@@ -380,13 +382,14 @@ class HAWSTargetMgr {
             // create conclusion to return 
             conclusion->reqNum = tasksReqNum[pid];
             conclusion->targRan = (char*) this->targStr.c_str();
-            conclusion->wallTime = tasksOutWallTime[pid];
-            conclusion->cpuTime = tasksOutCPUTime[pid];
             conclusion->exitCode = tasksStatusCode[pid];
             conclusion->outputLen = tasksFormalOutputLen[pid]; 
-            conclusion->freeableOutput = tasksCompleted[pid]; // NOT FREED YET
-            conclusion->output = tasksFormalOutput[pid]; // NOT FREED YET, freed from freeableOutput
+            conclusion->wallTime = tasksOutWallTime[pid];
+            conclusion->cpuTime = tasksOutCPUTime[pid]; // freeable after resp send
+            conclusion->freeableOutput = tasksCompleted[pid]; // freeable after resp send
+            conclusion->output = tasksFormalOutput[pid]; // freed as part of tasksCompleted
             conclusion->targetRealBillableUS = tasksBillableUS[pid];
+
         
             // free this task
             //TODO erase more
