@@ -128,16 +128,16 @@ function parse_response_string(response)
     else # good response
         println("good response!")
         # good headers, parse
-        req_num = req_arr[2]
+        req_num = parse(Int, req_arr[2])
         println(req_num)
         matrix_string = req_arr[end-1]
         println("got string")
         output = parse_matrix_output(matrix_string)
         @show output
         println("parsed matrix")
-        @show req_arr[2:end-2]..., output
-        @show response(req_arr[2:end-2]..., output)
-        resp = response(req_arr[2:end-2]..., output)
+        @show req_num, req_arr[3:end-2]..., output
+        @show response(req_num, req_arr[3:end-2]..., output)
+        resp = response(req_num, req_arr[3:end-2]..., output)
         println("made response")
         dict[req_num] = resp
         println("saved response!")
