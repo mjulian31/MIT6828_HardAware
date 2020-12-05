@@ -4,6 +4,16 @@ using Base.Threads
 const SEND_PORT = 8080
 const RECEIVE_PORT = 8081
 
+struct response
+    req_num
+    hardware
+    wall_time
+    cpu_time
+    exit_code
+    output_len
+    output
+end
+
 const REQ_START = "^"
 const REQ_END = "\$"
 const DELIM = ","
@@ -27,16 +37,6 @@ CPU_ONLY = "cpu-only"
 request_num = Atomic{Int}(1)
 responses = Dict([]) # request_num -> response
 RESPONSE_LEN = 9
-
-struct response
-    req_num
-    hardware
-    wall_time
-    cpu_time
-    exit_code
-    output_len
-    output
-end
 
 function get_gpu_threads(N, M)
     blocks_row = div(N + TILE_DIM - N%TILE_DIM, TILE_DIM)
@@ -129,9 +129,10 @@ function parse_response_string(response)
     end
 end
 
-function send_request(a, b, c)
-    N, M = size(c)
+function send_request(a, b)
+    N = size(a, 1)
     R = size(a, 2)
+    M = size(b, 2)
 
     cmd_args = get_cmd_args(N, R, M)
     target_pref = get_target_pref(N, R, M)
@@ -200,7 +201,7 @@ println("matrix b:")
 println("answer:")
 @show c
 println("request string:")
-req = generate_request(a, b, c)
+req = generate_request(a, b)
 println(req)
 
 println("sending request & starting receiver")

@@ -80,9 +80,10 @@ function make_request_string(req_num, cmd_args, target_pref, cpu_thread, gpu_cpu
     return req_string
 end
 
-function generate_request(a, b, c)
-    N, M = size(c)
+function generate_request(a, b)
+    N = size(a, 1)
     R = size(a, 2)
+    M = size(b, 2)
 
     cmd_args = get_cmd_args(N, R, M)
     target_pref = get_target_pref(N, R, M)
@@ -100,7 +101,7 @@ function generate_request(a, b, c)
 
     req_string = make_request_string(req_num, cmd_args, target_pref, cpu_thread, gpu_cpu_thread, gpu_thread, cpu_ram, gpu_ram, gpu_mem, gpu_shared_mem, job_id, stdin_len, stdin_input)
 
-    return req_string
+    return req_num, req_string
 end
 
 function send_request(req_string)
@@ -131,7 +132,7 @@ println("matrix b:")
 println("answer:")
 @show c
 println("request string:")
-req = generate_request(a, b, c)
+req = generate_request(a, b)
 println(req)
 
 println("sending request & starting receiver")
