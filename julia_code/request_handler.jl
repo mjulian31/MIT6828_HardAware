@@ -132,10 +132,10 @@ function parse_response_string(response_str)
         output = parse_matrix_output(matrix_string)
         @show output
         resp = response(req_num, req_arr[3:end-2]..., output)
-        dict[req_num] = resp
+        responses[req_num] = resp
         println("saved response!")
         # notify waiting thread that we have the response saved
-        notify(responses[req_num])
+        notify(notifiers[req_num])
         println("notified!")
         return resp
     end
