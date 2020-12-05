@@ -49,7 +49,7 @@ function get_gpu_threads(N, M)
 end
 
 function get_mat_strings(a, b)
-    matstrings = string(round.(a, digits=5), round.(b, digits=5))
+    matstrings = string(round.(a, digits=6), round.(b, digits=6))
     return length(matstrings), matstrings
 end
 

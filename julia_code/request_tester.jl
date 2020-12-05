@@ -11,7 +11,7 @@ end
 
 function test_matrix(res, a, b)
     max_diff = maximum(abs, (a*b-res))
-    return max_diff < 1e-5
+    return max_diff < 1e-4
 end
 
 start_reciever()
