@@ -116,8 +116,6 @@ function parse_response_string(response)
     println("parsing func called!")
     req_arr = split(response, (DELIM, '\n'), keepempty=false)
     println("split string!")
-    @show req_arr
-    @show req_arr[1], req_arr[end], size(req_arr, 1) # all the checks
     if req_arr[1] != REQ_START # checks right start
         println("error parsing bad start!")
         return BAD_RESPONSE
@@ -131,9 +129,9 @@ function parse_response_string(response)
         println("good response!")
         # good headers, parse
         req_num = req_arr[2]
-        matrix_string = req_arr[-2]
+        matrix_string = req_arr[end-1]
         output = parse_matrix_output(matrix_string)
-        resp = response(req_arr[2:-3]..., output)
+        resp = response(req_arr[2:end-2]..., output)
         dict[req_num] = resp
         println("saved response!")
         # notify waiting thread that we have the response saved
