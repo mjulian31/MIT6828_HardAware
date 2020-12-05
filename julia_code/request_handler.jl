@@ -183,7 +183,9 @@ function start_reciever()
            sock = accept(server)
            @async while isopen(sock)
                response_str = readline(sock, keep=true)
+               println("parsing response...")
                response = parse_response_string(response_str)
+               println("done parsing")
                if response != BAD_RESPONSE
                    println("got good response")
                    # remove line from socket
