@@ -2,13 +2,11 @@ include("request_handler.jl")
 
 # matrix multiplication
 function mult(x, y)
-    @async begin
-        notifier = Condition()
-        req_num, _ = send_request(x, y, notifier)
-        wait(notifier)
-        # got response, return matrix
-        return responses[req_num]
-    end
+    notifier = Condition()
+    req_num, _ = send_request(x, y, notifier)
+    wait(notifier)
+    # got response, return matrix
+    return responses[req_num]
 end
 
 start_reciever()
