@@ -114,7 +114,9 @@ end
 
 function parse_response_string(response)
     println("parsing func called!")
+    @show reponse
     req_arr = split(response, (DELIM, '\n'), keepempty=false)
+    @show req_arr
     println("split string!")
     if req_arr[1] != REQ_START # checks right start
         println("error parsing bad start!")
