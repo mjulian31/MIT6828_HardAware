@@ -17,22 +17,22 @@ end
 start_reciever()
 
 println("test 1...")
-a = rand(Float32, 10, 10)
-b = rand(Float32, 10, 10)
+a = rand(10, 10)
+b = rand(10, 10)
 res = mult(a, b)
 @assert test_matrix(res, a, b)
 println("done.")
 
 println("test 2...")
-a = rand(Float32, 1024, 1000)
-b = rand(Float32, 1000, 1020)
+a = rand(1024, 1000)
+b = rand(1000, 1020)
 res = mult(a, b)
 @assert test_matrix(res, a, b)
 println("done.")
 
 println("test 3...")
-a = rand(Float32, 4098, 10)
-b = rand(Float32, 10, 124)
+a = rand(4098, 10)
+b = rand(10, 124)
 res = mult(a, b)
 @assert test_matrix(res, a, b)
 println("done.")
@@ -41,8 +41,8 @@ println("parallel tests")
 
 println("test 1...")
 @threads for i = 1:2
-    a = rand(Float32, 10, 10)
-    b = rand(Float32, 10, 10)
+    a = rand(10, 10)
+    b = rand(10, 10)
     res = mult(a, b)
     @assert test_matrix(res, a, b)
 end
@@ -50,8 +50,8 @@ println("done.")
 
 println("test 2...")
 @threads for i = 1:8
-    a = rand(Float32, 1001, 1024)
-    b = rand(Float32, 1024, 1008)
+    a = rand(1001, 1024)
+    b = rand(1024, 1008)
     res = mult(a, b)
     @assert test_matrix(res, a, b)
 end
@@ -59,8 +59,8 @@ println("done.")
 
 println("test 3...")
 @threads for i = 1:30
-    a = rand(Float32, 10, 1024)
-    b = rand(Float32, 1024, 53)
+    a = rand(10, 1024)
+    b = rand(1024, 53)
     res = mult(a, b)
     @assert test_matrix(res, a, b)
 end
