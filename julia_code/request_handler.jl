@@ -20,6 +20,7 @@ CPU_PREF = "cpu-please"
 CPU_ONLY = "cpu-only"
 
 request_num = 1
+responses = Dict([]) # request_num -> response string
 
 
 function get_gpu_threads(N, M)
@@ -62,8 +63,7 @@ function get_job_id(N, R, M)
 end
 
 function make_request_string(req_num, cmd_args, target_pref, cpu_thread, gpu_cpu_thread, gpu_thread, cpu_ram, gpu_ram, gpu_mem, gpu_shared_mem, job_id, stdin_len, stdin_input)
-    req_string = string(REQ_START, DELIM,
-                        req_num, DELIM,
+    req_string = string(REQ_START, req_num, DELIM,
                         CPU_BINARY, DELIM,
                         GPU_BINARY, DELIM,
                         cmd_args, DELIM,
@@ -79,6 +79,10 @@ function make_request_string(req_num, cmd_args, target_pref, cpu_thread, gpu_cpu
                         stdin_len, DELIM,
                         stdin_input, REQ_END)
     return req_string
+end
+
+function parse_response_string(response)
+
 end
 
 function generate_request(a, b, c)
