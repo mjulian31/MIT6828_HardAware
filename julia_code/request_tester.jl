@@ -6,7 +6,7 @@ function mult(x, y)
     req_num, _ = send_request(x, y, notifier)
     wait(notifier)
     # got response, return matrix
-    return responses[req_num]
+    return responses[req_num].output
 end
 
 start_reciever()
