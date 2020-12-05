@@ -9,6 +9,10 @@ const REQ_END = "\$"
 const DELIM = ","
 const BAD_RESPONSE = response(0, :none, 0, 0, 1, 0, :none)
 
+request_lock = ReentrantLock()
+server = connect(SEND_PORT)
+atexit(close_sender)
+
 const CPU_BINARY = "/opt/haws/bin/matmul_cpu"
 const GPU_BINARY = "/opt/haws/bin/matmul_gpu"
 
@@ -20,7 +24,7 @@ ANY = "any"
 CPU_PREF = "cpu-please"
 CPU_ONLY = "cpu-only"
 
-request_num = 1
+request_num = Atomic{Int}(1)
 responses = Dict([]) # request_num -> response
 RESPONSE_LEN = 9
 
@@ -33,7 +37,6 @@ struct response
     output_len
     output
 end
-
 
 function get_gpu_threads(N, M)
     blocks_row = div(N + TILE_DIM - N%TILE_DIM, TILE_DIM)
@@ -126,7 +129,7 @@ function parse_response_string(response)
     end
 end
 
-function generate_request(a, b, c)
+function send_request(a, b, c)
     N, M = size(c)
     R = size(a, 2)
 
@@ -142,16 +145,27 @@ function generate_request(a, b, c)
     job_id = get_job_id(N, R, M)
     stdin_len, stdin_input = get_mat_strings(a, b)
 
-    req_num = request_num # TODO ATOMIC
+    while true
+        req_num = request_num
+        if atomic_cas!(request_num, req_num, req_num + 1) === req_num
+            # we aquired a request number
+            break
+        end
+    end
 
+    # make the request string
     req_string = make_request_string(req_num, cmd_args, target_pref, cpu_thread, gpu_cpu_thread, gpu_thread, cpu_ram, gpu_ram, gpu_mem, gpu_shared_mem, job_id, stdin_len, stdin_input)
 
-    return req_string
+    # send request to server (locked operation)
+    lock(request_lock)
+    print(server, req_string)
+    unlock(request_lock)
+
+    # report back request sent
+    return req_num, req_string
 end
 
-function send_request(req_string)
-    server = connect(SEND_PORT)
-    print(server, req_string)
+function close_sender()
     close(server)
 end
 
@@ -192,3 +206,4 @@ println(req)
 println("sending request & starting receiver")
 start_reciever()
 send_request()
+close_sender()
