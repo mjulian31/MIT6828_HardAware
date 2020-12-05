@@ -422,12 +422,14 @@ void HAWS::StartSocket() {
 
 // MAIN THREAD
 void HAWS::StopSocket() {
-    printf("HAWS: Stopping Socket (Client1)\n");
+    printf("HAWS/RECV: Stopping Requst Loop\n");
     assert(sockThreadReqsRunning); // must be started before stopped
     sockLoopKillFlag = true; // enable killswitch for socket loop thread
+    printf("HAWS/RECV: waiting on req thread\n");
     sockThreadReqs->join();            // block until thread exits and returns
     sockThreadReqsRunning = false;     // sock loop thread gone
     delete(sockThreadReqs);
+    printf("HAWS/RECV: Stopped Request Loop\n");
 }
 
 // REQUEST HANDLER THREAD / MAIN THREAD (in test mode)

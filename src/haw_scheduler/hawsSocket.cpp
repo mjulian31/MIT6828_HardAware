@@ -85,13 +85,19 @@ void haws_socket_send_resp(int socket, int reqNum, std::string targRan,
 }
 
 void haws_socket_req_loop(int socket) { // SOCKET THREAD
-    printf("HAWS/RECV: hello from RequestLoop Thread\n");
-    printf("HAWS/RECV: listening...\n");
+    printf("HAWS/RECVLOOP: hello from request loop thread\n");
+    printf("HAWS/RECVLOOP: listening...\n");
     // blocks here until connection opened
-    int socket_fd = socket_open_recv_socket(socket, false, "HAWS/RECV"); // non blocking reads
-    printf("HAWS/RECV: ...client connected!");
-    char* socket_read_buf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
-    char* splitBuf = (char*) malloc(sizeof(char) * SOCKET_READ_BUF_SIZE);
+    int socket_fd = socket_open_recv_socket(socket, false, "HAWS/RECVLOOP"); // non blocking reads
+    printf("HAWS/RECVLOOP: ...client connected!\n");
+    if (!haws.IsRespLoopRunning()) { // connect to client if haven't already
+        haws.StartRespLoop();
+    }
+    long readBufSize = SOCKET_READ_BUF_SIZE;
+    char* socket_read_buf = (char*) malloc(readBufSize);
+    printf("HAWS/RECVLOOP: alloc read buf of %ld bytes\n", readBufSize);
+    char* splitBuf = (char*) malloc(readBufSize);
+    printf("HAWS/RECVLOOP: alloc read split buf of %ld bytes\n", readBufSize);
     int throttle = 0;
     HAWSClientRequest* req;
     int bytes_in = 0; 
@@ -109,11 +115,8 @@ void haws_socket_req_loop(int socket) { // SOCKET THREAD
         bytes_in = read(socket_fd, socket_read_buf, SOCKET_READ_BUF_SIZE);
         assert(bytes_in != SOCKET_READ_BUF_SIZE); // request was too large - use workBuf for partial
         if (bytes_in > 0) {
-            if (!haws.IsRespLoopRunning()) { // connect to client if haven't already
-                haws.StartRespLoop();
-            }
             pos = 0;
-            printf("SOCKET: read: %d - '%s'\n", bytes_in, socket_read_buf); 
+            printf("HAWS/RECVLOOP: read: %d - '%s'\n", bytes_in, socket_read_buf); 
             if (splitReqPending) {            
                 handledSplit = false;
                 assert(splitBufPos > 0);
@@ -123,7 +126,7 @@ void haws_socket_req_loop(int socket) { // SOCKET THREAD
                         memcpy(splitBuf + splitBufPos, socket_read_buf, pos);
                         splitBuf[splitBufPos + lingerBytes] = '$'; // reterminate finished request
                         handledSplit = true;
-                        printf("SPLITBUFFER FIXED UP:%s\n", splitBuf);
+                        printf("HAWS/RECVLOOP: SPLITBUFFER FIXED UP:%s\n", splitBuf);
                         //assert(false);
                         break;
                     }
@@ -163,20 +166,25 @@ void haws_socket_req_loop(int socket) { // SOCKET THREAD
                     memset(splitBuf, 0, SOCKET_READ_BUF_SIZE); // reset splitbuffer 
                     memcpy(splitBuf, socket_read_buf + pos, bytesRemaining);
                     splitBufPos = bytesRemaining;
-                    printf("SPLITBUF NOW free at->[%d]:%s\n", splitBufPos, splitBuf);
+                    printf("HAWS/RECVLOOP: SPLITBUF NOW free at->[%d]:%s\n", splitBufPos, splitBuf);
                     splitReqPending = true;
                     break; // splitbuf now has half contents, done processing buffer
                 }
             } 
         } else {
             if (throttle++ % 1000 == 0) {
-                printf("SOCKET: reading nothing\n");
+                printf("HAWS/RECVLOOP: reading nothing\n");
             }
         }
         usleep(1000);
     }
-    shutdown(socket_fd, 2);
+    printf("HAWS/RECVLOOP: got kill flag\n");
+    //shutdown(socket_fd, 2);
+    printf("HAWS/RECVLOOP: close socket\n");
     close(socket_fd);
+    printf("HAWS/RECVLOOP: free read buf\n");
     free(socket_read_buf);
+    printf("HAWS/RECVLOOP: free split buf\n");
     free(splitBuf);
+    printf("HAWS/RECVLOOP: freed buffers\n");
 }
