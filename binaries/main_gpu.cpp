@@ -136,7 +136,7 @@ int main(int argc, char **argv) {
   check_errors(cuModuleLoad(&module, "matmul_gpu.ptx"), "module load");
   // get kernel function from binary
   CUfunction kernel_addr;
-  check_errors(cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float64ES_IS0_ES_IS0_E5Int32S1_S1_"), "function load");
+  check_errors(cuModuleGetFunction(&kernel_addr, module, "_Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1_"), "function load");
   // get dimensions to use
   int N = 1024;
 	int R = 1024;
