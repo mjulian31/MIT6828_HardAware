@@ -7,6 +7,7 @@ const RECEIVE_PORT = 8081
 const REQ_START = "^"
 const REQ_END = "\$"
 const DELIM = ","
+const BAD_RESPONSE = response(0, :none, 0, 0, 1, 0, :none)
 
 const CPU_BINARY = "/opt/haws/bin/matmul_cpu"
 const GPU_BINARY = "/opt/haws/bin/matmul_gpu"
@@ -20,7 +21,18 @@ CPU_PREF = "cpu-please"
 CPU_ONLY = "cpu-only"
 
 request_num = 1
-responses = Dict([]) # request_num -> response string
+responses = Dict([]) # request_num -> response
+RESPONSE_LEN = 9
+
+struct response
+    req_num
+    hardware
+    wall_time
+    cpu_time
+    exit_code
+    output_len
+    output
+end
 
 
 function get_gpu_threads(N, M)
@@ -81,8 +93,37 @@ function make_request_string(req_num, cmd_args, target_pref, cpu_thread, gpu_cpu
     return req_string
 end
 
-function parse_response_string(response)
+function parse_matrix_output(matrix_string, matrix_sizes_string)
+    lines = split(matrix_string, "[];")
+    out = zeros(size(lines, 1), size(split(lines[1], " "), 1))
+    for row, line in enumerate(lines)
+        elems = split(line, " ")
+        for col, elem in enumerate(elems)
+            out[row][col] = elem
+        end
+    end
+    return out
+end
 
+function parse_response_string(response)
+    req_arr = split(response, DELIM)
+    if req_arr[1] != REQ_START
+        println("error parsing bad start!")
+        return BAD_RESPONSE
+    else if req_arr[-1] != REQ_END
+        println("error parsing bad end!")
+        return BAD_RESPONSE
+    else if size(req_arr, 1) != RESPONSE_LEN
+        return BAD_RESPONSE
+    else
+        # good headers, parse
+        req_num = req_arr[2]
+        matrix_string = req_arr[-2]
+        output = parse_matrix_output(matrix_string)
+        resp = response(req_arr[2:-3]..., output)
+        dict[req_num] = resp
+        return resp
+    end
 end
 
 function generate_request(a, b, c)
@@ -120,7 +161,15 @@ function start_reciever()
        while true
            sock = accept(server)
            @async while isopen(sock)
-               write(stdout, readline(sock, keep=false))
+               response_str = readline(sock, keep=true)
+               response = parse_response_string(response_str)
+               if response != BAD_RESPONSE
+                   # remove line from socket
+                   readline(sock, keep=false)
+               else
+                   # got a bad response, continue waiting
+                   continue
+               end
            end
        end
     end
