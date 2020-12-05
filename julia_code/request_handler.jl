@@ -133,6 +133,7 @@ function parse_response_string(response)
         matrix_string = req_arr[end-1]
         println("got string")
         output = parse_matrix_output(matrix_string)
+        @show output
         println("parsed matrix")
         @show req_arr[2:end-2]..., output
         resp = response(req_arr[2:end-2]..., output)
