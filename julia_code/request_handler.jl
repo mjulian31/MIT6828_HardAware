@@ -197,7 +197,7 @@ function start_reciever()
        server = listen(RECEIVE_PORT)
        while true
            sock = accept(server)
-           @async while isopen(sock)
+           t = @async while isopen(sock)
                response_str = readline(sock, keep=true)
                println("parsing response...")
                response = parse_response_string(response_str)
@@ -213,6 +213,10 @@ function start_reciever()
                    continue
                end
            end
+           while !istaskdone(t)
+                println("server is running...")
+                sleep(1)
+            end
        end
     end
 end
