@@ -80,7 +80,8 @@ int main (int argc, char *argv[]) {
             printf("%d TESTS PASSED\n", numTests);
         }
     } else {
-        printf("error: usage ./haws <prod | test> <phys limit mb> <gpu limit mb> <gpu shared limit mb>");
+        printf("error: usage ./haws <prod | test> " \
+               "<phys limit mb> <gpu limit mb> <gpu shared limit mb>");
         exit(1);
     }
 }

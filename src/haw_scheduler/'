@@ -29,8 +29,6 @@ std::queue<HAWSClientRequest*>* tasksToStartQueue;
 
 std::mutex conclusionLock;
 std::list<HAWSConclusion*> pendConclusions;
-bool threadRespLoopRunning = false;
-std::thread* threadRespLoop;
 
 HAWSTargetMgr* cpuMgr;
 HAWSTargetMgr* gpuMgr;
@@ -107,9 +105,9 @@ void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, tim
    }
    conclusionLock.lock();
    pendConclusions.push_back(conclusion);
-   conclusionLock.unlock();
-   // racy, remove 
+   //TODO remove this it's slow
    printf("HAWS/CONCLUSION: %ld pending conclusions\n", pendConclusions.size());
+   conclusionLock.unlock();
 }
 
 // SCHEDLOOP THREAD
@@ -155,14 +153,12 @@ void HAWS::ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemL
     printf("HAWS: ScheduleLoop ended...\n");
 }
 
-// SCHEDLOOP THREAD
 void HAWS::RequeueReq(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     tasksToStartQueueLock.lock();
     tasksToStartQueue->push(req); //put it back in queue
     tasksToStartQueueLock.unlock();
 }
-
-// SCHEDLOOP THREAD 
+ 
 void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     int maxRAM = req->GetCPUJobPhysMB();
     globalPhysMemAvail -= maxRAM;
@@ -174,7 +170,6 @@ void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     //printf("HAWS/SL: CPU got %s\n", req->ToStr().c_str());
 }
 
-// SCHEDLOOP THREAD
 void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     int maxRAM = req->GetCPUJobPhysMB();
     globalPhysMemAvail -= maxRAM;
@@ -185,7 +180,6 @@ void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     allGPUPids.insert(allGPUPids.begin(), pid);
 }
 
-// SCHEDLOOP THREAD
 void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
     HAWSHWTarget HWTarget = DetermineReqTarget(req);
     if (HWTarget == TargCPU) {
@@ -219,11 +213,14 @@ HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) { // SCHEDLOOP THR
     return shouldUseCPU ? TargCPU : TargGPU;
 }
 
+// MAIN THREAD BELOW
+
 HAWS::HAWS() {
     printf("HAWS: Constructed\n");
     this->reqCounter = 0; 
     tasksToStartQueue = new std::queue<HAWSClientRequest*>();
 }
+
 HAWS::~HAWS() {
     assert(tasksToStartQueue->size() == 0); // shouldn't leave stuff in queue
     delete tasksToStartQueue;
@@ -236,12 +233,10 @@ int HAWS::GetNumQueuedReqs() {
     return size;
 }
 
-// MAIN THREAD (in test mode)
 int HAWS::GetNumActiveTasks() {
     return cpuMgr->GetNumActiveTasks() + gpuMgr->GetNumActiveTasks();
 }
 
-// MAIN THREAD (in test mode)
 bool HAWS::IsDoingWork() {
     return GetNumQueuedReqs() > 0 || GetNumActiveTasks() > 0;
 }
@@ -261,7 +256,6 @@ void HAWS::PrintData() {
     gpuMgr->PrintData();
 }
 
-// MAIN THREAD
 void HAWS::Start() {
     hawsStartTime = std::chrono::system_clock::now();
     
@@ -294,7 +288,6 @@ void HAWS::Start() {
     gpuMgr->Start();
 }
 
-// MAIN THREAD
 void HAWS::Stop() {
     hawsStopTime = std::chrono::system_clock::now(); // save full stop time
     tasksToStartQueueLock.lock();
@@ -305,12 +298,11 @@ void HAWS::Stop() {
     assert(enqueuedReqs == 0); 
 
     // should not stop with conclusions to be sent back
-    // racy ?
-    printf("HAWS/CONCLUSION: ended with %ld conclusions generated\n", pendConclusions.size());
-    //conclusionLock.lock();
+    conclusionLock.lock();
     //assert(pendConclusions.size() == 0);
-    pendConclusions.clear(); //TODO REMOVE ME -- MEMLEAK
-    //conclusionLock.unlock();
+    printf("HAWS/CONCLUSION: ended with %ld conclusions generated\n", pendConclusions.size());
+    pendConclusions.clear(); //TODO REMOVE ME MEMLEAK
+    conclusionLock.unlock();
 
     // all memory should be relased from all tasks being completed
     assert(globalPhysMemAvail = this->physMemLimitMB);
@@ -321,16 +313,9 @@ void HAWS::Stop() {
     schedLoopKillFlag = true; // enable killswitch for schedule loop thread
 
     printf("HAWS: Stopping ScheduleLoop\n");
-    schedLoopThread->join();          
-    schedLoopThreadRunning = false;   
+    schedLoopThread->join();          // block until thread exits and returns
+    schedLoopThreadRunning = false;   // schedule loop thread gone
     delete(schedLoopThread);
-
-    if (threadRespLoopRunning) {
-        printf("HAWS: Stoping Response Loop Thread\n");
-        threadRespLoop->join();
-        threadRespLoopRunning = false; 
-        delete(threadRespLoop);
-    }
 
     // print info once stopped
     this->PrintData();
@@ -344,11 +329,10 @@ void HAWS::Stop() {
     schedLoopKillFlag = false; // reset killswitch - scheduler is now off
 }
 
-// RESPONSE HANDLER THREAD
-void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion* resp) {
+void HAWS::SendConclusion(int socket, char* buf, int max_bytes, HAWSConclusion resp) {
     std::string response;
     response = "^," + std::to_string(resp->reqNum) + "," +
-                      resp->targRan + "," +
+                      std::to_string(resp->targRan) + "," +
                       std::to_string(resp->wallTime) + "," +
                       std::to_string(resp->cpuTime) + "," +
                       std::to_string(resp->exitCode) + "," +
@@ -358,34 +342,32 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
 }
 
 // RESPONSE HANDLER THREAD
-void HAWS::RespLoop(int portResp1) {
+void HAWS::ResponseLoop() {
     printf("HAWS/RESPONSE: response loop running\n");
-    int sockResp1 = socket_open_send_socket(portResp1, "HAWS/RESP");
+    this->sockResp1 = socket_open_send_socket(this->portResp1, "HAWS/RESPONSE");
     char* sendBuf = (char*) malloc(sizeof(char) * SOCKET_SEND_BUF_SIZE);
     printf("HAWS/RESPONSE: connected to client\n");
     std::list<HAWSConclusion*>::iterator it;
-    while (!schedLoopKillFlag) {
+    while (!globalKillFlag) {
         int numSent = 0;
         conclusionLock.lock();
         if (pendConclusions.size() > 0) {
             memset(sendBuf, 0, sizeof(char) * SOCKET_SEND_BUF_SIZE); // zero to start
             for (it = pendConclusions.begin(); it != pendConclusions.end(); it++) {
-                SendConclusion(sockResp1, sendBuf, SOCKET_SEND_BUF_SIZE, *it);
-                //free(*it); // TODO free conclusion
+                SendConclusion(this->sockResp1, sendBuf, SOCKET_SEND_BUF_SIZE, *it);
                 numSent++;
             }
-            //pendConclusions.clear(); //TODO 
         }
         conclusionLock.unlock();
-        printf("HAWS/RESP: sent %d response(s)\n", numSent);
+        printf("HAWS/RESPONSE: sent %d response(s)\n", numSent);
     }
-    socket_close_socket(sockResp1, "HAWS/RESP");
+    socket_close_socket(this->sockResp1, "HAWS");
 }
 
-// REQUEST HANDLER THREAD (starts the response loop)
-void HAWS::StartRespLoopThread() {
-    threadRespLoopRunning = true;
-    threadRespLoop = new std::thread(RespLoop, 8081);
+// REQUEST HANDLER THREAD
+void HAWS::StartRequestLoopThread() {
+    threadRespRunning = true;
+    threadRespLoop = new std::thread(ResponseLoop);
 }
 
 // MAIN THREAD

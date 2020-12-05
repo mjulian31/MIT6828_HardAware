@@ -24,7 +24,7 @@ enum TaskStatus {
 
 typedef struct HAWSConclusion {
     int reqNum;
-    std::string targRun;
+    std::string targRan;
     float wallTime;
     float cpuTime;
     int exitCode;
@@ -49,10 +49,6 @@ class HAWS {
         bool sockThreadReqsRunning;
         std::thread* sockThreadReqs;
         int portReqs = 8080;
-        // responses
-        
-        int sockResp1 = -1;
-        int portResp1 = 8081;
 
         std::mutex tasksActiveLock;
         int cpuTasksActive = 0;
@@ -67,7 +63,11 @@ class HAWS {
         static void StartTaskCPU(HAWSClientRequest* req);
         static void StartTaskGPU(HAWSClientRequest* req);
         static HAWSHWTarget DetermineReqTarget(HAWSClientRequest* req);
-    
+   
+        //RESPONSE THREAD
+        static void RespLoop(int port);
+        static void SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion* resp);
+
         //unused
         /*
         void ParseFields();
@@ -86,9 +86,10 @@ class HAWS {
         void SetPhysMemLimitMB(int limitMB) { this->physMemLimitMB = limitMB; }
         void SetGPUMemLimitMB(int limitMB) { this->gpuMemLimitMB = limitMB; }
         void SetGPUSharedMemLimitMB(int limitMB) { this->gpuSharedMemLimitMB = limitMB; }
-        void StartSocket();
         void Start();
+        void StartSocket();
         void HardAwareSchedule(HAWSClientRequest* req);
+        static void StartRespLoopThread();
         int GetNumActiveTasks();
         int GetNumQueuedReqs();
         bool IsDoingWork();
