@@ -197,26 +197,31 @@ function start_reciever()
        server = listen(RECEIVE_PORT)
        while true
            sock = accept(server)
-           t = @async while isopen(sock)
-               response_str = readline(sock, keep=true)
-               println("parsing response...")
-               response = parse_response_string(response_str)
-               println("done parsing")
-               if response != BAD_RESPONSE
-                   println("got good response")
-                   # remove line from socket
-                   readline(sock, keep=false)
-                   println(responses)
-               else
-                   println("got bad response")
-                   # got a bad response, continue waiting
-                   continue
+           t = @async try
+               while isopen(sock)
+                   response_str = readline(sock, keep=true)
+                   println("parsing response...")
+                   response = parse_response_string(response_str)
+                   println("done parsing")
+                   if response != BAD_RESPONSE
+                       println("got good response")
+                       # remove line from socket
+                       readline(sock, keep=false)
+                       println(responses)
+                   else
+                       println("got bad response")
+                       # got a bad response, continue waiting
+                       continue
+                   end
                end
-           end
-           while !istaskdone(t)
+            catch err
+                bt = catch_backtrace()
+                println()
+                showerror(stderr, err, bt)
+            end
+            while !istaskdone(t)
                 println("server is running...")
                 sleep(1)
             end
-       end
     end
 end
