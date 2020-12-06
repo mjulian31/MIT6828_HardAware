@@ -84,8 +84,8 @@ float* load_matrix(char* matrix_string, int N, int M) {
  */
 char* encode_matrix(float* matrix, int N, int M) {
 	// (number of ; N + [] 2 + num spaces M*N + number of numbers N*M * number size sizeof(float) + null terminator)* sizeof(char)
-	char* matrix_string = (char*)(malloc((N + 2 + M*N + M*N*sizeof(float)*4 + 1) * sizeof(char)));
-	int NUM_SIZE = sizeof(float)*4 + 2;
+	char* matrix_string = (char*)(malloc((N + 2 + M*N + M*N*sizeof(float)*8 + 1) * sizeof(char)));
+	int NUM_SIZE = sizeof(float)*8 + 2;
   int i = 0;
 	matrix_string[i] = '[';
 	i++;
