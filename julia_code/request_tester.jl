@@ -10,9 +10,13 @@ function mult(x, y)
 end
 
 function test_matrix(res, a, b)
-    max_diff = maximum(abs, (convert(Array{Float32,2}, a)*convert(Array{Float32,2}, b)-res))
+    a_low = round.(a, digits=10)
+    b_low = round.(b, digits=10)
+    max_diff = maximum(abs, (a_low*b_low - res))
+    mean_diff = mean(abs, (a_low*b_low - res))
     @show max_diff
-    return max_diff < 1e-4
+    @show mean_diff
+    return max_diff < 1e-3 && mean_diff < 1e-6
 end
 
 start_reciever()
@@ -21,7 +25,6 @@ println("test 1...")
 a = rand(10, 10)
 b = rand(10, 10)
 res = mult(a, b)
-@show a*b - res
 @assert test_matrix(res, a, b)
 println("done.")
 
@@ -29,8 +32,6 @@ println("test 2...")
 a = rand(1024, 1000)
 b = rand(1000, 1020)
 res = mult(a, b)
-@show size(res), size(a*b)
-@show test_matrix(res, a, b)
 @assert test_matrix(res, a, b)
 println("done.")
 
