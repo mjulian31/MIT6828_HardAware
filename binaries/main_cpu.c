@@ -171,7 +171,7 @@ int main(int argc, char *argv[]) {
 		printf("matrices: ");
 		scanf("\n");
 		fgets(matinput, STDIN_BUFFER_SIZE, stdin);
-        printf("BINDEBUG: matinput is '%s'", matinput);
+        //printf("BINDEBUG: matinput is '%s'", matinput);
 		matstringA = strtok_r(matinput, "[]\n", &rest);
 		matstringB = strtok_r(NULL, "[]\n", &rest);
 		A = load_matrix(matstringA, N, R);
