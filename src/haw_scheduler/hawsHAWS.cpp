@@ -264,7 +264,12 @@ int HAWS::GetNumActiveTasks() {
 
 // MAIN THREAD (in test mode)
 bool HAWS::IsDoingWork() {
-    return GetNumQueuedReqs() > 0 || GetNumActiveTasks() > 0;
+    int pendResp = 0;
+    conclusionLock.lock();
+    pendResp = pendConclusions.size();
+    conclusionLock.unlock(); 
+    // either running tasks or have responses to send
+    return GetNumQueuedReqs() > 0 || GetNumActiveTasks() > 0 || pendResp > 0;
 }
 
 void HAWS::PrintData() {
