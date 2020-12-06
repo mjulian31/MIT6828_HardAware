@@ -204,9 +204,9 @@ function start_reciever()
                 showerror(stderr, err, bt)
             end
         end
-        while !istaskdone(t)
-            println("server is running...")
-            sleep(1)
-        end
+        # while !istaskdone(t)
+        #     println("server is running...")
+        #     sleep(1)
+        # end
     end
 end

@@ -65,9 +65,18 @@ end
 println("done.")
 
 println("test 3 (parallel)...")
-@threads for i = 1:30
+@threads for i = 1:27
     a = rand(10, 1024)
     b = rand(1024, 53)
+    res = mult(a, b)
+    @assert test_matrix(res, a, b)
+end
+println("done.")
+
+println("test 4 (parallel)...")
+@threads for i = 1:27
+    a = rand(1024, 1024)
+    b = rand(1024, 1024)
     res = mult(a, b)
     @assert test_matrix(res, a, b)
 end
