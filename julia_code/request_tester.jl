@@ -5,8 +5,10 @@ include("request_handler.jl")
 # matrix multiplication
 function mult(x, y)
     notifier = Condition()
+    lock(notifier)
     req_num, _ = send_request(x, y, notifier)
     wait(notifier)
+    unlock(notifier)
     # got response, return matrix
     return responses[req_num].output
 end
