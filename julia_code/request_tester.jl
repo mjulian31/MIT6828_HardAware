@@ -1,4 +1,5 @@
 using Statistics
+using Base.Threads
 include("request_handler.jl")
 
 # matrix multiplication
@@ -22,21 +23,21 @@ end
 
 start_reciever()
 
-println("test 1...")
+println("test 1 (serial)...")
 a = rand(10, 10)
 b = rand(10, 10)
 res = mult(a, b)
 @assert test_matrix(res, a, b)
 println("done.")
 
-println("test 2...")
+println("test 2 (serial)...")
 a = rand(1024, 1000)
 b = rand(1000, 1020)
 res = mult(a, b)
 @assert test_matrix(res, a, b)
 println("done.")
 
-println("test 3...")
+println("test 3 (serial)...")
 a = rand(4098, 10)
 b = rand(10, 124)
 res = mult(a, b)
@@ -45,7 +46,7 @@ println("done.")
 
 println("parallel tests")
 
-println("test 1...")
+println("test 1 (parallel)...")
 @threads for i = 1:2
     a = rand(10, 10)
     b = rand(10, 10)
@@ -54,7 +55,7 @@ println("test 1...")
 end
 println("done.")
 
-println("test 2...")
+println("test 2 (parallel)...")
 @threads for i = 1:8
     a = rand(1001, 1024)
     b = rand(1024, 1008)
@@ -63,7 +64,7 @@ println("test 2...")
 end
 println("done.")
 
-println("test 3...")
+println("test 3 (parallel)...")
 @threads for i = 1:30
     a = rand(10, 1024)
     b = rand(1024, 53)
