@@ -133,7 +133,9 @@ function parse_response_string(response_str)
         resp = response(req_num, req_arr[3:end-2]..., output)
         responses[req_num] = resp
         # notify waiting thread that we have the response saved
+        lock(notifiers[req_num])
         notify(notifiers[req_num])
+        unlock(notifiers[req_num])
         return resp
     end
 end
