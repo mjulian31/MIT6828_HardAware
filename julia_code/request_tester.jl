@@ -104,7 +104,7 @@ println("test 5 (parallel)...")
 end
 println("done.")
 
-println("test 6 (parallel)...")
+#=println("test 6 (parallel)...")
 @threads for i = 1:27
     if i % 2 == 0
         a = rand(2048, 2048)
@@ -121,5 +121,6 @@ println("test 6 (parallel)...")
     end
 end
 println("done.")
+=#
 
 close_sender()

@@ -22,7 +22,7 @@ class HAWSClientRequest {
         int gpuJobGPUPhysMB;        // FIELD 12
         int gpuJobGPUShMB;          // FIELD 13
         std::string jobID;          // FIELD 14
-        int stdinLen;               // FIELD 15
+        long stdinLen;              // FIELD 15
         char* freeableStdin;        // FIELD 16
     public:
           HAWSClientRequest(int reqNum,                 // FIELD 2
