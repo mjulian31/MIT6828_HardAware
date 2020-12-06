@@ -7,8 +7,13 @@ function mult(x, y)
     notifier = Threads.Condition()
     lock(notifier)
     req_num, _ = send_request(x, y, notifier)
-    wait(notifier)
-    unlock(notifier)
+    try
+        while !(req_num in keys(responses))
+            wait(notifier)
+        end
+    finally
+        unlock(notifier)
+    end
     # got response, return matrix
     return responses[req_num].output
 end
