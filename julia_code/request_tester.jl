@@ -11,6 +11,7 @@ end
 
 function test_matrix(res, a, b)
     max_diff = maximum(abs, (a*b-res))
+    @show max_diff
     return max_diff < 1e-4
 end
 
@@ -20,6 +21,7 @@ println("test 1...")
 a = rand(10, 10)
 b = rand(10, 10)
 res = mult(a, b)
+@show a*b - res
 @assert test_matrix(res, a, b)
 println("done.")
 
