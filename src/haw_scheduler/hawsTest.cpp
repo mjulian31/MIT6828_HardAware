@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <thread>
 #include <unistd.h>
+#include <signal.h>
 
 #include "socket.h"
 #include "hawsHAWS.h"
@@ -36,7 +37,14 @@ int cpuBinRAMGPUBase = 2;
 int gpuBinRAMBase = 2;
 
 int numTests = 0;
-HAWS haws;
+HAWS haws; // the one and only HAWS 
+
+void main_exit_handler(int signum) {
+    haws.Stop();
+    haws.StopSocket();
+    printf("HAWS: exited happily\n");
+    exit(0);
+}
 
 int main (int argc, char *argv[]) {
     if (argc != 5) {
@@ -44,6 +52,8 @@ int main (int argc, char *argv[]) {
                "<phys limit mb> <gpu limit mb> <gpu shared limit mb>");
         exit(1);
     }
+
+    signal(SIGINT, main_exit_handler);
 
     // set resource limits
     // memory
@@ -92,6 +102,7 @@ int main (int argc, char *argv[]) {
         exit(1);
     }
 }
+
 
 int haws_test_small() {
    HAWSClientRequest* r1 = new HAWSClientRequest(1, "/opt/haws/bin/matmul_cpu", 

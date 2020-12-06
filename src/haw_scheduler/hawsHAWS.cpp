@@ -284,7 +284,7 @@ void HAWS::Start() {
     globalGPUMemAvail = this->gpuMemLimitMB;
     globalGPUSharedMemAvail = this->gpuSharedMemLimitMB;
 
-    schedLoopKillFlag = false; // disable killswitch for schedule loop and socket loops
+    schedLoopKillFlag = false; // disable killswitch for schedule loop
 
     // start schedule loop
     printf("HAWS: Starting ScheduleLoop\n");
@@ -312,12 +312,11 @@ void HAWS::Stop() {
     assert(enqueuedReqs == 0); 
 
     // should not stop with conclusions to be sent back
-    // racy ?
-    printf("HAWS/CONCLUSION: ended with %ld conclusions generated\n", pendConclusions.size());
-    //conclusionLock.lock();
-    //assert(pendConclusions.size() == 0);
-    //pendConclusions.clear(); //TODO REMOVE ME -- MEMLEAK
-    //conclusionLock.unlock();
+    conclusionLock.lock();
+    printf("HAWS: stopped with %d requests serviced\n", this->reqCounter); 
+    assert(pendConclusions.size() == 0);
+    pendConclusions.clear();
+    conclusionLock.unlock();
 
     // all memory should be relased from all tasks being completed
     assert(globalPhysMemAvail = this->physMemLimitMB);
@@ -341,8 +340,6 @@ void HAWS::Stop() {
     gpuMgr->Stop();
     delete cpuMgr;
     delete gpuMgr;
-
-    schedLoopKillFlag = false; // reset killswitch - scheduler is now off
 }
 
 // RESPONSE HANDLER THREAD
@@ -442,7 +439,7 @@ void HAWS::RespLoop(int portResp1) {
     printf("HAWS/RESPLOOP: connected to client\n");
     std::list<HAWSConclusion*>::iterator it;
     int numSent = 0;
-    while (!schedLoopKillFlag) {
+    while (!sockLoopKillFlag) {
         numSent = 0;
         conclusionLock.lock();
         if (pendConclusions.size() > 0) {
@@ -482,7 +479,7 @@ void HAWS::StartRespLoop() {
 void HAWS::StartSocket() {
     // start client1 socket loop
     printf("HAWS: Starting SocketLoop (Client1)\n");
-    sockLoopKillFlag = false; // disable killswitch for socket loop thread
+    sockLoopKillFlag = false; // disable killswitch for socket loop threads
     sockThreadReqs = new std::thread(haws_socket_req_loop2, this->portReqs); 
     sockThreadReqsRunning = true; // socket loop thread active
     sleep(1); // give things a chance to start

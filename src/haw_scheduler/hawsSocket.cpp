@@ -122,13 +122,16 @@ void haws_socket_req_loop2(int socket) { // SOCKET THREAD
             // move incoming data to recv buffer
             memcpy(reqBuf + (reqBufPos * sizeof(char)), socket_read_buf, bytes_in);
             reqBufPos += bytes_in;
-           
+         
+            // @perf  
+            // i think we can do "i = reqBufPos - bytes_in" to skip scanning prev scanned bytes 
             for (int i = 0; i < reqBufPos; i++) {
                 if (reqBuf[i] == '$') {
                     printf("HAWS/RECVLOOP: found end of request, processing\n"); 
                     req = haws_socket_create_client_request(reqBuf, SOCKET_READ_BUF_SIZE);
                     haws.HardAwareSchedule(req);
-                    memset(reqBuf, 0, sizeof(i));
+                    assert(reqBufPos < SOCKET_READ_BUF_SIZE);
+                    memset(reqBuf, 0, reqBufPos + 1);
                     reqBufPos = 0;
                     break;
                 }
