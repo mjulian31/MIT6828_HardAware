@@ -10,7 +10,7 @@ function mult(x, y)
 end
 
 function test_matrix(res, a, b)
-    max_diff = maximum(abs, (a*b-res))
+    max_diff = maximum(abs, (convert(Array{Float32,2}, a)*convert(Array{Float32,2}, b)-res))
     @show max_diff
     return max_diff < 1e-4
 end
