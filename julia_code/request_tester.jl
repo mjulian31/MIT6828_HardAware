@@ -27,6 +27,8 @@ println("test 2...")
 a = rand(1024, 1000)
 b = rand(1000, 1020)
 res = mult(a, b)
+@show size(res), size(a*b)
+@show test_matrix(res, a, b)
 @assert test_matrix(res, a, b)
 println("done.")
 
