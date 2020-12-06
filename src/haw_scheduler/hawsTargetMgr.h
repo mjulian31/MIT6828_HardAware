@@ -26,7 +26,6 @@ static const char* TaskStatusToStr(TaskStatus ts) {
 class HAWSTargetMgr {
     std::string targStr;
     std::list<pid_t> allPids;
-    //std::list<pid_t> terminatingPids;
     std::unordered_map<pid_t, int> tasksReqNum;
     std::unordered_map<pid_t, std::string> tasksActive;
     std::unordered_map<pid_t, TaskStatus> tasksStatus;
@@ -37,21 +36,14 @@ class HAWSTargetMgr {
     std::unordered_map<pid_t, long> tasksBillableUS;
     std::unordered_map<pid_t, ChildHandle*> tasksHandles;
 
-    // file monitoring - set COMM_FILE true to use
-    //std::unordered_map<pid_t, std::string> tasksStdout;
     std::unordered_map<pid_t, char*> tasksCompleted; //freeable, LARGE 
     std::unordered_map<pid_t, long> tasksFormalOutputLen;
-    std::unordered_map<pid_t, char*> tasksFormalOutput; //pointer into tasksCompleted, LARGE 
+    std::unordered_map<pid_t, char*> tasksFormalOutput; //ptr into tasksCompleted, no-freeable, LARGE
     std::unordered_map<pid_t, int> tasksOutWallTimeLen;
     std::unordered_map<pid_t, char*> tasksOutWallTime; // freeable 
     std::unordered_map<pid_t, int> tasksOutCPUTimeLen;
     std::unordered_map<pid_t, char*> tasksOutCPUTime; // freeable
     std::unordered_map<pid_t, long> tasksOutputLen;
-
-    // stdout monitoring - set COMM_STDOUT true to use 
-    //std::unordered_map<pid_t, char*> tasksStdoutBuff;
-    std::unordered_map<pid_t, int> tasksStdoutBuffLen;
-    std::unordered_map<pid_t, int> tasksStdoutBuffScan;
 
     std::mutex taskLock; 
     std::mutex completionLock; 
@@ -59,7 +51,6 @@ class HAWSTargetMgr {
     int throttle = 0;
     int freedPhysMB = 0;
     char* stdOutBuffer;
-    std::string endOfStdoutStr = "@";
 
     //CPUCostModel cputCostModel; //object TODO
 
@@ -120,55 +111,52 @@ class HAWSTargetMgr {
         return rc == 0 ? stat_buf.st_size : -1;
     }
     void TaskCompleteGetDroppedOutput(pid_t pid) {
-        printf("TARGMGR/%s Picking Up Dropped Output\n", this->targStr.c_str());
+        printf("TARGMGR/%s/FILEIN picking up dropped output\n", this->targStr.c_str());
+
         std::string filepath = "/opt/haws/bin/out/" + std::to_string(pid) + ".txt";
-        int timeout = 0;
+
+        int timeout = 0; // wait up to 30 seconds for file to appear after proc finishes
         while (!FileExists(filepath)) {
-            //assert(false); // binary did not drop the right outfileA
+            printf("TARGMGR/%s/FILEIN file %d.txt not there yet... wait %d/30\n", 
+                       this->targStr.c_str(), pid, timeout);
             sleep(1); // try again
             if (timeout == 30) {
-                printf("TARGMGR/%s file %d.txt didn't show up for %ds after bin exited\n", 
+                printf("TARGMGR/%s/FILEIN file %d.txt didn't show up for %ds after bin exited\n", 
                        this->targStr.c_str(), pid, timeout);
                 assert(false);
             } timeout++;
         }
+
+        // read entire file contents in at once
         long output_bytes = GetFileSize(filepath);
         assert(output_bytes > 0);
-        //printf("TARGMGR/%s Malloc for storing output\n", this->targStr.c_str());
         char* output = (char*) malloc(1 + output_bytes * sizeof(char));
-        //printf("TARGMGR/%s Open file\n", this->targStr.c_str());
         FILE *fp = fopen(filepath.c_str(), "r"); 
         assert(fp != NULL); 
-        //printf("TARGMGR/%s Read it all \n", this->targStr.c_str());
         size_t len = fread(output, sizeof(char), output_bytes, fp);
         assert(ferror(fp) == 0);
-        //printf("TARGMGR/%s Close file\n", this->targStr.c_str());
         fclose(fp);
         output[len++] = '\0'; //just to be safe 
-         
-        //std::ifstream infile(filepath.c_str());
-        //std::string content((std::istreambuf_iterator<char>(infile)),
-        //                    (std::istreambuf_iterator<char>()));
-        //assert(content.length() > 0); // there was nothing in the file
-        printf("TARGMGR/%s Save pointer\n", this->targStr.c_str());
+        printf("TARGMGR/%s/FILEIN save total output pointer\n", this->targStr.c_str());
         taskLock.lock();
         tasksCompleted[pid] = output;
         tasksOutputLen[pid] = len;
         taskLock.unlock();
 
-        printf("TARGMGR/%s Delete dropped file\n", this->targStr.c_str());
+        // disabled for debugging 
+        //printf("TARGMGR/%s/FILEIN Delete dropped file\n", this->targStr.c_str());
         //if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
         //    assert(false);
         //}
-        printf("TARGMGR/%s Done saving output\n", this->targStr.c_str());
+        printf("TARGMGR/%s/FILEIN Done saving output\n", this->targStr.c_str());
     }
+
     void TaskCompleteAccountingProtected(pid_t pid, TaskStatus ts, int s_code, time_point ended) {
         char* formalOutput = NULL;
         char* allOutput = tasksCompleted[pid];
 
-        // find wall time
+        // find wall time - @dedup
         int pos = 0;
-        //float wallTime = 0.0;
         int bufPos = 0;
         int wallTimeLen = 0; 
         char* wallTimeBuffer = (char*) malloc(100*sizeof(char));
@@ -176,23 +164,17 @@ class HAWSTargetMgr {
         for(pos = 0; pos < tasksOutputLen[pid]; pos++) {
             if (allOutput[pos] == '\n') {
                 wallTimeBuffer[bufPos + 1] == '\0'; // null terminate  
-                //wallTime = strtof(wallTimeBuffer, NULL);
-                //assert(wallTime > 0.0);
-                //std::string wallClock(wallTimeBuffer);
-                //assert(wallClock.length() > 0);
-                //free(wallTimeBuffer);
-                //wallTime = std::stof(wallClock);
                 pos++; // get off newline
                 break;
             }
             wallTimeBuffer[pos] = allOutput[pos];
             bufPos++;
         } assert(pos != tasksOutputLen[pid]); // didn't find a newline
-        //printf("FILE: test wall time got STR:%s\n", wallTimeBuffer); 
         tasksOutWallTime[pid] = wallTimeBuffer; // freeable after resp send
+        assert(bufPos > 0);
         tasksOutWallTimeLen[pid] = bufPos;
 
-        // find cpu time
+        // find cpu time - @dedup
         float cpuTime = 0.0;
         char* cpuTimeBuffer = (char*) malloc(100*sizeof(char));
         bufPos = 0;
@@ -201,20 +183,14 @@ class HAWSTargetMgr {
         for(pos = pos; pos < tasksOutputLen[pid]; pos++) {
             if (allOutput[pos] == '\n') {
                 cpuTimeBuffer[bufPos + 1] == '\0'; // null terminate  
-                //std::string cpuClock(cpuTimeBuffer);
-                //cpuTime = strtof(cpuTimeBuffer, NULL);
-                //assert(cpuTime > 0.0);
-                //assert(cpuClock.length() > 0);
-                //free(cpuTimeBuffer);
-                //cpuTime = std::stof(cpuClock);
                 pos++; // get off newline
                 break;
             }
             cpuTimeBuffer[bufPos] = allOutput[pos];
             bufPos++;
         } assert(pos != tasksOutputLen[pid]); // didn't find a newline
-        //printf("FILE: test cpu time got STR:%s\n", cpuTimeBuffer); 
         tasksOutCPUTime[pid] = cpuTimeBuffer; // freeable after resp send
+        assert(bufPos > 0);
         tasksOutCPUTimeLen[pid] = bufPos;
 
         // store pointer to start of formal output
@@ -222,92 +198,16 @@ class HAWSTargetMgr {
 
         // update after discounting wall and cpu time
         tasksFormalOutputLen[pid] = tasksOutputLen[pid] - pos - 1; 
-
-        //printf("HAWS/ACCOUNTING: test cpu time got FLOAT:%f\n", cpuTime); 
-        //printf("HAWS/ACCOUNTING: output len: %ld\n", tasksOutputLen[pid]);
-        //printf("HAWS/ACCOUNTING: formal output:%s\n", tasksFormalOutput[pid]); 
+        assert(tasksFormalOutputLen[pid] > 0);
 
         tasksEndTime[pid] = ended;
         tasksStatus[pid] = ts;
         tasksStatusCode[pid] = s_code;
 
-        //RM??
-        if (COMM_STDOUT) {
-            assert(false);
-            //std::string cppStdOut(tasksStdoutBuff[pid]);
-            //tasksStdout[pid] = cppStdOut;
-        } else if (COMM_FILE) {
-            //TaskCompleteGetDroppedOutputProtected(pid);    
-        } else {
-            assert(false); //not implemented
-        }
-        //tasksCompleted[pid] = tasksStdout[pid].substr(0, tasksStdout[pid].find(endOfStdoutStr));
-
-        tasksActive.erase(pid);
+        tasksActive.erase(pid); // TODO move to a general place we clear all maps
         this->freedPhysMB += tasksMaxRAM[pid];
         tasksBillableUS[pid] = TIMEDIFF_CAST_USEC(tasksEndTime[pid] - tasksStartTime[pid]);
     }
-
-    /*
-    void SendTermChildStdin(ChildHandle* handle) {
-        terminatingPids.insert(terminatingPids.begin(), handle->pid);
-        write(handle->pipes[PARENT_WRITE_PIPE][WRITE_FD], "_$_term\n", 8);
-        //printf("TERMINATED IT\n");
-    }*/
-
-    /*
-    void ProcessChildStdout(ChildHandle* handle, char* stdOutBuffer) {
-        pid_t pid = handle->pid;
-        bool useCPPStrs = false;
-        //taskLock.lock(); // needed ?
-
-        if (useCPPStrs) {
-            tasksStdout[pid].append(stdOutBuffer);
-            //printf("STDOUT NOW: %s\n", tasksStdout[pid].c_str());
-            if (tasksStdout[pid].find(endOfStdoutStr) != std::string::npos) {
-                SendTermChildStdin(handle);
-            }
-        } else {
-            // append new output to stdout buffer       
-            memcpy(tasksStdoutBuff[pid] + (tasksStdoutBuffLen[pid] * sizeof(char)), 
-                   stdOutBuffer, 
-                   strlen(stdOutBuffer));
-            tasksStdoutBuffLen[pid] += strlen(stdOutBuffer);
-            tasksStdoutBuff[pid][tasksStdoutBuffLen[pid] + 1] = (char) NULL; // terminate new string
-            //printf("STDOUT NOW: %s\n", tasksStdoutBuff[pid]);
-            for (int i = tasksStdoutBuffScan[pid]; i < tasksStdoutBuffLen[pid]; i++) {
-                tasksStdoutBuffScan[pid] = i; 
-                if (tasksStdoutBuff[pid][i] == '@') {
-                    SendTermChildStdin(handle);
-                    break;
-                }
-            }
-        }
-        //taskLock.unlock(); // needed ?
-    }*/
-    /*
-    void CollectChildrenStdout() {
-        std::unordered_map<pid_t, std::string>::iterator it = tasksActive.begin();
-        while (it != tasksActive.end()) {
-            pid_t pid = it->first;
-            ChildHandle* handle = tasksHandles[pid];
-            std::list<pid_t>::iterator termIt = terminatingPids.begin();
-            // only collect stdout from children that have not been told to exit
-            if (std::find(terminatingPids.begin(), terminatingPids.end(), handle->pid) == 
-                terminatingPids.end()) {
-                int count = read(handle->pipes[PARENT_READ_PIPE][READ_FD], 
-                                 stdOutBuffer, sizeof(stdOutBuffer)-1);
-                if (count >= 0) {
-                    stdOutBuffer[count] = 0;
-                    //printf("COLLECTED %s\n", stdOutBuffer);
-                    ProcessChildStdout(handle, stdOutBuffer);
-                } else {
-                    printf("readlen 0\n");
-                }
-            }
-            it++;
-        }
-    }*/
 
     // ------ PUBLIC BELOW ------
 
@@ -317,18 +217,13 @@ class HAWSTargetMgr {
         }
         int StartTask(int reqNum, std::string binpath, std::string args, 
                       char* stdin_buf, long stdin_buff_len, int maxRAM) {
-            //if (strlen(stdin_buf) != stdin_buff_len) {
-            //    printf("HWMGR/%s: STDIN SIZE MISMATCH req says %ld but stdin_buf is %ld\n", 
-            //           this->targStr.c_str(), stdin_buff_len, strlen(stdin_buf));
-            //    assert(strlen(stdin_buf) == stdin_buff_len);
-            //}
-
             ChildHandle* handle = start_subprocess_nonblocking(binpath, args, 
                                                                stdin_buf, stdin_buff_len);
             time_point start_time = std::chrono::system_clock::now();
             pid_t pid = handle->pid;
 
             taskLock.lock();
+
             allPids.insert(allPids.begin(), pid);
             tasksReqNum[pid] = reqNum;
             tasksActive[pid] = binpath + " " + args;
@@ -338,8 +233,7 @@ class HAWSTargetMgr {
             tasksMaxRAM[pid] = maxRAM;
             tasksBillableUS[pid] = 0;
             tasksHandles[pid] = handle;
-            tasksStdoutBuffLen[pid] = 0;
-            tasksStdoutBuffScan[pid] = 0;
+
             taskLock.unlock();
 
             printf("HWMGR/%s: starting task done\n", this->targStr.c_str());
@@ -347,12 +241,8 @@ class HAWSTargetMgr {
         }
         
         void Monitor () { //SCHEDLOOP THREAD
-            if (COMM_STDOUT) {
-                //CollectChildrenStdout();
-            }
-
+            //@perf this only should run in debug mode
             if (throttle % 1000 == 0) { // make sure all invariants are satisfied
-                //printf("-->doing sanity check\n");
                 taskLock.lock();
                 this->SanityCheckActiveTasksProtected(); 
                 this->SanityCheckCompletedTasksProtected();
@@ -360,10 +250,9 @@ class HAWSTargetMgr {
                     this->PrintDataProtected();
                 }
                 taskLock.unlock();
-                //printf("<--done doing sanity check\n");
             } throttle++;
-            //usleep(1); //simulate extra work
         }
+
         void PrintData () {
             taskLock.lock();
             this->PrintDataProtected();
@@ -392,36 +281,30 @@ class HAWSTargetMgr {
            
             // create conclusion to return 
             conclusion->reqNum = tasksReqNum[pid];
-            
             // targ ran
             conclusion->targRanLen = this->targStr.length();
             conclusion->targRan = (char*) this->targStr.c_str();
             conclusion->exitCode = tasksStatusCode[pid];
-
             // wall time
             conclusion->wallTimeLen = tasksOutWallTimeLen[pid];
             conclusion->wallTime = tasksOutWallTime[pid];
-
             // cpu time
             conclusion->cpuTimeLen = tasksOutCPUTimeLen[pid];
             conclusion->cpuTime = tasksOutCPUTime[pid]; // freeable after resp send
-    
             // formal output 
             conclusion->outputLen = tasksFormalOutputLen[pid]; 
             conclusion->freeableOutput = tasksCompleted[pid]; // freeable after resp send
             conclusion->output = tasksFormalOutput[pid]; // freed as part of tasksCompleted
-
+            // black box process total start to finish runtime (server-side)
             conclusion->targetRealBillableUS = tasksBillableUS[pid];
 
-        
-            // free this task
-            //TODO erase more
+            // free info related to this task
+            //@mem erase more maps now that conclusion is ready as response
             free(tasksHandles[pid]);
             tasksCompleted.erase(pid);
             tasksHandles.erase(pid);
+
             taskLock.unlock();
-            //printf("done doing accounting\n");
-            //printf("unlocked TaskConclude\n");
             return conclusion;
         }
         int TaskIsActive(pid_t pid) {
@@ -436,21 +319,10 @@ class HAWSTargetMgr {
             taskLock.unlock();
             return size;
         }
-        void Start() {
-            // Read from child’s stdout
-            //stdOutBuffer = (char*) malloc(1024 * 3);
-        }
-        void Stop () {
-            /*
-            std::list<pid_t>::iterator it = allPids.begin();
-            while (it != allPids.end()) {
-                printf("HWMGR/%s OUTPUT PID %d: %s\n", this->targStr.c_str(),
-                       *it, tasksStdout[*it].c_str()); //TODO rename
-                it++;
-            }*/
-            //free(stdOutBuffer);
 
-            // clear all member datastructures
+        void Start() { }
+
+        void Stop () { 
             taskLock.lock();
             std::unordered_map<pid_t, char*>::iterator mit = tasksCompleted.begin();
             while (mit != tasksCompleted.end()) {
@@ -459,10 +331,13 @@ class HAWSTargetMgr {
                 free(mit->second); 
                 mit++;
             }
-            allPids.clear();
-            //terminatingPids.clear(); // rm? 
+
+            // @perf @mem all member datastructures should really be empty at this point 
+            // after proper cleanup on task end / response send
             assert(tasksCompleted.size() == 0); 
             assert(tasksActive.size() == 0);
+            // for now forcibly clear the others
+            allPids.clear();
             tasksActive.clear();
             tasksStatus.clear();
             tasksStatusCode.clear();
@@ -474,14 +349,9 @@ class HAWSTargetMgr {
                    tasksHandles.size());
             assert(tasksHandles.size() == 0);
             tasksHandles.clear();
+
             taskLock.unlock();
         }
-
-        // shelved
-        void GetTaskStatus () {}
-        void StopTask() {}
-        void ColdQuery() {}
-        void HotQuery() {}
 };
 
 #endif
