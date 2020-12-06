@@ -35,13 +35,13 @@ HAWSClientRequest* haws_socket_create_client_request(char* socket_read_buf, long
     // FIELD 9 - gpu job gpu threads
     CSV_BUF_PARSE_INT(socket_read_buf, gpuThreadsGPUStr, gpuThreadsGPUStrCpp, gpuThreadsGPU);
     // FIELD 10 - cpu job physmem MB
-    CSV_BUF_PARSE_INT(socket_read_buf, cpuPhysmemMBStr, cpuPhysmemMBStrCpp, cpuPhysmemMB);
+    CSV_BUF_PARSE_INT(socket_read_buf, cpuPhysmemMBStr, cpuPhysmemMBStrCpp, cpuPhysmemBytes);
     // FIELD 11 - gpu job physmem MB
-    CSV_BUF_PARSE_INT(socket_read_buf, gpuPhysmemMBStr, gpuPhysmemMBStrCpp, gpuPhysmemMB);
+    CSV_BUF_PARSE_INT(socket_read_buf, gpuPhysmemMBStr, gpuPhysmemMBStrCpp, gpuPhysmemBytes);
     // FIELD 12 - gpu job gpu mem MB
-    CSV_BUF_PARSE_INT(socket_read_buf, gpuMemMBStr, gpuMemMBStrCpp, gpuMemMB);
+    CSV_BUF_PARSE_INT(socket_read_buf, gpuMemMBStr, gpuMemMBStrCpp, gpuMemBytes);
     // FIELD 13 - gpu job gpu shared mem MB
-    CSV_BUF_PARSE_INT(socket_read_buf, gpuSharedMemMBStr, gpuSharedMemMBStrCpp, gpuSharedMemMB);
+    CSV_BUF_PARSE_INT(socket_read_buf, gpuSharedMemMBStr, gpuSharedMemMBStrCpp, gpuSharedMemBytes);
     // FIELD 14 - task ID
     CSV_BUF_PARSE_CPP_STR(socket_read_buf, taskID, taskIDCpp);
     // FIELD 15 - task stdin len
@@ -67,10 +67,10 @@ HAWSClientRequest* haws_socket_create_client_request(char* socket_read_buf, long
                                                    cpuThreadsCPU,    // FIELD 7
                                                    gpuThreadsCPU,    // FIELD 8
                                                    gpuThreadsGPU,    // FIELD 9
-                                                   cpuPhysmemMB,     // FIELD 10
-                                                   gpuPhysmemMB,     // FIELD 11
-                                                   gpuMemMB,         // FIELD 12
-                                                   gpuSharedMemMB,   // FIELD 13
+                                   cpuPhysmemBytes / (1024 * 1024),  // FIELD 10
+                                   gpuPhysmemBytes / (1024 * 1024),  // FIELD 11
+                                       gpuMemBytes / (1024 * 1024),  // FIELD 12
+                                 gpuSharedMemBytes / (1024 * 1024),  // FIELD 13
                                                    taskIDCpp,        // FIELD 14
                                                    taskStdinLen,     // FIELD 15
                                                    freeable_stdin);  // FIELD 16

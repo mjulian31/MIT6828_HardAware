@@ -168,7 +168,7 @@ void HAWS::RequeueReq(HAWSClientRequest* req) { // SCHEDLOOP THREAD
 
 // SCHEDLOOP THREAD 
 void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
-    int maxRAM = req->GetCPUJobPhysMB() / (1024 * 1024);
+    int maxRAM = req->GetCPUJobPhysMB();
     globalPhysMemAvail -= maxRAM;
     printf("HAWS: Starting CPU Task\n");
     int pid = cpuMgr->StartTask(req->GetNum(),
@@ -181,7 +181,7 @@ void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
 
 // SCHEDLOOP THREAD
 void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
-    int maxRAM = req->GetCPUJobPhysMB() / (1024 * 1024);
+    int maxRAM = req->GetCPUJobPhysMB();
     globalPhysMemAvail -= maxRAM;
     printf("HAWS: Starting GPU Task\n");
     int pid = gpuMgr->StartTask(req->GetNum(), 
@@ -195,15 +195,16 @@ void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
 void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
     HAWSHWTarget HWTarget = DetermineReqTarget(req);
     if (HWTarget == TargCPU) {
-        //if (globalPhysMemAvail - req->GetCPUJobPhysMB() < 0) {
+        if (globalPhysMemAvail - req->GetCPUJobPhysMB() < 0) {
             //RequeueReq(req); // this target doesn't have enough memory to run
-        //    return;
-        //} else {
+            printf("HAWS: CPU not enough target mem to run\n");
+            return;
+        } else {
             StartTaskCPU(req);        
             req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
             tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
             delete req; // req is really gone
-        //}
+        }
     } else if (HWTarget == TargGPU) {
         StartTaskGPU(req);
         req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
@@ -258,10 +259,10 @@ void HAWS::PrintData() {
     auto elapsedUS = TIMEDIFF_CAST_USEC(hawsStopTime - hawsStartTime);
     auto elapsedMS = TIMEDIFF_CAST_MSEC(hawsStopTime - hawsStartTime);
     auto elapsedS = TIMEDIFF_CAST_SEC(hawsStopTime - hawsStartTime);
+    float billableCents = centsPerUnitTimeCPU * billableCPUus;
     //printf("HAWS: System runtime: %ld us (%ld ms) (%ld s)\n", elapsedUS, elapsedMS, elapsedS);
     //printf("HAWS: Billable CPU us: %ld\n", billableCPUus);
     //printf("HAWS: Billable CPU cents/us: %f\n", centsPerUnitTimeCPU);
-    float billableCents = centsPerUnitTimeCPU * billableCPUus;
     //printf("HAWS: Billable CPU cents: %f cents (%f$)\n", billableCents, billableCents / 100);
     cpuMgr->PrintData();
     gpuMgr->PrintData();
@@ -359,7 +360,6 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
     printf("HAWS/SEND:    output len: %d\n", resp->outputLen);
     //printf("HAWS/SEND:        output: %s\n", resp->output);
 
-
     long pos = 0;
     buf[pos] = '^';
     pos++;
@@ -400,19 +400,12 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
 
     std::string outLen = std::to_string(resp->outputLen);
     memcpy(buf + (pos * sizeof(char)), outLen.c_str(), outLen.length());
-    //printf("outlen is %ld\n", outLen.length());
-    //printf("pos is %ld\n", pos);
     pos += outLen.length();
-    //printf("pos is %ld\n", pos);
-    //pos++;
-    //printf("pos is %ld\n", pos);
     
     buf[pos] = ',';
     pos++;
 
-    //printf("pos is %ld\n", pos);
     memcpy(buf + (pos * sizeof(char)), resp->output, resp->outputLen);
-    //printf("STRLEN of resp->output is %ld\n", strlen(resp->output));
     pos += resp->outputLen;
     
     buf[pos] = ',';
@@ -428,11 +421,10 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
             printf("null byte in send buffer at spot %d\n", i);
             assert(false); 
         }
-        //printf("%c", buf[i]); 
     }
     printf("\n");
     assert(pos < max_bytes);
-    send(socket, buf, pos, 0); // send it!
+    send(socket, buf, pos, 0); // send it
 }
 
 // RESPONSE HANDLER THREAD
