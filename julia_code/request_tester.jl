@@ -52,6 +52,7 @@ println("test 1 (parallel)...")
     b = rand(10, 10)
     res = mult(a, b)
     @assert test_matrix(res, a, b)
+    @show "done with", i
 end
 println("done.")
 
@@ -61,6 +62,7 @@ println("test 2 (parallel)...")
     b = rand(1024, 1008)
     res = mult(a, b)
     @assert test_matrix(res, a, b)
+    @show "done with", i
 end
 println("done.")
 
@@ -70,6 +72,7 @@ println("test 3 (parallel)...")
     b = rand(1024, 53)
     res = mult(a, b)
     @assert test_matrix(res, a, b)
+    @show "done with", i
 end
 println("done.")
 
@@ -79,6 +82,25 @@ println("test 4 (parallel)...")
     b = rand(1024, 1024)
     res = mult(a, b)
     @assert test_matrix(res, a, b)
+    @show "done with", i
+end
+println("done.")
+
+println("test 5 (parallel)...")
+@threads for i = 1:27
+    if i % 2 == 0
+        a = rand(1024, 1024)
+        b = rand(1024, 1024)
+        res = mult(a, b)
+        @assert test_matrix(res, a, b)
+        @show "done with", i
+    else
+        a = rand(16, 16)
+        b = rand(16, 16)
+        res = mult(a, b)
+        @assert test_matrix(res, a, b)
+        @show "done with", i
+    end
 end
 println("done.")
 
