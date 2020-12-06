@@ -1,3 +1,4 @@
+using Statistics
 include("request_handler.jl")
 
 # matrix multiplication
