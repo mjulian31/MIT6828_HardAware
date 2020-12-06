@@ -65,6 +65,7 @@ void haws_test_socket_all() {
     testClientSendSocket = socket_open_send_socket(8080, "TEST/CLIENT/SEND");
     assert(testClientSendSocket > 0);
     haws.Start();
+    sleep(2); // give chance for server to come up and do handshake
     
     // requests over socket tests
     //RUN_TEST(haws_test_socket_simple_send_recv);

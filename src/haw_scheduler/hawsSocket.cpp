@@ -128,6 +128,7 @@ void haws_socket_req_loop_newline(int socket) {
     free(socket_read_buf);
 }
 
+/*
 void haws_socket_req_loop(int socket) { // SOCKET THREAD
     printf("HAWS/RECVLOOP: hello from request loop thread\n");
 
@@ -250,7 +251,7 @@ void haws_socket_req_loop(int socket) { // SOCKET THREAD
     printf("HAWS/RECVLOOP: free req buf\n");
     free(reqBuf);
     printf("HAWS/RECVLOOP: freed buffers\n");
-}
+}*/
 
 
 long readLine(int fd, char *buffer, long n)
