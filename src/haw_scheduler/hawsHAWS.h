@@ -40,8 +40,6 @@ typedef struct HAWSConclusion {
 
 class HAWS {
     private:
-        int reqCounter;
-
         int physMemLimitMB;
         int gpuMemLimitMB;
         int gpuSharedMemLimitMB; 

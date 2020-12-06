@@ -133,10 +133,12 @@ void HAWS::ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemL
                 // do not deque next work and continue for another round to try
             } else {
             */
-                ProcessClientRequest(next);
+                ProcessClientRequest(next); // UNLOCKS tasksToStartQueueLock
             //}
+        } else {
+            tasksToStartQueueLock.unlock(); // unlock queue
+            //printf("HAWS/SL: tasks to start queue empty!\n");
         }
-        tasksToStartQueueLock.unlock(); // unlock queue
         
         //monitor HW targets
         cpuMgr->Monitor(); // do work while processes running in cpu manager  
@@ -154,7 +156,7 @@ void HAWS::ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemL
         }
 
         ReapChildren(); // collect all completed child processes
-        usleep(50); // yield CPU
+        usleep(1000); // yield CPU
     }
     printf("HAWS: ScheduleLoop ended...\n");
 }
@@ -197,22 +199,34 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
     if (HWTarget == TargCPU) {
         if (globalPhysMemAvail - req->GetCPUJobPhysMB() < 0) {
             //RequeueReq(req); // this target doesn't have enough memory to run
-            printf("HAWS: CPU not enough target mem to run\n");
+            tasksToStartQueueLock.unlock();
+            printf("HAWS/REQ: CPU not enough target mem to run\n");
             return;
         } else {
+            tasksToStartQueueLock.unlock();
             StartTaskCPU(req);        
-            req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
+            //printf("HAWS/REQ: freeing stdin\n");
+            //req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
+            tasksToStartQueueLock.lock();
             tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
             delete req; // req is really gone
+            tasksToStartQueueLock.unlock();
+            return;
         }
     } else if (HWTarget == TargGPU) {
+        tasksToStartQueueLock.unlock();
         StartTaskGPU(req);
-        req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
+        //printf("HAWS/REQ: freeing stdin\n");
+        //req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
+        tasksToStartQueueLock.lock();
         tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
         delete req; // done processing client req
+        tasksToStartQueueLock.unlock();
+        return;
     } else {
         assert(false); // "hardware target not implemented"
     }
+    assert(false); // not reached
 }
 
 HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) { // SCHEDLOOP THREAD
@@ -228,7 +242,7 @@ HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) { // SCHEDLOOP THR
 
 HAWS::HAWS() {
     printf("HAWS: Constructed\n");
-    this->reqCounter = 0; 
+    reqCounter = 0; 
     tasksToStartQueue = new std::queue<HAWSClientRequest*>();
 }
 HAWS::~HAWS() {
@@ -255,7 +269,7 @@ bool HAWS::IsDoingWork() {
 
 void HAWS::PrintData() {
     printf("HAWS: PrintData\n");
-    printf("HAWS:   serviced %d requests\n", this->reqCounter);
+    printf("HAWS:   serviced %d requests\n", reqCounter);
     auto elapsedUS = TIMEDIFF_CAST_USEC(hawsStopTime - hawsStartTime);
     auto elapsedMS = TIMEDIFF_CAST_MSEC(hawsStopTime - hawsStartTime);
     auto elapsedS = TIMEDIFF_CAST_SEC(hawsStopTime - hawsStartTime);
@@ -272,8 +286,6 @@ void HAWS::PrintData() {
 void HAWS::Start() {
     hawsStartTime = std::chrono::system_clock::now();
     
-    this->reqCounter = 0; 
-
     assert(!schedLoopThreadRunning); // must be stopped before started
 
     // set resource limits -- cpu and gpu memory
@@ -313,7 +325,6 @@ void HAWS::Stop() {
 
     // should not stop with conclusions to be sent back
     conclusionLock.lock();
-    printf("HAWS: stopped with %d requests serviced\n", this->reqCounter); 
     assert(pendConclusions.size() == 0);
     pendConclusions.clear();
     conclusionLock.unlock();
@@ -422,6 +433,7 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
     printf("\n");
     assert(pos < max_bytes);
     send(socket, buf, pos, 0); // send it
+    reqCounter++;
 }
 
 // RESPONSE HANDLER THREAD
@@ -478,9 +490,10 @@ void HAWS::StartRespLoop() {
 // MAIN THREAD
 void HAWS::StartSocket() {
     // start client1 socket loop
+    reqCounter = 0; // racy but other thread hasn't started
     printf("HAWS: Starting SocketLoop (Client1)\n");
     sockLoopKillFlag = false; // disable killswitch for socket loop threads
-    sockThreadReqs = new std::thread(haws_socket_req_loop, this->portReqs); 
+    sockThreadReqs = new std::thread(haws_socket_req_loop_newline, this->portReqs); 
     sockThreadReqsRunning = true; // socket loop thread active
     sleep(1); // give things a chance to start
 }
@@ -502,15 +515,18 @@ void HAWS::StopSocket() {
     threadRespLoop->join();
     threadRespLoopRunning = false; 
     delete(threadRespLoop);
+
     printf("HAWS: Stopped Socket Loops\n");
+    printf("HAWS: Stopped with %d requests serviced\n", reqCounter); 
 }
 
 // REQUEST HANDLER THREAD / MAIN THREAD (in test mode)
 void HAWS::HardAwareSchedule(HAWSClientRequest* req) {
+    /* requests can come in out of order
     if (this->reqCounter + 1 != req->GetNum()) {
         printf("reqCounter was at %d, req number in is %d\n", this->reqCounter, req->GetNum());
         assert(false);
-    } this->reqCounter++;
+    } this->reqCounter++; */
 
     assert(tasksToStartQueue != NULL);
     tasksToStartQueueLock.lock();

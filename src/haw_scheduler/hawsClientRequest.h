@@ -88,7 +88,6 @@ class HAWSClientRequest {
         // manually called to free pointer holding (large) stdin
         void FreeStdinBuf() {
             if (this->stdinLen > 0) {
-                printf("REQ: freeing stdin\n");
                 assert(this->freeableStdin != NULL);
                 free(this->freeableStdin);
             }
