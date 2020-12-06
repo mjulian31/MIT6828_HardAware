@@ -18,8 +18,8 @@ hawsHAWS.o: hawsHAWS.cpp hawsHAWS.h hawsUtil.h hawsSocket.h
 socket.o: socket.cpp socket.h
 	g++ -c socket.cpp socket.h
 
-hawsSocket.o: hawsSocket.cpp
-	g++ -c hawsSocket.cpp
+hawsSocket.o: hawsSocket.cpp 
+	g++ -c hawsSocket.cpp 
 
 
 
