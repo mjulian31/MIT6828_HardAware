@@ -48,20 +48,29 @@ std::thread* testSockRecvLoop;
 int haws_test_socket_simple_send_recv();
 int haws_test_socket_many_cpu();
 void haws_test_socket_recv_loop();
+int haws_help_load_client_buffer_sample_req(int reqNum);
+
+int reqNum = 1;
 
 void haws_test_socket_all() {
+    // setup 
+    clientSendBuff = (char*) malloc(CLIENT_SEND_BUFF_SIZE * sizeof(char));
+    clientRecvBuff = (char*) malloc(CLIENT_RECV_BUFF_SIZE * sizeof(char));
     // bringup client recv thread
     testSockRecvLoop = new std::thread(haws_test_socket_recv_loop);
     haws.StartSocket(); // bringup server networking
-
     testClientSendSocket = socket_open_send_socket(8080, "TEST/CLIENT/SEND");
     assert(testClientSendSocket > 0);
-
-    printf("TEST/CLIENT: waiting 5 seconds after handshake...\n");
-    sleep(5);
+    haws.Start();
+    
+    // requests over socket tests
     RUN_TEST(haws_test_socket_simple_send_recv);
-    //RUN_TEST(haws_test_socket_many_cpu);
+    RUN_TEST(haws_test_socket_many_cpu);
 
+    //teardown
+    free(clientSendBuff);
+    free(clientRecvBuff);
+    haws.Stop();
     socket_close_socket(testClientSendSocket, "TEST/CLIENT/SEND");
     haws.StopSocket();
     testGlobalKillFlag = true; // stop client recv thread
@@ -69,6 +78,35 @@ void haws_test_socket_all() {
     testSockRecvLoop->join();
     delete(testSockRecvLoop);
     printf("TEST/CLIENT: stopped recv loop\n");
+}
+
+int haws_test_socket_simple_send_recv() {
+    int length = haws_help_load_client_buffer_sample_req(reqNum++);
+    printf("TEST/CLIENT:\n\nsample req bytes[%d]:", length);
+    for (int i = 0; i < length; i++) { // safe print buff
+        printf("%c", clientSendBuff[i]);
+    }
+    printf("TEST/CLIENT: send it\n");
+    send(testClientSendSocket, clientSendBuff, length, 0); 
+    printf("TEST/CLIENT: sample request sent!\n"); 
+    sleep(10); // let job start
+    while (haws.IsDoingWork()) { usleep(1000); };
+    return 0;
+}
+
+int haws_test_socket_many_cpu() {
+    for (int i = 1; i <= 1000; i++) { 
+        int length = haws_help_load_client_buffer_sample_req(reqNum++);
+        //printf("TEST:\n\nsample req#%d bytes[%d]:\n\n%s\n\n", i, length, clientSendBuff);
+        //printf("TEST: send it\n");
+        send(testClientSendSocket, clientSendBuff, length, 0); 
+    }
+    printf("TEST: all sample requests sent!\n"); 
+
+    sleep(120); // give them a chance to be all be received and started
+
+    while (haws.IsDoingWork()) { usleep(1000); };
+    return 0;
 }
 
 long haws_help_load_client_buffer_field(int pos, char* content, int len, bool addDelim) {
@@ -205,46 +243,4 @@ void haws_test_socket_recv_loop() {
     printf("TEST/CLIENT/RECVLOOP: socket recv thread done\n");
 }
 
-int haws_test_socket_simple_send_recv() {
-    haws.Start();
-    clientSendBuff = (char*) malloc(CLIENT_SEND_BUFF_SIZE * sizeof(char));
-    
-    int length = haws_help_load_client_buffer_sample_req(1);
-    printf("TEST/CLIENT:\n\nsample req bytes[%d]:", length);
-    for (int i = 0; i < length; i++) { // safe print buff
-        printf("%c", clientSendBuff[i]);
-    }
-    printf("TEST/CLIENT: send it\n");
-    send(testClientSendSocket, clientSendBuff, length, 0); 
-    printf("TEST/CLIENT: sample request sent!\n"); 
-    sleep(10);
-    while (haws.IsDoingWork()) { usleep(1000); };
-    haws.Stop();
-    
-    free(clientSendBuff);
-    return 0;
-}
-
-int haws_test_socket_many_cpu() {
-    haws.Start();
-    clientRecvBuff = (char*) malloc(CLIENT_RECV_BUFF_SIZE * sizeof(char));
-    clientSendBuff = (char*) malloc(CLIENT_SEND_BUFF_SIZE * sizeof(char));
-
-    for (int i = 1; i <= 1000; i++) { 
-        int length = haws_help_load_client_buffer_sample_req(i);
-        //printf("TEST:\n\nsample req#%d bytes[%d]:\n\n%s\n\n", i, length, clientSendBuff);
-        //printf("TEST: send it\n");
-        send(testClientSendSocket, clientSendBuff, length, 0); 
-    }
-    printf("TEST: sample requests sent!\n"); 
-
-    sleep(120); // give them a chance to be all be received and started
-
-    while (haws.IsDoingWork()) { usleep(1000); };
-    haws.Stop();
-
-    free(clientSendBuff);
-    free(clientRecvBuff);
-    return 0;
-}
 
