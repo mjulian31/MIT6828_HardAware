@@ -17,7 +17,7 @@ function test_matrix(res, a, b)
     mean_diff = mean(abs, (a_low*b_low - res))
     @show max_diff
     @show mean_diff
-    return max_diff < 1e-3 && mean_diff < 1e-6
+    return max_diff < 1e-3 && mean_diff < 1e-4
 end
 
 start_reciever()
