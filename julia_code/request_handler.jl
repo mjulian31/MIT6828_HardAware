@@ -172,7 +172,7 @@ function send_request(a, b, req_notifier)
 
     # send request to server (locked operation)
     lock(request_lock)
-    print(server, req_string)
+    println(server, req_string)
     unlock(request_lock)
 
     # report back request sent
