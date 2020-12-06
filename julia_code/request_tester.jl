@@ -4,7 +4,7 @@ include("request_handler.jl")
 
 # matrix multiplication
 function mult(x, y)
-    notifier = Condition()
+    notifier = Threads.Condition()
     lock(notifier)
     req_num, _ = send_request(x, y, notifier)
     wait(notifier)
