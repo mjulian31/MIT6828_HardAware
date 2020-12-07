@@ -8,6 +8,7 @@ using MLDatasets
 using Base.Threads
 
 include("request_handler.jl")
+start_reciever()
 
 # matrix multiplication
 function mult(x, y)
