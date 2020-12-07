@@ -11,13 +11,18 @@ include("request_handler.jl")
 
 # matrix multiplication
 function mult(x, y)
-    @async begin
-        notifier = Condition()
-        req_num, _ = send_request(x, y, notifier)
-        wait(notifier)
-        # got response, return matrix
-        return responses[req_num]
+    notifier = Threads.Condition()
+    lock(notifier)
+    req_num, _ = send_request(x, y, notifier)
+    try
+        while !(req_num in keys(responses))
+            wait(notifier)
+        end
+    finally
+        unlock(notifier)
     end
+    # got response, return matrix
+    return responses[req_num].output
 end
 
 
@@ -247,7 +252,7 @@ pred_map = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 x_train, y_train = MNIST.traindata(Float64, 1:4096)
 x_test, y_test  = MNIST.testdata(Float64, 1:512)
-DIM = 128
+DIM = 28
 num_features = size(pred_map, 1)
 
 x_train = prep_data(x_train, 28, DIM)
