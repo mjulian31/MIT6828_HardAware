@@ -1,5 +1,6 @@
 using Sockets
 using Base.Threads
+using Printf
 
 const SEND_PORT = 8080
 const RECEIVE_PORT = 8081
@@ -128,6 +129,7 @@ function parse_response_string(response_str)
     else # good response
         # good headers, parse
         req_num = parse(Int, req_arr[2])
+        @printf("got %i\n", req_num)
         matrix_string = req_arr[end-1]
         output = parse_matrix_output(matrix_string)
         resp = response(req_num, req_arr[3:end-2]..., output)
