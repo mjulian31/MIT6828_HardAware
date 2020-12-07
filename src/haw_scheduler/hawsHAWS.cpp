@@ -242,21 +242,20 @@ void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
 // SCHEDLOOP THREAD
 void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
     HAWSHWTarget HWTarget = DetermineReqTarget(req);
-    int throttle = 0;
     if (HWTarget == TargCPU) {
         if (globalPhysMemAvail - req->GetCPUJobPhysMB() < 0) {
             // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
-            if (throttle++ % 1000 == 0) {
-                printf("HAWS/PHYSFULL: not enough physmem to run CPU job\n");
+            if (throttle % 10 == 0) {
+                printf("\nHAWS/PHYSFULL: not enough physmem to run CPU job\n\n");
             }
             return;
         } 
         if (globalCPUThreadsAvail - req->GetCPUJobCPUThreads() < 0) {
             // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
-            if (throttle++ % 1000 == 0) {
-                printf("HAWS/CPUFULL: not enough free CPU threads to run CPU job\n");
+            if (throttle % 10 == 0) {
+                printf("\nHAWS/CPUFULL: not enough free CPU threads to run CPU job\n\n");
             }
             return;
         }
@@ -275,32 +274,32 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
         if (globalPhysMemAvail - req->GetGPUJobPhysMB() < 0) { // do we have enough physmem
             // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
-            if (throttle++ % 1000 == 0) {
-                printf("HAWS/PHYSFULL: not enough physmem to run GPU job\n");
+            if (throttle % 10 == 0) {
+                printf("\nHAWS/PHYSFULL: not enough physmem to run GPU job\n\n");
             }
             return;
         }
         if (globalGPUMemAvail - req->GetGPUJobGPUPhysMB() < 0) { // do we have enough gpu mem
             // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
-            if (throttle++ % 1000 == 0) {
-                printf("HAWS/GPUMEMFULL: not enough GPU mem to run GPU job\n");
+            if (throttle % 10 == 0) {
+                printf("\nHAWS/GPUMEMFULL: not enough GPU mem to run GPU job\n\n");
             }
             return;
         }
         if (globalCPUThreadsAvail - req->GetGPUJobCPUThreads () < 0) {
             // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
-            if (throttle++ % 1000 == 0) {
-                printf("HAWS/CPUFULL: not enough free CPU threads to run GPU job\n");
+            if (throttle % 10 == 0) {
+                printf("\nHAWS/CPUFULL: not enough free CPU threads to run GPU job\n\n");
             }
             return;
         }
         if (globalGPUThreadsAvail - req->GetGPUJobGPUThreads() < 0) {
             // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
-            if (throttle++ % 1000 == 0) {
-                printf("HAWS/GPUFULL: not enough free GPU threads to run GPU job\n");
+            if (throttle % 10 == 0) {
+                printf("\nHAWS/GPUFULL: not enough free GPU threads to run GPU job\n\n");
             }
             return;
         }

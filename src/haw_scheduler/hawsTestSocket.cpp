@@ -217,7 +217,7 @@ int haws_test_socket_cputrlimit_cpu() {
 
 int haws_test_socket_gputrlimit_gpu() {
     int length;
-    for (int i = 1; i <= 100; i++) {
+    for (int i = 1; i <= 50; i++) {
         length = haws_help_load_client_buffer_sample_req(reqNum++,
                  (char*) "gpu-only", (char*) "1024",
                  0,  // cpu cpu threads
@@ -323,10 +323,15 @@ long haws_estimate_gpujob_gpu_ram(int dim) {
 
 int haws_estimate_gpujob_gpu_threads(int dim) {
     float gpuThreadEstimate = sqrt(dim); //TODO make more accurate
-    int gpuThreadEstimateInt = static_cast<int>(gpuThreadEstimate); 
-    if (gpuThreadEstimateInt == 0) {
-        gpuThreadEstimateInt = 1;
-    }
+    /*
+    int TILE_DIM = 32;
+    int M = dim;
+    int N = dim;
+    int gpuThreadEstimateInt = (N + TILE_DIM - N % TILE_DIM) / TILE_DIM * 
+                               (M + TILE_DIM - M % TILE_DIM) / TILE_DIM;
+    */
+    int gpuThreadEstimateInt = static_cast<int>(gpuThreadEstimate);
+    assert(gpuThreadEstimateInt > 0);
     return gpuThreadEstimateInt;
 }
 
