@@ -29,8 +29,8 @@ end
 
 
 function mul_tile!(ptr_C::Ptr{Cfloat}, ptr_A::Ptr{Cfloat}, ptr_B::Ptr{Cfloat}, N::Cint, R::Cint, M::Cint)
-    NUM_TILES_ROW = div(N + TILE_DIM - N%TILE_DIM, TILE_DIM)
-    NUM_TILES_COL = div(M + TILE_DIM - M%TILE_DIM, TILE_DIM)
+    NUM_TILES_ROW = div(N + TILE_DIM - 1, TILE_DIM)
+    NUM_TILES_COL = div(M + TILE_DIM - 1, TILE_DIM)
     NUM_TILES = div(R + TILE_DIM - R%TILE_DIM, TILE_DIM)
     A = CArray(ptr_A, (N, R))
     B = CArray(ptr_B, (R, M))
@@ -103,7 +103,7 @@ function coalesced_matmul_kernel!(ptr_out::Ptr{Cfloat}, ptr_in1::Ptr{Cfloat}, pt
 
     outval = zero(eltype(output))
 
-    NUM_TILES = div(R + TILE_DIM - R%TILE_DIM, TILE_DIM)
+    NUM_TILES = div(R + TILE_DIM - 1, TILE_DIM)
 
     # loop over all tiles needed for this calculation
     for t in 0:NUM_TILES-1
@@ -184,21 +184,21 @@ objfile = "matmul_cpu.o"
 tm = GPUCompiler.llvm_machine(job.target)
 LLVM.emit(tm, ir, LLVM.API.LLVMObjectFile, objfile)
 if check_err
-    run(`clang -o matmul_cpu main_cpu.c matmul_cpu.o -DERR_CHECK`)
+    run(`clang -O3 -o matmul_cpu main_cpu.c matmul_cpu.o -DERR_CHECK`)
 else
-    run(`clang -o matmul_cpu main_cpu.c matmul_cpu.o`)
+    run(`clang -O3 -o matmul_cpu main_cpu.c matmul_cpu.o`)
 end
 println("done. saved cpu binary to matmul_cpu")
 
 print("generating gpu binary...")
 DIM = 1024
-a = CuArray{Float64}(undef, (DIM, DIM))
+a = CuArray{Float32}(undef, (DIM, DIM))
 da = CUDA.cudaconvert(a)
 aptr = reinterpret(Ptr{Cfloat}, da.ptr)
-b = CuArray{Float64}(undef, (DIM, DIM))
+b = CuArray{Float32}(undef, (DIM, DIM))
 db = CUDA.cudaconvert(b)
 bptr = reinterpret(Ptr{Cfloat}, db.ptr)
-c = CuArray{Float64}(undef, (DIM, DIM))
+c = CuArray{Float32}(undef, (DIM, DIM))
 dc = CUDA.cudaconvert(c)
 cptr = reinterpret(Ptr{Cfloat}, dc.ptr)
 n = Cint(DIM)
@@ -208,8 +208,8 @@ run(`rm -f -r dump`)
 CUDA.@device_code dir="dump" @cuda name="matmul" threads=(TILE_DIM, TILE_DIM) blocks=(div(DIM, TILE_DIM), div(DIM, TILE_DIM)) coalesced_matmul_kernel!(cptr, aptr, bptr, n, r, m)
 run(`scp dump/matmul_1.asm matmul_gpu.ptx`)
 if check_err
-    run(`/usr/local/cuda-11.1/bin/nvcc -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu -DERR_CHECK`)
+    run(`/usr/local/cuda-11.1/bin/nvcc -O3 -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu -DERR_CHECK`)
 else
-    run(`/usr/local/cuda-11.1/bin/nvcc -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu`)
+    run(`/usr/local/cuda-11.1/bin/nvcc -O3 -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu`)
 end
 println("done. saved gpu binary to matmul_gpu")
