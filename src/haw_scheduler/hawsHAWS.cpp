@@ -174,9 +174,9 @@ void HAWS::ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit,
                    (int)(((float) globalCPUThreadsAvail / (float) cpuThreadLimit)*100));
             printf("HAWS/RESMON: free gpu threads %d (%d%%)\n", globalGPUThreadsAvail,
                    (int)(((float) globalGPUThreadsAvail / (float) gpuThreadLimit)*100));
-            printf("HAWS/SL: free phys mem %dMB (%d%%)\n", globalPhysMemAvail, 
+            printf("HAWS/RESMON: free phys mem %dMB (%d%%)\n", globalPhysMemAvail, 
                    (int)(((float) globalPhysMemAvail / (float) physMemLimitMB)*100));
-            printf("HAWS/SL: free gpu mem %dMB (%d%%)\n", globalGPUMemAvail, 
+            printf("HAWS/RESMON: free gpu mem %dMB (%d%%)\n", globalGPUMemAvail, 
                    (int)(((float) globalGPUMemAvail / (float) gpuMemLimitMB)*100));
         }
 
