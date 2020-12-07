@@ -20,6 +20,8 @@ typedef std::chrono::time_point<std::chrono::system_clock> time_point;
 #define TIMEDIFF_CAST_SEC(timediff) \
         (std::chrono::duration_cast<std::chrono::seconds>(timediff).count())
 
+// bytes / kb / mb / gb stuff
+#define MB_TO_BYTES(somemb) ((uint64_t) ((uint64_t) 1024 * (uint64_t) 1024 * (uint64_t) somemb))
 
 //csv stuff
 #define CSV_BUF_PARSE_CPP_STR(buf, cName, cppName) \

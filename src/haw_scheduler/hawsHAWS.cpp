@@ -122,19 +122,18 @@ void HAWS::ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemL
         tasksToStartQueueLock.lock(); // lock queue
         if (!tasksToStartQueue->empty()) { // check if item is in queue
             next = tasksToStartQueue->front();
-            // if no binary has enough physmem to run, 
+            // if no binary has enough physmem to run on any target, 
             // leave queue alone until a task completion frees physmem
-            /*
             if (globalPhysMemAvail - next->GetCPUJobPhysMB() < 0 &&
                 globalPhysMemAvail - next->GetGPUJobPhysMB() < 0) {
+                tasksToStartQueueLock.unlock(); // unlock queue, we cannot start any target
                 if (throttle % 10000 == 0) {
                     printf("Phys mem at capacity, waiting...\n");
                 }
                 // do not deque next work and continue for another round to try
             } else {
-            */
                 ProcessClientRequest(next); // UNLOCKS tasksToStartQueueLock
-            //}
+            }
         } else {
             tasksToStartQueueLock.unlock(); // unlock queue
             //printf("HAWS/SL: tasks to start queue empty!\n");
@@ -142,11 +141,11 @@ void HAWS::ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemL
         
         //monitor HW targets
         cpuMgr->Monitor(); // do work while processes running in cpu manager  
-        globalPhysMemAvail += cpuMgr->GetFreedMBRam(); // replenish physmem
+        globalPhysMemAvail += cpuMgr->GetFreedRam(); // replenish physmem
     
         gpuMgr->Monitor(); // do work while processes running in gpu manager
-        globalPhysMemAvail += gpuMgr->GetFreedMBRam(); // replenish physmem
-        //globalGPUMemAvail += gpuMgr->GetFreedGPUMBRam();
+        globalPhysMemAvail += gpuMgr->GetFreedRam(); // replenish physmem
+        globalGPUMemAvail += gpuMgr->GetFreedGPURam(); // replenish gpu mem
 
         if (throttle++ % 10000 == 0) {
             printf("HAWS/SL: free phys mem %dMB (%d%%)\n", globalPhysMemAvail, 
@@ -176,48 +175,74 @@ void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     int pid = cpuMgr->StartTask(req->GetNum(),
                                 req->GetCPUBinPath(), 
                                 req->GetJobArgv(), 
-                                req->GetStdin(), req->GetStdinLen(), maxRAM);
+                                req->GetStdin(), req->GetStdinLen(), 
+                                maxRAM, 0);
     allCPUPids.insert(allCPUPids.begin(), pid);
     //printf("HAWS/SL: CPU got %s\n", req->ToStr().c_str());
 }
 
 // SCHEDLOOP THREAD
 void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
-    int maxRAM = req->GetCPUJobPhysMB();
+    int maxRAM = req->GetGPUJobPhysMB();
     globalPhysMemAvail -= maxRAM;
-    printf("HAWS: Starting GPU Task\n");
+    int maxGPURAM = req->GetGPUJobGPUPhysMB();
+    globalGPUMemAvail -= maxGPURAM;
+    printf("HAWS: Starting GPU Task (Phys %dMB/GPU %dMB)\n", maxRAM, maxGPURAM);
     int pid = gpuMgr->StartTask(req->GetNum(), 
-                                req->GetCPUBinPath(),
+                                req->GetGPUBinPath(),
                                 req->GetJobArgv(),
-                                req->GetStdin(), req->GetStdinLen(), maxRAM);
+                                req->GetStdin(), req->GetStdinLen(), 
+                                maxRAM, maxGPURAM);
     allGPUPids.insert(allGPUPids.begin(), pid);
 }
 
 // SCHEDLOOP THREAD
 void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
     HAWSHWTarget HWTarget = DetermineReqTarget(req);
+    int throttle = 0;
     if (HWTarget == TargCPU) {
         if (globalPhysMemAvail - req->GetCPUJobPhysMB() < 0) {
-            //RequeueReq(req); // this target doesn't have enough memory to run
+            // @perf we should take req and requeue it at the back to try something else
             tasksToStartQueueLock.unlock();
-            printf("HAWS/REQ: CPU not enough target mem to run\n");
+            if (throttle++ % 1000 == 0) {
+                printf("HAWS/REQ: not enough physmem to run CPU job\n");
+            }
             return;
-        } else {
+        } 
+        
+        // resources are available to run
+        tasksToStartQueueLock.unlock();
+        StartTaskCPU(req);        
+        printf("HAWS/REQ: freeing stdin\n");
+        req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
+        tasksToStartQueueLock.lock();
+        tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
+        delete req; // req is really gone
+        tasksToStartQueueLock.unlock();
+        return;
+    } else if (HWTarget == TargGPU) {
+        if (globalPhysMemAvail - req->GetGPUJobPhysMB() < 0) { // do we have enough physmem
+            // @perf we should take req and requeue it at the back to try something else
             tasksToStartQueueLock.unlock();
-            StartTaskCPU(req);        
-            //printf("HAWS/REQ: freeing stdin\n");
-            //req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
-            tasksToStartQueueLock.lock();
-            tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
-            delete req; // req is really gone
-            tasksToStartQueueLock.unlock();
+            if (throttle++ % 1000 == 0) {
+                printf("HAWS/REQ: not enough physmem to run GPU job\n");
+            }
             return;
         }
-    } else if (HWTarget == TargGPU) {
+        if (globalGPUMemAvail - req->GetGPUJobGPUPhysMB() < 0) { // do we have enough gpu mem
+            // @perf we should take req and requeue it at the back to try something else
+            tasksToStartQueueLock.unlock();
+            if (throttle++ % 1000 == 0) {
+                printf("HAWS/REQ: not enough GPU mem to run GPU job\n");
+            }
+            return;
+        }
+
+        // resources are available to run
         tasksToStartQueueLock.unlock();
         StartTaskGPU(req);
-        //printf("HAWS/REQ: freeing stdin\n");
-        //req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
+        printf("HAWS/REQ: freeing stdin\n");
+        req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
         tasksToStartQueueLock.lock();
         tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
         delete req; // done processing client req

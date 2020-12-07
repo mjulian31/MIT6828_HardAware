@@ -33,6 +33,7 @@ class HAWSTargetMgr {
     std::unordered_map<pid_t, time_point> tasksStartTime;
     std::unordered_map<pid_t, time_point> tasksEndTime;
     std::unordered_map<pid_t, int> tasksMaxRAM;
+    std::unordered_map<pid_t, int> tasksMaxGPURAM;
     std::unordered_map<pid_t, long> tasksBillableUS;
     std::unordered_map<pid_t, ChildHandle*> tasksHandles;
 
@@ -50,6 +51,7 @@ class HAWSTargetMgr {
     int activeTasks = 0;
     int throttle = 0;
     int freedPhysMB = 0;
+    int freedGPUMB = 0;
     char* stdOutBuffer;
 
     //CPUCostModel cputCostModel; //object TODO
@@ -88,6 +90,7 @@ class HAWSTargetMgr {
         printf("HWMGR:    task status: %s\n", TaskStatusToStr(tasksStatus[pid]));
         printf("HWMGR:    status code: %d\n", tasksStatusCode[pid]);
         printf("HWMGR:   max phys mem: %d\n", tasksMaxRAM[pid]);  
+        printf("HWMGR:   max phys mem: %d\n", tasksMaxGPURAM[pid]);  
         printf("HWMGR:    billable ms: %ld\n", tasksBillableUS[pid]);  
     }
     void PrintAllProcessesProtected() { // holding lock
@@ -206,6 +209,7 @@ class HAWSTargetMgr {
 
         tasksActive.erase(pid); // TODO move to a general place we clear all maps
         this->freedPhysMB += tasksMaxRAM[pid];
+        this->freedGPUMB += tasksMaxGPURAM[pid];
         tasksBillableUS[pid] = TIMEDIFF_CAST_USEC(tasksEndTime[pid] - tasksStartTime[pid]);
     }
 
@@ -216,7 +220,7 @@ class HAWSTargetMgr {
             this->targStr = targStr;
         }
         int StartTask(int reqNum, std::string binpath, std::string args, 
-                      char* stdin_buf, long stdin_buff_len, int maxRAM) {
+                      char* stdin_buf, long stdin_buff_len, int maxRAM, int maxGPURAM) {
             ChildHandle* handle = start_subprocess_nonblocking(binpath, args, 
                                                                stdin_buf, stdin_buff_len);
             time_point start_time = std::chrono::system_clock::now();
@@ -231,6 +235,7 @@ class HAWSTargetMgr {
             tasksStatusCode[pid] = -1;
             tasksStartTime[pid] = start_time; 
             tasksMaxRAM[pid] = maxRAM;
+            tasksMaxGPURAM[pid] = maxGPURAM;
             tasksBillableUS[pid] = 0;
             tasksHandles[pid] = handle;
 
@@ -258,10 +263,17 @@ class HAWSTargetMgr {
             this->PrintDataProtected();
             taskLock.unlock();
         }   
-        int GetFreedMBRam() {
+        int GetFreedRam() {
             taskLock.lock();
             int freed = this->freedPhysMB;
             this->freedPhysMB = 0; // requester has been notified with reclaimed mem
+            taskLock.unlock();
+            return freed;
+        }
+        int GetFreedGPURam() {
+            taskLock.lock();
+            int freed = this->freedGPUMB;
+            this->freedGPUMB = 0; // requester has been notified with reclaimed mem
             taskLock.unlock();
             return freed;
         }
@@ -344,6 +356,7 @@ class HAWSTargetMgr {
             tasksStartTime.clear();
             tasksEndTime.clear();
             tasksMaxRAM.clear();
+            tasksMaxGPURAM.clear();
             tasksBillableUS.clear();
             printf("HWMGR/%s tasksHandles.size = %ld\n", this->targStr.c_str(), 
                    tasksHandles.size());
