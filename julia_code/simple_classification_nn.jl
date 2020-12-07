@@ -232,6 +232,7 @@ function net_train(net, x_train, y_train, epochs, learning_rate, batch_size, ran
                     error = prop_b(layer, error, learning_rate, false, 0)
                 end
             end
+            @printf("iter %i of %i of epoch %i\n", j, size(x_train, 1), epoch)
         end
 
         # average error
