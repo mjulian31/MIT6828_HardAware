@@ -106,9 +106,11 @@ void haws_test_socket_all() {
     //RUN_TEST(haws_test_socket_simple_send_recv);
     //RUN_TEST(haws_test_socket_many_cpu());
 
+    // switch to cpu tests
     RUN_TEST(haws_test_socket_memlimit_cpu());
-    RUN_TEST(haws_test_socket_memlimit_gpu());
     RUN_TEST(haws_test_socket_cputrlimit_cpu());
+    // switch to gpu tests
+    RUN_TEST(haws_test_socket_memlimit_gpu());
     RUN_TEST(haws_test_socket_gputrlimit_gpu());
 
     //RUN_TEST(haws_test_gpu_profile_up_to(1024));
