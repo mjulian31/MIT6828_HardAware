@@ -55,8 +55,7 @@ int haws_test_socket_simple_send_recv();
 int haws_test_socket_memlimit_cpu();
 int haws_test_socket_memlimit_gpu();
 int haws_test_socket_cputrlimit_cpu();
-
-//int haws_test_socket_gputrlimit_gpu();
+int haws_test_socket_gputrlimit_gpu();
 
 int haws_test_target_profile_up_to(char* target, int maxDim);
 int haws_test_cpu_profile_up_to(int maxDim);
@@ -108,7 +107,8 @@ void haws_test_socket_all() {
     //RUN_TEST(haws_test_socket_many_cpu());
     //RUN_TEST(haws_test_socket_memlimit_cpu());
     //RUN_TEST(haws_test_socket_memlimit_gpu());
-    RUN_TEST(haws_test_socket_cputrlimit_cpu());
+    //RUN_TEST(haws_test_socket_cputrlimit_cpu());
+    RUN_TEST(haws_test_socket_gputrlimit_gpu());
 
     //RUN_TEST(haws_test_gpu_profile_up_to(1024));
 
@@ -231,6 +231,29 @@ int haws_test_socket_cputrlimit_cpu() {
     while (haws.IsDoingWork()) { sleep(1); }; 
     return 0;
 }
+
+int haws_test_socket_gputrlimit_gpu() {
+    int length;
+    for (int i = 1; i <= 500; i++) {
+        length = haws_help_load_client_buffer_sample_req(reqNum++,
+                 (char*) "gpu-only", (char*) "1024",
+                 0,  // cpu cpu threads
+                 1,  // gpu cpu threads 
+                 haws_estimate_gpujob_gpu_threads(1024), // gpu gpu threads 
+                 0,  // cpu physmem
+                 haws_estimate_gpujob_cpu_ram(1024),     // gpu physmem
+                 haws_estimate_gpujob_gpu_ram(1024),     // gpu gpu mem
+                 haws_estimate_gpujob_gpu_ram(1024),     // gpu shared mem
+                 false); // no stdin -- rand compute
+        send(testClientSendSocket, clientSendBuff, length, 0);
+    }
+    printf("TEST: all sample requests sent\n");
+    sleep(5); // give them a chance to start being received and started
+    while (haws.IsDoingWork()) { sleep(1); }; 
+    return 0;
+}
+
+
 
 /*
 int haws_test_socket_many_gpu() {
