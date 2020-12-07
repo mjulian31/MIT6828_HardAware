@@ -119,7 +119,9 @@ void haws_socket_req_loop_newline(int socket) {
             } else {
                 memset(socket_read_buf, 0, (bytes_in + 2) * sizeof(char));
             }
+            continue; // continue trying to read immediately
         }
+        usleep(50000); // yield
     }
     printf("HAWS/RECVLOOP: got kill flag\n");
     printf("HAWS/RECVLOOP: close socket\n");

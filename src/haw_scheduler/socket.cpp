@@ -68,11 +68,11 @@ int socket_open_recv_socket(int port, bool isBlocking, std::string callerStr) {
         exit(EXIT_FAILURE); 
     } 
     // set socket reusable 
-    //int optval = 1;
-    //int success = setsockopt(new_socket,SOL_SOCKET,SO_REUSEADDR,&optval,sizeof(int));
-    //assert(success == 0);
+    int optval = 1;
+    int success = setsockopt(new_socket,SOL_SOCKET,SO_REUSEADDR,&optval,sizeof(int));
+    assert(success == 0);
     // set socket nonblocking
-    int success = socket_set_blocking(new_socket, isBlocking);
+    success = socket_set_blocking(new_socket, isBlocking);
     assert(success);
     printf("%s/SOCK: recv socket created and accepted (socket %d)\n", callerStr.c_str(), 
            new_socket);
