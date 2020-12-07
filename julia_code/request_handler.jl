@@ -43,8 +43,8 @@ RESPONSE_LEN = 9
 notifiers = Dict([]) # request_num -> notifier
 
 function get_gpu_threads(N, M)
-    blocks_row = div(N + TILE_DIM - N%TILE_DIM, TILE_DIM)
-    blocks_col = div(M + TILE_DIM - M%TILE_DIM, TILE_DIM)
+    blocks_row = div(N + TILE_DIM - 1, TILE_DIM)
+    blocks_col = div(M + TILE_DIM - 1, TILE_DIM)
     return blocks_row * blocks_col
 end
 

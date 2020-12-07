@@ -237,8 +237,8 @@ int main(int argc, char **argv) {
 
   // launch the matmul CUDA Kernel
   int threadsPerBlock = 32;
-  int blocksPerRow = (N + threadsPerBlock - N%threadsPerBlock)/threadsPerBlock;
-  int blocksPerCol = (M + threadsPerBlock - M%threadsPerBlock)/threadsPerBlock;
+  int blocksPerRow = (N + threadsPerBlock - 1)/threadsPerBlock;
+  int blocksPerCol = (M + threadsPerBlock - 1)/threadsPerBlock;
   dim3 cudaBlockSize(threadsPerBlock, threadsPerBlock, 1);
   dim3 cudaGridSize(blocksPerRow, blocksPerCol, 1);
 

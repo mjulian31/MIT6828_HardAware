@@ -29,8 +29,8 @@ end
 
 
 function mul_tile!(ptr_C::Ptr{Cfloat}, ptr_A::Ptr{Cfloat}, ptr_B::Ptr{Cfloat}, N::Cint, R::Cint, M::Cint)
-    NUM_TILES_ROW = div(N + TILE_DIM - N%TILE_DIM, TILE_DIM)
-    NUM_TILES_COL = div(M + TILE_DIM - M%TILE_DIM, TILE_DIM)
+    NUM_TILES_ROW = div(N + TILE_DIM - 1, TILE_DIM)
+    NUM_TILES_COL = div(M + TILE_DIM - 1, TILE_DIM)
     NUM_TILES = div(R + TILE_DIM - R%TILE_DIM, TILE_DIM)
     A = CArray(ptr_A, (N, R))
     B = CArray(ptr_B, (R, M))
@@ -103,7 +103,7 @@ function coalesced_matmul_kernel!(ptr_out::Ptr{Cfloat}, ptr_in1::Ptr{Cfloat}, pt
 
     outval = zero(eltype(output))
 
-    NUM_TILES = div(R + TILE_DIM - R%TILE_DIM, TILE_DIM)
+    NUM_TILES = div(R + TILE_DIM - 1, TILE_DIM)
 
     # loop over all tiles needed for this calculation
     for t in 0:NUM_TILES-1
