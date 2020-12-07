@@ -39,13 +39,13 @@ HAWSClientRequest* haws_socket_create_client_request(char* socket_read_buf, long
     // FIELD 9 - gpu job gpu threads
     CSV_BUF_PARSE_INT(socket_read_buf, gpuThreadsGPUStr, gpuThreadsGPUStrCpp, gpuThreadsGPU);
     // FIELD 10 - cpu job physmem MB
-    CSV_BUF_PARSE_INT(socket_read_buf, cpuPhysmemMBStr, cpuPhysmemMBStrCpp, cpuPhysmemBytes);
+    CSV_BUF_PARSE_LONG(socket_read_buf, cpuPhysmemMBStr, cpuPhysmemMBStrCpp, cpuPhysmemBytes);
     // FIELD 11 - gpu job physmem MB
-    CSV_BUF_PARSE_INT(socket_read_buf, gpuPhysmemMBStr, gpuPhysmemMBStrCpp, gpuPhysmemBytes);
+    CSV_BUF_PARSE_LONG(socket_read_buf, gpuPhysmemMBStr, gpuPhysmemMBStrCpp, gpuPhysmemBytes);
     // FIELD 12 - gpu job gpu mem MB
-    CSV_BUF_PARSE_INT(socket_read_buf, gpuMemMBStr, gpuMemMBStrCpp, gpuMemBytes);
+    CSV_BUF_PARSE_LONG(socket_read_buf, gpuMemMBStr, gpuMemMBStrCpp, gpuMemBytes);
     // FIELD 13 - gpu job gpu shared mem MB
-    CSV_BUF_PARSE_INT(socket_read_buf, gpuSharedMemMBStr, gpuSharedMemMBStrCpp, gpuSharedMemBytes);
+    CSV_BUF_PARSE_LONG(socket_read_buf, gpuSharedMemMBStr, gpuSharedMemMBStrCpp, gpuSharedMemBytes);
     // FIELD 14 - task ID
     CSV_BUF_PARSE_CPP_STR(socket_read_buf, taskID, taskIDCpp);
     // FIELD 15 - task stdin len
@@ -119,7 +119,9 @@ void haws_socket_req_loop_newline(int socket) {
             } else {
                 memset(socket_read_buf, 0, (bytes_in + 2) * sizeof(char));
             }
+            continue; // continue trying to read immediately
         }
+        usleep(50000); // yield
     }
     printf("HAWS/RECVLOOP: got kill flag\n");
     printf("HAWS/RECVLOOP: close socket\n");

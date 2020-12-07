@@ -5,4 +5,5 @@ test/large
 binaries/matmul_cpu
 binaries/matmul_gpu
 binaries/matmul_gpu.ptx
+binaries/dump
 *.gch

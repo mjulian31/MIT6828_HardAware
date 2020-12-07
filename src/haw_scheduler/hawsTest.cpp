@@ -47,21 +47,23 @@ void main_exit_handler(int signum) {
 }
 
 int main (int argc, char *argv[]) {
-    if (argc != 5) {
+    if (argc != 7) {
         printf("error: usage ./haws <prod | test>" \
+               "<max cpu threads> <max gpu threads> " \
                "<phys limit mb> <gpu limit mb> <gpu shared limit mb>");
         exit(1);
     }
 
-    signal(SIGINT, main_exit_handler);
+    signal(SIGINT, main_exit_handler); // allow ctrl-c to exit happily (when nothing running)
 
-    // set resource limits
-    // memory
-    haws.SetPhysMemLimitMB(atoi(argv[2]));
-    haws.SetGPUMemLimitMB(atoi(argv[3]));
-    haws.SetGPUSharedMemLimitMB(atoi(argv[4]));
-    // threads
-    // TODO
+    // set resource limits - threads
+    haws.SetCPUThreadLimit(atoi(argv[2]));
+    haws.SetGPUThreadLimit(atoi(argv[3]));
+
+    // set resource limits - memory
+    haws.SetPhysMemLimitMB(atoi(argv[4]));
+    haws.SetGPUMemLimitMB(atoi(argv[5]));
+    haws.SetGPUSharedMemLimitMB(atoi(argv[6]));
 
     if (strcmp(argv[1], "prod") == 0) {
         printf("HAWS: Standalone mode\n");
@@ -76,17 +78,17 @@ int main (int argc, char *argv[]) {
         // basic tests - no command line args or stdin
         bool allWhiteBox = false;
         if (allWhiteBox) {
-            RUN_TEST(haws_test_small);
-            RUN_TEST(haws_test_1);
-            RUN_TEST(haws_test_1);
-            RUN_TEST(haws_test_1);
+            RUN_TEST(haws_test_small());
+            RUN_TEST(haws_test_1());
+            RUN_TEST(haws_test_1());
+            RUN_TEST(haws_test_1());
 
             // test request buffering when out of physical memory
-            RUN_TEST(haws_test_physmem_limit_buffer);
+            RUN_TEST(haws_test_physmem_limit_buffer());
 
             // many parallel actual matrix multiplies
-            RUN_TEST(haws_test_matmul_cpu_prod1);
-            RUN_TEST(haws_test_matmul_gpu_prod1);
+            RUN_TEST(haws_test_matmul_cpu_prod1());
+            RUN_TEST(haws_test_matmul_gpu_prod1());
         }
 
         // BLACKBOX tests - call scheduler through socket
