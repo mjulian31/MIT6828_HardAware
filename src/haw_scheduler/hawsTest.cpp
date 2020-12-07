@@ -76,17 +76,17 @@ int main (int argc, char *argv[]) {
         // basic tests - no command line args or stdin
         bool allWhiteBox = false;
         if (allWhiteBox) {
-            RUN_TEST(haws_test_small);
-            RUN_TEST(haws_test_1);
-            RUN_TEST(haws_test_1);
-            RUN_TEST(haws_test_1);
+            RUN_TEST(haws_test_small());
+            RUN_TEST(haws_test_1());
+            RUN_TEST(haws_test_1());
+            RUN_TEST(haws_test_1());
 
             // test request buffering when out of physical memory
-            RUN_TEST(haws_test_physmem_limit_buffer);
+            RUN_TEST(haws_test_physmem_limit_buffer());
 
             // many parallel actual matrix multiplies
-            RUN_TEST(haws_test_matmul_cpu_prod1);
-            RUN_TEST(haws_test_matmul_gpu_prod1);
+            RUN_TEST(haws_test_matmul_cpu_prod1());
+            RUN_TEST(haws_test_matmul_gpu_prod1());
         }
 
         // BLACKBOX tests - call scheduler through socket

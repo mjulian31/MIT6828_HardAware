@@ -47,6 +47,7 @@ std::thread* testSockRecvLoop;
 
 int haws_test_socket_simple_send_recv();
 int haws_test_socket_many_cpu();
+int haws_test_profile_up_to(int maxDim);
 void haws_test_socket_recv_loop();
 int haws_help_load_client_buffer_sample_req(int reqNum, 
                                             char* targetRec, 
@@ -69,7 +70,8 @@ void haws_test_socket_all() {
     
     // requests over socket tests
     //RUN_TEST(haws_test_socket_simple_send_recv);
-    RUN_TEST(haws_test_socket_many_cpu);
+    //RUN_TEST(haws_test_socket_many_cpu);
+    RUN_TEST(haws_test_profile_up_to(1024));
 
     //teardown
     free(clientSendBuff);
@@ -115,7 +117,24 @@ int haws_test_socket_many_cpu() {
 
     sleep(190); // give them a chance to be all be received and started
 
-    while (haws.IsDoingWork()) { usleep(1000); };
+    while (haws.IsDoingWork()) { usleep(1000); }; // can probably sleep(1)
+    return 0;
+}
+
+int haws_test_profile_up_to(int maxDim) {
+    std::string dim;
+    for (int i = 2; i <= maxDim; i++) {
+        dim = std::to_string(i);
+        int length = haws_help_load_client_buffer_sample_req(reqNum++,
+                                                             (char*) "cpu-only",
+                                                             (char*) dim.c_str(),
+                                                             false);
+        send(testClientSendSocket, clientSendBuff, length, 0);
+    }
+    printf("TEST: all sample requests sent\n");
+    sleep(5); // give them a chance to start
+
+    while(haws.IsDoingWork()) { sleep(1); }
     return 0;
 }
 
