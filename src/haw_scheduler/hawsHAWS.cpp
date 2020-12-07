@@ -32,15 +32,23 @@ std::list<HAWSConclusion*> pendConclusions;
 bool threadRespLoopRunning = false;
 std::thread* threadRespLoop;
 
-HAWSTargetMgr* cpuMgr;
-HAWSTargetMgr* gpuMgr;
+// target managers
+HAWSTargetMgr* cpuMgr;     // CPU
+HAWSTargetMgr* gpuMgr;     // GPU
+//(other possible future targets)
+//HAWSTargetMgr* tpuMgr;   // TPU 
+//HAWSTargetMgr* asicMgr;  // ASIC
+//HAWSTargetMgr* fpgaMgr;  // FPGA
 
+//std::mutex globalMemLock; //old
+
+// thread control - how many threads can the scheduler use for children?
+int globalCPUThreadsAvail = 0;
+int globalGPUThreadsAvail = 0;
 // memory control - how much memory can the scheduler use for children?
-std::mutex globalMemLock;
-
 int globalPhysMemAvail = 0;
 int globalGPUMemAvail = 0;
-int globalGPUSharedMemAvail = 0;
+//int globalGPUSharedMemAvail = 0;
 
 int reqCounter = 0;
 
@@ -114,7 +122,8 @@ void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, tim
 }
 
 // SCHEDLOOP THREAD
-void HAWS::ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemLimitMB) { 
+void HAWS::ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit, 
+                        int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemLimitMB) { 
     printf("HAWS/SL: ScheduleLoop started...\n");
     int freedMBRam; // from task completion
     HAWSClientRequest* next;
@@ -122,8 +131,11 @@ void HAWS::ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemL
         tasksToStartQueueLock.lock(); // lock queue
         if (!tasksToStartQueue->empty()) { // check if item is in queue
             next = tasksToStartQueue->front();
+
+            // disabled -- resource checking now handled in ProcessClientRequest
             // if no binary has enough physmem to run on any target, 
             // leave queue alone until a task completion frees physmem
+            /*
             if (globalPhysMemAvail - next->GetCPUJobPhysMB() < 0 &&
                 globalPhysMemAvail - next->GetGPUJobPhysMB() < 0) {
                 tasksToStartQueueLock.unlock(); // unlock queue, we cannot start any target
@@ -132,29 +144,44 @@ void HAWS::ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemL
                 }
                 // do not deque next work and continue for another round to try
             } else {
-                ProcessClientRequest(next); // UNLOCKS tasksToStartQueueLock
-            }
+            */
+
+            // call holding tasksToStartQueue.lock()
+            ProcessClientRequest(next); // UNLOCKS tasksToStartQueueLock
+
+            //}
         } else {
             tasksToStartQueueLock.unlock(); // unlock queue
             //printf("HAWS/SL: tasks to start queue empty!\n");
         }
         
-        //monitor HW targets
-        cpuMgr->Monitor(); // do work while processes running in cpu manager  
-        globalPhysMemAvail += cpuMgr->GetFreedRam(); // replenish physmem
-    
-        gpuMgr->Monitor(); // do work while processes running in gpu manager
-        globalPhysMemAvail += gpuMgr->GetFreedRam(); // replenish physmem
-        globalGPUMemAvail += gpuMgr->GetFreedGPURam(); // replenish gpu mem
+        //monitor HW target CPU
+        cpuMgr->Monitor(); // perodic call to update state while running tasks on target
+        // reclaim resources from completed tasks
+        globalCPUThreadsAvail += cpuMgr->GetFreedCPUThreads(); // replenish cpu threads
+        globalPhysMemAvail += cpuMgr->GetFreedRam();           // replenish physmem
+   
+        //monitor HW target GPU
+        gpuMgr->Monitor(); // periodic call to update state while running tasks on target
+        // reclaim resources from completed tasks
+        globalCPUThreadsAvail += gpuMgr->GetFreedCPUThreads(); // replenish cpu threads
+        globalGPUThreadsAvail += gpuMgr->GetFreedGPUThreads(); // replenish gpu threads
+        globalPhysMemAvail += gpuMgr->GetFreedRam();           // replenish physmem
+        globalGPUMemAvail += gpuMgr->GetFreedGPURam();         // replenish gpu mem
 
-        if (throttle++ % 10000 == 0) {
+        if (throttle++ % 5000 == 0) {
+            printf("HAWS/RESMON: free cpu threads %d (%d%%)\n", globalCPUThreadsAvail,
+                   (int)(((float) globalCPUThreadsAvail / (float) cpuThreadLimit)*100));
+            printf("HAWS/RESMON: free gpu threads %d (%d%%)\n", globalGPUThreadsAvail,
+                   (int)(((float) globalGPUThreadsAvail / (float) gpuThreadLimit)*100));
             printf("HAWS/SL: free phys mem %dMB (%d%%)\n", globalPhysMemAvail, 
                    (int)(((float) globalPhysMemAvail / (float) physMemLimitMB)*100));
             printf("HAWS/SL: free gpu mem %dMB (%d%%)\n", globalGPUMemAvail, 
                    (int)(((float) globalGPUMemAvail / (float) gpuMemLimitMB)*100));
         }
 
-        ReapChildren(); // collect all completed child processes
+        ReapChildren(); // collect all completed child processes (notifies target managers)
+
         usleep(1000); // yield CPU
     }
     printf("HAWS: ScheduleLoop ended...\n");
@@ -169,30 +196,46 @@ void HAWS::RequeueReq(HAWSClientRequest* req) { // SCHEDLOOP THREAD
 
 // SCHEDLOOP THREAD 
 void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
+    int maxCPUThreads = req->GetCPUJobCPUThreads();
     int maxRAM = req->GetCPUJobPhysMB();
+    
+    //alloc resources for this task
     globalPhysMemAvail -= maxRAM;
+    globalCPUThreadsAvail -= maxCPUThreads;
+
+    //launch it!
     printf("HAWS: Starting CPU Task\n");
     int pid = cpuMgr->StartTask(req->GetNum(),
                                 req->GetCPUBinPath(), 
                                 req->GetJobArgv(), 
                                 req->GetStdin(), req->GetStdinLen(), 
-                                maxRAM, 0);
+                                maxCPUThreads, 0, // threads (GPU unusued = 0)
+                                maxRAM, 0); // rams
     allCPUPids.insert(allCPUPids.begin(), pid);
     //printf("HAWS/SL: CPU got %s\n", req->ToStr().c_str());
 }
 
 // SCHEDLOOP THREAD
 void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
+    int maxCPUThreads = req->GetGPUJobCPUThreads();
+    int maxGPUThreads = req->GetGPUJobGPUThreads(); 
     int maxRAM = req->GetGPUJobPhysMB();
-    globalPhysMemAvail -= maxRAM;
     int maxGPURAM = req->GetGPUJobGPUPhysMB();
+
+    // alloc resources for this task
+    globalCPUThreadsAvail -= maxCPUThreads;
+    globalGPUThreadsAvail -= maxGPUThreads;
+    globalPhysMemAvail -= maxRAM;
     globalGPUMemAvail -= maxGPURAM;
+
+    //launch it!
     printf("HAWS: Starting GPU Task (Phys %dMB/GPU %dMB)\n", maxRAM, maxGPURAM);
     int pid = gpuMgr->StartTask(req->GetNum(), 
                                 req->GetGPUBinPath(),
                                 req->GetJobArgv(),
-                                req->GetStdin(), req->GetStdinLen(), 
-                                maxRAM, maxGPURAM);
+                                req->GetStdin(), req->GetStdinLen(),
+                                maxCPUThreads, maxGPUThreads, // threads (both CPU and GPU)
+                                maxRAM, maxGPURAM); // rams
     allGPUPids.insert(allGPUPids.begin(), pid);
 }
 
@@ -202,15 +245,23 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
     int throttle = 0;
     if (HWTarget == TargCPU) {
         if (globalPhysMemAvail - req->GetCPUJobPhysMB() < 0) {
-            // @perf we should take req and requeue it at the back to try something else
+            // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
             if (throttle++ % 1000 == 0) {
-                printf("HAWS/REQ: not enough physmem to run CPU job\n");
+                printf("HAWS/PHYSFULL: not enough physmem to run CPU job\n");
             }
             return;
         } 
+        if (globalCPUThreadsAvail - req->GetCPUJobCPUThreads() < 0) {
+            // @perf we should take req and requeue it at the back to try next req
+            tasksToStartQueueLock.unlock();
+            if (throttle++ % 1000 == 0) {
+                printf("HAWS/CPUFULL: not enough free CPU threads to run CPU job\n");
+            }
+            return;
+        }
         
-        // resources are available to run
+        // all resources are available to run
         tasksToStartQueueLock.unlock();
         StartTaskCPU(req);        
         printf("HAWS/REQ: freeing stdin\n");
@@ -222,18 +273,34 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
         return;
     } else if (HWTarget == TargGPU) {
         if (globalPhysMemAvail - req->GetGPUJobPhysMB() < 0) { // do we have enough physmem
-            // @perf we should take req and requeue it at the back to try something else
+            // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
             if (throttle++ % 1000 == 0) {
-                printf("HAWS/REQ: not enough physmem to run GPU job\n");
+                printf("HAWS/PHYSFULL: not enough physmem to run GPU job\n");
             }
             return;
         }
         if (globalGPUMemAvail - req->GetGPUJobGPUPhysMB() < 0) { // do we have enough gpu mem
-            // @perf we should take req and requeue it at the back to try something else
+            // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
             if (throttle++ % 1000 == 0) {
-                printf("HAWS/REQ: not enough GPU mem to run GPU job\n");
+                printf("HAWS/GPUMEMFULL: not enough GPU mem to run GPU job\n");
+            }
+            return;
+        }
+        if (globalCPUThreadsAvail - req->GetGPUJobCPUThreads () < 0) {
+            // @perf we should take req and requeue it at the back to try next req
+            tasksToStartQueueLock.unlock();
+            if (throttle++ % 1000 == 0) {
+                printf("HAWS/CPUFULL: not enough free CPU threads to run GPU job\n");
+            }
+            return;
+        }
+        if (globalGPUThreadsAvail - req->GetGPUJobGPUThreads() < 0) {
+            // @perf we should take req and requeue it at the back to try next req
+            tasksToStartQueueLock.unlock();
+            if (throttle++ % 1000 == 0) {
+                printf("HAWS/GPUFULL: not enough free GPU threads to run GPU job\n");
             }
             return;
         }
@@ -256,12 +323,8 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
 
 HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     bool shouldUseCPU = req->GetTargHint() == "cpu-only" || 
-                        req->GetTargHint() == "cpu-please"  ||
-                        req->GetTargHint() == "any";
-
-    //TODO consult extra hints or profiling info to pick target intelligently
-    // do analysis to determine if should use CPU or gpu
-
+                        req->GetTargHint() == "cpu-please"  || // unused for profiling 
+                        req->GetTargHint() == "any"; // unused for profiling
     return shouldUseCPU ? TargCPU : TargGPU;
 }
 
@@ -318,19 +381,26 @@ void HAWS::Start() {
     
     assert(!schedLoopThreadRunning); // must be stopped before started
 
+    // set resource limits -- cpu and gpu threads
+    assert(this->cpuThreadLimit > 0);
+    assert(this->gpuThreadLimit > 0);
+    globalCPUThreadsAvail = this->cpuThreadLimit;
+    globalGPUThreadsAvail = this->gpuThreadLimit;
     // set resource limits -- cpu and gpu memory
     assert(this->physMemLimitMB > 0);
     assert(this->gpuMemLimitMB > 0);
     assert(this->gpuSharedMemLimitMB > 0);
     globalPhysMemAvail = this->physMemLimitMB;
     globalGPUMemAvail = this->gpuMemLimitMB;
-    globalGPUSharedMemAvail = this->gpuSharedMemLimitMB;
+    //globalGPUSharedMemAvail = this->gpuSharedMemLimitMB; // currently unused
 
     schedLoopKillFlag = false; // disable killswitch for schedule loop
 
     // start schedule loop
     printf("HAWS: Starting ScheduleLoop\n");
     schedLoopThread = new std::thread(HAWS::ScheduleLoop, 
+                                      this->cpuThreadLimit,
+                                      this->gpuThreadLimit,
                                       this->physMemLimitMB, 
                                       this->gpuMemLimitMB, 
                                       this->gpuSharedMemLimitMB);    
@@ -359,10 +429,13 @@ void HAWS::Stop() {
     pendConclusions.clear();
     conclusionLock.unlock();
 
-    // all memory should be relased from all tasks being completed
+    // all threads should be released from all tasks being completed
+    assert(globalCPUThreadsAvail = this->cpuThreadLimit);
+    assert(globalGPUThreadsAvail = this->gpuThreadLimit);
+    // all memory should be released from all tasks being completed
     assert(globalPhysMemAvail = this->physMemLimitMB);
     assert(globalGPUMemAvail = this->gpuMemLimitMB);
-    assert(globalGPUSharedMemAvail = this->gpuSharedMemLimitMB);
+    //assert(globalGPUSharedMemAvail = this->gpuSharedMemLimitMB);
     assert(schedLoopThreadRunning);   // must be started before stopped
 
     schedLoopKillFlag = true; // enable killswitch for schedule loop thread

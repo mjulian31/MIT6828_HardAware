@@ -53,7 +53,7 @@ typedef std::chrono::time_point<std::chrono::system_clock> time_point;
     printf("CSVPARSER/STRINT: " #strName "[%ld]:%s\n", fieldLen, strName); \
     std::string strNameCpp(strName); \
     int intName = std::stoi(strName); \
-    assert(intName > 0); \
+    assert(intName >= 0); \
     free(strName); \
     printf("CSVPARSER/INT: " #strName ":%d\n", intName);
 

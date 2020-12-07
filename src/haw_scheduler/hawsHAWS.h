@@ -40,6 +40,8 @@ typedef struct HAWSConclusion {
 
 class HAWS {
     private:
+        int cpuThreadLimit;
+        int gpuThreadLimit;
         int physMemLimitMB;
         int gpuMemLimitMB;
         int gpuSharedMemLimitMB; 
@@ -53,11 +55,12 @@ class HAWS {
         int portReqs = 8080;
 
         std::mutex tasksActiveLock;
-        int cpuTasksActive = 0;
-        int gpuTasksActive = 0;
+        int cpuTasksActive = 0; // unused?
+        int gpuTasksActive = 0; // unused?
 
         //SCHEDLOOP THREAD 
-        static void ScheduleLoop(int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemLimitMB); 
+        static void ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit,
+                                 int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemLimitMB); 
         static void ReapChildren();
         static void DispatchConclusion(pid_t, TaskStatus, int status, time_point time_completed);
         static void ProcessClientRequest(HAWSClientRequest* req);
@@ -85,6 +88,8 @@ class HAWS {
     public:
         HAWS();
         ~HAWS();
+        void SetCPUThreadLimit(int limitTrs) { this->cpuThreadLimit = limitTrs; };
+        void SetGPUThreadLimit(int limitTrs) { this->gpuThreadLimit = limitTrs; };
         void SetPhysMemLimitMB(int limitMB) { this->physMemLimitMB = limitMB; }
         void SetGPUMemLimitMB(int limitMB) { this->gpuMemLimitMB = limitMB; }
         void SetGPUSharedMemLimitMB(int limitMB) { this->gpuSharedMemLimitMB = limitMB; }

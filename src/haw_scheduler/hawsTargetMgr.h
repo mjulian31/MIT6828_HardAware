@@ -32,11 +32,20 @@ class HAWSTargetMgr {
     std::unordered_map<pid_t, int> tasksStatusCode;
     std::unordered_map<pid_t, time_point> tasksStartTime;
     std::unordered_map<pid_t, time_point> tasksEndTime;
+
+    // resources
+    int freedCPUThreads = 0;
+    int freedGPUThreads = 0;
+    int freedPhysMB = 0;
+    int freedGPUMB = 0;
+    std::unordered_map<pid_t, int> tasksMaxCPUThreads;
+    std::unordered_map<pid_t, int> tasksMaxGPUThreads;
     std::unordered_map<pid_t, int> tasksMaxRAM;
     std::unordered_map<pid_t, int> tasksMaxGPURAM;
-    std::unordered_map<pid_t, long> tasksBillableUS;
-    std::unordered_map<pid_t, ChildHandle*> tasksHandles;
 
+    std::unordered_map<pid_t, long> tasksBillableUS;
+
+    std::unordered_map<pid_t, ChildHandle*> tasksHandles;
     std::unordered_map<pid_t, char*> tasksCompleted; //freeable, LARGE 
     std::unordered_map<pid_t, long> tasksFormalOutputLen;
     std::unordered_map<pid_t, char*> tasksFormalOutput; //ptr into tasksCompleted, no-freeable, LARGE
@@ -50,8 +59,7 @@ class HAWSTargetMgr {
     std::mutex completionLock; 
     int activeTasks = 0;
     int throttle = 0;
-    int freedPhysMB = 0;
-    int freedGPUMB = 0;
+    
     char* stdOutBuffer;
 
     //CPUCostModel cputCostModel; //object TODO
@@ -89,8 +97,10 @@ class HAWSTargetMgr {
         printf("HWMGR:  in active set: %d\n", this->TaskIsActiveProtected(pid));  
         printf("HWMGR:    task status: %s\n", TaskStatusToStr(tasksStatus[pid]));
         printf("HWMGR:    status code: %d\n", tasksStatusCode[pid]);
+        printf("HWMGR:max cpu threads: %d\n", tasksMaxCPUThreads[pid]);  
+        printf("HWMGR:max gpu threads: %d\n", tasksMaxGPUThreads[pid]);  
         printf("HWMGR:   max phys mem: %d\n", tasksMaxRAM[pid]);  
-        printf("HWMGR:   max phys mem: %d\n", tasksMaxGPURAM[pid]);  
+        printf("HWMGR:   max gpu  mem: %d\n", tasksMaxGPURAM[pid]);  
         printf("HWMGR:    billable ms: %ld\n", tasksBillableUS[pid]);  
     }
     void PrintAllProcessesProtected() { // holding lock
@@ -208,8 +218,14 @@ class HAWSTargetMgr {
         tasksStatusCode[pid] = s_code;
 
         tasksActive.erase(pid); // TODO move to a general place we clear all maps
+
+        // accumulate freed resources
+        this->freedCPUThreads += tasksMaxCPUThreads[pid];
+        this->freedGPUThreads += tasksMaxGPUThreads[pid];
         this->freedPhysMB += tasksMaxRAM[pid];
         this->freedGPUMB += tasksMaxGPURAM[pid];
+
+        // server side actual runtime cost (early)
         tasksBillableUS[pid] = TIMEDIFF_CAST_USEC(tasksEndTime[pid] - tasksStartTime[pid]);
     }
 
@@ -220,7 +236,9 @@ class HAWSTargetMgr {
             this->targStr = targStr;
         }
         int StartTask(int reqNum, std::string binpath, std::string args, 
-                      char* stdin_buf, long stdin_buff_len, int maxRAM, int maxGPURAM) {
+                      char* stdin_buf, long stdin_buff_len, 
+                      int maxCPUThreads, int maxGPUThreads, 
+                      int maxRAM, int maxGPURAM) {
             ChildHandle* handle = start_subprocess_nonblocking(binpath, args, 
                                                                stdin_buf, stdin_buff_len);
             time_point start_time = std::chrono::system_clock::now();
@@ -234,6 +252,8 @@ class HAWSTargetMgr {
             tasksStatus[pid] = TASK_RUNNING;
             tasksStatusCode[pid] = -1;
             tasksStartTime[pid] = start_time; 
+            tasksMaxCPUThreads[pid] = maxCPUThreads;
+            tasksMaxGPUThreads[pid] = maxGPUThreads;
             tasksMaxRAM[pid] = maxRAM;
             tasksMaxGPURAM[pid] = maxGPURAM;
             tasksBillableUS[pid] = 0;
@@ -266,14 +286,28 @@ class HAWSTargetMgr {
         int GetFreedRam() {
             taskLock.lock();
             int freed = this->freedPhysMB;
-            this->freedPhysMB = 0; // requester has been notified with reclaimed mem
+            this->freedPhysMB = 0; // requester has been notified of reclaimed mem
             taskLock.unlock();
             return freed;
         }
         int GetFreedGPURam() {
             taskLock.lock();
             int freed = this->freedGPUMB;
-            this->freedGPUMB = 0; // requester has been notified with reclaimed mem
+            this->freedGPUMB = 0; // requester has been notified of reclaimed mem
+            taskLock.unlock();
+            return freed;
+        }
+        int GetFreedCPUThreads() {
+            taskLock.lock();
+            int freed = this->freedCPUThreads;
+            this->freedCPUThreads = 0; // requester has been notified of reclaimed threads
+            taskLock.unlock();
+            return freed;
+        }
+        int GetFreedGPUThreads() {
+            taskLock.lock();
+            int freed = this->freedGPUThreads; 
+            this->freedGPUThreads = 0; // requester has been notified of reclaimed threads
             taskLock.unlock();
             return freed;
         }
@@ -336,32 +370,40 @@ class HAWSTargetMgr {
 
         void Stop () { 
             taskLock.lock();
+
+            /* we no longer keep tasksCompleted values after proc completes. 
             std::unordered_map<pid_t, char*>::iterator mit = tasksCompleted.begin();
             while (mit != tasksCompleted.end()) {
                 printf("HWMGR/%s COMPLETED PID %d: formal output[%ld]\n", this->targStr.c_str(), 
                        mit->first, tasksFormalOutputLen[mit->first]);
                 free(mit->second); 
                 mit++;
-            }
+            }*/
 
-            // @perf @mem all member datastructures should really be empty at this point 
-            // after proper cleanup on task end / response send
+            // @perf @mem all member datastructures should really be already empty at this point 
+            // ...after proper cleanup on task end / response send (TODO)
             assert(tasksCompleted.size() == 0); 
             assert(tasksActive.size() == 0);
-            // for now forcibly clear the others
+            assert(tasksHandles.size() == 0);
+            //(assert all task maps are empty)
+
+            // for now forcibly clear the others that have been accumulating 
+            // these accumulate small contents at least
+            // the large freeable buffers should already have been freed on task completion
             allPids.clear();
             tasksActive.clear();
             tasksStatus.clear();
             tasksStatusCode.clear();
             tasksStartTime.clear();
             tasksEndTime.clear();
+            tasksMaxCPUThreads.clear();
+            tasksMaxGPUThreads.clear();
             tasksMaxRAM.clear();
             tasksMaxGPURAM.clear();
             tasksBillableUS.clear();
-            printf("HWMGR/%s tasksHandles.size = %ld\n", this->targStr.c_str(), 
-                   tasksHandles.size());
-            assert(tasksHandles.size() == 0);
             tasksHandles.clear();
+            //printf("HWMGR/%s tasksHandles.size = %ld\n", this->targStr.c_str(), 
+            //       tasksHandles.size());
 
             taskLock.unlock();
         }
