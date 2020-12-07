@@ -56,7 +56,7 @@ function get_mat_strings(a, b)
 end
 
 function get_cmd_args(N, R, M)
-    return string(N, " ", R, " ", M, " norand")
+    return string(N, " ", R, " ", M) #, " norand")
 end
 
 function get_target_pref(N, R, M) #TODO
@@ -155,7 +155,7 @@ function send_request(a, b, req_notifier)
     gpu_mem = get_gpu_mem(N, R, M)
     gpu_shared_mem = get_gpu_shared_mem(N, R, M)
     job_id = get_job_id(N, R, M)
-    stdin_len, stdin_input = get_mat_strings(a, b)
+    stdin_len, stdin_input = 0, ""#get_mat_strings(a, b)
 
     req_num = 0
     while true
@@ -189,13 +189,13 @@ function start_reciever()
            t = @async try
                while isopen(sock)
                    response_str = readline(sock, keep=false)
-                   println("parsing response...")
+                   # println("parsing response...")
                    response = parse_response_string(response_str)
-                   println("done parsing")
+                   # println("done parsing")
                    if response != BAD_RESPONSE
-                       println("got good response")
+                       # println("got good response")
                    else
-                       println("got bad response")
+                       println("got bad response!")
                        # got a bad response, continue waiting
                        continue
                    end
