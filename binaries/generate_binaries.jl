@@ -184,9 +184,9 @@ objfile = "matmul_cpu.o"
 tm = GPUCompiler.llvm_machine(job.target)
 LLVM.emit(tm, ir, LLVM.API.LLVMObjectFile, objfile)
 if check_err
-    run(`clang -o matmul_cpu main_cpu.c matmul_cpu.o -DERR_CHECK`)
+    run(`clang -O3 -o matmul_cpu main_cpu.c matmul_cpu.o -DERR_CHECK`)
 else
-    run(`clang -o matmul_cpu main_cpu.c matmul_cpu.o`)
+    run(`clang -O3 -o matmul_cpu main_cpu.c matmul_cpu.o`)
 end
 println("done. saved cpu binary to matmul_cpu")
 
@@ -208,8 +208,8 @@ run(`rm -f -r dump`)
 CUDA.@device_code dir="dump" @cuda name="matmul" threads=(TILE_DIM, TILE_DIM) blocks=(div(DIM, TILE_DIM), div(DIM, TILE_DIM)) coalesced_matmul_kernel!(cptr, aptr, bptr, n, r, m)
 run(`scp dump/matmul_1.asm matmul_gpu.ptx`)
 if check_err
-    run(`/usr/local/cuda-11.1/bin/nvcc -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu -DERR_CHECK`)
+    run(`/usr/local/cuda-11.1/bin/nvcc -O3 -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu -DERR_CHECK`)
 else
-    run(`/usr/local/cuda-11.1/bin/nvcc -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu`)
+    run(`/usr/local/cuda-11.1/bin/nvcc -O3 -L/usr/local/cuda-11.1/lib64 -lcudart -lcuda -lnvrtc -I/usr/local/cuda-11.1/include main_gpu.cpp -o matmul_gpu`)
 end
 println("done. saved gpu binary to matmul_gpu")
