@@ -105,11 +105,11 @@ void haws_test_socket_all() {
     // requests over socket tests
     //RUN_TEST(haws_test_socket_simple_send_recv);
     //RUN_TEST(haws_test_socket_many_cpu());
-    //RUN_TEST(haws_test_socket_memlimit_cpu());
-    //RUN_TEST(haws_test_socket_memlimit_gpu());
 
-    RUN_TEST(haws_test_socket_gputrlimit_gpu());
+    RUN_TEST(haws_test_socket_memlimit_cpu());
+    RUN_TEST(haws_test_socket_memlimit_gpu());
     RUN_TEST(haws_test_socket_cputrlimit_cpu());
+    RUN_TEST(haws_test_socket_gputrlimit_gpu());
 
     //RUN_TEST(haws_test_gpu_profile_up_to(1024));
 
@@ -168,13 +168,13 @@ int haws_test_socket_many_cpu() {
 
 int haws_test_socket_memlimit_cpu() {
     int length;
-    for (int i = 1; i <= 500; i++) { 
+    for (int i = 1; i <= 50; i++) { 
         length = haws_help_load_client_buffer_sample_req(reqNum++, 
                  (char*) "cpu-only", (char*) "1024", 
                  1, // cpu cpu threads
                  0, // gpu cpu threads
                  0, // gpu gpu threads
-                 haws_estimate_cpujob_cpu_ram(1024) * 10, 
+                 haws_estimate_cpujob_cpu_ram(1024) * 500, // cpu physmem (inflated)
                  0, 
                  0, 
                  0, 
@@ -191,7 +191,7 @@ int haws_test_socket_memlimit_cpu() {
 
 int haws_test_socket_memlimit_gpu() {
     int length;
-    for (int i = 1; i <= 500; i++) { 
+    for (int i = 1; i <= 75; i++) { 
         length = haws_help_load_client_buffer_sample_req(reqNum++, 
                  (char*) "gpu-only", (char*) "1024", 
                  0, // cpu cpu threads
@@ -214,7 +214,7 @@ int haws_test_socket_memlimit_gpu() {
 
 int haws_test_socket_cputrlimit_cpu() {
     int length;
-    for (int i = 1; i <= 500; i++) {
+    for (int i = 1; i <= 100; i++) {
         length = haws_help_load_client_buffer_sample_req(reqNum++,
                  (char*) "cpu-only", (char*) "1024",
                  1,  // cpu cpu threads
@@ -235,12 +235,12 @@ int haws_test_socket_cputrlimit_cpu() {
 
 int haws_test_socket_gputrlimit_gpu() {
     int length;
-    for (int i = 1; i <= 500; i++) {
+    for (int i = 1; i <= 100; i++) {
         length = haws_help_load_client_buffer_sample_req(reqNum++,
                  (char*) "gpu-only", (char*) "1024",
                  0,  // cpu cpu threads
                  1,  // gpu cpu threads 
-                 haws_estimate_gpujob_gpu_threads(1024), // gpu gpu threads 
+                 haws_estimate_gpujob_gpu_threads(1024) * 10, // gpu gpu threads 
                  0,  // cpu physmem
                  haws_estimate_gpujob_cpu_ram(1024),     // gpu physmem
                  haws_estimate_gpujob_gpu_ram(1024),     // gpu gpu mem
