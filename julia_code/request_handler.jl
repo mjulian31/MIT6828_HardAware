@@ -225,6 +225,10 @@ function parse_response_string(response_str)
         resp = response(req_num, req_arr[3:end-2]..., output)
         responses[req_num] = resp
         # notify waiting thread that we have the response saved
+        if !(req_num in keys(notifiers))
+            @show keys(notifiers), req_num
+            @assert false
+        end
         lock(notifiers[req_num])
         notify(notifiers[req_num])
         unlock(notifiers[req_num])
