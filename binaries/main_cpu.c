@@ -192,8 +192,8 @@ int main(int argc, char *argv[]) {
 	double start_cpu = get_cpu_time();
 	double start_wall = get_wall_time();
 	matmul(output, A, B, N, R, M);
-	double end_cpu = get_cpu_time();
 	double end_wall = get_wall_time();
+	double end_cpu = get_cpu_time();
 
 	// error check
 	#ifdef ERR_CHECK

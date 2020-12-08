@@ -61,10 +61,15 @@ function get_cmd_args(N, R, M)
 end
 
 function get_target_pref(N, R, M)
-    if N*M > 1024
+    if N*M >= 1024*256
         return GPU_ONLY
-    end
-    return CPU_ONLY
+    elseif N*M >= 1024*32
+        return GPU_PLEASE
+    elseif N*R*M <= 32*64
+        return CPU_ONLY
+    elseif N*M <= 32*256
+        return CPU_PLEASE
+    return ANY
 end
 
 function get_cpu_ram(N, R, M)

@@ -224,6 +224,8 @@ int main(int argc, char **argv) {
   }
 
   // alloc the device matricies
+  double start_cpu = get_cpu_time();
+  double start_wall = get_wall_time();
   CUdeviceptr d_A;
   check_errors(cuMemAlloc(&d_A, sizeof(float) * N * R), "device input a alloc");
   CUdeviceptr d_B;
@@ -244,8 +246,6 @@ int main(int argc, char **argv) {
 
   void *arr[] = {&d_output, &d_A, &d_B, &N, &R, &M};
   // call kernel and time function
-  double start_cpu = get_cpu_time();
-	double start_wall = get_wall_time();
   check_errors(cuLaunchKernel(kernel_addr, cudaGridSize.x, cudaGridSize.y,
                                  cudaGridSize.z, /* grid dim */
                                  cudaBlockSize.x, cudaBlockSize.y,
@@ -254,11 +254,11 @@ int main(int argc, char **argv) {
                                  &arr[0],         /* arguments */
                                  0), "kernel launch");
   check_errors(cuCtxSynchronize(), "sync");
-  double end_cpu = get_cpu_time();
-	double end_wall = get_wall_time();
 
   // copy device result to host
   check_errors(cuMemcpyDtoH(h_output, d_output, sizeof(float) * N * M), "host to device copy");
+	double end_wall = get_wall_time();
+  double end_cpu = get_cpu_time();
 
   // free device global memory
   check_errors(cuMemFree(d_A), "free device a");

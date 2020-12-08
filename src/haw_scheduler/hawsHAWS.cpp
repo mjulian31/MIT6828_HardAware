@@ -16,6 +16,10 @@
 #include "hawsClientRequest.h"
 #include "hawsSocket.h"
 #include "socket.h"
+#include <stdlib.h>
+#include <time.h>
+#include <unordered_map>
+#include <climits>
 
 //using namespace std;
 
@@ -35,7 +39,7 @@ std::thread* threadRespLoop;
 HAWSTargetMgr* cpuMgr;     // CPU
 HAWSTargetMgr* gpuMgr;     // GPU
 //(other possible future targets)
-//HAWSTargetMgr* tpuMgr;   // TPU 
+//HAWSTargetMgr* tpuMgr;   // TPU
 //HAWSTargetMgr* asicMgr;  // ASIC
 //HAWSTargetMgr* fpgaMgr;  // FPGA
 
@@ -53,6 +57,9 @@ int reqCounter = 0;
 
 std::list<pid_t> allCPUPids;
 std::list<pid_t> allGPUPids;
+
+std::unordered_map<std::string, long> CPUTimeMap;
+std::unordered_map<std::string, long> GPUTimeMap;
 
 float centsPerUnitTimeCPU = 0.000001; // 1 penny per second default
 float centsPerUnitTimeGPU = 0.0000015; // 1.5 pennies per second default
@@ -82,20 +89,20 @@ void HAWS::ReapChildren() { // SCHEDLOOP THREAD
        if (WIFEXITED(status) && !WEXITSTATUS(status)) {
           //DEBUGPR("program execution successful\n"); 
           task_status = TASK_FINISHED_SUCCESS;
-       } else if (WIFEXITED(status) && WEXITSTATUS(status)) { 
-            if (WEXITSTATUS(status) == 127) { 
-                // execv failed 
-                printf("execv failed\n"); 
+       } else if (WIFEXITED(status) && WEXITSTATUS(status)) {
+            if (WEXITSTATUS(status) == 127) {
+                // execv failed
+                printf("execv failed\n");
                 task_status = TASK_FINISHED_ABNORMAL;
                 assert(false);
-            } 
+            }
             else  {
                 task_status = TASK_FINISHED_NONZERO;
             }
        } else {
            task_status = TASK_FINISHED_ABNORMAL;
        }
-       DispatchConclusion(p, task_status, status, time_completed); 
+       DispatchConclusion(p, task_status, status, time_completed);
     }
     if (reapedTasks > 0) { DEBUGPR("TARGMGR: subprocesses reaped: %d\n", reapedTasks); }
 }
@@ -106,12 +113,32 @@ void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, tim
     if (IN_LIST(allCPUPids, pid)) {
        assert(cpuMgr->TaskIsActive(pid));
        assert(NOT_IN_LIST(allGPUPids, pid));
-       conclusion = cpuMgr->TaskConclude(pid, task_status, status, ended); 
+       conclusion = cpuMgr->TaskConclude(pid, task_status, status, ended);
+       long wallTime = std::stol(conclusion->wallTime);
+       std::string id = std::string(conclusion->taskID);
+       // put min wall time in map
+       if (CPUTimeMap.count(id) > 0) {
+         // in map
+         CPUTimeMap[id] = (wallTime < CPUTimeMap[id])? wallTime: CPUTimeMap[id];
+       } else {
+         // init
+         CPUTimeMap[conclusion->taskID] = wallTime;
+       }
        billableCPUus += conclusion->targetRealBillableUS;
    } else if (IN_LIST(allGPUPids, pid)) {
        assert(gpuMgr->TaskIsActive(pid));
        assert(NOT_IN_LIST(allCPUPids, pid));
-       conclusion = gpuMgr->TaskConclude(pid, task_status, status, ended); 
+       conclusion = gpuMgr->TaskConclude(pid, task_status, status, ended);
+       long wallTime = std::stol(conclusion->wallTime);
+       std::string id = std::string(conclusion->taskID);
+       // put min wall time in map
+       if (GPUTimeMap.count(id) > 0) {
+         // in map
+         GPUTimeMap[id] = (wallTime < GPUTimeMap[id])? wallTime: GPUTimeMap[id];
+       } else {
+         // init
+         GPUTimeMap[id] = wallTime;
+       }
        billableGPUus += conclusion->targetRealBillableUS;
    }
    conclusionLock.lock();
@@ -133,7 +160,7 @@ void HAWS::ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit,
             next = tasksToStartQueue->front();
 
             // disabled -- resource checking now handled in ProcessClientRequest
-            // if no binary has enough physmem to run on any target, 
+            // if no binary has enough physmem to run on any target,
             // leave queue alone until a task completion frees physmem
             /*
             if (globalPhysMemAvail - next->GetCPUJobPhysMB() < 0 &&
@@ -154,13 +181,13 @@ void HAWS::ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit,
             tasksToStartQueueLock.unlock(); // unlock queue
             //DEBUGPR("HAWS/SL: tasks to start queue empty!\n");
         }
-        
+
         //monitor HW target CPU
         cpuMgr->Monitor(); // perodic call to update state while running tasks on target
         // reclaim resources from completed tasks
         globalCPUThreadsAvail += cpuMgr->GetFreedCPUThreads(); // replenish cpu threads
         globalPhysMemAvail += cpuMgr->GetFreedRam();           // replenish physmem
-   
+
         //monitor HW target GPU
         gpuMgr->Monitor(); // periodic call to update state while running tasks on target
         // reclaim resources from completed tasks
@@ -174,10 +201,18 @@ void HAWS::ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit,
                    (int)(((float) globalCPUThreadsAvail / (float) cpuThreadLimit)*100));
             printf("HAWS/RESMON: free gpu threads %d (%d%%)\n", globalGPUThreadsAvail,
                    (int)(((float) globalGPUThreadsAvail / (float) gpuThreadLimit)*100));
-            printf("HAWS/RESMON: free phys mem %dMB (%d%%)\n", globalPhysMemAvail, 
+            printf("HAWS/RESMON: free phys mem %dMB (%d%%)\n", globalPhysMemAvail,
                    (int)(((float) globalPhysMemAvail / (float) physMemLimitMB)*100));
-            printf("HAWS/RESMON: free gpu mem %dMB (%d%%)\n", globalGPUMemAvail, 
+            printf("HAWS/RESMON: free gpu mem %dMB (%d%%)\n", globalGPUMemAvail,
                    (int)(((float) globalGPUMemAvail / (float) gpuMemLimitMB)*100));
+            // print dictionaries
+            for(std::unordered_map<std::string, long>::const_iterator it = CPUTimeMap.begin(); it != CPUTimeMap.end(); ++it) {
+                printf("task id: %s -> cpu: %ld\n", (it->first).c_str(), it->second);
+            }
+            printf("\n");
+            for(std::unordered_map<std::string, long>::const_iterator it = GPUTimeMap.begin(); it != GPUTimeMap.end(); ++it) {
+                printf("task id: %s -> gpu: %ld\n", (it->first).c_str(), it->second);
+            }
         }
 
         ReapChildren(); // collect all completed child processes (notifies target managers)
@@ -194,11 +229,11 @@ void HAWS::RequeueReq(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     tasksToStartQueueLock.unlock();
 }
 
-// SCHEDLOOP THREAD 
+// SCHEDLOOP THREAD
 void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     int maxCPUThreads = req->GetCPUJobCPUThreads();
     int maxRAM = req->GetCPUJobPhysMB();
-    
+
     //alloc resources for this task
     globalPhysMemAvail -= maxRAM;
     globalCPUThreadsAvail -= maxCPUThreads;
@@ -206,9 +241,10 @@ void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     //launch it!
     DEBUGPR("HAWS: Starting CPU Task\n");
     int pid = cpuMgr->StartTask(req->GetNum(),
-                                req->GetCPUBinPath(), 
-                                req->GetJobArgv(), 
-                                req->GetStdin(), req->GetStdinLen(), 
+                                req->GetJobID(),
+                                req->GetCPUBinPath(),
+                                req->GetJobArgv(),
+                                req->GetStdin(), req->GetStdinLen(),
                                 maxCPUThreads, 0, // threads (GPU unusued = 0)
                                 maxRAM, 0); // rams
     allCPUPids.insert(allCPUPids.begin(), pid);
@@ -218,7 +254,7 @@ void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
 // SCHEDLOOP THREAD
 void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     int maxCPUThreads = req->GetGPUJobCPUThreads();
-    int maxGPUThreads = req->GetGPUJobGPUThreads(); 
+    int maxGPUThreads = req->GetGPUJobGPUThreads();
     int maxRAM = req->GetGPUJobPhysMB();
     int maxGPURAM = req->GetGPUJobGPUPhysMB();
 
@@ -231,6 +267,7 @@ void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     //launch it!
     DEBUGPR("HAWS: Starting GPU Task (Phys %dMB/GPU %dMB)\n", maxRAM, maxGPURAM);
     int pid = gpuMgr->StartTask(req->GetNum(), 
+                                req->GetJobID(),
                                 req->GetGPUBinPath(),
                                 req->GetJobArgv(),
                                 req->GetStdin(), req->GetStdinLen(),
@@ -250,7 +287,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
                 DEBUGPR("\nHAWS/PHYSFULL: not enough physmem to run CPU job\n\n");
             }
             return;
-        } 
+        }
         if (globalCPUThreadsAvail - req->GetCPUJobCPUThreads() < 0) {
             // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
@@ -259,7 +296,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
             }
             return;
         }
-        
+
         // all resources are available to run
         tasksToStartQueueLock.unlock();
         StartTaskCPU(req);        
@@ -321,10 +358,41 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
 }
 
 HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) { // SCHEDLOOP THREAD
-    bool shouldUseCPU = req->GetTargHint() == "cpu-only" || 
-                        req->GetTargHint() == "cpu-please"  || // unused for profiling 
-                        req->GetTargHint() == "any"; // unused for profiling
-    return shouldUseCPU ? TargCPU : TargGPU;
+    std::string hint = req->GetTargHint();
+    if (hint == "cpu-only") return TargCPU;
+    if (hint == "gpu-only") return TargGPU;
+    // now estimate for "please" and "any" hints
+    long estGPU = LONG_MAX;
+    if (GPUTimeMap.count(req->GetJobID()) > 0) {
+      // in map
+      estGPU = GPUTimeMap[req->GetJobID()];
+    }
+    long estCPU = LONG_MAX;
+    if (CPUTimeMap.count(req->GetJobID()) > 0) {
+      // in map
+      estCPU = CPUTimeMap[req->GetJobID()];
+    }
+    if (hint == "cpu-please" && estCPU <= estGPU) 
+        return HAWS::RandomizeTarget(TargCPU, 0.75);
+    if (hint == "gpu-please" && estGPU <= estCPU) 
+        return HAWS::RandomizeTarget(TargGPU, 0.75);
+    if (hint == "any" && (estCPU == LONG_MAX || estGPU == LONG_MAX)) 
+        return HAWS::RandomizeTarget(TargGPU, 0.50);
+    if (hint == "any") 
+        return (estCPU <= estGPU) ? HAWS::RandomizeTarget(TargCPU, 0.65) :
+                                    HAWS::RandomizeTarget(TargGPU, 0.65);
+    return (estCPU <= estGPU) ? HAWS::RandomizeTarget(TargCPU, 0.65) : 
+                                HAWS::RandomizeTarget(TargGPU, 0.65);
+}
+
+HAWSHWTarget HAWS::RandomizeTarget(HAWSHWTarget best_target, float favor) {
+    if (best_target == TargCPU) {
+      if (rand() / static_cast<float>(RAND_MAX) > favor) return TargGPU;
+      return TargCPU;
+    } else {
+      if (rand() / static_cast<float>(RAND_MAX) > favor) return TargCPU;
+      return TargGPU;
+    }
 }
 
 HAWS::HAWS() {
@@ -354,7 +422,7 @@ bool HAWS::IsDoingWork() {
     int pendResp = 0;
     conclusionLock.lock();
     pendResp = pendConclusions.size();
-    conclusionLock.unlock(); 
+    conclusionLock.unlock();
     // either running tasks or have responses to send
     return GetNumQueuedReqs() > 0 || GetNumActiveTasks() > 0 || pendResp > 0;
 }
@@ -377,7 +445,9 @@ void HAWS::PrintData() {
 // MAIN THREAD
 void HAWS::Start() {
     hawsStartTime = std::chrono::system_clock::now();
-    
+
+    srand(time(NULL)); // initialize random seed
+
     assert(!schedLoopThreadRunning); // must be stopped before started
 
     // set resource limits -- cpu and gpu threads
@@ -400,9 +470,9 @@ void HAWS::Start() {
     schedLoopThread = new std::thread(HAWS::ScheduleLoop, 
                                       this->cpuThreadLimit,
                                       this->gpuThreadLimit,
-                                      this->physMemLimitMB, 
-                                      this->gpuMemLimitMB, 
-                                      this->gpuSharedMemLimitMB);    
+                                      this->physMemLimitMB,
+                                      this->gpuMemLimitMB,
+                                      this->gpuSharedMemLimitMB);
     schedLoopThreadRunning = true; // schedule loop thread active
 
     // create and start hardware target managers -- currently cpu and gpu
@@ -420,7 +490,7 @@ void HAWS::Stop() {
     tasksToStartQueueLock.unlock();
 
     // should not stop with reqs in flight in queue
-    assert(enqueuedReqs == 0); 
+    assert(enqueuedReqs == 0);
 
     // should not stop with conclusions to be sent back
     conclusionLock.lock();
@@ -475,7 +545,7 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
     pos++;
     buf[pos] = ',';
     pos++;
-    
+
     std::string reqNum = std::to_string(resp->reqNum);
     memcpy(buf + (pos * sizeof(char)), reqNum.c_str(), reqNum.length());
     pos += reqNum.length();
@@ -485,19 +555,19 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
 
     memcpy(buf + (pos * sizeof(char)), resp->targRan, resp->targRanLen);
     pos += resp->targRanLen;
-    
+
     buf[pos] = ',';
     pos++;
 
     memcpy(buf + (pos * sizeof(char)), resp->wallTime, resp->wallTimeLen);
     pos += resp->wallTimeLen;
-    
+
     buf[pos] = ',';
     pos++;
 
     memcpy(buf + (pos * sizeof(char)), resp->cpuTime, resp->cpuTimeLen);
     pos += resp->cpuTimeLen;
-    
+
     buf[pos] = ',';
     pos++;
 
@@ -511,13 +581,13 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
     std::string outLen = std::to_string(resp->outputLen);
     memcpy(buf + (pos * sizeof(char)), outLen.c_str(), outLen.length());
     pos += outLen.length();
-    
+
     buf[pos] = ',';
     pos++;
 
     memcpy(buf + (pos * sizeof(char)), resp->output, resp->outputLen);
     pos += resp->outputLen;
-    
+
     buf[pos] = ',';
     pos++;
     buf[pos] = '$';
@@ -566,7 +636,7 @@ void HAWS::RespLoop(int portResp1) {
                 free(*it);
                 numSent++;
             }
-            pendConclusions.clear(); //TODO 
+            pendConclusions.clear(); //TODO
         }
         conclusionLock.unlock();
         if (numSent > 0) {
@@ -595,7 +665,7 @@ void HAWS::StartSocket() {
     reqCounter = 0; // racy but other thread hasn't started
     DEBUGPR("HAWS: Starting SocketLoop (Client1)\n");
     sockLoopKillFlag = false; // disable killswitch for socket loop threads
-    sockThreadReqs = new std::thread(haws_socket_req_loop_newline, this->portReqs); 
+    sockThreadReqs = new std::thread(haws_socket_req_loop_newline, this->portReqs);
     sockThreadReqsRunning = true; // socket loop thread active
     sleep(1); // give things a chance to start
 }
@@ -615,7 +685,7 @@ void HAWS::StopSocket() {
     assert(threadRespLoopRunning);
     DEBUGPR("HAWS: Stoping Response Loop\n");
     threadRespLoop->join();
-    threadRespLoopRunning = false; 
+    threadRespLoopRunning = false;
     delete(threadRespLoop);
 
     DEBUGPR("HAWS: Stopped Socket Loops\n");
@@ -633,5 +703,5 @@ void HAWS::HardAwareSchedule(HAWSClientRequest* req) {
     assert(tasksToStartQueue != NULL);
     tasksToStartQueueLock.lock();
     tasksToStartQueue->push(req);
-    tasksToStartQueueLock.unlock(); 
+    tasksToStartQueueLock.unlock();
 }

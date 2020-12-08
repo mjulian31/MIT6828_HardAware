@@ -32,6 +32,7 @@ class HAWSTargetMgr {
     std::unordered_map<pid_t, int> tasksStatusCode;
     std::unordered_map<pid_t, time_point> tasksStartTime;
     std::unordered_map<pid_t, time_point> tasksEndTime;
+    std::unordered_map<pid_t, std::string> tasksID;
 
     // resources
     int freedCPUThreads = 0;
@@ -46,25 +47,25 @@ class HAWSTargetMgr {
     std::unordered_map<pid_t, long> tasksBillableUS;
 
     std::unordered_map<pid_t, ChildHandle*> tasksHandles;
-    std::unordered_map<pid_t, char*> tasksCompleted; //freeable, LARGE 
+    std::unordered_map<pid_t, char*> tasksCompleted; //freeable, LARGE
     std::unordered_map<pid_t, long> tasksFormalOutputLen;
     std::unordered_map<pid_t, char*> tasksFormalOutput; //ptr into tasksCompleted, no-freeable, LARGE
     std::unordered_map<pid_t, int> tasksOutWallTimeLen;
-    std::unordered_map<pid_t, char*> tasksOutWallTime; // freeable 
+    std::unordered_map<pid_t, char*> tasksOutWallTime; // freeable
     std::unordered_map<pid_t, int> tasksOutCPUTimeLen;
     std::unordered_map<pid_t, char*> tasksOutCPUTime; // freeable
     std::unordered_map<pid_t, long> tasksOutputLen;
 
-    std::mutex taskLock; 
-    std::mutex completionLock; 
+    std::mutex taskLock;
+    std::mutex completionLock;
     int activeTasks = 0;
     int throttle = 0;
-    
+
     char* stdOutBuffer;
 
     //CPUCostModel cputCostModel; //object TODO
 
-    private: 
+    private:
     inline void SanityCheckActiveTasksProtected () { // holding lock
         std::unordered_map<int, std::string>::iterator it = tasksActive.begin();
         std::list<pid_t>::iterator allPidIt;
@@ -89,7 +90,7 @@ class HAWSTargetMgr {
             it++;
         }
     }
-    int TaskIsActiveProtected (pid_t pid) { // holding lock 
+    int TaskIsActiveProtected (pid_t pid) { // holding lock
         return this->tasksActive.find(pid) != this->tasksActive.end();
     }
     void PrintProcessProtected(pid_t pid) { // holding lock
@@ -112,10 +113,10 @@ class HAWSTargetMgr {
     void PrintDataProtected () { // holding lock
         DEBUGPR("TARGMGR/%s | processes %ld/%ld active/all\n", this->targStr.c_str(),
                 tasksActive.size(), allPids.size());
-        
+
     }
     bool FileExists(std::string name) {
-        struct stat buffer;   
+        struct stat buffer;
         return (stat (name.c_str(), &buffer) == 0);
     }
     long GetFileSize(std::string filename) {
@@ -144,8 +145,8 @@ class HAWSTargetMgr {
         long output_bytes = GetFileSize(filepath);
         assert(output_bytes > 0);
         char* output = (char*) malloc(1 + output_bytes * sizeof(char));
-        FILE *fp = fopen(filepath.c_str(), "r"); 
-        assert(fp != NULL); 
+        FILE *fp = fopen(filepath.c_str(), "r");
+        assert(fp != NULL);
         size_t len = fread(output, sizeof(char), output_bytes, fp);
         assert(ferror(fp) == 0);
         fclose(fp);
@@ -157,7 +158,7 @@ class HAWSTargetMgr {
         taskLock.unlock();
 
         // disabled for debugging 
-        //DEBUGPR("TARGMGR/%s/FILEIN Delete dropped file\n", this->targStr.c_str());
+        DEBUGPR("TARGMGR/%s/FILEIN Delete dropped file\n", this->targStr.c_str());
         if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
             assert(false);
         }
@@ -171,12 +172,12 @@ class HAWSTargetMgr {
         // find wall time - @dedup
         int pos = 0;
         int bufPos = 0;
-        int wallTimeLen = 0; 
+        int wallTimeLen = 0;
         char* wallTimeBuffer = (char*) malloc(100*sizeof(char));
         memset(wallTimeBuffer, 0, 100);
         for(pos = 0; pos < tasksOutputLen[pid]; pos++) {
             if (allOutput[pos] == '\n') {
-                wallTimeBuffer[bufPos + 1] == '\0'; // null terminate  
+                wallTimeBuffer[bufPos + 1] == '\0'; // null terminate
                 pos++; // get off newline
                 break;
             }
@@ -195,7 +196,7 @@ class HAWSTargetMgr {
         memset(cpuTimeBuffer, 0, 100);
         for(pos = pos; pos < tasksOutputLen[pid]; pos++) {
             if (allOutput[pos] == '\n') {
-                cpuTimeBuffer[bufPos + 1] == '\0'; // null terminate  
+                cpuTimeBuffer[bufPos + 1] == '\0'; // null terminate
                 pos++; // get off newline
                 break;
             }
@@ -210,7 +211,7 @@ class HAWSTargetMgr {
         tasksFormalOutput[pid] = allOutput + (pos * sizeof(char));
 
         // update after discounting wall and cpu time
-        tasksFormalOutputLen[pid] = tasksOutputLen[pid] - pos - 1; 
+        tasksFormalOutputLen[pid] = tasksOutputLen[pid] - pos - 1;
         assert(tasksFormalOutputLen[pid] > 0);
 
         tasksEndTime[pid] = ended;
@@ -232,14 +233,14 @@ class HAWSTargetMgr {
     // ------ PUBLIC BELOW ------
 
     public:
-        HAWSTargetMgr (std::string targStr) { 
+        HAWSTargetMgr (std::string targStr) {
             this->targStr = targStr;
         }
-        int StartTask(int reqNum, std::string binpath, std::string args, 
-                      char* stdin_buf, long stdin_buff_len, 
-                      int maxCPUThreads, int maxGPUThreads, 
+        int StartTask(int reqNum, std::string taskID, std::string binpath, std::string args,
+                      char* stdin_buf, long stdin_buff_len,
+                      int maxCPUThreads, int maxGPUThreads,
                       int maxRAM, int maxGPURAM) {
-            ChildHandle* handle = start_subprocess_nonblocking(binpath, args, 
+            ChildHandle* handle = start_subprocess_nonblocking(binpath, args,
                                                                stdin_buf, stdin_buff_len);
             time_point start_time = std::chrono::system_clock::now();
             pid_t pid = handle->pid;
@@ -251,25 +252,26 @@ class HAWSTargetMgr {
             tasksActive[pid] = binpath + " " + args;
             tasksStatus[pid] = TASK_RUNNING;
             tasksStatusCode[pid] = -1;
-            tasksStartTime[pid] = start_time; 
+            tasksStartTime[pid] = start_time;
             tasksMaxCPUThreads[pid] = maxCPUThreads;
             tasksMaxGPUThreads[pid] = maxGPUThreads;
             tasksMaxRAM[pid] = maxRAM;
             tasksMaxGPURAM[pid] = maxGPURAM;
             tasksBillableUS[pid] = 0;
             tasksHandles[pid] = handle;
+            tasksID[pid] = taskID;
 
             taskLock.unlock();
 
             DEBUGPR("HWMGR/%s: starting task done\n", this->targStr.c_str());
             return pid;
         }
-        
+
         void Monitor () { //SCHEDLOOP THREAD
             //@perf this only should run in debug mode
             if (throttle % 1000 == 0) { // make sure all invariants are satisfied
                 taskLock.lock();
-                this->SanityCheckActiveTasksProtected(); 
+                this->SanityCheckActiveTasksProtected();
                 this->SanityCheckCompletedTasksProtected();
                 if (throttle % 10000 == 0) {
                     this->PrintDataProtected();
@@ -282,7 +284,7 @@ class HAWSTargetMgr {
             taskLock.lock();
             this->PrintDataProtected();
             taskLock.unlock();
-        }   
+        }
         int GetFreedRam() {
             taskLock.lock();
             int freed = this->freedPhysMB;
@@ -306,14 +308,14 @@ class HAWSTargetMgr {
         }
         int GetFreedGPUThreads() {
             taskLock.lock();
-            int freed = this->freedGPUThreads; 
+            int freed = this->freedGPUThreads;
             this->freedGPUThreads = 0; // requester has been notified of reclaimed threads
             taskLock.unlock();
             return freed;
         }
-        HAWSConclusion* TaskConclude(pid_t pid, TaskStatus ts, int status_code, 
+        HAWSConclusion* TaskConclude(pid_t pid, TaskStatus ts, int status_code,
                                      time_point time_completed) { //SCHEDLOOP THREAD
-            TaskCompleteGetDroppedOutput(pid);    
+            TaskCompleteGetDroppedOutput(pid);
             // must be freed by caller
             HAWSConclusion* conclusion = (HAWSConclusion*) malloc(sizeof(HAWSConclusion));
 
@@ -323,9 +325,9 @@ class HAWSTargetMgr {
             int success = subprocess_close_parent_stdin_pipe(tasksHandles[pid]);
             assert(success == 0);
 
-            this->TaskCompleteAccountingProtected(pid, ts, status_code, time_completed); 
-           
-            // create conclusion to return 
+            this->TaskCompleteAccountingProtected(pid, ts, status_code, time_completed);
+
+            // create conclusion to return
             conclusion->reqNum = tasksReqNum[pid];
             // targ ran
             conclusion->targRanLen = this->targStr.length();
@@ -337,13 +339,13 @@ class HAWSTargetMgr {
             // cpu time
             conclusion->cpuTimeLen = tasksOutCPUTimeLen[pid];
             conclusion->cpuTime = tasksOutCPUTime[pid]; // freeable after resp send
-            // formal output 
-            conclusion->outputLen = tasksFormalOutputLen[pid]; 
+            // formal output
+            conclusion->outputLen = tasksFormalOutputLen[pid];
             conclusion->freeableOutput = tasksCompleted[pid]; // freeable after resp send
             conclusion->output = tasksFormalOutput[pid]; // freed as part of tasksCompleted
             // black box process total start to finish runtime (server-side)
             conclusion->targetRealBillableUS = tasksBillableUS[pid];
-
+            conclusion->taskID = (char*) tasksID[pid].c_str();
             // free info related to this task
             //@mem erase more maps now that conclusion is ready as response
             free(tasksHandles[pid]);
@@ -358,36 +360,36 @@ class HAWSTargetMgr {
             bool active = this->TaskIsActiveProtected(pid);
             taskLock.unlock();
             return active;
-        }        
-        int GetNumActiveTasks() { 
+        }
+        int GetNumActiveTasks() {
             taskLock.lock();
-            int size = this->tasksActive.size(); 
+            int size = this->tasksActive.size();
             taskLock.unlock();
             return size;
         }
 
         void Start() { }
 
-        void Stop () { 
+        void Stop () {
             taskLock.lock();
 
-            /* we no longer keep tasksCompleted values after proc completes. 
+            /* we no longer keep tasksCompleted values after proc completes.
             std::unordered_map<pid_t, char*>::iterator mit = tasksCompleted.begin();
             while (mit != tasksCompleted.end()) {
                 DEBUGPR("HWMGR/%s COMPLETED PID %d: formal output[%ld]\n", this->targStr.c_str(), 
                        mit->first, tasksFormalOutputLen[mit->first]);
-                free(mit->second); 
+                free(mit->second);
                 mit++;
             }*/
 
-            // @perf @mem all member datastructures should really be already empty at this point 
+            // @perf @mem all member datastructures should really be already empty at this point
             // ...after proper cleanup on task end / response send (TODO)
-            assert(tasksCompleted.size() == 0); 
+            assert(tasksCompleted.size() == 0);
             assert(tasksActive.size() == 0);
             assert(tasksHandles.size() == 0);
             //(assert all task maps are empty)
 
-            // for now forcibly clear the others that have been accumulating 
+            // for now forcibly clear the others that have been accumulating
             // these accumulate small contents at least
             // the large freeable buffers should already have been freed on task completion
             allPids.clear();
