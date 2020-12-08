@@ -69,6 +69,7 @@ function get_target_pref(N, R, M)
         return CPU_ONLY
     elseif N*M <= 32*256
         return CPU_PLEASE
+    end
     return ANY
 end
 
