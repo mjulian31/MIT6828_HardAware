@@ -5,7 +5,9 @@
 #include <chrono>
 #include <list>
 
-//using namespace std;
+//print / debug stuff
+#define DEBUGPR(...) printf(__VA_ARGS__)
+//#define DEBUGPR
 
 //list stuff
 #define IN_LIST(list, item) (std::find(list.begin(), list.end(), item) != list.end())
@@ -37,7 +39,7 @@ typedef std::chrono::time_point<std::chrono::system_clock> time_point;
     std::string cppName(cName); \
     assert(cppName.length() > 0);  \
     free(cName); \
-    printf("CSVPARSER/CPPSTR: " #cppName ":'%s'\n", cppName.c_str());
+    DEBUGPR("CSVPARSER/CPPSTR: " #cppName ":'%s'\n", cppName.c_str());
 
 //@dedup?
 #define CSV_BUF_PARSE_INT(buf, strName, strNameCpp, intName) \
@@ -50,12 +52,12 @@ typedef std::chrono::time_point<std::chrono::system_clock> time_point;
     char* strName = (char*) malloc(sizeof(char) * (fieldLen + 1)); \
     memcpy(strName, (buf + (startPos * sizeof(char))), fieldLen); \
     strName[fieldLen] = '\0'; \
-    printf("CSVPARSER/STRINT: " #strName "[%ld]:%s\n", fieldLen, strName); \
+    DEBUGPR("CSVPARSER/STRINT: " #strName "[%ld]:%s\n", fieldLen, strName); \
     std::string strNameCpp(strName); \
     int intName = std::stoi(strName); \
     assert(intName >= 0); \
     free(strName); \
-    printf("CSVPARSER/INT: " #strName ":%d\n", intName);
+    DEBUGPR("CSVPARSER/INT: " #strName ":%d\n", intName);
 
 //@dedup?
 #define CSV_BUF_PARSE_LONG(buf, strName, strNameCpp, varName) \
@@ -68,11 +70,11 @@ typedef std::chrono::time_point<std::chrono::system_clock> time_point;
     char* strName = (char*) malloc(sizeof(char) * (fieldLen + 1)); \
     memcpy(strName, (buf + (startPos * sizeof(char))), fieldLen); \
     strName[fieldLen] = '\0'; \
-    printf("CSVPARSER/STRLONG: " #strName "[%ld]:%s\n", fieldLen, strName); \
+    DEBUGPR("CSVPARSER/STRLONG: " #strName "[%ld]:%s\n", fieldLen, strName); \
     std::string strNameCpp(strName); \
     long varName = std::stol(strName); \
     assert(varName >= 0); \
     free(strName); \
-    printf("CSVPARSER/LONG: " #strName ":%ld\n", varName);
+    DEBUGPR("CSVPARSER/LONG: " #strName ":%ld\n", varName);
 
 #endif

@@ -13,7 +13,6 @@
 #include "hawsUtil.h"
 #include "hawsHAWS.h"
 #include "hawsTargetMgr.h"
-#include "hawsGPUMgr.h"
 #include "hawsClientRequest.h"
 #include "hawsSocket.h"
 #include "socket.h"
@@ -65,6 +64,7 @@ time_point hawsStopTime;
 
 int throttle = 0;
 
+
 void HAWS::ReapChildren() { // SCHEDLOOP THREAD
     pid_t p;
     int status;
@@ -74,13 +74,13 @@ void HAWS::ReapChildren() { // SCHEDLOOP THREAD
     while ((p=waitpid(-1, &status, WNOHANG)) > 0) {
        time_completed = std::chrono::system_clock::now();
        // debugging
-       //printf("WAIDPID: PID %d status %d\n", p, status);
-       //printf("waitpid() was < 0\n"); 
-       //printf("errno codes are ECHILD: %d, EINTR: %d, EINVAL %d\n", ECHILD, EINTR, EINVAL);
-       //printf("errno was = %d\n", errno);
+       //DEBUGPR("WAIDPID: PID %d status %d\n", p, status);
+       //DEBUGPR("waitpid() was < 0\n"); 
+       //DEBUGPR("errno codes are ECHILD: %d, EINTR: %d, EINVAL %d\n", ECHILD, EINTR, EINVAL);
+       //DEBUGPR("errno was = %d\n", errno);
 
        if (WIFEXITED(status) && !WEXITSTATUS(status)) {
-          //printf("program execution successful\n"); 
+          //DEBUGPR("program execution successful\n"); 
           task_status = TASK_FINISHED_SUCCESS;
        } else if (WIFEXITED(status) && WEXITSTATUS(status)) { 
             if (WEXITSTATUS(status) == 127) { 
@@ -97,7 +97,7 @@ void HAWS::ReapChildren() { // SCHEDLOOP THREAD
        }
        DispatchConclusion(p, task_status, status, time_completed); 
     }
-    if (reapedTasks > 0) { printf("TARGMGR: subprocesses reaped: %d\n", reapedTasks); }
+    if (reapedTasks > 0) { DEBUGPR("TARGMGR: subprocesses reaped: %d\n", reapedTasks); }
 }
 
 // SCHEDLOOP THREAD
@@ -118,13 +118,13 @@ void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, tim
    pendConclusions.push_back(conclusion);
    conclusionLock.unlock();
    // racy, remove 
-   printf("HAWS/CONCLUSION: %ld pending conclusions\n", pendConclusions.size());
+   DEBUGPR("HAWS/CONCLUSION: %ld pending conclusions\n", pendConclusions.size());
 }
 
 // SCHEDLOOP THREAD
 void HAWS::ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit, 
                         int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemLimitMB) { 
-    printf("HAWS/SL: ScheduleLoop started...\n");
+    DEBUGPR("HAWS/SL: ScheduleLoop started...\n");
     int freedMBRam; // from task completion
     HAWSClientRequest* next;
     while (!schedLoopKillFlag) {
@@ -140,7 +140,7 @@ void HAWS::ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit,
                 globalPhysMemAvail - next->GetGPUJobPhysMB() < 0) {
                 tasksToStartQueueLock.unlock(); // unlock queue, we cannot start any target
                 if (throttle % 10000 == 0) {
-                    printf("Phys mem at capacity, waiting...\n");
+                    DEBUGPR("Phys mem at capacity, waiting...\n");
                 }
                 // do not deque next work and continue for another round to try
             } else {
@@ -152,7 +152,7 @@ void HAWS::ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit,
             //}
         } else {
             tasksToStartQueueLock.unlock(); // unlock queue
-            //printf("HAWS/SL: tasks to start queue empty!\n");
+            //DEBUGPR("HAWS/SL: tasks to start queue empty!\n");
         }
         
         //monitor HW target CPU
@@ -170,13 +170,13 @@ void HAWS::ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit,
         globalGPUMemAvail += gpuMgr->GetFreedGPURam();         // replenish gpu mem
 
         if (throttle++ % 5000 == 0) {
-            printf("HAWS/RESMON: free cpu threads %d (%d%%)\n", globalCPUThreadsAvail,
+            DEBUGPR("HAWS/RESMON: free cpu threads %d (%d%%)\n", globalCPUThreadsAvail,
                    (int)(((float) globalCPUThreadsAvail / (float) cpuThreadLimit)*100));
-            printf("HAWS/RESMON: free gpu threads %d (%d%%)\n", globalGPUThreadsAvail,
+            DEBUGPR("HAWS/RESMON: free gpu threads %d (%d%%)\n", globalGPUThreadsAvail,
                    (int)(((float) globalGPUThreadsAvail / (float) gpuThreadLimit)*100));
-            printf("HAWS/RESMON: free phys mem %dMB (%d%%)\n", globalPhysMemAvail, 
+            DEBUGPR("HAWS/RESMON: free phys mem %dMB (%d%%)\n", globalPhysMemAvail, 
                    (int)(((float) globalPhysMemAvail / (float) physMemLimitMB)*100));
-            printf("HAWS/RESMON: free gpu mem %dMB (%d%%)\n", globalGPUMemAvail, 
+            DEBUGPR("HAWS/RESMON: free gpu mem %dMB (%d%%)\n", globalGPUMemAvail, 
                    (int)(((float) globalGPUMemAvail / (float) gpuMemLimitMB)*100));
         }
 
@@ -184,7 +184,7 @@ void HAWS::ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit,
 
         usleep(1000); // yield CPU
     }
-    printf("HAWS: ScheduleLoop ended...\n");
+    DEBUGPR("HAWS: ScheduleLoop ended...\n");
 }
 
 // SCHEDLOOP THREAD
@@ -204,7 +204,7 @@ void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     globalCPUThreadsAvail -= maxCPUThreads;
 
     //launch it!
-    printf("HAWS: Starting CPU Task\n");
+    DEBUGPR("HAWS: Starting CPU Task\n");
     int pid = cpuMgr->StartTask(req->GetNum(),
                                 req->GetCPUBinPath(), 
                                 req->GetJobArgv(), 
@@ -212,7 +212,7 @@ void HAWS::StartTaskCPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
                                 maxCPUThreads, 0, // threads (GPU unusued = 0)
                                 maxRAM, 0); // rams
     allCPUPids.insert(allCPUPids.begin(), pid);
-    //printf("HAWS/SL: CPU got %s\n", req->ToStr().c_str());
+    //DEBUGPR("HAWS/SL: CPU got %s\n", req->ToStr().c_str());
 }
 
 // SCHEDLOOP THREAD
@@ -229,7 +229,7 @@ void HAWS::StartTaskGPU(HAWSClientRequest* req) { // SCHEDLOOP THREAD
     globalGPUMemAvail -= maxGPURAM;
 
     //launch it!
-    printf("HAWS: Starting GPU Task (Phys %dMB/GPU %dMB)\n", maxRAM, maxGPURAM);
+    DEBUGPR("HAWS: Starting GPU Task (Phys %dMB/GPU %dMB)\n", maxRAM, maxGPURAM);
     int pid = gpuMgr->StartTask(req->GetNum(), 
                                 req->GetGPUBinPath(),
                                 req->GetJobArgv(),
@@ -247,7 +247,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
             // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
             if (throttle % 10 == 0) {
-                printf("\nHAWS/PHYSFULL: not enough physmem to run CPU job\n\n");
+                DEBUGPR("\nHAWS/PHYSFULL: not enough physmem to run CPU job\n\n");
             }
             return;
         } 
@@ -255,7 +255,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
             // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
             if (throttle % 10 == 0) {
-                printf("\nHAWS/CPUFULL: not enough free CPU threads to run CPU job\n\n");
+                DEBUGPR("\nHAWS/CPUFULL: not enough free CPU threads to run CPU job\n\n");
             }
             return;
         }
@@ -263,7 +263,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
         // all resources are available to run
         tasksToStartQueueLock.unlock();
         StartTaskCPU(req);        
-        printf("HAWS/REQ: freeing stdin\n");
+        DEBUGPR("HAWS/REQ: freeing stdin\n");
         req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
         tasksToStartQueueLock.lock();
         tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
@@ -275,7 +275,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
             // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
             if (throttle % 10 == 0) {
-                printf("\nHAWS/PHYSFULL: not enough physmem to run GPU job\n\n");
+                DEBUGPR("\nHAWS/PHYSFULL: not enough physmem to run GPU job\n\n");
             }
             return;
         }
@@ -283,7 +283,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
             // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
             if (throttle % 10 == 0) {
-                printf("\nHAWS/GPUMEMFULL: not enough GPU mem to run GPU job\n\n");
+                DEBUGPR("\nHAWS/GPUMEMFULL: not enough GPU mem to run GPU job\n\n");
             }
             return;
         }
@@ -291,7 +291,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
             // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
             if (throttle % 10 == 0) {
-                printf("\nHAWS/CPUFULL: not enough free CPU threads to run GPU job\n\n");
+                DEBUGPR("\nHAWS/CPUFULL: not enough free CPU threads to run GPU job\n\n");
             }
             return;
         }
@@ -299,7 +299,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
             // @perf we should take req and requeue it at the back to try next req
             tasksToStartQueueLock.unlock();
             if (throttle % 10 == 0) {
-                printf("\nHAWS/GPUFULL: not enough free GPU threads to run GPU job\n\n");
+                DEBUGPR("\nHAWS/GPUFULL: not enough free GPU threads to run GPU job\n\n");
             }
             return;
         }
@@ -307,7 +307,7 @@ void HAWS::ProcessClientRequest(HAWSClientRequest* req) { //SCHEDLOOP THREAD
         // resources are available to run
         tasksToStartQueueLock.unlock();
         StartTaskGPU(req);
-        printf("HAWS/REQ: freeing stdin\n");
+        DEBUGPR("HAWS/REQ: freeing stdin\n");
         req->FreeStdinBuf(); // FREES FREEABLE STDIN (LARGE)
         tasksToStartQueueLock.lock();
         tasksToStartQueue->pop();  // calls destructor on object in queue, next gone
@@ -328,7 +328,7 @@ HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) { // SCHEDLOOP THR
 }
 
 HAWS::HAWS() {
-    printf("HAWS: Constructed\n");
+    DEBUGPR("HAWS: Constructed\n");
     reqCounter = 0; 
     tasksToStartQueue = new std::queue<HAWSClientRequest*>();
 }
@@ -360,16 +360,16 @@ bool HAWS::IsDoingWork() {
 }
 
 void HAWS::PrintData() {
-    printf("HAWS: PrintData\n");
-    printf("HAWS:   serviced %d requests\n", reqCounter);
+    DEBUGPR("HAWS: PrintData\n");
+    DEBUGPR("HAWS:   serviced %d requests\n", reqCounter);
     auto elapsedUS = TIMEDIFF_CAST_USEC(hawsStopTime - hawsStartTime);
     auto elapsedMS = TIMEDIFF_CAST_MSEC(hawsStopTime - hawsStartTime);
     auto elapsedS = TIMEDIFF_CAST_SEC(hawsStopTime - hawsStartTime);
     float billableCents = centsPerUnitTimeCPU * billableCPUus;
-    //printf("HAWS: System runtime: %ld us (%ld ms) (%ld s)\n", elapsedUS, elapsedMS, elapsedS);
-    //printf("HAWS: Billable CPU us: %ld\n", billableCPUus);
-    //printf("HAWS: Billable CPU cents/us: %f\n", centsPerUnitTimeCPU);
-    //printf("HAWS: Billable CPU cents: %f cents (%f$)\n", billableCents, billableCents / 100);
+    //DEBUGPR("HAWS: System runtime: %ld us (%ld ms) (%ld s)\n", elapsedUS, elapsedMS, elapsedS);
+    //DEBUGPR("HAWS: Billable CPU us: %ld\n", billableCPUus);
+    //DEBUGPR("HAWS: Billable CPU cents/us: %f\n", centsPerUnitTimeCPU);
+    //DEBUGPR("HAWS: Billable CPU cents: %f cents (%f$)\n", billableCents, billableCents / 100);
     cpuMgr->PrintData();
     gpuMgr->PrintData();
 }
@@ -396,7 +396,7 @@ void HAWS::Start() {
     schedLoopKillFlag = false; // disable killswitch for schedule loop
 
     // start schedule loop
-    printf("HAWS: Starting ScheduleLoop\n");
+    DEBUGPR("HAWS: Starting ScheduleLoop\n");
     schedLoopThread = new std::thread(HAWS::ScheduleLoop, 
                                       this->cpuThreadLimit,
                                       this->gpuThreadLimit,
@@ -439,7 +439,7 @@ void HAWS::Stop() {
 
     schedLoopKillFlag = true; // enable killswitch for schedule loop thread
 
-    printf("HAWS: Stopping ScheduleLoop\n");
+    DEBUGPR("HAWS: Stopping ScheduleLoop\n");
     schedLoopThread->join();          
     schedLoopThreadRunning = false;   
     delete(schedLoopThread);
@@ -459,16 +459,16 @@ void HAWS::Stop() {
 void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion* resp) {
     memset(buf, 0, max_bytes);
 
-    printf("HAWS/SEND: conclusion: \n");
-    printf("HAWS/SEND:        reqNum: %d\n", resp->reqNum);
-    printf("HAWS/SEND:       targRan: %s\n", resp->targRan);
-    printf("HAWS/SEND:   wallTimeLen: %d\n", resp->wallTimeLen);
-    printf("HAWS/SEND:      wallTime: %s\n", resp->wallTime);
-    printf("HAWS/SEND:    cpuTimeLen: %d\n", resp->cpuTimeLen);
-    printf("HAWS/SEND:       cpuTime: %s\n", resp->cpuTime);
-    printf("HAWS/SEND:     exit code: %d\n", resp->exitCode);
-    printf("HAWS/SEND:    output len: %d\n", resp->outputLen);
-    //printf("HAWS/SEND:        output: %s\n", resp->output);
+    DEBUGPR("HAWS/SEND: conclusion: \n");
+    DEBUGPR("HAWS/SEND:        reqNum: %d\n", resp->reqNum);
+    DEBUGPR("HAWS/SEND:       targRan: %s\n", resp->targRan);
+    DEBUGPR("HAWS/SEND:   wallTimeLen: %d\n", resp->wallTimeLen);
+    DEBUGPR("HAWS/SEND:      wallTime: %s\n", resp->wallTime);
+    DEBUGPR("HAWS/SEND:    cpuTimeLen: %d\n", resp->cpuTimeLen);
+    DEBUGPR("HAWS/SEND:       cpuTime: %s\n", resp->cpuTime);
+    DEBUGPR("HAWS/SEND:     exit code: %d\n", resp->exitCode);
+    DEBUGPR("HAWS/SEND:    output len: %d\n", resp->outputLen);
+    //DEBUGPR("HAWS/SEND:        output: %s\n", resp->output);
 
     long pos = 0;
     buf[pos] = '^';
@@ -525,14 +525,14 @@ void HAWS::SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion*
     buf[pos] = '\n';
     pos++;
 
-    printf("HAWS/RESP: SEND[%ld]:", pos);
+    DEBUGPR("HAWS/RESP: SEND[%ld]:", pos);
     for (int i = 0; i < pos; i++) {
         if (buf[i] == '\0') {
-            printf("null byte in send buffer at spot %d\n", i);
+            DEBUGPR("null byte in send buffer at spot %d\n", i);
             assert(false); 
         }
     }
-    printf("\n");
+    DEBUGPR("\n");
     assert(pos < max_bytes);
     send(socket, buf, pos, 0); // send it
     reqCounter++;
@@ -545,12 +545,12 @@ bool HAWS::IsRespLoopRunning() {
 
 // RESPONSE HANDLER THREAD
 void HAWS::RespLoop(int portResp1) {
-    printf("HAWS/RESPLOOP: response loop running\n");
+    DEBUGPR("HAWS/RESPLOOP: response loop running\n");
     assert(threadRespLoopRunning);
     int sockResp1 = socket_open_send_socket(portResp1, "HAWS/RESP");
     int sendBufSize = sizeof(char) * SOCKET_SEND_BUF_SIZE;
     char* sendBuf = (char*) malloc(sendBufSize);
-    printf("HAWS/RESPLOOP: connected to client\n");
+    DEBUGPR("HAWS/RESPLOOP: connected to client\n");
     std::list<HAWSConclusion*>::iterator it;
     int numSent = 0;
     while (!sockLoopKillFlag) {
@@ -570,16 +570,16 @@ void HAWS::RespLoop(int portResp1) {
         }
         conclusionLock.unlock();
         if (numSent > 0) {
-            printf("HAWS/RESP: sent %d response(s)\n", numSent);
+            DEBUGPR("HAWS/RESP: sent %d response(s)\n", numSent);
         }
         usleep(1000); // yield
     }
-    printf("HAWS/RESPLOOP: saw stop request\n");
-    printf("HAWS/RESPLOOP: freeing response buffer\n");
+    DEBUGPR("HAWS/RESPLOOP: saw stop request\n");
+    DEBUGPR("HAWS/RESPLOOP: freeing response buffer\n");
     free(sendBuf);
-    printf("HAWS/RESPLOOP: closing socket\n");
+    DEBUGPR("HAWS/RESPLOOP: closing socket\n");
     socket_close_socket(sockResp1, "HAWS/RESP");
-    printf("HAWS/RESPLOOP: stopped\n");
+    DEBUGPR("HAWS/RESPLOOP: stopped\n");
 }
 
 // REQUEST HANDLER THREAD (starts the response loop)
@@ -593,7 +593,7 @@ void HAWS::StartRespLoop() {
 void HAWS::StartSocket() {
     // start client1 socket loop
     reqCounter = 0; // racy but other thread hasn't started
-    printf("HAWS: Starting SocketLoop (Client1)\n");
+    DEBUGPR("HAWS: Starting SocketLoop (Client1)\n");
     sockLoopKillFlag = false; // disable killswitch for socket loop threads
     sockThreadReqs = new std::thread(haws_socket_req_loop_newline, this->portReqs); 
     sockThreadReqsRunning = true; // socket loop thread active
@@ -602,31 +602,31 @@ void HAWS::StartSocket() {
 
 // MAIN THREAD
 void HAWS::StopSocket() {
-    printf("HAWS: Stopping Socket Loops\n");
-    printf("HAWS: Stopping Requst Loop\n");
+    DEBUGPR("HAWS: Stopping Socket Loops\n");
+    DEBUGPR("HAWS: Stopping Requst Loop\n");
     assert(sockThreadReqsRunning); // must be started before stopped
     sockLoopKillFlag = true; // enable killswitch for socket loop thread
-    printf("HAWS: waiting on req thread\n");
+    DEBUGPR("HAWS: waiting on req thread\n");
     sockThreadReqs->join();            // block until thread exits and returns
     sockThreadReqsRunning = false;     // sock loop thread gone
     delete(sockThreadReqs);
-    printf("HAWS: Stopped Request Loop\n");
+    DEBUGPR("HAWS: Stopped Request Loop\n");
 
     assert(threadRespLoopRunning);
-    printf("HAWS: Stoping Response Loop\n");
+    DEBUGPR("HAWS: Stoping Response Loop\n");
     threadRespLoop->join();
     threadRespLoopRunning = false; 
     delete(threadRespLoop);
 
-    printf("HAWS: Stopped Socket Loops\n");
-    printf("HAWS: Stopped with %d requests serviced\n", reqCounter); 
+    DEBUGPR("HAWS: Stopped Socket Loops\n");
+    DEBUGPR("HAWS: Stopped with %d requests serviced\n", reqCounter); 
 }
 
 // REQUEST HANDLER THREAD / MAIN THREAD (in test mode)
 void HAWS::HardAwareSchedule(HAWSClientRequest* req) {
     /* requests can come in out of order
     if (this->reqCounter + 1 != req->GetNum()) {
-        printf("reqCounter was at %d, req number in is %d\n", this->reqCounter, req->GetNum());
+        DEBUGPR("reqCounter was at %d, req number in is %d\n", this->reqCounter, req->GetNum());
         assert(false);
     } this->reqCounter++; */
 
