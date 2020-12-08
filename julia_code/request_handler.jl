@@ -15,14 +15,14 @@ struct response
     output
 end
 
-@enum machine_type
+@enum machine_type begin
     CL
     LOC
 end
 
 machine = LOC
 
-@enum method_type
+@enum method_type begin
     CUTOFF
     CUTOFF_ANY
     CUTOFF_IDEAL
@@ -31,7 +31,7 @@ end
 
 method = LEVELS
 
-@eunum stdin_use
+@enum stdin_use begin
     YES
     NO
 end
