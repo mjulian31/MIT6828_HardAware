@@ -18,9 +18,9 @@ if size(ARGS, 1) > 2 && ARGS[1] == "stdin"
     end
     if ARGS[3] == "levels"
         method = LEVELS
-    elseif ARGS[4] = "cutoff"
+    elseif ARGS[4] == "cutoff"
         method = CUTOFF
-    elseif ARGS[4] = "ideal"
+    elseif ARGS[4] == "ideal"
         method = CUTOFF_IDEAL
     else
         method = CUTOFF_ANY
@@ -33,9 +33,9 @@ elseif size(ARGS, 1) > 1
     end
     if ARGS[3] == "levels"
         method = LEVELS
-    elseif ARGS[4] = "cutoff"
+    elseif ARGS[4] == "cutoff"
         method = CUTOFF
-    elseif ARGS[4] = "ideal"
+    elseif ARGS[4] == "ideal"
         method = CUTOFF_IDEAL
     else
         method = CUTOFF_ANY
