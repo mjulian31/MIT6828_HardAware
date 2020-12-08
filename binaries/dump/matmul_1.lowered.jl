@@ -48,122 +48,121 @@ CodeInfo(
 │    %47  = Main.eltype(output)
 │           outval = Main.zero(%47)
 │    %49  = R + Main.TILE_DIM
-│    %50  = R % Main.TILE_DIM
-│    %51  = %49 - %50
-│           NUM_TILES = Main.div(%51, Main.TILE_DIM)
-│    %53  = NUM_TILES - 1
-│    %54  = 0:%53
-│           @_27 = Base.iterate(%54)
-│    %56  = @_27 === nothing
-│    %57  = Base.not_int(%56)
-└───        goto #19 if not %57
+│    %50  = %49 - 1
+│           NUM_TILES = Main.div(%50, Main.TILE_DIM)
+│    %52  = NUM_TILES - 1
+│    %53  = 0:%52
+│           @_27 = Base.iterate(%53)
+│    %55  = @_27 === nothing
+│    %56  = Base.not_int(%55)
+└───        goto #19 if not %56
 2 ┄─        Core.NewvarNode(:(val@_31))
 │           Core.NewvarNode(:(val@_32))
 │           Core.NewvarNode(:(val@_33))
 │           Core.NewvarNode(:(val@_34))
 │           Core.NewvarNode(:(@_35))
-│    %64  = @_27
-│           t = Core.getfield(%64, 1)
-│    %66  = Core.getfield(%64, 2)
-│    %67  = gi - 1
-│    %68  = %67 * Main.TILE_DIM
-│           I = %68 + i
-│    %70  = gj - 1
-│    %71  = %70 * Main.TILE_DIM
-│           J = %71 + j
-│    %73  = I <= N
-└───        goto #4 if not %73
-3 ── %75  = t * Main.TILE_DIM
-│    %76  = %75 + j
-│           @_38 = %76 <= R
+│    %63  = @_27
+│           t = Core.getfield(%63, 1)
+│    %65  = Core.getfield(%63, 2)
+│    %66  = gi - 1
+│    %67  = %66 * Main.TILE_DIM
+│           I = %67 + i
+│    %69  = gj - 1
+│    %70  = %69 * Main.TILE_DIM
+│           J = %70 + j
+│    %72  = I <= N
+└───        goto #4 if not %72
+3 ── %74  = t * Main.TILE_DIM
+│    %75  = %74 + j
+│           @_38 = %75 <= R
 └───        goto #5
 4 ──        @_38 = false
 5 ┄─        goto #7 if not @_38
 6 ──        $(Expr(:inbounds, true))
-│    %82  = input1
-│    %83  = I
-│    %84  = t * Main.TILE_DIM
-│    %85  = %84 + j
-│    %86  = Base.getindex(%82, %83, %85)
-│           Base.setindex!(tile1, %86, i, j)
-│           val@_31 = %86
+│    %81  = input1
+│    %82  = I
+│    %83  = t * Main.TILE_DIM
+│    %84  = %83 + j
+│    %85  = Base.getindex(%81, %82, %84)
+│           Base.setindex!(tile1, %85, i, j)
+│           val@_31 = %85
 │           $(Expr(:inbounds, :pop))
 │           val@_31
 └───        goto #8
 7 ──        $(Expr(:inbounds, true))
-│    %93  = 0.0
-│           Base.setindex!(tile1, %93, i, j)
-│           val@_32 = %93
+│    %92  = 0.0
+│           Base.setindex!(tile1, %92, i, j)
+│           val@_32 = %92
 │           $(Expr(:inbounds, :pop))
 └───        val@_32
-8 ┄─ %98  = t * Main.TILE_DIM
-│    %99  = %98 + i
-│    %100 = %99 <= R
-└───        goto #10 if not %100
+8 ┄─ %97  = t * Main.TILE_DIM
+│    %98  = %97 + i
+│    %99  = %98 <= R
+└───        goto #10 if not %99
 9 ──        @_39 = J <= M
 └───        goto #11
 10 ─        @_39 = false
 11 ┄        goto #13 if not @_39
 12 ─        $(Expr(:inbounds, true))
-│    %107 = input2
-│    %108 = t * Main.TILE_DIM
-│    %109 = %108 + i
-│    %110 = Base.getindex(%107, %109, J)
-│           Base.setindex!(tile2, %110, i, j)
-│           val@_33 = %110
+│    %106 = input2
+│    %107 = t * Main.TILE_DIM
+│    %108 = %107 + i
+│    %109 = Base.getindex(%106, %108, J)
+│           Base.setindex!(tile2, %109, i, j)
+│           val@_33 = %109
 │           $(Expr(:inbounds, :pop))
 │           val@_33
 └───        goto #14
 13 ─        $(Expr(:inbounds, true))
-│    %117 = 0.0
-│           Base.setindex!(tile2, %117, i, j)
-│           val@_34 = %117
+│    %116 = 0.0
+│           Base.setindex!(tile2, %116, i, j)
+│           val@_34 = %116
 │           $(Expr(:inbounds, :pop))
 └───        val@_34
 14 ┄        Main.sync_threads()
-│    %123 = gi - 1
-│    %124 = %123 * Main.TILE_DIM
-│           I = %124 + i
-│    %126 = gj - 1
-│    %127 = %126 * Main.TILE_DIM
-│           J = %127 + j
-│    %129 = 1:Main.TILE_DIM
-│           @_35 = Base.iterate(%129)
-│    %131 = @_35 === nothing
-│    %132 = Base.not_int(%131)
-└───        goto #17 if not %132
-15 ┄ %134 = @_35
-│           k = Core.getfield(%134, 1)
-│    %136 = Core.getfield(%134, 2)
+│    %122 = gi - 1
+│    %123 = %122 * Main.TILE_DIM
+│           I = %123 + i
+│    %125 = gj - 1
+│    %126 = %125 * Main.TILE_DIM
+│           J = %126 + j
+│    %128 = 1:Main.TILE_DIM
+│           @_35 = Base.iterate(%128)
+│    %130 = @_35 === nothing
+│    %131 = Base.not_int(%130)
+└───        goto #17 if not %131
+15 ┄ %133 = @_35
+│           k = Core.getfield(%133, 1)
+│    %135 = Core.getfield(%133, 2)
 │           $(Expr(:inbounds, true))
-│    %138 = outval
-│    %139 = Base.getindex(tile1, i, k)
-│    %140 = Base.getindex(tile2, k, j)
-│    %141 = %139 * %140
-│    %142 = %138 + %141
-│           outval = %142
-│           val@_37 = %142
+│    %137 = outval
+│    %138 = Base.getindex(tile1, i, k)
+│    %139 = Base.getindex(tile2, k, j)
+│    %140 = %138 * %139
+│    %141 = %137 + %140
+│           outval = %141
+│           val@_37 = %141
 │           $(Expr(:inbounds, :pop))
 │           val@_37
-│           @_35 = Base.iterate(%129, %136)
-│    %148 = @_35 === nothing
-│    %149 = Base.not_int(%148)
-└───        goto #17 if not %149
+│           @_35 = Base.iterate(%128, %135)
+│    %147 = @_35 === nothing
+│    %148 = Base.not_int(%147)
+└───        goto #17 if not %148
 16 ─        goto #15
 17 ┄        Main.sync_threads()
-│           @_27 = Base.iterate(%54, %66)
-│    %154 = @_27 === nothing
-│    %155 = Base.not_int(%154)
-└───        goto #19 if not %155
+│           @_27 = Base.iterate(%53, %65)
+│    %153 = @_27 === nothing
+│    %154 = Base.not_int(%153)
+└───        goto #19 if not %154
 18 ─        goto #2
-19 ┄ %158 = gi - 1
-│    %159 = %158 * Main.TILE_DIM
-│           I = %159 + i
-│    %161 = gj - 1
-│    %162 = %161 * Main.TILE_DIM
-│           J = %162 + j
-│    %164 = I <= N
-└───        goto #21 if not %164
+19 ┄ %157 = gi - 1
+│    %158 = %157 * Main.TILE_DIM
+│           I = %158 + i
+│    %160 = gj - 1
+│    %161 = %160 * Main.TILE_DIM
+│           J = %161 + j
+│    %163 = I <= N
+└───        goto #21 if not %163
 20 ─        @_40 = J <= M
 └───        goto #22
 21 ─        @_40 = false

@@ -99,11 +99,19 @@ void haws_socket_req_loop_newline(int socket) {
     while (!sockLoopKillFlag) {
         bytes_in = readLine(socket_fd, socket_read_buf, SOCKET_READ_BUF_SIZE);
         assert(bytes_in != SOCKET_READ_BUF_SIZE);
-        if (bytes_in > 0) {
+        if (bytes_in > 1) {
             if(!haws.IsRespLoopRunning()) {
                 haws.StartRespLoop(); 
             }
-            assert(socket_read_buf[0] == '^');
+            if (socket_read_buf[0] != '^') {
+                printf("HAWS/RECVLOOP: didn't find start of request\n");
+                printf("HAWS/RECVLOOP: buffer:'");
+                for (int i = 0; i < bytes_in; i++) {
+                    printf("|%c|", socket_read_buf[i]);
+                }
+                printf("'\n");
+                assert(socket_read_buf[0] == '^');
+            }
             if (socket_read_buf[bytes_in - 2] != '$') {
                 printf("RECVBUF[%ld]:%s", bytes_in, socket_read_buf);
                 assert(socket_read_buf[bytes_in - 1] == '$'); // make sure we got a full request
@@ -255,6 +263,13 @@ void haws_socket_req_loop(int socket) { // SOCKET THREAD
     printf("HAWS/RECVLOOP: freed buffers\n");
 }*/
 
+/* Read characters from 'fd' until a newline is encountered. If a newline
+  character is not encountered in the first (n - 1) bytes, then the excess
+  characters are discarded. The returned string placed in 'buf' is
+  null-terminated and includes the newline character if it was read in the
+  first (n - 1) bytes. The function return value is the number of bytes
+  placed in buffer (which includes the newline character if encountered,
+  but excludes the terminating null byte). */
 
 long readLine(int fd, char *buffer, long n)
 {

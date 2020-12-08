@@ -8,11 +8,11 @@ target triple = "nvptx64-nvidia-cuda"
 
 @__static_shmem_285 = internal addrspace(3) global [1056 x float] zeroinitializer, align 32
 @__static_shmem_286 = internal addrspace(3) global [1056 x float] zeroinitializer, align 32
-@exception5 = private unnamed_addr constant [10 x i8] c"exception\00", align 1
+@exception4 = private unnamed_addr constant [10 x i8] c"exception\00", align 1
 @0 = internal unnamed_addr constant [108 x i8] c"ERROR: a %s was thrown during kernel execution.\0A       Run Julia on debug level 2 for device stack traces.\0A\00", align 1
 @1 = internal unnamed_addr constant [110 x i8] c"WARNING: could not signal exception status to the host, execution will continue.\0A         Please file a bug.\0A\00", align 1
 
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:88 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:88 within `coalesced_matmul_kernel!'
 define dso_local ptx_kernel void @_Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1_(i64, i64, i64, i32, i32, i32) local_unnamed_addr !dbg !43 {
 top:
   %6 = alloca [2 x i64]
@@ -46,20 +46,20 @@ top:
   %34 = getelementptr inbounds %jl_value_t addrspace(10)*, %jl_value_t addrspace(10)** %33, i64 4
   %35 = bitcast %jl_value_t addrspace(10)** %34 to i64**
   %36 = load i64*, i64** %35, !tbaa !45, !invariant.load !4
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:89 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:89 within `coalesced_matmul_kernel!'
 ; ┌ @ essentials.jl:414 within `reinterpret'
    %37 = inttoptr i64 %0 to i8 addrspace(1)*, !dbg !49
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:90 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:90 within `coalesced_matmul_kernel!'
 ; ┌ @ essentials.jl:414 within `reinterpret'
    %38 = inttoptr i64 %1 to i8 addrspace(1)*, !dbg !53
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:91 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:91 within `coalesced_matmul_kernel!'
 ; ┌ @ essentials.jl:414 within `reinterpret'
    %39 = inttoptr i64 %2 to i8 addrspace(1)*, !dbg !55
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:92 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:38 within `CuDeviceArray' @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:48
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:92 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48
 ; │┌ @ broadcast.jl:837 within `materialize'
 ; ││┌ @ broadcast.jl:1046 within `copy'
 ; │││┌ @ ntuple.jl:42 within `ntuple'
@@ -76,7 +76,7 @@ top:
       %43 = getelementptr inbounds [2 x i64], [2 x i64]* %6, i32 0, i32 1, !dbg !69
       store i64 %41, i64* %43, align 8, !dbg !69, !tbaa !81
 ; │└└└
-; │ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:38 within `CuDeviceArray' @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:48 @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:31
+; │ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48 @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:31
    %44 = getelementptr inbounds { [2 x i64], i8 addrspace(1)* }, { [2 x i64], i8 addrspace(1)* }* %7, i32 0, i32 0, !dbg !83
    %45 = bitcast [2 x i64]* %44 to i8*, !dbg !83
    %46 = bitcast [2 x i64]* %6 to i8*, !dbg !83
@@ -84,8 +84,8 @@ top:
    %47 = getelementptr inbounds { [2 x i64], i8 addrspace(1)* }, { [2 x i64], i8 addrspace(1)* }* %7, i32 0, i32 1, !dbg !83
    store i8 addrspace(1)* %37, i8 addrspace(1)** %47, align 8, !dbg !83, !tbaa !81
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:93 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:38 within `CuDeviceArray' @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:48
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:93 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48
 ; │┌ @ broadcast.jl:837 within `materialize'
 ; ││┌ @ broadcast.jl:1046 within `copy'
 ; │││┌ @ ntuple.jl:42 within `ntuple'
@@ -102,7 +102,7 @@ top:
       %51 = getelementptr inbounds [2 x i64], [2 x i64]* %8, i32 0, i32 1, !dbg !89
       store i64 %49, i64* %51, align 8, !dbg !89, !tbaa !81
 ; │└└└
-; │ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:38 within `CuDeviceArray' @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:48 @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:31
+; │ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48 @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:31
    %52 = getelementptr inbounds { [2 x i64], i8 addrspace(1)* }, { [2 x i64], i8 addrspace(1)* }* %9, i32 0, i32 0, !dbg !95
    %53 = bitcast [2 x i64]* %52 to i8*, !dbg !95
    %54 = bitcast [2 x i64]* %8 to i8*, !dbg !95
@@ -110,8 +110,8 @@ top:
    %55 = getelementptr inbounds { [2 x i64], i8 addrspace(1)* }, { [2 x i64], i8 addrspace(1)* }* %9, i32 0, i32 1, !dbg !95
    store i8 addrspace(1)* %38, i8 addrspace(1)** %55, align 8, !dbg !95, !tbaa !81
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:94 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:38 within `CuDeviceArray' @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:48
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:94 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48
 ; │┌ @ broadcast.jl:837 within `materialize'
 ; ││┌ @ broadcast.jl:1046 within `copy'
 ; │││┌ @ ntuple.jl:42 within `ntuple'
@@ -128,7 +128,7 @@ top:
       %59 = getelementptr inbounds [2 x i64], [2 x i64]* %10, i32 0, i32 1, !dbg !101
       store i64 %57, i64* %59, align 8, !dbg !101, !tbaa !81
 ; │└└└
-; │ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:38 within `CuDeviceArray' @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:48 @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:31
+; │ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:48 @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:31
    %60 = getelementptr inbounds { [2 x i64], i8 addrspace(1)* }, { [2 x i64], i8 addrspace(1)* }* %11, i32 0, i32 0, !dbg !107
    %61 = bitcast [2 x i64]* %60 to i8*, !dbg !107
    %62 = bitcast [2 x i64]* %10 to i8*, !dbg !107
@@ -136,11 +136,11 @@ top:
    %63 = getelementptr inbounds { [2 x i64], i8 addrspace(1)* }, { [2 x i64], i8 addrspace(1)* }* %11, i32 0, i32 1, !dbg !107
    store i8 addrspace(1)* %39, i8 addrspace(1)** %63, align 8, !dbg !107, !tbaa !81
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:95 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:77 within `blockIdx'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:57 within `blockIdx_x'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:95 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:77 within `blockIdx'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_x'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %64 = call fastcc i32 @jl_llvmcall0(), !dbg !108
 ; ││└└
 ; ││┌ @ boot.jl:708 within `Int64'
@@ -150,26 +150,26 @@ top:
 ; ││┌ @ int.jl:86 within `+'
      %66 = add i64 %65, 1, !dbg !123
 ; │└└
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:57 within `blockIdx_y'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_y'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %67 = call fastcc i32 @jl_llvmcall1(), !dbg !126
 ; │└└└
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:57 within `blockIdx_z'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_z'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %68 = call fastcc i32 @jl_llvmcall2(), !dbg !131
 ; └└└└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:96 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:77 within `blockIdx'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:57 within `blockIdx_x'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:96 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:77 within `blockIdx'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_x'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %69 = call fastcc i32 @jl_llvmcall3(), !dbg !136
 ; │└└└
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:57 within `blockIdx_y'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_y'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %70 = call fastcc i32 @jl_llvmcall4(), !dbg !142
 ; ││└└
 ; ││┌ @ boot.jl:708 within `Int64'
@@ -179,16 +179,16 @@ top:
 ; ││┌ @ int.jl:86 within `+'
      %72 = add i64 %71, 1, !dbg !148
 ; │└└
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:57 within `blockIdx_z'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_z'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %73 = call fastcc i32 @jl_llvmcall5(), !dbg !149
 ; └└└└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:97 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:91 within `threadIdx'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:47 within `threadIdx_x'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:97 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:91 within `threadIdx'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_x'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %74 = call fastcc i32 @jl_llvmcall6(), !dbg !153
 ; ││└└
 ; ││┌ @ boot.jl:708 within `Int64'
@@ -198,26 +198,26 @@ top:
 ; ││┌ @ int.jl:86 within `+'
      %76 = add i64 %75, 1, !dbg !163
 ; │└└
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:47 within `threadIdx_y'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_y'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %77 = call fastcc i32 @jl_llvmcall7(), !dbg !164
 ; │└└└
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:47 within `threadIdx_z'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_z'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %78 = call fastcc i32 @jl_llvmcall8(), !dbg !169
 ; └└└└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:98 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:91 within `threadIdx'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:47 within `threadIdx_x'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:98 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:91 within `threadIdx'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_x'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %79 = call fastcc i32 @jl_llvmcall9(), !dbg !174
 ; │└└└
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:47 within `threadIdx_y'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_y'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %80 = call fastcc i32 @jl_llvmcall10(), !dbg !180
 ; ││└└
 ; ││┌ @ boot.jl:708 within `Int64'
@@ -227,38 +227,38 @@ top:
 ; ││┌ @ int.jl:86 within `+'
      %82 = add i64 %81, 1, !dbg !186
 ; │└└
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:47 within `threadIdx_z'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `_index'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_z'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
       %83 = call fastcc i32 @jl_llvmcall11(), !dbg !187
 ; └└└└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:101 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/memory_shared.jl:24 within `macro expansion'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/memory_shared.jl:55 within `emit_shmem'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/memory_shared.jl:55 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:101 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:24 within `macro expansion'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:55 within `emit_shmem'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:55 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
      %84 = call fastcc i8 addrspace(3)* @jl_llvmcall12(), !dbg !191
 ; │└└
-; │ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/memory_shared.jl:25 within `macro expansion'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:38 within `CuDeviceArray' @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:31
+; │ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:25 within `macro expansion'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:31
     %85 = getelementptr inbounds { [2 x i64], i8 addrspace(3)* }, { [2 x i64], i8 addrspace(3)* }* %12, i32 0, i32 0, !dbg !199
     store [2 x i64] [i64 33, i64 32], [2 x i64]* %85, align 8, !dbg !199, !tbaa !81
     %86 = getelementptr inbounds { [2 x i64], i8 addrspace(3)* }, { [2 x i64], i8 addrspace(3)* }* %12, i32 0, i32 1, !dbg !199
     store i8 addrspace(3)* %84, i8 addrspace(3)** %86, align 8, !dbg !199, !tbaa !81
 ; └└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:102 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/memory_shared.jl:24 within `macro expansion'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/memory_shared.jl:55 within `emit_shmem'
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/memory_shared.jl:55 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:102 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:24 within `macro expansion'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:55 within `emit_shmem'
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:55 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
      %87 = call fastcc i8 addrspace(3)* @jl_llvmcall13(), !dbg !202
 ; │└└
-; │ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/memory_shared.jl:25 within `macro expansion'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:38 within `CuDeviceArray' @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:31
+; │ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:25 within `macro expansion'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:31
     %88 = getelementptr inbounds { [2 x i64], i8 addrspace(3)* }, { [2 x i64], i8 addrspace(3)* }* %13, i32 0, i32 0, !dbg !207
     store [2 x i64] [i64 33, i64 32], [2 x i64]* %88, align 8, !dbg !207, !tbaa !81
     %89 = getelementptr inbounds { [2 x i64], i8 addrspace(3)* }, { [2 x i64], i8 addrspace(3)* }* %13, i32 0, i32 1, !dbg !207
     store i8 addrspace(3)* %87, i8 addrspace(3)** %89, align 8, !dbg !207, !tbaa !81
 ; └└
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:106 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:106 within `coalesced_matmul_kernel!'
 ; ┌ @ int.jl:920 within `+'
 ; │┌ @ int.jl:476 within `rem'
     %90 = sext i32 %4 to i64, !dbg !210
@@ -266,1060 +266,1040 @@ top:
 ; │ @ int.jl:922 within `+' @ int.jl:86
    %91 = add i64 %90, 32, !dbg !214
 ; └
-; ┌ @ promotion.jl:352 within `rem'
-; │┌ @ promotion.jl:282 within `promote'
-; ││┌ @ promotion.jl:259 within `_promote'
-; │││┌ @ number.jl:7 within `convert'
-; ││││┌ @ boot.jl:708 within `Int64'
-; │││││┌ @ boot.jl:627 within `toInt64'
-        %92 = sext i32 %4 to i64, !dbg !216
-; │└└└└└
-; │ @ promotion.jl:352 within `rem' @ int.jl:261
-   br label %pass, !dbg !228
-
-L67:                                              ; preds = %pass2
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
-; ┌ @ range.jl:620 within `iterate'
-   br label %L69, !dbg !229
-
-L68:                                              ; preds = %pass2
-   br label %L69, !dbg !229
-
-L69:                                              ; preds = %L68, %L67
-   %value_phi = phi i8 [ 1, %L67 ], [ 0, %L68 ]
-   %value_phi3 = phi i64 [ 0, %L68 ], [ undef, %L67 ]
-   %value_phi4 = phi i64 [ 0, %L68 ], [ undef, %L67 ]
-; └
-  %93 = xor i8 %value_phi, 1, !dbg !232
-  %94 = trunc i8 %93 to i1, !dbg !232
-  %95 = xor i1 %94, true, !dbg !232
-  br i1 %95, label %L69.L518_crit_edge, label %L69.L74_crit_edge, !dbg !232
-
-L69.L518_crit_edge:                               ; preds = %L69
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:138 within `coalesced_matmul_kernel!'
-; ┌ @ range.jl:624 within `iterate'
-   br label %L518, !dbg !233
-
-L69.L74_crit_edge:                                ; preds = %L69
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
-; ┌ @ range.jl:620 within `iterate'
-   br label %L74, !dbg !229
-
-L74:                                              ; preds = %L69.L74_crit_edge, %L517
-   %value_phi5 = phi float [ 0.000000e+00, %L69.L74_crit_edge ], [ %205, %L517 ]
-   %value_phi6 = phi i64 [ %value_phi3, %L69.L74_crit_edge ], [ %value_phi17, %L517 ]
-   %value_phi7 = phi i64 [ %value_phi4, %L69.L74_crit_edge ], [ %value_phi18, %L517 ]
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:111 within `coalesced_matmul_kernel!'
 ; ┌ @ int.jl:85 within `-'
-   %96 = sub i64 %66, 1, !dbg !235
-; └
-; ┌ @ int.jl:87 within `*'
-   %97 = mul i64 %96, 32, !dbg !238
-; └
-; ┌ @ int.jl:86 within `+'
-   %98 = add i64 %97, %76, !dbg !240
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:112 within `coalesced_matmul_kernel!'
-; ┌ @ int.jl:85 within `-'
-   %99 = sub i64 %72, 1, !dbg !241
-; └
-; ┌ @ int.jl:87 within `*'
-   %100 = mul i64 %99, 32, !dbg !243
-; └
-; ┌ @ int.jl:86 within `+'
-   %101 = add i64 %100, %82, !dbg !244
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:115 within `coalesced_matmul_kernel!'
-; ┌ @ promotion.jl:350 within `<='
-; │┌ @ promotion.jl:282 within `promote'
-; ││┌ @ promotion.jl:259 within `_promote'
-; │││┌ @ number.jl:7 within `convert'
-; ││││┌ @ boot.jl:708 within `Int64'
-; │││││┌ @ boot.jl:627 within `toInt64'
-        %102 = sext i32 %3 to i64, !dbg !245
-; │└└└└└
-; │ @ promotion.jl:350 within `<=' @ int.jl:441
-   %103 = icmp sle i64 %98, %102, !dbg !253
-; └
-  %104 = zext i1 %103 to i8, !dbg !252
-  %105 = trunc i8 %104 to i1, !dbg !252
-  %106 = xor i1 %105, true, !dbg !252
-  br i1 %106, label %L94, label %L88, !dbg !252
-
-L88:                                              ; preds = %L74
-; ┌ @ int.jl:87 within `*'
-   %107 = mul i64 %value_phi6, 32, !dbg !255
-; └
-; ┌ @ int.jl:86 within `+'
-   %108 = add i64 %107, %82, !dbg !256
-; └
-; ┌ @ promotion.jl:350 within `<='
-; │┌ @ promotion.jl:282 within `promote'
-; ││┌ @ promotion.jl:259 within `_promote'
-; │││┌ @ number.jl:7 within `convert'
-; ││││┌ @ boot.jl:708 within `Int64'
-; │││││┌ @ boot.jl:627 within `toInt64'
-        %109 = sext i32 %4 to i64, !dbg !245
-; │└└└└└
-; │ @ promotion.jl:350 within `<=' @ int.jl:441
-   %110 = icmp sle i64 %108, %109, !dbg !253
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
-; ┌ @ range.jl:620 within `iterate'
-   %111 = zext i1 %110 to i8, !dbg !229
-   br label %L95, !dbg !229
-
-L94:                                              ; preds = %L74
-   br label %L95, !dbg !229
-
-L95:                                              ; preds = %L94, %L88
-   %value_phi8 = phi i8 [ %111, %L88 ], [ 0, %L94 ]
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:115 within `coalesced_matmul_kernel!'
-  %112 = trunc i8 %value_phi8 to i1, !dbg !252
-  %113 = xor i1 %112, true, !dbg !252
-  br i1 %113, label %L195, label %L97, !dbg !252
-
-L97:                                              ; preds = %L95
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:116 within `coalesced_matmul_kernel!'
-; ┌ @ int.jl:87 within `*'
-   %114 = mul i64 %value_phi6, 32, !dbg !257
-; └
-; ┌ @ int.jl:86 within `+'
-   %115 = add i64 %114, %82, !dbg !259
-; └
-; ┌ @ abstractarray.jl:1060 within `getindex'
-; │┌ @ abstractarray.jl:1082 within `_getindex'
-    br label %L119, !dbg !260
-
-L119:                                             ; preds = %L97
-; ││ @ abstractarray.jl:1083 within `_getindex'
-; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
-; │││┌ @ abstractarray.jl:1879 within `_sub2ind'
-; ││││┌ @ abstractarray.jl:75 within `axes'
-; │││││┌ @ tuple.jl:158 within `map'
-; ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
-; │││││││┌ @ promotion.jl:409 within `max'
-; ││││││││┌ @ int.jl:82 within `<'
-           %116 = icmp slt i64 %48, 0, !dbg !264
-; ││││││││└
-          %117 = zext i1 %116 to i8, !dbg !266
-          %118 = trunc i8 %117 to i1, !dbg !266
-          %119 = xor i1 %118, true, !dbg !266
-          %120 = select i1 %119, i64 %48, i64 0, !dbg !266
-; ││││└└└└
-; ││││ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
-; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
-; │││││┌ @ abstractarray.jl:1915 within `nextL'
-; ││││││┌ @ range.jl:544 within `unsafe_length'
-; │││││││┌ @ int.jl:85 within `-'
-          %121 = sub i64 %120, 0, !dbg !281
-; ││││││└└
-; ││││││┌ @ int.jl:87 within `*'
-         %122 = mul i64 1, %121, !dbg !289
-; │││││└└
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %123 = sub i64 %98, 1, !dbg !290
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %124 = mul i64 %123, 1, !dbg !293
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %125 = add i64 1, %124, !dbg !294
-; │││││└
-; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %126 = sub i64 %115, 1, !dbg !295
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %127 = mul i64 %126, %122, !dbg !298
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %128 = add i64 %125, %127, !dbg !299
-; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:99 within `getindex'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:78 within `arrayref'
-      br label %L142, !dbg !300
-
-L142:                                             ; preds = %L119
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:80 within `arrayref'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:79 within `unsafe_load'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `pointerref'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-; │││││││┌ @ int.jl:85 within `-'
-          %129 = sub i64 %128, 1, !dbg !304
-; │││││││└
-         %130 = call fastcc float @jl_llvmcall14(i8 addrspace(1)* %38, i64 %129), !dbg !305
-; ││││└└└
-      br label %L146, !dbg !313
-
-L146:                                             ; preds = %L142
-; │││└
-     br label %L147, !dbg !302
-
-L147:                                             ; preds = %L146
-; ││└
-; ││ @ abstractarray.jl:1084 within `_getindex'
-    br label %L148, !dbg !314
-
-L148:                                             ; preds = %L147
-; │└
-   br label %L149, !dbg !262
-
-L149:                                             ; preds = %L148
-; └
-; ┌ @ abstractarray.jl:1153 within `setindex!'
-; │┌ @ abstractarray.jl:1175 within `_setindex!'
-    br label %L168, !dbg !315
-
-L168:                                             ; preds = %L149
-; ││ @ abstractarray.jl:1176 within `_setindex!'
-; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
-; │││┌ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
-; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %131 = sub i64 %76, 1, !dbg !319
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %132 = mul i64 %131, 1, !dbg !326
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %133 = add i64 1, %132, !dbg !327
-; │││││└
-; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %134 = sub i64 %82, 1, !dbg !328
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %135 = mul i64 %134, 33, !dbg !331
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %136 = add i64 %133, %135, !dbg !332
-; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:101 within `setindex!'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:84 within `arrayset'
-      br label %L187, !dbg !333
-
-L187:                                             ; preds = %L168
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:86 within `arrayset'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:82 within `unsafe_store!'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `pointerset'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-; │││││││┌ @ int.jl:85 within `-'
-          %137 = sub i64 %136, 1, !dbg !337
-; │││││││└
-         call fastcc void @jl_llvmcall15(i8 addrspace(3)* %84, float %130, i64 %137), !dbg !338
-; ││││└└└
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:87 within `arrayset'
-      br label %L191, !dbg !345
-
-L191:                                             ; preds = %L187
-; │││└
-     br label %L192, !dbg !335
-
-L192:                                             ; preds = %L191
-; ││└
-; ││ @ abstractarray.jl:1177 within `_setindex!'
-    br label %L193, !dbg !346
-
-L193:                                             ; preds = %L192
-; │└
-   br label %L194, !dbg !317
-
-L194:                                             ; preds = %L193
-; └
-  br label %L241, !dbg !258
-
-L195:                                             ; preds = %L95
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:118 within `coalesced_matmul_kernel!'
-; ┌ @ abstractarray.jl:1153 within `setindex!'
-; │┌ @ abstractarray.jl:1175 within `_setindex!'
-    br label %L214, !dbg !347
-
-L214:                                             ; preds = %L195
-; ││ @ abstractarray.jl:1176 within `_setindex!'
-; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
-; │││┌ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
-; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %138 = sub i64 %76, 1, !dbg !350
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %139 = mul i64 %138, 1, !dbg !357
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %140 = add i64 1, %139, !dbg !358
-; │││││└
-; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %141 = sub i64 %82, 1, !dbg !359
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %142 = mul i64 %141, 33, !dbg !362
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %143 = add i64 %140, %142, !dbg !363
-; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:101 within `setindex!'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:84 within `arrayset'
-      br label %L233, !dbg !364
-
-L233:                                             ; preds = %L214
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:86 within `arrayset'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:82 within `unsafe_store!'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `pointerset'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-; │││││││┌ @ int.jl:85 within `-'
-          %144 = sub i64 %143, 1, !dbg !366
-; │││││││└
-         call fastcc void @jl_llvmcall22(i8 addrspace(3)* %84, float 0.000000e+00, i64 %144), !dbg !367
-; ││││└└└
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:87 within `arrayset'
-      br label %L237, !dbg !372
-
-L237:                                             ; preds = %L233
-; │││└
-     br label %L238, !dbg !365
-
-L238:                                             ; preds = %L237
-; ││└
-; ││ @ abstractarray.jl:1177 within `_setindex!'
-    br label %L239, !dbg !373
-
-L239:                                             ; preds = %L238
-; │└
-   br label %L240, !dbg !348
-
-L240:                                             ; preds = %L239
-   br label %L241, !dbg !348
-
-L241:                                             ; preds = %L240, %L194
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:120 within `coalesced_matmul_kernel!'
-; ┌ @ int.jl:87 within `*'
-   %145 = mul i64 %value_phi6, 32, !dbg !374
-; └
-; ┌ @ int.jl:86 within `+'
-   %146 = add i64 %145, %76, !dbg !376
-; └
-; ┌ @ promotion.jl:350 within `<='
-; │┌ @ promotion.jl:282 within `promote'
-; ││┌ @ promotion.jl:259 within `_promote'
-; │││┌ @ number.jl:7 within `convert'
-; ││││┌ @ boot.jl:708 within `Int64'
-; │││││┌ @ boot.jl:627 within `toInt64'
-        %147 = sext i32 %4 to i64, !dbg !377
-; │└└└└└
-; │ @ promotion.jl:350 within `<=' @ int.jl:441
-   %148 = icmp sle i64 %146, %147, !dbg !383
-; └
-  %149 = zext i1 %148 to i8, !dbg !375
-  %150 = trunc i8 %149 to i1, !dbg !375
-  %151 = xor i1 %150, true, !dbg !375
-  br i1 %151, label %L250, label %L247, !dbg !375
-
-L247:                                             ; preds = %L241
-; ┌ @ promotion.jl:350 within `<='
-; │┌ @ promotion.jl:282 within `promote'
-; ││┌ @ promotion.jl:259 within `_promote'
-; │││┌ @ number.jl:7 within `convert'
-; ││││┌ @ boot.jl:708 within `Int64'
-; │││││┌ @ boot.jl:627 within `toInt64'
-        %152 = sext i32 %5 to i64, !dbg !377
-; │└└└└└
-; │ @ promotion.jl:350 within `<=' @ int.jl:441
-   %153 = icmp sle i64 %101, %152, !dbg !383
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
-; ┌ @ range.jl:620 within `iterate'
-   %154 = zext i1 %153 to i8, !dbg !229
-   br label %L251, !dbg !229
-
-L250:                                             ; preds = %L241
-   br label %L251, !dbg !229
-
-L251:                                             ; preds = %L250, %L247
-   %value_phi9 = phi i8 [ %154, %L247 ], [ 0, %L250 ]
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:120 within `coalesced_matmul_kernel!'
-  %155 = trunc i8 %value_phi9 to i1, !dbg !375
-  %156 = xor i1 %155, true, !dbg !375
-  br i1 %156, label %L351, label %L253, !dbg !375
-
-L253:                                             ; preds = %L251
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:121 within `coalesced_matmul_kernel!'
-; ┌ @ int.jl:87 within `*'
-   %157 = mul i64 %value_phi6, 32, !dbg !384
-; └
-; ┌ @ int.jl:86 within `+'
-   %158 = add i64 %157, %76, !dbg !386
-; └
-; ┌ @ abstractarray.jl:1060 within `getindex'
-; │┌ @ abstractarray.jl:1082 within `_getindex'
-    br label %L275, !dbg !387
-
-L275:                                             ; preds = %L253
-; ││ @ abstractarray.jl:1083 within `_getindex'
-; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
-; │││┌ @ abstractarray.jl:1879 within `_sub2ind'
-; ││││┌ @ abstractarray.jl:75 within `axes'
-; │││││┌ @ tuple.jl:158 within `map'
-; ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
-; │││││││┌ @ promotion.jl:409 within `max'
-; ││││││││┌ @ int.jl:82 within `<'
-           %159 = icmp slt i64 %56, 0, !dbg !389
-; ││││││││└
-          %160 = zext i1 %159 to i8, !dbg !390
-          %161 = trunc i8 %160 to i1, !dbg !390
-          %162 = xor i1 %161, true, !dbg !390
-          %163 = select i1 %162, i64 %56, i64 0, !dbg !390
-; ││││└└└└
-; ││││ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
-; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
-; │││││┌ @ abstractarray.jl:1915 within `nextL'
-; ││││││┌ @ range.jl:544 within `unsafe_length'
-; │││││││┌ @ int.jl:85 within `-'
-          %164 = sub i64 %163, 0, !dbg !398
-; ││││││└└
-; ││││││┌ @ int.jl:87 within `*'
-         %165 = mul i64 1, %164, !dbg !403
-; │││││└└
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %166 = sub i64 %158, 1, !dbg !404
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %167 = mul i64 %166, 1, !dbg !406
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %168 = add i64 1, %167, !dbg !407
-; │││││└
-; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %169 = sub i64 %101, 1, !dbg !408
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %170 = mul i64 %169, %165, !dbg !411
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %171 = add i64 %168, %170, !dbg !412
-; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:99 within `getindex'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:78 within `arrayref'
-      br label %L298, !dbg !413
-
-L298:                                             ; preds = %L275
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:80 within `arrayref'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:79 within `unsafe_load'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `pointerref'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-; │││││││┌ @ int.jl:85 within `-'
-          %172 = sub i64 %171, 1, !dbg !415
-; │││││││└
-         %173 = call fastcc float @jl_llvmcall16(i8 addrspace(1)* %39, i64 %172), !dbg !416
-; ││││└└└
-      br label %L302, !dbg !420
-
-L302:                                             ; preds = %L298
-; │││└
-     br label %L303, !dbg !414
-
-L303:                                             ; preds = %L302
-; ││└
-; ││ @ abstractarray.jl:1084 within `_getindex'
-    br label %L304, !dbg !421
-
-L304:                                             ; preds = %L303
-; │└
-   br label %L305, !dbg !388
-
-L305:                                             ; preds = %L304
-; └
-; ┌ @ abstractarray.jl:1153 within `setindex!'
-; │┌ @ abstractarray.jl:1175 within `_setindex!'
-    br label %L324, !dbg !422
-
-L324:                                             ; preds = %L305
-; ││ @ abstractarray.jl:1176 within `_setindex!'
-; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
-; │││┌ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
-; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %174 = sub i64 %76, 1, !dbg !424
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %175 = mul i64 %174, 1, !dbg !431
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %176 = add i64 1, %175, !dbg !432
-; │││││└
-; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %177 = sub i64 %82, 1, !dbg !433
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %178 = mul i64 %177, 33, !dbg !436
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %179 = add i64 %176, %178, !dbg !437
-; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:101 within `setindex!'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:84 within `arrayset'
-      br label %L343, !dbg !438
-
-L343:                                             ; preds = %L324
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:86 within `arrayset'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:82 within `unsafe_store!'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `pointerset'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-; │││││││┌ @ int.jl:85 within `-'
-          %180 = sub i64 %179, 1, !dbg !440
-; │││││││└
-         call fastcc void @jl_llvmcall17(i8 addrspace(3)* %87, float %173, i64 %180), !dbg !441
-; ││││└└└
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:87 within `arrayset'
-      br label %L347, !dbg !446
-
-L347:                                             ; preds = %L343
-; │││└
-     br label %L348, !dbg !439
-
-L348:                                             ; preds = %L347
-; ││└
-; ││ @ abstractarray.jl:1177 within `_setindex!'
-    br label %L349, !dbg !447
-
-L349:                                             ; preds = %L348
-; │└
-   br label %L350, !dbg !423
-
-L350:                                             ; preds = %L349
-; └
-  br label %L397, !dbg !385
-
-L351:                                             ; preds = %L251
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:123 within `coalesced_matmul_kernel!'
-; ┌ @ abstractarray.jl:1153 within `setindex!'
-; │┌ @ abstractarray.jl:1175 within `_setindex!'
-    br label %L370, !dbg !448
-
-L370:                                             ; preds = %L351
-; ││ @ abstractarray.jl:1176 within `_setindex!'
-; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
-; │││┌ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
-; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %181 = sub i64 %76, 1, !dbg !451
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %182 = mul i64 %181, 1, !dbg !458
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %183 = add i64 1, %182, !dbg !459
-; │││││└
-; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %184 = sub i64 %82, 1, !dbg !460
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %185 = mul i64 %184, 33, !dbg !463
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %186 = add i64 %183, %185, !dbg !464
-; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:101 within `setindex!'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:84 within `arrayset'
-      br label %L389, !dbg !465
-
-L389:                                             ; preds = %L370
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:86 within `arrayset'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:82 within `unsafe_store!'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `pointerset'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-; │││││││┌ @ int.jl:85 within `-'
-          %187 = sub i64 %186, 1, !dbg !467
-; │││││││└
-         call fastcc void @jl_llvmcall21(i8 addrspace(3)* %87, float 0.000000e+00, i64 %187), !dbg !468
-; ││││└└└
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:87 within `arrayset'
-      br label %L393, !dbg !473
-
-L393:                                             ; preds = %L389
-; │││└
-     br label %L394, !dbg !466
-
-L394:                                             ; preds = %L393
-; ││└
-; ││ @ abstractarray.jl:1177 within `_setindex!'
-    br label %L395, !dbg !474
-
-L395:                                             ; preds = %L394
-; │└
-   br label %L396, !dbg !449
-
-L396:                                             ; preds = %L395
-   br label %L397, !dbg !449
-
-L397:                                             ; preds = %L396, %L350
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:127 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/synchronization.jl:14 within `sync_threads'
-   call void @llvm.nvvm.barrier0(), !dbg !475
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:134 within `coalesced_matmul_kernel!'
-  br label %L397.L399_crit_edge, !dbg !479
-
-L397.L399_crit_edge:                              ; preds = %L397
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
-; ┌ @ range.jl:620 within `iterate'
-   br label %L399, !dbg !229
-
-L399:                                             ; preds = %L397.L399_crit_edge, %L504
-   %value_phi10 = phi float [ %value_phi5, %L397.L399_crit_edge ], [ %205, %L504 ]
-   %value_phi11 = phi i64 [ 1, %L397.L399_crit_edge ], [ %value_phi13, %L504 ]
-   %value_phi12 = phi i64 [ 1, %L397.L399_crit_edge ], [ %value_phi14, %L504 ]
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:135 within `coalesced_matmul_kernel!'
-; ┌ @ abstractarray.jl:1060 within `getindex'
-; │┌ @ abstractarray.jl:1082 within `_getindex'
-    br label %L421, !dbg !480
-
-L421:                                             ; preds = %L399
-; ││ @ abstractarray.jl:1083 within `_getindex'
-; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
-; │││┌ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
-; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %188 = sub i64 %76, 1, !dbg !483
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %189 = mul i64 %188, 1, !dbg !490
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %190 = add i64 1, %189, !dbg !491
-; │││││└
-; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %191 = sub i64 %value_phi11, 1, !dbg !492
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %192 = mul i64 %191, 33, !dbg !495
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %193 = add i64 %190, %192, !dbg !496
-; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:99 within `getindex'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:78 within `arrayref'
-      br label %L440, !dbg !497
-
-L440:                                             ; preds = %L421
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:80 within `arrayref'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:79 within `unsafe_load'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `pointerref'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-; │││││││┌ @ int.jl:85 within `-'
-          %194 = sub i64 %193, 1, !dbg !499
-; │││││││└
-         %195 = call fastcc float @jl_llvmcall18(i8 addrspace(3)* %84, i64 %194), !dbg !500
-; ││││└└└
-      br label %L444, !dbg !504
-
-L444:                                             ; preds = %L440
-; │││└
-     br label %L445, !dbg !498
-
-L445:                                             ; preds = %L444
-; ││└
-; ││ @ abstractarray.jl:1084 within `_getindex'
-    br label %L446, !dbg !505
-
-L446:                                             ; preds = %L445
-; │└
-   br label %L447, !dbg !481
-
-L447:                                             ; preds = %L446
-; │┌ @ abstractarray.jl:1082 within `_getindex'
-    br label %L466, !dbg !480
-
-L466:                                             ; preds = %L447
-; ││ @ abstractarray.jl:1083 within `_getindex'
-; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
-; │││┌ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
-; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %196 = sub i64 %value_phi11, 1, !dbg !483
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %197 = mul i64 %196, 1, !dbg !490
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %198 = add i64 1, %197, !dbg !491
-; │││││└
-; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %199 = sub i64 %82, 1, !dbg !492
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %200 = mul i64 %199, 33, !dbg !495
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %201 = add i64 %198, %200, !dbg !496
-; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:99 within `getindex'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:78 within `arrayref'
-      br label %L485, !dbg !497
-
-L485:                                             ; preds = %L466
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:80 within `arrayref'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:79 within `unsafe_load'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `pointerref'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:7 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-; │││││││┌ @ int.jl:85 within `-'
-          %202 = sub i64 %201, 1, !dbg !499
-; │││││││└
-         %203 = call fastcc float @jl_llvmcall19(i8 addrspace(3)* %87, i64 %202), !dbg !500
-; ││││└└└
-      br label %L489, !dbg !504
-
-L489:                                             ; preds = %L485
-; │││└
-     br label %L490, !dbg !498
-
-L490:                                             ; preds = %L489
-; ││└
-; ││ @ abstractarray.jl:1084 within `_getindex'
-    br label %L491, !dbg !505
-
-L491:                                             ; preds = %L490
-; │└
-   br label %L492, !dbg !481
-
-L492:                                             ; preds = %L491
-; └
-; ┌ @ float.jl:404 within `*'
-   %204 = fmul float %195, %203, !dbg !506
-; └
-; ┌ @ float.jl:400 within `+'
-   %205 = fadd float %value_phi10, %204, !dbg !509
-; └
-; ┌ @ range.jl:624 within `iterate'
-; │┌ @ promotion.jl:398 within `=='
-    %206 = icmp eq i64 %value_phi12, 32, !dbg !511
-    %207 = zext i1 %206 to i8, !dbg !511
-; │└
-   %208 = trunc i8 %207 to i1, !dbg !513
-   %209 = xor i1 %208, true, !dbg !513
-   br i1 %209, label %L497, label %L496, !dbg !513
-
-L496:                                             ; preds = %L492
-   br label %L499, !dbg !513
-
-L497:                                             ; preds = %L492
-; │ @ range.jl:625 within `iterate'
-; │┌ @ int.jl:86 within `+'
-    %210 = add i64 %value_phi12, 1, !dbg !514
-; │└
-; │ @ range.jl:624 within `iterate'
-   br label %L499, !dbg !513
-
-L499:                                             ; preds = %L497, %L496
-   %value_phi13 = phi i64 [ %210, %L497 ], [ undef, %L496 ]
-   %value_phi14 = phi i64 [ %210, %L497 ], [ undef, %L496 ]
-   %value_phi15 = phi i8 [ 1, %L496 ], [ 0, %L497 ]
-; └
-  %211 = xor i8 %value_phi15, 1, !dbg !482
-  %212 = trunc i8 %211 to i1, !dbg !482
-  %213 = xor i1 %212, true, !dbg !482
-  br i1 %213, label %L499.L505_crit_edge, label %L504, !dbg !482
-
-L499.L505_crit_edge:                              ; preds = %L499
-; ┌ @ range.jl:624 within `iterate'
-   br label %L505, !dbg !513
-
-L504:                                             ; preds = %L499
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
-; ┌ @ range.jl:620 within `iterate'
-   br label %L399, !dbg !229
-
-L505:                                             ; preds = %L499.L505_crit_edge
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:138 within `coalesced_matmul_kernel!'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/synchronization.jl:14 within `sync_threads'
-   call void @llvm.nvvm.barrier0(), !dbg !516
-; └
-; ┌ @ range.jl:624 within `iterate'
-; │┌ @ promotion.jl:398 within `=='
-    %214 = icmp eq i64 %value_phi7, %263, !dbg !517
-    %215 = zext i1 %214 to i8, !dbg !517
-; │└
-   %216 = trunc i8 %215 to i1, !dbg !233
-   %217 = xor i1 %216, true, !dbg !233
-   br i1 %217, label %L510, label %L509, !dbg !233
-
-L509:                                             ; preds = %L505
-   br label %L512, !dbg !233
-
-L510:                                             ; preds = %L505
-; │ @ range.jl:625 within `iterate'
-; │┌ @ int.jl:86 within `+'
-    %218 = add i64 %value_phi7, 1, !dbg !518
-; │└
-; │ @ range.jl:624 within `iterate'
-   br label %L512, !dbg !233
-
-L512:                                             ; preds = %L510, %L509
-   %value_phi17 = phi i64 [ %218, %L510 ], [ undef, %L509 ]
-   %value_phi18 = phi i64 [ %218, %L510 ], [ undef, %L509 ]
-   %value_phi19 = phi i8 [ 1, %L509 ], [ 0, %L510 ]
-; └
-  %219 = xor i8 %value_phi19, 1, !dbg !234
-  %220 = trunc i8 %219 to i1, !dbg !234
-  %221 = xor i1 %220, true, !dbg !234
-  br i1 %221, label %L512.L518_crit_edge, label %L517, !dbg !234
-
-L512.L518_crit_edge:                              ; preds = %L512
-; ┌ @ range.jl:624 within `iterate'
-   br label %L518, !dbg !233
-
-L517:                                             ; preds = %L512
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
-; ┌ @ range.jl:620 within `iterate'
-   br label %L74, !dbg !229
-
-L518:                                             ; preds = %L69.L518_crit_edge, %L512.L518_crit_edge
-   %value_phi20 = phi float [ %205, %L512.L518_crit_edge ], [ 0.000000e+00, %L69.L518_crit_edge ]
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:141 within `coalesced_matmul_kernel!'
-; ┌ @ int.jl:85 within `-'
-   %222 = sub i64 %66, 1, !dbg !520
-; └
-; ┌ @ int.jl:87 within `*'
-   %223 = mul i64 %222, 32, !dbg !522
-; └
-; ┌ @ int.jl:86 within `+'
-   %224 = add i64 %223, %76, !dbg !523
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:142 within `coalesced_matmul_kernel!'
-; ┌ @ int.jl:85 within `-'
-   %225 = sub i64 %72, 1, !dbg !524
-; └
-; ┌ @ int.jl:87 within `*'
-   %226 = mul i64 %225, 32, !dbg !526
-; └
-; ┌ @ int.jl:86 within `+'
-   %227 = add i64 %226, %82, !dbg !527
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:144 within `coalesced_matmul_kernel!'
-; ┌ @ promotion.jl:350 within `<='
-; │┌ @ promotion.jl:282 within `promote'
-; ││┌ @ promotion.jl:259 within `_promote'
-; │││┌ @ number.jl:7 within `convert'
-; ││││┌ @ boot.jl:708 within `Int64'
-; │││││┌ @ boot.jl:627 within `toInt64'
-        %228 = sext i32 %3 to i64, !dbg !528
-; │└└└└└
-; │ @ promotion.jl:350 within `<=' @ int.jl:441
-   %229 = icmp sle i64 %224, %228, !dbg !535
-; └
-  %230 = zext i1 %229 to i8, !dbg !534
-  %231 = trunc i8 %230 to i1, !dbg !534
-  %232 = xor i1 %231, true, !dbg !534
-  br i1 %232, label %L533, label %L530, !dbg !534
-
-L530:                                             ; preds = %L518
-; ┌ @ promotion.jl:350 within `<='
-; │┌ @ promotion.jl:282 within `promote'
-; ││┌ @ promotion.jl:259 within `_promote'
-; │││┌ @ number.jl:7 within `convert'
-; ││││┌ @ boot.jl:708 within `Int64'
-; │││││┌ @ boot.jl:627 within `toInt64'
-        %233 = sext i32 %5 to i64, !dbg !528
-; │└└└└└
-; │ @ promotion.jl:350 within `<=' @ int.jl:441
-   %234 = icmp sle i64 %227, %233, !dbg !535
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:138 within `coalesced_matmul_kernel!'
-; ┌ @ range.jl:624 within `iterate'
-   %235 = zext i1 %234 to i8, !dbg !233
-   br label %L534, !dbg !233
-
-L533:                                             ; preds = %L518
-   br label %L534, !dbg !233
-
-L534:                                             ; preds = %L533, %L530
-   %value_phi21 = phi i8 [ %235, %L530 ], [ 0, %L533 ]
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:144 within `coalesced_matmul_kernel!'
-  %236 = trunc i8 %value_phi21 to i1, !dbg !534
-  %237 = xor i1 %236, true, !dbg !534
-  br i1 %237, label %L586, label %L536, !dbg !534
-
-L536:                                             ; preds = %L534
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:145 within `coalesced_matmul_kernel!'
-; ┌ @ abstractarray.jl:1153 within `setindex!'
-; │┌ @ abstractarray.jl:1175 within `_setindex!'
-    br label %L555, !dbg !536
-
-L555:                                             ; preds = %L536
-; ││ @ abstractarray.jl:1176 within `_setindex!'
-; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
-; │││┌ @ abstractarray.jl:1879 within `_sub2ind'
-; ││││┌ @ abstractarray.jl:75 within `axes'
-; │││││┌ @ tuple.jl:158 within `map'
-; ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
-; │││││││┌ @ promotion.jl:409 within `max'
-; ││││││││┌ @ int.jl:82 within `<'
-           %238 = icmp slt i64 %40, 0, !dbg !539
-; ││││││││└
-          %239 = zext i1 %238 to i8, !dbg !540
-          %240 = trunc i8 %239 to i1, !dbg !540
-          %241 = xor i1 %240, true, !dbg !540
-          %242 = select i1 %241, i64 %40, i64 0, !dbg !540
-; ││││└└└└
-; ││││ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
-; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
-; │││││┌ @ abstractarray.jl:1915 within `nextL'
-; ││││││┌ @ range.jl:544 within `unsafe_length'
-; │││││││┌ @ int.jl:85 within `-'
-          %243 = sub i64 %242, 0, !dbg !548
-; ││││││└└
-; ││││││┌ @ int.jl:87 within `*'
-         %244 = mul i64 1, %243, !dbg !553
-; │││││└└
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %245 = sub i64 %224, 1, !dbg !554
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %246 = mul i64 %245, 1, !dbg !556
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %247 = add i64 1, %246, !dbg !557
-; │││││└
-; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
-; │││││┌ @ abstractarray.jl:1918 within `offsetin'
-; ││││││┌ @ int.jl:85 within `-'
-         %248 = sub i64 %227, 1, !dbg !558
-; │││││└└
-; │││││┌ @ int.jl:87 within `*'
-        %249 = mul i64 %248, %244, !dbg !561
-; │││││└
-; │││││┌ @ int.jl:86 within `+'
-        %250 = add i64 %247, %249, !dbg !562
-; ││└└└└
-; ││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:101 within `setindex!'
-; │││┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:84 within `arrayset'
-      br label %L578, !dbg !563
-
-L578:                                             ; preds = %L555
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:86 within `arrayset'
-; ││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:82 within `unsafe_store!'
-; │││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `pointerset'
-; ││││││┌ @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl:42 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-; │││││││┌ @ int.jl:85 within `-'
-          %251 = sub i64 %250, 1, !dbg !565
-; │││││││└
-         call fastcc void @jl_llvmcall20(i8 addrspace(1)* %37, float %value_phi20, i64 %251), !dbg !566
-; ││││└└└
-; ││││ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl:87 within `arrayset'
-      br label %L582, !dbg !571
-
-L582:                                             ; preds = %L578
-; │││└
-     br label %L583, !dbg !564
-
-L583:                                             ; preds = %L582
-; ││└
-; ││ @ abstractarray.jl:1177 within `_setindex!'
-    br label %L584, !dbg !572
-
-L584:                                             ; preds = %L583
-; │└
-   br label %L585, !dbg !537
-
-L585:                                             ; preds = %L584
-   br label %L586, !dbg !537
-
-L586:                                             ; preds = %L585, %L534
-; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:147 within `coalesced_matmul_kernel!'
-  ret void, !dbg !573
-
-pass:                                             ; preds = %top
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:106 within `coalesced_matmul_kernel!'
-; ┌ @ promotion.jl:352 within `rem' @ int.jl:261
-   br label %oksrem, !dbg !228
-
-oksrem:                                           ; preds = %pass
-   %252 = srem i64 %92, 32, !dbg !228
-   br label %after_srem, !dbg !228
-
-after_srem:                                       ; preds = %oksrem
-; └
-; ┌ @ int.jl:85 within `-'
-   %253 = sub i64 %91, %252, !dbg !574
+   %92 = sub i64 %91, 1, !dbg !216
 ; └
 ; ┌ @ int.jl:260 within `div'
-   %254 = icmp ne i64 %253, -9223372036854775808, !dbg !575
-   %255 = or i1 true, %254, !dbg !575
-   %256 = and i1 true, %255, !dbg !575
-   br i1 %256, label %pass2, label %fail1, !dbg !575
+   %93 = icmp ne i64 %92, -9223372036854775808, !dbg !218
+   %94 = or i1 true, %93, !dbg !218
+   %95 = and i1 true, %94, !dbg !218
+   br i1 %95, label %pass, label %fail, !dbg !218
 
-fail1:                                            ; preds = %after_srem
-   call fastcc void @gpu_report_exception(i64 ptrtoint ([10 x i8]* @exception5 to i64)), !dbg !575
-   call fastcc void @gpu_signal_exception(), !dbg !575
-   call void asm sideeffect "trap;", ""(), !dbg !575
-   br label %pass2
-
-pass2:                                            ; preds = %fail1, %after_srem
-   %257 = sdiv i64 %253, 32, !dbg !575
+L65:                                              ; preds = %pass
 ; └
-;  @ /users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+; ┌ @ range.jl:620 within `iterate'
+   br label %L67, !dbg !220
+
+L66:                                              ; preds = %pass
+   br label %L67, !dbg !220
+
+L67:                                              ; preds = %L66, %L65
+   %value_phi = phi i8 [ 1, %L65 ], [ 0, %L66 ]
+   %value_phi1 = phi i64 [ 0, %L66 ], [ undef, %L65 ]
+   %value_phi2 = phi i64 [ 0, %L66 ], [ undef, %L65 ]
+; └
+  %96 = xor i8 %value_phi, 1, !dbg !223
+  %97 = trunc i8 %96 to i1, !dbg !223
+  %98 = xor i1 %97, true, !dbg !223
+  br i1 %98, label %L67.L516_crit_edge, label %L67.L72_crit_edge, !dbg !223
+
+L67.L516_crit_edge:                               ; preds = %L67
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:138 within `coalesced_matmul_kernel!'
+; ┌ @ range.jl:624 within `iterate'
+   br label %L516, !dbg !224
+
+L67.L72_crit_edge:                                ; preds = %L67
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+; ┌ @ range.jl:620 within `iterate'
+   br label %L72, !dbg !220
+
+L72:                                              ; preds = %L67.L72_crit_edge, %L515
+   %value_phi3 = phi float [ 0.000000e+00, %L67.L72_crit_edge ], [ %208, %L515 ]
+   %value_phi4 = phi i64 [ %value_phi1, %L67.L72_crit_edge ], [ %value_phi15, %L515 ]
+   %value_phi5 = phi i64 [ %value_phi2, %L67.L72_crit_edge ], [ %value_phi16, %L515 ]
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:111 within `coalesced_matmul_kernel!'
 ; ┌ @ int.jl:85 within `-'
-   %258 = sub i64 %257, 1, !dbg !577
+   %99 = sub i64 %66, 1, !dbg !226
+; └
+; ┌ @ int.jl:87 within `*'
+   %100 = mul i64 %99, 32, !dbg !228
+; └
+; ┌ @ int.jl:86 within `+'
+   %101 = add i64 %100, %76, !dbg !230
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:112 within `coalesced_matmul_kernel!'
+; ┌ @ int.jl:85 within `-'
+   %102 = sub i64 %72, 1, !dbg !231
+; └
+; ┌ @ int.jl:87 within `*'
+   %103 = mul i64 %102, 32, !dbg !233
+; └
+; ┌ @ int.jl:86 within `+'
+   %104 = add i64 %103, %82, !dbg !234
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:115 within `coalesced_matmul_kernel!'
+; ┌ @ promotion.jl:350 within `<='
+; │┌ @ promotion.jl:282 within `promote'
+; ││┌ @ promotion.jl:259 within `_promote'
+; │││┌ @ number.jl:7 within `convert'
+; ││││┌ @ boot.jl:708 within `Int64'
+; │││││┌ @ boot.jl:627 within `toInt64'
+        %105 = sext i32 %3 to i64, !dbg !235
+; │└└└└└
+; │ @ promotion.jl:350 within `<=' @ int.jl:441
+   %106 = icmp sle i64 %101, %105, !dbg !248
+; └
+  %107 = zext i1 %106 to i8, !dbg !247
+  %108 = trunc i8 %107 to i1, !dbg !247
+  %109 = xor i1 %108, true, !dbg !247
+  br i1 %109, label %L92, label %L86, !dbg !247
+
+L86:                                              ; preds = %L72
+; ┌ @ int.jl:87 within `*'
+   %110 = mul i64 %value_phi4, 32, !dbg !250
+; └
+; ┌ @ int.jl:86 within `+'
+   %111 = add i64 %110, %82, !dbg !251
+; └
+; ┌ @ promotion.jl:350 within `<='
+; │┌ @ promotion.jl:282 within `promote'
+; ││┌ @ promotion.jl:259 within `_promote'
+; │││┌ @ number.jl:7 within `convert'
+; ││││┌ @ boot.jl:708 within `Int64'
+; │││││┌ @ boot.jl:627 within `toInt64'
+        %112 = sext i32 %4 to i64, !dbg !235
+; │└└└└└
+; │ @ promotion.jl:350 within `<=' @ int.jl:441
+   %113 = icmp sle i64 %111, %112, !dbg !248
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+; ┌ @ range.jl:620 within `iterate'
+   %114 = zext i1 %113 to i8, !dbg !220
+   br label %L93, !dbg !220
+
+L92:                                              ; preds = %L72
+   br label %L93, !dbg !220
+
+L93:                                              ; preds = %L92, %L86
+   %value_phi6 = phi i8 [ %114, %L86 ], [ 0, %L92 ]
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:115 within `coalesced_matmul_kernel!'
+  %115 = trunc i8 %value_phi6 to i1, !dbg !247
+  %116 = xor i1 %115, true, !dbg !247
+  br i1 %116, label %L193, label %L95, !dbg !247
+
+L95:                                              ; preds = %L93
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:116 within `coalesced_matmul_kernel!'
+; ┌ @ int.jl:87 within `*'
+   %117 = mul i64 %value_phi4, 32, !dbg !252
+; └
+; ┌ @ int.jl:86 within `+'
+   %118 = add i64 %117, %82, !dbg !254
+; └
+; ┌ @ abstractarray.jl:1060 within `getindex'
+; │┌ @ abstractarray.jl:1082 within `_getindex'
+    br label %L117, !dbg !255
+
+L117:                                             ; preds = %L95
+; ││ @ abstractarray.jl:1083 within `_getindex'
+; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
+; │││┌ @ abstractarray.jl:1879 within `_sub2ind'
+; ││││┌ @ abstractarray.jl:75 within `axes'
+; │││││┌ @ tuple.jl:158 within `map'
+; ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
+; │││││││┌ @ promotion.jl:409 within `max'
+; ││││││││┌ @ int.jl:82 within `<'
+           %119 = icmp slt i64 %48, 0, !dbg !259
+; ││││││││└
+          %120 = zext i1 %119 to i8, !dbg !261
+          %121 = trunc i8 %120 to i1, !dbg !261
+          %122 = xor i1 %121, true, !dbg !261
+          %123 = select i1 %122, i64 %48, i64 0, !dbg !261
+; ││││└└└└
+; ││││ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
+; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
+; │││││┌ @ abstractarray.jl:1915 within `nextL'
+; ││││││┌ @ range.jl:544 within `unsafe_length'
+; │││││││┌ @ int.jl:85 within `-'
+          %124 = sub i64 %123, 0, !dbg !276
+; ││││││└└
+; ││││││┌ @ int.jl:87 within `*'
+         %125 = mul i64 1, %124, !dbg !284
+; │││││└└
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %126 = sub i64 %101, 1, !dbg !285
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %127 = mul i64 %126, 1, !dbg !288
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %128 = add i64 1, %127, !dbg !289
+; │││││└
+; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %129 = sub i64 %118, 1, !dbg !290
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %130 = mul i64 %129, %125, !dbg !293
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %131 = add i64 %128, %130, !dbg !294
+; ││└└└└
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:78 within `arrayref'
+      br label %L140, !dbg !295
+
+L140:                                             ; preds = %L117
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+; │││││││┌ @ int.jl:85 within `-'
+          %132 = sub i64 %131, 1, !dbg !299
+; │││││││└
+         %133 = call fastcc float @jl_llvmcall14(i8 addrspace(1)* %38, i64 %132), !dbg !300
+; ││││└└└
+      br label %L144, !dbg !308
+
+L144:                                             ; preds = %L140
+; │││└
+     br label %L145, !dbg !297
+
+L145:                                             ; preds = %L144
+; ││└
+; ││ @ abstractarray.jl:1084 within `_getindex'
+    br label %L146, !dbg !309
+
+L146:                                             ; preds = %L145
+; │└
+   br label %L147, !dbg !257
+
+L147:                                             ; preds = %L146
+; └
+; ┌ @ abstractarray.jl:1153 within `setindex!'
+; │┌ @ abstractarray.jl:1175 within `_setindex!'
+    br label %L166, !dbg !310
+
+L166:                                             ; preds = %L147
+; ││ @ abstractarray.jl:1176 within `_setindex!'
+; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
+; │││┌ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
+; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %134 = sub i64 %76, 1, !dbg !314
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %135 = mul i64 %134, 1, !dbg !321
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %136 = add i64 1, %135, !dbg !322
+; │││││└
+; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %137 = sub i64 %82, 1, !dbg !323
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %138 = mul i64 %137, 33, !dbg !326
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %139 = add i64 %136, %138, !dbg !327
+; ││└└└└
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:84 within `arrayset'
+      br label %L185, !dbg !328
+
+L185:                                             ; preds = %L166
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+; │││││││┌ @ int.jl:85 within `-'
+          %140 = sub i64 %139, 1, !dbg !332
+; │││││││└
+         call fastcc void @jl_llvmcall15(i8 addrspace(3)* %84, float %133, i64 %140), !dbg !333
+; ││││└└└
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
+      br label %L189, !dbg !340
+
+L189:                                             ; preds = %L185
+; │││└
+     br label %L190, !dbg !330
+
+L190:                                             ; preds = %L189
+; ││└
+; ││ @ abstractarray.jl:1177 within `_setindex!'
+    br label %L191, !dbg !341
+
+L191:                                             ; preds = %L190
+; │└
+   br label %L192, !dbg !312
+
+L192:                                             ; preds = %L191
+; └
+  br label %L239, !dbg !253
+
+L193:                                             ; preds = %L93
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:118 within `coalesced_matmul_kernel!'
+; ┌ @ abstractarray.jl:1153 within `setindex!'
+; │┌ @ abstractarray.jl:1175 within `_setindex!'
+    br label %L212, !dbg !342
+
+L212:                                             ; preds = %L193
+; ││ @ abstractarray.jl:1176 within `_setindex!'
+; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
+; │││┌ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
+; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %141 = sub i64 %76, 1, !dbg !345
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %142 = mul i64 %141, 1, !dbg !352
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %143 = add i64 1, %142, !dbg !353
+; │││││└
+; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %144 = sub i64 %82, 1, !dbg !354
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %145 = mul i64 %144, 33, !dbg !357
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %146 = add i64 %143, %145, !dbg !358
+; ││└└└└
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:84 within `arrayset'
+      br label %L231, !dbg !359
+
+L231:                                             ; preds = %L212
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+; │││││││┌ @ int.jl:85 within `-'
+          %147 = sub i64 %146, 1, !dbg !361
+; │││││││└
+         call fastcc void @jl_llvmcall22(i8 addrspace(3)* %84, float 0.000000e+00, i64 %147), !dbg !362
+; ││││└└└
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
+      br label %L235, !dbg !367
+
+L235:                                             ; preds = %L231
+; │││└
+     br label %L236, !dbg !360
+
+L236:                                             ; preds = %L235
+; ││└
+; ││ @ abstractarray.jl:1177 within `_setindex!'
+    br label %L237, !dbg !368
+
+L237:                                             ; preds = %L236
+; │└
+   br label %L238, !dbg !343
+
+L238:                                             ; preds = %L237
+   br label %L239, !dbg !343
+
+L239:                                             ; preds = %L238, %L192
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:120 within `coalesced_matmul_kernel!'
+; ┌ @ int.jl:87 within `*'
+   %148 = mul i64 %value_phi4, 32, !dbg !369
+; └
+; ┌ @ int.jl:86 within `+'
+   %149 = add i64 %148, %76, !dbg !371
+; └
+; ┌ @ promotion.jl:350 within `<='
+; │┌ @ promotion.jl:282 within `promote'
+; ││┌ @ promotion.jl:259 within `_promote'
+; │││┌ @ number.jl:7 within `convert'
+; ││││┌ @ boot.jl:708 within `Int64'
+; │││││┌ @ boot.jl:627 within `toInt64'
+        %150 = sext i32 %4 to i64, !dbg !372
+; │└└└└└
+; │ @ promotion.jl:350 within `<=' @ int.jl:441
+   %151 = icmp sle i64 %149, %150, !dbg !378
+; └
+  %152 = zext i1 %151 to i8, !dbg !370
+  %153 = trunc i8 %152 to i1, !dbg !370
+  %154 = xor i1 %153, true, !dbg !370
+  br i1 %154, label %L248, label %L245, !dbg !370
+
+L245:                                             ; preds = %L239
+; ┌ @ promotion.jl:350 within `<='
+; │┌ @ promotion.jl:282 within `promote'
+; ││┌ @ promotion.jl:259 within `_promote'
+; │││┌ @ number.jl:7 within `convert'
+; ││││┌ @ boot.jl:708 within `Int64'
+; │││││┌ @ boot.jl:627 within `toInt64'
+        %155 = sext i32 %5 to i64, !dbg !372
+; │└└└└└
+; │ @ promotion.jl:350 within `<=' @ int.jl:441
+   %156 = icmp sle i64 %104, %155, !dbg !378
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+; ┌ @ range.jl:620 within `iterate'
+   %157 = zext i1 %156 to i8, !dbg !220
+   br label %L249, !dbg !220
+
+L248:                                             ; preds = %L239
+   br label %L249, !dbg !220
+
+L249:                                             ; preds = %L248, %L245
+   %value_phi7 = phi i8 [ %157, %L245 ], [ 0, %L248 ]
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:120 within `coalesced_matmul_kernel!'
+  %158 = trunc i8 %value_phi7 to i1, !dbg !370
+  %159 = xor i1 %158, true, !dbg !370
+  br i1 %159, label %L349, label %L251, !dbg !370
+
+L251:                                             ; preds = %L249
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:121 within `coalesced_matmul_kernel!'
+; ┌ @ int.jl:87 within `*'
+   %160 = mul i64 %value_phi4, 32, !dbg !379
+; └
+; ┌ @ int.jl:86 within `+'
+   %161 = add i64 %160, %76, !dbg !381
+; └
+; ┌ @ abstractarray.jl:1060 within `getindex'
+; │┌ @ abstractarray.jl:1082 within `_getindex'
+    br label %L273, !dbg !382
+
+L273:                                             ; preds = %L251
+; ││ @ abstractarray.jl:1083 within `_getindex'
+; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
+; │││┌ @ abstractarray.jl:1879 within `_sub2ind'
+; ││││┌ @ abstractarray.jl:75 within `axes'
+; │││││┌ @ tuple.jl:158 within `map'
+; ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
+; │││││││┌ @ promotion.jl:409 within `max'
+; ││││││││┌ @ int.jl:82 within `<'
+           %162 = icmp slt i64 %56, 0, !dbg !384
+; ││││││││└
+          %163 = zext i1 %162 to i8, !dbg !385
+          %164 = trunc i8 %163 to i1, !dbg !385
+          %165 = xor i1 %164, true, !dbg !385
+          %166 = select i1 %165, i64 %56, i64 0, !dbg !385
+; ││││└└└└
+; ││││ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
+; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
+; │││││┌ @ abstractarray.jl:1915 within `nextL'
+; ││││││┌ @ range.jl:544 within `unsafe_length'
+; │││││││┌ @ int.jl:85 within `-'
+          %167 = sub i64 %166, 0, !dbg !393
+; ││││││└└
+; ││││││┌ @ int.jl:87 within `*'
+         %168 = mul i64 1, %167, !dbg !398
+; │││││└└
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %169 = sub i64 %161, 1, !dbg !399
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %170 = mul i64 %169, 1, !dbg !401
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %171 = add i64 1, %170, !dbg !402
+; │││││└
+; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %172 = sub i64 %104, 1, !dbg !403
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %173 = mul i64 %172, %168, !dbg !406
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %174 = add i64 %171, %173, !dbg !407
+; ││└└└└
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:78 within `arrayref'
+      br label %L296, !dbg !408
+
+L296:                                             ; preds = %L273
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+; │││││││┌ @ int.jl:85 within `-'
+          %175 = sub i64 %174, 1, !dbg !410
+; │││││││└
+         %176 = call fastcc float @jl_llvmcall16(i8 addrspace(1)* %39, i64 %175), !dbg !411
+; ││││└└└
+      br label %L300, !dbg !415
+
+L300:                                             ; preds = %L296
+; │││└
+     br label %L301, !dbg !409
+
+L301:                                             ; preds = %L300
+; ││└
+; ││ @ abstractarray.jl:1084 within `_getindex'
+    br label %L302, !dbg !416
+
+L302:                                             ; preds = %L301
+; │└
+   br label %L303, !dbg !383
+
+L303:                                             ; preds = %L302
+; └
+; ┌ @ abstractarray.jl:1153 within `setindex!'
+; │┌ @ abstractarray.jl:1175 within `_setindex!'
+    br label %L322, !dbg !417
+
+L322:                                             ; preds = %L303
+; ││ @ abstractarray.jl:1176 within `_setindex!'
+; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
+; │││┌ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
+; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %177 = sub i64 %76, 1, !dbg !419
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %178 = mul i64 %177, 1, !dbg !426
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %179 = add i64 1, %178, !dbg !427
+; │││││└
+; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %180 = sub i64 %82, 1, !dbg !428
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %181 = mul i64 %180, 33, !dbg !431
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %182 = add i64 %179, %181, !dbg !432
+; ││└└└└
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:84 within `arrayset'
+      br label %L341, !dbg !433
+
+L341:                                             ; preds = %L322
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+; │││││││┌ @ int.jl:85 within `-'
+          %183 = sub i64 %182, 1, !dbg !435
+; │││││││└
+         call fastcc void @jl_llvmcall17(i8 addrspace(3)* %87, float %176, i64 %183), !dbg !436
+; ││││└└└
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
+      br label %L345, !dbg !441
+
+L345:                                             ; preds = %L341
+; │││└
+     br label %L346, !dbg !434
+
+L346:                                             ; preds = %L345
+; ││└
+; ││ @ abstractarray.jl:1177 within `_setindex!'
+    br label %L347, !dbg !442
+
+L347:                                             ; preds = %L346
+; │└
+   br label %L348, !dbg !418
+
+L348:                                             ; preds = %L347
+; └
+  br label %L395, !dbg !380
+
+L349:                                             ; preds = %L249
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:123 within `coalesced_matmul_kernel!'
+; ┌ @ abstractarray.jl:1153 within `setindex!'
+; │┌ @ abstractarray.jl:1175 within `_setindex!'
+    br label %L368, !dbg !443
+
+L368:                                             ; preds = %L349
+; ││ @ abstractarray.jl:1176 within `_setindex!'
+; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
+; │││┌ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
+; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %184 = sub i64 %76, 1, !dbg !446
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %185 = mul i64 %184, 1, !dbg !453
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %186 = add i64 1, %185, !dbg !454
+; │││││└
+; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %187 = sub i64 %82, 1, !dbg !455
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %188 = mul i64 %187, 33, !dbg !458
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %189 = add i64 %186, %188, !dbg !459
+; ││└└└└
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:84 within `arrayset'
+      br label %L387, !dbg !460
+
+L387:                                             ; preds = %L368
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+; │││││││┌ @ int.jl:85 within `-'
+          %190 = sub i64 %189, 1, !dbg !462
+; │││││││└
+         call fastcc void @jl_llvmcall21(i8 addrspace(3)* %87, float 0.000000e+00, i64 %190), !dbg !463
+; ││││└└└
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
+      br label %L391, !dbg !468
+
+L391:                                             ; preds = %L387
+; │││└
+     br label %L392, !dbg !461
+
+L392:                                             ; preds = %L391
+; ││└
+; ││ @ abstractarray.jl:1177 within `_setindex!'
+    br label %L393, !dbg !469
+
+L393:                                             ; preds = %L392
+; │└
+   br label %L394, !dbg !444
+
+L394:                                             ; preds = %L393
+   br label %L395, !dbg !444
+
+L395:                                             ; preds = %L394, %L348
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:127 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/synchronization.jl:14 within `sync_threads'
+   call void @llvm.nvvm.barrier0(), !dbg !470
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:134 within `coalesced_matmul_kernel!'
+  br label %L395.L397_crit_edge, !dbg !474
+
+L395.L397_crit_edge:                              ; preds = %L395
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+; ┌ @ range.jl:620 within `iterate'
+   br label %L397, !dbg !220
+
+L397:                                             ; preds = %L395.L397_crit_edge, %L502
+   %value_phi8 = phi float [ %value_phi3, %L395.L397_crit_edge ], [ %208, %L502 ]
+   %value_phi9 = phi i64 [ 1, %L395.L397_crit_edge ], [ %value_phi11, %L502 ]
+   %value_phi10 = phi i64 [ 1, %L395.L397_crit_edge ], [ %value_phi12, %L502 ]
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:135 within `coalesced_matmul_kernel!'
+; ┌ @ abstractarray.jl:1060 within `getindex'
+; │┌ @ abstractarray.jl:1082 within `_getindex'
+    br label %L419, !dbg !475
+
+L419:                                             ; preds = %L397
+; ││ @ abstractarray.jl:1083 within `_getindex'
+; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
+; │││┌ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
+; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %191 = sub i64 %76, 1, !dbg !478
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %192 = mul i64 %191, 1, !dbg !485
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %193 = add i64 1, %192, !dbg !486
+; │││││└
+; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %194 = sub i64 %value_phi9, 1, !dbg !487
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %195 = mul i64 %194, 33, !dbg !490
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %196 = add i64 %193, %195, !dbg !491
+; ││└└└└
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:78 within `arrayref'
+      br label %L438, !dbg !492
+
+L438:                                             ; preds = %L419
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+; │││││││┌ @ int.jl:85 within `-'
+          %197 = sub i64 %196, 1, !dbg !494
+; │││││││└
+         %198 = call fastcc float @jl_llvmcall18(i8 addrspace(3)* %84, i64 %197), !dbg !495
+; ││││└└└
+      br label %L442, !dbg !499
+
+L442:                                             ; preds = %L438
+; │││└
+     br label %L443, !dbg !493
+
+L443:                                             ; preds = %L442
+; ││└
+; ││ @ abstractarray.jl:1084 within `_getindex'
+    br label %L444, !dbg !500
+
+L444:                                             ; preds = %L443
+; │└
+   br label %L445, !dbg !476
+
+L445:                                             ; preds = %L444
+; │┌ @ abstractarray.jl:1082 within `_getindex'
+    br label %L464, !dbg !475
+
+L464:                                             ; preds = %L445
+; ││ @ abstractarray.jl:1083 within `_getindex'
+; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
+; │││┌ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
+; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %199 = sub i64 %value_phi9, 1, !dbg !478
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %200 = mul i64 %199, 1, !dbg !485
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %201 = add i64 1, %200, !dbg !486
+; │││││└
+; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %202 = sub i64 %82, 1, !dbg !487
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %203 = mul i64 %202, 33, !dbg !490
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %204 = add i64 %201, %203, !dbg !491
+; ││└└└└
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:99 within `getindex'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:78 within `arrayref'
+      br label %L483, !dbg !492
+
+L483:                                             ; preds = %L464
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:80 within `arrayref'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:79 within `unsafe_load'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `pointerref'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+; │││││││┌ @ int.jl:85 within `-'
+          %205 = sub i64 %204, 1, !dbg !494
+; │││││││└
+         %206 = call fastcc float @jl_llvmcall19(i8 addrspace(3)* %87, i64 %205), !dbg !495
+; ││││└└└
+      br label %L487, !dbg !499
+
+L487:                                             ; preds = %L483
+; │││└
+     br label %L488, !dbg !493
+
+L488:                                             ; preds = %L487
+; ││└
+; ││ @ abstractarray.jl:1084 within `_getindex'
+    br label %L489, !dbg !500
+
+L489:                                             ; preds = %L488
+; │└
+   br label %L490, !dbg !476
+
+L490:                                             ; preds = %L489
+; └
+; ┌ @ float.jl:404 within `*'
+   %207 = fmul float %198, %206, !dbg !501
+; └
+; ┌ @ float.jl:400 within `+'
+   %208 = fadd float %value_phi8, %207, !dbg !504
+; └
+; ┌ @ range.jl:624 within `iterate'
+; │┌ @ promotion.jl:398 within `=='
+    %209 = icmp eq i64 %value_phi10, 32, !dbg !506
+    %210 = zext i1 %209 to i8, !dbg !506
+; │└
+   %211 = trunc i8 %210 to i1, !dbg !508
+   %212 = xor i1 %211, true, !dbg !508
+   br i1 %212, label %L495, label %L494, !dbg !508
+
+L494:                                             ; preds = %L490
+   br label %L497, !dbg !508
+
+L495:                                             ; preds = %L490
+; │ @ range.jl:625 within `iterate'
+; │┌ @ int.jl:86 within `+'
+    %213 = add i64 %value_phi10, 1, !dbg !509
+; │└
+; │ @ range.jl:624 within `iterate'
+   br label %L497, !dbg !508
+
+L497:                                             ; preds = %L495, %L494
+   %value_phi11 = phi i64 [ %213, %L495 ], [ undef, %L494 ]
+   %value_phi12 = phi i64 [ %213, %L495 ], [ undef, %L494 ]
+   %value_phi13 = phi i8 [ 1, %L494 ], [ 0, %L495 ]
+; └
+  %214 = xor i8 %value_phi13, 1, !dbg !477
+  %215 = trunc i8 %214 to i1, !dbg !477
+  %216 = xor i1 %215, true, !dbg !477
+  br i1 %216, label %L497.L503_crit_edge, label %L502, !dbg !477
+
+L497.L503_crit_edge:                              ; preds = %L497
+; ┌ @ range.jl:624 within `iterate'
+   br label %L503, !dbg !508
+
+L502:                                             ; preds = %L497
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+; ┌ @ range.jl:620 within `iterate'
+   br label %L397, !dbg !220
+
+L503:                                             ; preds = %L497.L503_crit_edge
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:138 within `coalesced_matmul_kernel!'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/synchronization.jl:14 within `sync_threads'
+   call void @llvm.nvvm.barrier0(), !dbg !511
+; └
+; ┌ @ range.jl:624 within `iterate'
+; │┌ @ promotion.jl:398 within `=='
+    %217 = icmp eq i64 %value_phi5, %261, !dbg !512
+    %218 = zext i1 %217 to i8, !dbg !512
+; │└
+   %219 = trunc i8 %218 to i1, !dbg !224
+   %220 = xor i1 %219, true, !dbg !224
+   br i1 %220, label %L508, label %L507, !dbg !224
+
+L507:                                             ; preds = %L503
+   br label %L510, !dbg !224
+
+L508:                                             ; preds = %L503
+; │ @ range.jl:625 within `iterate'
+; │┌ @ int.jl:86 within `+'
+    %221 = add i64 %value_phi5, 1, !dbg !513
+; │└
+; │ @ range.jl:624 within `iterate'
+   br label %L510, !dbg !224
+
+L510:                                             ; preds = %L508, %L507
+   %value_phi15 = phi i64 [ %221, %L508 ], [ undef, %L507 ]
+   %value_phi16 = phi i64 [ %221, %L508 ], [ undef, %L507 ]
+   %value_phi17 = phi i8 [ 1, %L507 ], [ 0, %L508 ]
+; └
+  %222 = xor i8 %value_phi17, 1, !dbg !225
+  %223 = trunc i8 %222 to i1, !dbg !225
+  %224 = xor i1 %223, true, !dbg !225
+  br i1 %224, label %L510.L516_crit_edge, label %L515, !dbg !225
+
+L510.L516_crit_edge:                              ; preds = %L510
+; ┌ @ range.jl:624 within `iterate'
+   br label %L516, !dbg !224
+
+L515:                                             ; preds = %L510
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+; ┌ @ range.jl:620 within `iterate'
+   br label %L72, !dbg !220
+
+L516:                                             ; preds = %L67.L516_crit_edge, %L510.L516_crit_edge
+   %value_phi18 = phi float [ %208, %L510.L516_crit_edge ], [ 0.000000e+00, %L67.L516_crit_edge ]
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:141 within `coalesced_matmul_kernel!'
+; ┌ @ int.jl:85 within `-'
+   %225 = sub i64 %66, 1, !dbg !515
+; └
+; ┌ @ int.jl:87 within `*'
+   %226 = mul i64 %225, 32, !dbg !517
+; └
+; ┌ @ int.jl:86 within `+'
+   %227 = add i64 %226, %76, !dbg !518
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:142 within `coalesced_matmul_kernel!'
+; ┌ @ int.jl:85 within `-'
+   %228 = sub i64 %72, 1, !dbg !519
+; └
+; ┌ @ int.jl:87 within `*'
+   %229 = mul i64 %228, 32, !dbg !521
+; └
+; ┌ @ int.jl:86 within `+'
+   %230 = add i64 %229, %82, !dbg !522
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:144 within `coalesced_matmul_kernel!'
+; ┌ @ promotion.jl:350 within `<='
+; │┌ @ promotion.jl:282 within `promote'
+; ││┌ @ promotion.jl:259 within `_promote'
+; │││┌ @ number.jl:7 within `convert'
+; ││││┌ @ boot.jl:708 within `Int64'
+; │││││┌ @ boot.jl:627 within `toInt64'
+        %231 = sext i32 %3 to i64, !dbg !523
+; │└└└└└
+; │ @ promotion.jl:350 within `<=' @ int.jl:441
+   %232 = icmp sle i64 %227, %231, !dbg !530
+; └
+  %233 = zext i1 %232 to i8, !dbg !529
+  %234 = trunc i8 %233 to i1, !dbg !529
+  %235 = xor i1 %234, true, !dbg !529
+  br i1 %235, label %L531, label %L528, !dbg !529
+
+L528:                                             ; preds = %L516
+; ┌ @ promotion.jl:350 within `<='
+; │┌ @ promotion.jl:282 within `promote'
+; ││┌ @ promotion.jl:259 within `_promote'
+; │││┌ @ number.jl:7 within `convert'
+; ││││┌ @ boot.jl:708 within `Int64'
+; │││││┌ @ boot.jl:627 within `toInt64'
+        %236 = sext i32 %5 to i64, !dbg !523
+; │└└└└└
+; │ @ promotion.jl:350 within `<=' @ int.jl:441
+   %237 = icmp sle i64 %230, %236, !dbg !530
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:138 within `coalesced_matmul_kernel!'
+; ┌ @ range.jl:624 within `iterate'
+   %238 = zext i1 %237 to i8, !dbg !224
+   br label %L532, !dbg !224
+
+L531:                                             ; preds = %L516
+   br label %L532, !dbg !224
+
+L532:                                             ; preds = %L531, %L528
+   %value_phi19 = phi i8 [ %238, %L528 ], [ 0, %L531 ]
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:144 within `coalesced_matmul_kernel!'
+  %239 = trunc i8 %value_phi19 to i1, !dbg !529
+  %240 = xor i1 %239, true, !dbg !529
+  br i1 %240, label %L584, label %L534, !dbg !529
+
+L534:                                             ; preds = %L532
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:145 within `coalesced_matmul_kernel!'
+; ┌ @ abstractarray.jl:1153 within `setindex!'
+; │┌ @ abstractarray.jl:1175 within `_setindex!'
+    br label %L553, !dbg !531
+
+L553:                                             ; preds = %L534
+; ││ @ abstractarray.jl:1176 within `_setindex!'
+; ││┌ @ abstractarray.jl:1089 within `_to_linear_index'
+; │││┌ @ abstractarray.jl:1879 within `_sub2ind'
+; ││││┌ @ abstractarray.jl:75 within `axes'
+; │││││┌ @ tuple.jl:158 within `map'
+; ││││││┌ @ range.jl:326 within `OneTo' @ range.jl:317
+; │││││││┌ @ promotion.jl:409 within `max'
+; ││││││││┌ @ int.jl:82 within `<'
+           %241 = icmp slt i64 %40, 0, !dbg !534
+; ││││││││└
+          %242 = zext i1 %241 to i8, !dbg !535
+          %243 = trunc i8 %242 to i1, !dbg !535
+          %244 = xor i1 %243, true, !dbg !535
+          %245 = select i1 %244, i64 %40, i64 0, !dbg !535
+; ││││└└└└
+; ││││ @ abstractarray.jl:1879 within `_sub2ind' @ abstractarray.jl:1895
+; ││││┌ @ abstractarray.jl:1911 within `_sub2ind_recurse'
+; │││││┌ @ abstractarray.jl:1915 within `nextL'
+; ││││││┌ @ range.jl:544 within `unsafe_length'
+; │││││││┌ @ int.jl:85 within `-'
+          %246 = sub i64 %245, 0, !dbg !543
+; ││││││└└
+; ││││││┌ @ int.jl:87 within `*'
+         %247 = mul i64 1, %246, !dbg !548
+; │││││└└
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %248 = sub i64 %227, 1, !dbg !549
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %249 = mul i64 %248, 1, !dbg !551
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %250 = add i64 1, %249, !dbg !552
+; │││││└
+; │││││ @ abstractarray.jl:1911 within `_sub2ind_recurse' @ abstractarray.jl:1911
+; │││││┌ @ abstractarray.jl:1918 within `offsetin'
+; ││││││┌ @ int.jl:85 within `-'
+         %251 = sub i64 %230, 1, !dbg !553
+; │││││└└
+; │││││┌ @ int.jl:87 within `*'
+        %252 = mul i64 %251, %247, !dbg !556
+; │││││└
+; │││││┌ @ int.jl:86 within `+'
+        %253 = add i64 %250, %252, !dbg !557
+; ││└└└└
+; ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:101 within `setindex!'
+; │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:84 within `arrayset'
+      br label %L576, !dbg !558
+
+L576:                                             ; preds = %L553
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:86 within `arrayset'
+; ││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:82 within `unsafe_store!'
+; │││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `pointerset'
+; ││││││┌ @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl:42 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+; │││││││┌ @ int.jl:85 within `-'
+          %254 = sub i64 %253, 1, !dbg !560
+; │││││││└
+         call fastcc void @jl_llvmcall20(i8 addrspace(1)* %37, float %value_phi18, i64 %254), !dbg !561
+; ││││└└└
+; ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
+      br label %L580, !dbg !566
+
+L580:                                             ; preds = %L576
+; │││└
+     br label %L581, !dbg !559
+
+L581:                                             ; preds = %L580
+; ││└
+; ││ @ abstractarray.jl:1177 within `_setindex!'
+    br label %L582, !dbg !567
+
+L582:                                             ; preds = %L581
+; │└
+   br label %L583, !dbg !532
+
+L583:                                             ; preds = %L582
+   br label %L584, !dbg !532
+
+L584:                                             ; preds = %L583, %L532
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:147 within `coalesced_matmul_kernel!'
+  ret void, !dbg !568
+
+fail:                                             ; preds = %top
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:106 within `coalesced_matmul_kernel!'
+; ┌ @ int.jl:260 within `div'
+   call fastcc void @gpu_report_exception(i64 ptrtoint ([10 x i8]* @exception4 to i64)), !dbg !218
+   call fastcc void @gpu_signal_exception(), !dbg !218
+   call void asm sideeffect "trap;", ""(), !dbg !218
+   br label %pass
+
+pass:                                             ; preds = %fail, %top
+   %255 = sdiv i64 %92, 32, !dbg !218
+; └
+;  @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:109 within `coalesced_matmul_kernel!'
+; ┌ @ int.jl:85 within `-'
+   %256 = sub i64 %255, 1, !dbg !569
 ; └
 ; ┌ @ range.jl:5 within `Colon'
 ; │┌ @ range.jl:280 within `UnitRange'
 ; ││┌ @ range.jl:285 within `unitrange_last'
 ; │││┌ @ operators.jl:350 within `>='
 ; ││││┌ @ int.jl:441 within `<='
-       %259 = icmp sle i64 0, %258, !dbg !578
+       %257 = icmp sle i64 0, %256, !dbg !570
 ; │││└└
-     %260 = zext i1 %259 to i8, !dbg !582
-     %261 = trunc i8 %260 to i1, !dbg !582
-     %262 = xor i1 %261, true, !dbg !582
-     %263 = select i1 %262, i64 -1, i64 %258, !dbg !582
+     %258 = zext i1 %257 to i8, !dbg !574
+     %259 = trunc i8 %258 to i1, !dbg !574
+     %260 = xor i1 %259, true, !dbg !574
+     %261 = select i1 %260, i64 -1, i64 %256, !dbg !574
 ; └└└
 ; ┌ @ range.jl:620 within `iterate'
 ; │┌ @ range.jl:503 within `isempty'
 ; ││┌ @ operators.jl:303 within `>'
 ; │││┌ @ int.jl:82 within `<'
-      %264 = icmp slt i64 %263, 0, !dbg !588
+      %262 = icmp slt i64 %261, 0, !dbg !580
 ; │└└└
-   %265 = zext i1 %264 to i8, !dbg !229
-   %266 = trunc i8 %265 to i1, !dbg !229
-   %267 = xor i1 %266, true, !dbg !229
-   br i1 %267, label %L68, label %L67, !dbg !229
+   %263 = zext i1 %262 to i8, !dbg !220
+   %264 = trunc i8 %263 to i1, !dbg !220
+   %265 = xor i1 %264, true, !dbg !220
+   br i1 %265, label %L66, label %L65, !dbg !220
 ; └
 }
 
@@ -1331,7 +1311,7 @@ declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture writeonly, i8* nocapture r
 ; Function Attrs: alwaysinline
 define internal fastcc i32 @jl_llvmcall0() unnamed_addr #1 {
 entry:
-  %0 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.x(), !range !593
+  %0 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.x(), !range !585
   ret i32 %0
 }
 
@@ -1341,7 +1321,7 @@ declare i32 @llvm.nvvm.read.ptx.sreg.ctaid.x() #2
 ; Function Attrs: alwaysinline
 define internal fastcc i32 @jl_llvmcall1() unnamed_addr #1 {
 entry:
-  %0 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.y(), !range !594
+  %0 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.y(), !range !586
   ret i32 %0
 }
 
@@ -1351,7 +1331,7 @@ declare i32 @llvm.nvvm.read.ptx.sreg.ctaid.y() #2
 ; Function Attrs: alwaysinline
 define internal fastcc i32 @jl_llvmcall2() unnamed_addr #1 {
 entry:
-  %0 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.z(), !range !594
+  %0 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.z(), !range !586
   ret i32 %0
 }
 
@@ -1361,28 +1341,28 @@ declare i32 @llvm.nvvm.read.ptx.sreg.ctaid.z() #2
 ; Function Attrs: alwaysinline
 define internal fastcc i32 @jl_llvmcall3() unnamed_addr #1 {
 entry:
-  %0 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.x(), !range !593
+  %0 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.x(), !range !585
   ret i32 %0
 }
 
 ; Function Attrs: alwaysinline
 define internal fastcc i32 @jl_llvmcall4() unnamed_addr #1 {
 entry:
-  %0 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.y(), !range !594
+  %0 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.y(), !range !586
   ret i32 %0
 }
 
 ; Function Attrs: alwaysinline
 define internal fastcc i32 @jl_llvmcall5() unnamed_addr #1 {
 entry:
-  %0 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.z(), !range !594
+  %0 = call i32 @llvm.nvvm.read.ptx.sreg.ctaid.z(), !range !586
   ret i32 %0
 }
 
 ; Function Attrs: alwaysinline
 define internal fastcc i32 @jl_llvmcall6() unnamed_addr #1 {
 entry:
-  %0 = call i32 @llvm.nvvm.read.ptx.sreg.tid.x(), !range !595
+  %0 = call i32 @llvm.nvvm.read.ptx.sreg.tid.x(), !range !587
   ret i32 %0
 }
 
@@ -1392,7 +1372,7 @@ declare i32 @llvm.nvvm.read.ptx.sreg.tid.x() #2
 ; Function Attrs: alwaysinline
 define internal fastcc i32 @jl_llvmcall7() unnamed_addr #1 {
 entry:
-  %0 = call i32 @llvm.nvvm.read.ptx.sreg.tid.y(), !range !595
+  %0 = call i32 @llvm.nvvm.read.ptx.sreg.tid.y(), !range !587
   ret i32 %0
 }
 
@@ -1402,7 +1382,7 @@ declare i32 @llvm.nvvm.read.ptx.sreg.tid.y() #2
 ; Function Attrs: alwaysinline
 define internal fastcc i32 @jl_llvmcall8() unnamed_addr #1 {
 entry:
-  %0 = call i32 @llvm.nvvm.read.ptx.sreg.tid.z(), !range !595
+  %0 = call i32 @llvm.nvvm.read.ptx.sreg.tid.z(), !range !587
   ret i32 %0
 }
 
@@ -1412,21 +1392,21 @@ declare i32 @llvm.nvvm.read.ptx.sreg.tid.z() #2
 ; Function Attrs: alwaysinline
 define internal fastcc i32 @jl_llvmcall9() unnamed_addr #1 {
 entry:
-  %0 = call i32 @llvm.nvvm.read.ptx.sreg.tid.x(), !range !595
+  %0 = call i32 @llvm.nvvm.read.ptx.sreg.tid.x(), !range !587
   ret i32 %0
 }
 
 ; Function Attrs: alwaysinline
 define internal fastcc i32 @jl_llvmcall10() unnamed_addr #1 {
 entry:
-  %0 = call i32 @llvm.nvvm.read.ptx.sreg.tid.y(), !range !595
+  %0 = call i32 @llvm.nvvm.read.ptx.sreg.tid.y(), !range !587
   ret i32 %0
 }
 
 ; Function Attrs: alwaysinline
 define internal fastcc i32 @jl_llvmcall11() unnamed_addr #1 {
 entry:
-  %0 = call i32 @llvm.nvvm.read.ptx.sreg.tid.z(), !range !595
+  %0 = call i32 @llvm.nvvm.read.ptx.sreg.tid.z(), !range !587
   ret i32 %0
 }
 
@@ -1447,7 +1427,7 @@ define internal fastcc float @jl_llvmcall14(i8 addrspace(1)*, i64) unnamed_addr 
 entry:
   %2 = bitcast i8 addrspace(1)* %0 to float addrspace(1)*
   %3 = getelementptr inbounds float, float addrspace(1)* %2, i64 %1
-  %4 = load float, float addrspace(1)* %3, align 4, !tbaa !596
+  %4 = load float, float addrspace(1)* %3, align 4, !tbaa !588
   ret float %4
 }
 
@@ -1456,7 +1436,7 @@ define internal fastcc void @jl_llvmcall15(i8 addrspace(3)*, float, i64) unnamed
 entry:
   %3 = bitcast i8 addrspace(3)* %0 to float addrspace(3)*
   %4 = getelementptr inbounds float, float addrspace(3)* %3, i64 %2
-  store float %1, float addrspace(3)* %4, align 4, !tbaa !599
+  store float %1, float addrspace(3)* %4, align 4, !tbaa !591
   ret void
 }
 
@@ -1465,7 +1445,7 @@ define internal fastcc float @jl_llvmcall16(i8 addrspace(1)*, i64) unnamed_addr 
 entry:
   %2 = bitcast i8 addrspace(1)* %0 to float addrspace(1)*
   %3 = getelementptr inbounds float, float addrspace(1)* %2, i64 %1
-  %4 = load float, float addrspace(1)* %3, align 4, !tbaa !596
+  %4 = load float, float addrspace(1)* %3, align 4, !tbaa !588
   ret float %4
 }
 
@@ -1474,7 +1454,7 @@ define internal fastcc void @jl_llvmcall17(i8 addrspace(3)*, float, i64) unnamed
 entry:
   %3 = bitcast i8 addrspace(3)* %0 to float addrspace(3)*
   %4 = getelementptr inbounds float, float addrspace(3)* %3, i64 %2
-  store float %1, float addrspace(3)* %4, align 4, !tbaa !599
+  store float %1, float addrspace(3)* %4, align 4, !tbaa !591
   ret void
 }
 
@@ -1486,7 +1466,7 @@ define internal fastcc float @jl_llvmcall18(i8 addrspace(3)*, i64) unnamed_addr 
 entry:
   %2 = bitcast i8 addrspace(3)* %0 to float addrspace(3)*
   %3 = getelementptr inbounds float, float addrspace(3)* %2, i64 %1
-  %4 = load float, float addrspace(3)* %3, align 4, !tbaa !599
+  %4 = load float, float addrspace(3)* %3, align 4, !tbaa !591
   ret float %4
 }
 
@@ -1495,7 +1475,7 @@ define internal fastcc float @jl_llvmcall19(i8 addrspace(3)*, i64) unnamed_addr 
 entry:
   %2 = bitcast i8 addrspace(3)* %0 to float addrspace(3)*
   %3 = getelementptr inbounds float, float addrspace(3)* %2, i64 %1
-  %4 = load float, float addrspace(3)* %3, align 4, !tbaa !599
+  %4 = load float, float addrspace(3)* %3, align 4, !tbaa !591
   ret float %4
 }
 
@@ -1504,7 +1484,7 @@ define internal fastcc void @jl_llvmcall20(i8 addrspace(1)*, float, i64) unnamed
 entry:
   %3 = bitcast i8 addrspace(1)* %0 to float addrspace(1)*
   %4 = getelementptr inbounds float, float addrspace(1)* %3, i64 %2
-  store float %1, float addrspace(1)* %4, align 4, !tbaa !596
+  store float %1, float addrspace(1)* %4, align 4, !tbaa !588
   ret void
 }
 
@@ -1513,7 +1493,7 @@ define internal fastcc void @jl_llvmcall21(i8 addrspace(3)*, float, i64) unnamed
 entry:
   %3 = bitcast i8 addrspace(3)* %0 to float addrspace(3)*
   %4 = getelementptr inbounds float, float addrspace(3)* %3, i64 %2
-  store float %1, float addrspace(3)* %4, align 4, !tbaa !599
+  store float %1, float addrspace(3)* %4, align 4, !tbaa !591
   ret void
 }
 
@@ -1522,26 +1502,26 @@ define internal fastcc void @jl_llvmcall22(i8 addrspace(3)*, float, i64) unnamed
 entry:
   %3 = bitcast i8 addrspace(3)* %0 to float addrspace(3)*
   %4 = getelementptr inbounds float, float addrspace(3)* %3, i64 %2
-  store float %1, float addrspace(3)* %4, align 4, !tbaa !599
+  store float %1, float addrspace(3)* %4, align 4, !tbaa !591
   ret void
 }
 
-;  @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/runtime.jl:39 within `report_exception'
-define internal fastcc void @gpu_report_exception(i64) unnamed_addr !dbg !601 {
+;  @ /home/local/.julia/packages/CUDA/BIYoG/src/device/runtime.jl:39 within `report_exception'
+define internal fastcc void @gpu_report_exception(i64) unnamed_addr !dbg !593 {
 top:
   %1 = alloca %printf_args, align 8
-;  @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/runtime.jl:40 within `report_exception'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/output.jl:38 within `_cuprintf'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/output.jl:38 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-    %2 = bitcast %printf_args* %1 to i8*, !dbg !602
-    call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %2), !dbg !602
-    %3 = getelementptr inbounds %printf_args, %printf_args* %1, i64 0, i32 0, !dbg !602
-    store i64 %0, i64* %3, align 8, !dbg !602
-    %4 = call i32 @vprintf(i8* getelementptr inbounds ([108 x i8], [108 x i8]* @0, i64 0, i64 0), i8* nonnull %2), !dbg !602
-    call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %2), !dbg !602
+;  @ /home/local/.julia/packages/CUDA/BIYoG/src/device/runtime.jl:40 within `report_exception'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/output.jl:38 within `_cuprintf'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/output.jl:38 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+    %2 = bitcast %printf_args* %1 to i8*, !dbg !594
+    call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %2), !dbg !594
+    %3 = getelementptr inbounds %printf_args, %printf_args* %1, i64 0, i32 0, !dbg !594
+    store i64 %0, i64* %3, align 8, !dbg !594
+    %4 = call i32 @vprintf(i8* getelementptr inbounds ([108 x i8], [108 x i8]* @0, i64 0, i64 0), i8* nonnull %2), !dbg !594
+    call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %2), !dbg !594
 ; └└
-;  @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/runtime.jl:44 within `report_exception'
-  ret void, !dbg !610
+;  @ /home/local/.julia/packages/CUDA/BIYoG/src/device/runtime.jl:44 within `report_exception'
+  ret void, !dbg !602
 }
 
 ; Function Attrs: argmemonly nounwind
@@ -1552,40 +1532,40 @@ declare i32 @vprintf(i8*, i8*) local_unnamed_addr
 ; Function Attrs: argmemonly nounwind
 declare void @llvm.lifetime.end.p0i8(i64 immarg, i8* nocapture) #0
 
-;  @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/runtime.jl:25 within `signal_exception'
-define internal fastcc void @gpu_signal_exception() unnamed_addr !dbg !611 {
+;  @ /home/local/.julia/packages/CUDA/BIYoG/src/device/runtime.jl:25 within `signal_exception'
+define internal fastcc void @gpu_signal_exception() unnamed_addr !dbg !603 {
 top:
-;  @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/runtime.jl:26 within `signal_exception'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/runtime.jl:23 within `exception_flag'
-   %0 = call i64 @julia_exception_flag(), !dbg !612
+;  @ /home/local/.julia/packages/CUDA/BIYoG/src/device/runtime.jl:26 within `signal_exception'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/runtime.jl:23 within `exception_flag'
+   %0 = call i64 @julia_exception_flag(), !dbg !604
 ; └
-;  @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/runtime.jl:27 within `signal_exception'
-  %1 = icmp eq i64 %0, 0, !dbg !615
-  br i1 %1, label %L9, label %L5, !dbg !615
+;  @ /home/local/.julia/packages/CUDA/BIYoG/src/device/runtime.jl:27 within `signal_exception'
+  %1 = icmp eq i64 %0, 0, !dbg !607
+  br i1 %1, label %L9, label %L5, !dbg !607
 
 L5:                                               ; preds = %top
-;  @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/runtime.jl:28 within `signal_exception'
+;  @ /home/local/.julia/packages/CUDA/BIYoG/src/device/runtime.jl:28 within `signal_exception'
 ; ┌ @ pointer.jl:118 within `unsafe_store!' @ pointer.jl:118
-   %2 = inttoptr i64 %0 to i64*, !dbg !616
-   store i64 1, i64* %2, align 1, !dbg !616, !tbaa !621
+   %2 = inttoptr i64 %0 to i64*, !dbg !608
+   store i64 1, i64* %2, align 1, !dbg !608, !tbaa !613
 ; └
-;  @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/runtime.jl:29 within `signal_exception'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/synchronization.jl:115 within `threadfence_system'
-   call void @llvm.nvvm.membar.sys(), !dbg !623
+;  @ /home/local/.julia/packages/CUDA/BIYoG/src/device/runtime.jl:29 within `signal_exception'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/synchronization.jl:115 within `threadfence_system'
+   call void @llvm.nvvm.membar.sys(), !dbg !615
 ; └
-  br label %L11, !dbg !625
+  br label %L11, !dbg !617
 
 L9:                                               ; preds = %top
-;  @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/runtime.jl:31 within `signal_exception'
-; ┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/output.jl:38 within `_cuprintf'
-; │┌ @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/output.jl:38 within `macro expansion' @ /opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl:80
-    %3 = call i32 @vprintf(i8* getelementptr inbounds ([110 x i8], [110 x i8]* @1, i64 0, i64 0), i8* null), !dbg !626
-    br label %L11, !dbg !626
+;  @ /home/local/.julia/packages/CUDA/BIYoG/src/device/runtime.jl:31 within `signal_exception'
+; ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/output.jl:38 within `_cuprintf'
+; │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/output.jl:38 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
+    %3 = call i32 @vprintf(i8* getelementptr inbounds ([110 x i8], [110 x i8]* @1, i64 0, i64 0), i8* null), !dbg !618
+    br label %L11, !dbg !618
 
 L11:                                              ; preds = %L9, %L5
 ; └└
-;  @ /opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/runtime.jl:36 within `signal_exception'
-  ret void, !dbg !633
+;  @ /home/local/.julia/packages/CUDA/BIYoG/src/device/runtime.jl:36 within `signal_exception'
+  ret void, !dbg !625
 }
 
 declare i64 @julia_exception_flag() local_unnamed_addr
@@ -1606,7 +1586,7 @@ attributes #4 = { nounwind }
 !0 = !{i32 2, !"Dwarf Version", i32 4}
 !1 = !{i32 1, !"Debug Info Version", i32 3}
 !2 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !3, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
-!3 = !DIFile(filename: "/users/tandrews/MIT6828_HardAware/binaries/generate_binaries.jl", directory: ".")
+!3 = !DIFile(filename: "/home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl", directory: ".")
 !4 = !{}
 !5 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !6, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
 !6 = !DIFile(filename: "abstractarray.jl", directory: ".")
@@ -1614,11 +1594,11 @@ attributes #4 = { nounwind }
 !8 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !6, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
 !9 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !6, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
 !10 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !11, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
-!11 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/GPUCompiler/uTpNx/src/runtime.jl", directory: ".")
+!11 = !DIFile(filename: "/home/local/.julia/packages/GPUCompiler/uTpNx/src/runtime.jl", directory: ".")
 !12 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !11, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
 !13 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !11, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
 !14 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !15, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
-!15 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/runtime.jl", directory: ".")
+!15 = !DIFile(filename: "/home/local/.julia/packages/CUDA/BIYoG/src/device/runtime.jl", directory: ".")
 !16 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !11, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
 !17 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !11, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
 !18 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !15, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
@@ -1643,10 +1623,10 @@ attributes #4 = { nounwind }
 !37 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !11, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
 !38 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !11, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
 !39 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !40, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
-!40 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/memory_dynamic.jl", directory: ".")
+!40 = !DIFile(filename: "/home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_dynamic.jl", directory: ".")
 !41 = distinct !DICompileUnit(language: DW_LANG_Julia, file: !15, producer: "julia", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !4, nameTableKind: None)
 !42 = !{void (i64, i64, i64, i32, i32, i32)* @_Z12julia_matmul3PtrI7Float32ES_IS0_ES_IS0_E5Int32S1_S1_, !"kernel", i32 1}
-!43 = distinct !DISubprogram(name: "coalesced_matmul_kernel!", linkageName: "julia_coalesced_matmul_kernel!_3001", scope: null, file: !3, line: 88, type: !44, scopeLine: 88, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!43 = distinct !DISubprogram(name: "coalesced_matmul_kernel!", linkageName: "julia_coalesced_matmul_kernel!_3154", scope: null, file: !3, line: 88, type: !44, scopeLine: 88, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
 !44 = !DISubroutineType(types: !4)
 !45 = !{!46, !46, i64 0, i64 1}
 !46 = !{!"jtbaa_const", !47, i64 0}
@@ -1681,7 +1661,7 @@ attributes #4 = { nounwind }
 !75 = distinct !DISubprogram(name: "materialize;", linkageName: "materialize", scope: !64, file: !64, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
 !76 = !DILocation(line: 48, scope: !77, inlinedAt: !79)
 !77 = distinct !DISubprogram(name: "CuDeviceArray;", linkageName: "CuDeviceArray", scope: !78, file: !78, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!78 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/array.jl", directory: ".")
+!78 = !DIFile(filename: "/home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl", directory: ".")
 !79 = !DILocation(line: 38, scope: !77, inlinedAt: !80)
 !80 = !DILocation(line: 92, scope: !43)
 !81 = !{!82, !82, i64 0}
@@ -1713,10 +1693,10 @@ attributes #4 = { nounwind }
 !107 = !DILocation(line: 31, scope: !77, inlinedAt: !104)
 !108 = !DILocation(line: 80, scope: !109, inlinedAt: !111)
 !109 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !110, file: !110, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!110 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/base.jl", directory: ".")
+!110 = !DIFile(filename: "/home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl", directory: ".")
 !111 = !DILocation(line: 7, scope: !112, inlinedAt: !114)
 !112 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !113, file: !113, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!113 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/indexing.jl", directory: ".")
+!113 = !DIFile(filename: "/home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl", directory: ".")
 !114 = !DILocation(line: 7, scope: !115, inlinedAt: !116)
 !115 = distinct !DISubprogram(name: "_index;", linkageName: "_index", scope: !113, file: !113, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
 !116 = !DILocation(line: 57, scope: !117, inlinedAt: !118)
@@ -1797,7 +1777,7 @@ attributes #4 = { nounwind }
 !191 = !DILocation(line: 80, scope: !109, inlinedAt: !192)
 !192 = !DILocation(line: 55, scope: !193, inlinedAt: !195)
 !193 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !194, file: !194, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!194 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/memory_shared.jl", directory: ".")
+!194 = !DIFile(filename: "/home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl", directory: ".")
 !195 = !DILocation(line: 55, scope: !196, inlinedAt: !197)
 !196 = distinct !DISubprogram(name: "emit_shmem;", linkageName: "emit_shmem", scope: !194, file: !194, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
 !197 = !DILocation(line: 24, scope: !193, inlinedAt: !198)
@@ -1819,421 +1799,413 @@ attributes #4 = { nounwind }
 !213 = !DILocation(line: 106, scope: !43)
 !214 = !DILocation(line: 86, scope: !124, inlinedAt: !215)
 !215 = !DILocation(line: 922, scope: !124, inlinedAt: !213)
-!216 = !DILocation(line: 627, scope: !58, inlinedAt: !217)
-!217 = !DILocation(line: 708, scope: !61, inlinedAt: !218)
-!218 = !DILocation(line: 7, scope: !219, inlinedAt: !221)
-!219 = distinct !DISubprogram(name: "convert;", linkageName: "convert", scope: !220, file: !220, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!220 = !DIFile(filename: "number.jl", directory: ".")
-!221 = !DILocation(line: 259, scope: !222, inlinedAt: !224)
-!222 = distinct !DISubprogram(name: "_promote;", linkageName: "_promote", scope: !223, file: !223, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!223 = !DIFile(filename: "promotion.jl", directory: ".")
-!224 = !DILocation(line: 282, scope: !225, inlinedAt: !226)
-!225 = distinct !DISubprogram(name: "promote;", linkageName: "promote", scope: !223, file: !223, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!226 = !DILocation(line: 352, scope: !227, inlinedAt: !213)
-!227 = distinct !DISubprogram(name: "rem;", linkageName: "rem", scope: !223, file: !223, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!228 = !DILocation(line: 261, scope: !211, inlinedAt: !226)
-!229 = !DILocation(line: 620, scope: !230, inlinedAt: !232)
-!230 = distinct !DISubprogram(name: "iterate;", linkageName: "iterate", scope: !231, file: !231, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!231 = !DIFile(filename: "range.jl", directory: ".")
-!232 = !DILocation(line: 109, scope: !43)
-!233 = !DILocation(line: 624, scope: !230, inlinedAt: !234)
-!234 = !DILocation(line: 138, scope: !43)
-!235 = !DILocation(line: 85, scope: !236, inlinedAt: !237)
-!236 = distinct !DISubprogram(name: "-;", linkageName: "-", scope: !125, file: !125, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!237 = !DILocation(line: 111, scope: !43)
-!238 = !DILocation(line: 87, scope: !239, inlinedAt: !237)
-!239 = distinct !DISubprogram(name: "*;", linkageName: "*", scope: !125, file: !125, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!240 = !DILocation(line: 86, scope: !124, inlinedAt: !237)
-!241 = !DILocation(line: 85, scope: !236, inlinedAt: !242)
-!242 = !DILocation(line: 112, scope: !43)
-!243 = !DILocation(line: 87, scope: !239, inlinedAt: !242)
-!244 = !DILocation(line: 86, scope: !124, inlinedAt: !242)
-!245 = !DILocation(line: 627, scope: !58, inlinedAt: !246)
-!246 = !DILocation(line: 708, scope: !61, inlinedAt: !247)
-!247 = !DILocation(line: 7, scope: !219, inlinedAt: !248)
-!248 = !DILocation(line: 259, scope: !222, inlinedAt: !249)
-!249 = !DILocation(line: 282, scope: !225, inlinedAt: !250)
-!250 = !DILocation(line: 350, scope: !251, inlinedAt: !252)
-!251 = distinct !DISubprogram(name: "<=;", linkageName: "<=", scope: !223, file: !223, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!252 = !DILocation(line: 115, scope: !43)
-!253 = !DILocation(line: 441, scope: !254, inlinedAt: !250)
-!254 = distinct !DISubprogram(name: "<=;", linkageName: "<=", scope: !125, file: !125, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!255 = !DILocation(line: 87, scope: !239, inlinedAt: !252)
-!256 = !DILocation(line: 86, scope: !124, inlinedAt: !252)
-!257 = !DILocation(line: 87, scope: !239, inlinedAt: !258)
-!258 = !DILocation(line: 116, scope: !43)
-!259 = !DILocation(line: 86, scope: !124, inlinedAt: !258)
-!260 = !DILocation(line: 1082, scope: !261, inlinedAt: !262)
-!261 = distinct !DISubprogram(name: "_getindex;", linkageName: "_getindex", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!262 = !DILocation(line: 1060, scope: !263, inlinedAt: !258)
-!263 = distinct !DISubprogram(name: "getindex;", linkageName: "getindex", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!264 = !DILocation(line: 82, scope: !265, inlinedAt: !266)
-!265 = distinct !DISubprogram(name: "<;", linkageName: "<", scope: !125, file: !125, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!266 = !DILocation(line: 409, scope: !267, inlinedAt: !268)
-!267 = distinct !DISubprogram(name: "max;", linkageName: "max", scope: !223, file: !223, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!268 = !DILocation(line: 317, scope: !269, inlinedAt: !270)
-!269 = distinct !DISubprogram(name: "OneTo;", linkageName: "OneTo", scope: !231, file: !231, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!270 = !DILocation(line: 326, scope: !269, inlinedAt: !271)
-!271 = !DILocation(line: 158, scope: !272, inlinedAt: !274)
-!272 = distinct !DISubprogram(name: "map;", linkageName: "map", scope: !273, file: !273, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!273 = !DIFile(filename: "tuple.jl", directory: ".")
-!274 = !DILocation(line: 75, scope: !275, inlinedAt: !276)
-!275 = distinct !DISubprogram(name: "axes;", linkageName: "axes", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!276 = !DILocation(line: 1879, scope: !277, inlinedAt: !278)
-!277 = distinct !DISubprogram(name: "_sub2ind;", linkageName: "_sub2ind", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!278 = !DILocation(line: 1089, scope: !279, inlinedAt: !280)
-!279 = distinct !DISubprogram(name: "_to_linear_index;", linkageName: "_to_linear_index", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!280 = !DILocation(line: 1083, scope: !261, inlinedAt: !262)
-!281 = !DILocation(line: 85, scope: !236, inlinedAt: !282)
-!282 = !DILocation(line: 544, scope: !283, inlinedAt: !284)
-!283 = distinct !DISubprogram(name: "unsafe_length;", linkageName: "unsafe_length", scope: !231, file: !231, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!284 = !DILocation(line: 1915, scope: !285, inlinedAt: !286)
-!285 = distinct !DISubprogram(name: "nextL;", linkageName: "nextL", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!286 = !DILocation(line: 1911, scope: !287, inlinedAt: !288)
-!287 = distinct !DISubprogram(name: "_sub2ind_recurse;", linkageName: "_sub2ind_recurse", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!288 = !DILocation(line: 1895, scope: !277, inlinedAt: !276)
-!289 = !DILocation(line: 87, scope: !239, inlinedAt: !284)
-!290 = !DILocation(line: 85, scope: !236, inlinedAt: !291)
-!291 = !DILocation(line: 1918, scope: !292, inlinedAt: !286)
-!292 = distinct !DISubprogram(name: "offsetin;", linkageName: "offsetin", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!293 = !DILocation(line: 87, scope: !239, inlinedAt: !286)
-!294 = !DILocation(line: 86, scope: !124, inlinedAt: !286)
-!295 = !DILocation(line: 85, scope: !236, inlinedAt: !296)
-!296 = !DILocation(line: 1918, scope: !292, inlinedAt: !297)
-!297 = !DILocation(line: 1911, scope: !287, inlinedAt: !286)
-!298 = !DILocation(line: 87, scope: !239, inlinedAt: !297)
-!299 = !DILocation(line: 86, scope: !124, inlinedAt: !297)
-!300 = !DILocation(line: 78, scope: !301, inlinedAt: !302)
-!301 = distinct !DISubprogram(name: "arrayref;", linkageName: "arrayref", scope: !78, file: !78, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!302 = !DILocation(line: 99, scope: !303, inlinedAt: !280)
-!303 = distinct !DISubprogram(name: "getindex;", linkageName: "getindex", scope: !78, file: !78, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!304 = !DILocation(line: 85, scope: !236, inlinedAt: !305)
-!305 = !DILocation(line: 80, scope: !109, inlinedAt: !306)
-!306 = !DILocation(line: 7, scope: !307, inlinedAt: !309)
-!307 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !308, file: !308, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!308 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/LLVM/dUfQc/src/interop/pointer.jl", directory: ".")
-!309 = !DILocation(line: 7, scope: !310, inlinedAt: !311)
-!310 = distinct !DISubprogram(name: "pointerref;", linkageName: "pointerref", scope: !308, file: !308, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!311 = !DILocation(line: 79, scope: !312, inlinedAt: !313)
-!312 = distinct !DISubprogram(name: "unsafe_load;", linkageName: "unsafe_load", scope: !308, file: !308, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!313 = !DILocation(line: 80, scope: !301, inlinedAt: !302)
-!314 = !DILocation(line: 1084, scope: !261, inlinedAt: !262)
-!315 = !DILocation(line: 1175, scope: !316, inlinedAt: !317)
-!316 = distinct !DISubprogram(name: "_setindex!;", linkageName: "_setindex!", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!317 = !DILocation(line: 1153, scope: !318, inlinedAt: !258)
-!318 = distinct !DISubprogram(name: "setindex!;", linkageName: "setindex!", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!319 = !DILocation(line: 85, scope: !236, inlinedAt: !320)
-!320 = !DILocation(line: 1918, scope: !292, inlinedAt: !321)
-!321 = !DILocation(line: 1911, scope: !287, inlinedAt: !322)
-!322 = !DILocation(line: 1895, scope: !277, inlinedAt: !323)
-!323 = !DILocation(line: 1879, scope: !277, inlinedAt: !324)
-!324 = !DILocation(line: 1089, scope: !279, inlinedAt: !325)
-!325 = !DILocation(line: 1176, scope: !316, inlinedAt: !317)
-!326 = !DILocation(line: 87, scope: !239, inlinedAt: !321)
-!327 = !DILocation(line: 86, scope: !124, inlinedAt: !321)
-!328 = !DILocation(line: 85, scope: !236, inlinedAt: !329)
-!329 = !DILocation(line: 1918, scope: !292, inlinedAt: !330)
-!330 = !DILocation(line: 1911, scope: !287, inlinedAt: !321)
-!331 = !DILocation(line: 87, scope: !239, inlinedAt: !330)
-!332 = !DILocation(line: 86, scope: !124, inlinedAt: !330)
-!333 = !DILocation(line: 84, scope: !334, inlinedAt: !335)
-!334 = distinct !DISubprogram(name: "arrayset;", linkageName: "arrayset", scope: !78, file: !78, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!335 = !DILocation(line: 101, scope: !336, inlinedAt: !325)
-!336 = distinct !DISubprogram(name: "setindex!;", linkageName: "setindex!", scope: !78, file: !78, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!337 = !DILocation(line: 85, scope: !236, inlinedAt: !338)
-!338 = !DILocation(line: 80, scope: !109, inlinedAt: !339)
-!339 = !DILocation(line: 42, scope: !307, inlinedAt: !340)
-!340 = !DILocation(line: 42, scope: !341, inlinedAt: !342)
-!341 = distinct !DISubprogram(name: "pointerset;", linkageName: "pointerset", scope: !308, file: !308, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!342 = !DILocation(line: 82, scope: !343, inlinedAt: !344)
-!343 = distinct !DISubprogram(name: "unsafe_store!;", linkageName: "unsafe_store!", scope: !308, file: !308, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!344 = !DILocation(line: 86, scope: !334, inlinedAt: !335)
-!345 = !DILocation(line: 87, scope: !334, inlinedAt: !335)
-!346 = !DILocation(line: 1177, scope: !316, inlinedAt: !317)
-!347 = !DILocation(line: 1175, scope: !316, inlinedAt: !348)
-!348 = !DILocation(line: 1153, scope: !318, inlinedAt: !349)
-!349 = !DILocation(line: 118, scope: !43)
-!350 = !DILocation(line: 85, scope: !236, inlinedAt: !351)
-!351 = !DILocation(line: 1918, scope: !292, inlinedAt: !352)
-!352 = !DILocation(line: 1911, scope: !287, inlinedAt: !353)
-!353 = !DILocation(line: 1895, scope: !277, inlinedAt: !354)
-!354 = !DILocation(line: 1879, scope: !277, inlinedAt: !355)
-!355 = !DILocation(line: 1089, scope: !279, inlinedAt: !356)
-!356 = !DILocation(line: 1176, scope: !316, inlinedAt: !348)
-!357 = !DILocation(line: 87, scope: !239, inlinedAt: !352)
-!358 = !DILocation(line: 86, scope: !124, inlinedAt: !352)
-!359 = !DILocation(line: 85, scope: !236, inlinedAt: !360)
-!360 = !DILocation(line: 1918, scope: !292, inlinedAt: !361)
-!361 = !DILocation(line: 1911, scope: !287, inlinedAt: !352)
-!362 = !DILocation(line: 87, scope: !239, inlinedAt: !361)
-!363 = !DILocation(line: 86, scope: !124, inlinedAt: !361)
-!364 = !DILocation(line: 84, scope: !334, inlinedAt: !365)
-!365 = !DILocation(line: 101, scope: !336, inlinedAt: !356)
-!366 = !DILocation(line: 85, scope: !236, inlinedAt: !367)
-!367 = !DILocation(line: 80, scope: !109, inlinedAt: !368)
-!368 = !DILocation(line: 42, scope: !307, inlinedAt: !369)
-!369 = !DILocation(line: 42, scope: !341, inlinedAt: !370)
-!370 = !DILocation(line: 82, scope: !343, inlinedAt: !371)
-!371 = !DILocation(line: 86, scope: !334, inlinedAt: !365)
-!372 = !DILocation(line: 87, scope: !334, inlinedAt: !365)
-!373 = !DILocation(line: 1177, scope: !316, inlinedAt: !348)
-!374 = !DILocation(line: 87, scope: !239, inlinedAt: !375)
-!375 = !DILocation(line: 120, scope: !43)
-!376 = !DILocation(line: 86, scope: !124, inlinedAt: !375)
-!377 = !DILocation(line: 627, scope: !58, inlinedAt: !378)
-!378 = !DILocation(line: 708, scope: !61, inlinedAt: !379)
-!379 = !DILocation(line: 7, scope: !219, inlinedAt: !380)
-!380 = !DILocation(line: 259, scope: !222, inlinedAt: !381)
-!381 = !DILocation(line: 282, scope: !225, inlinedAt: !382)
-!382 = !DILocation(line: 350, scope: !251, inlinedAt: !375)
-!383 = !DILocation(line: 441, scope: !254, inlinedAt: !382)
-!384 = !DILocation(line: 87, scope: !239, inlinedAt: !385)
-!385 = !DILocation(line: 121, scope: !43)
-!386 = !DILocation(line: 86, scope: !124, inlinedAt: !385)
-!387 = !DILocation(line: 1082, scope: !261, inlinedAt: !388)
-!388 = !DILocation(line: 1060, scope: !263, inlinedAt: !385)
-!389 = !DILocation(line: 82, scope: !265, inlinedAt: !390)
-!390 = !DILocation(line: 409, scope: !267, inlinedAt: !391)
-!391 = !DILocation(line: 317, scope: !269, inlinedAt: !392)
-!392 = !DILocation(line: 326, scope: !269, inlinedAt: !393)
-!393 = !DILocation(line: 158, scope: !272, inlinedAt: !394)
-!394 = !DILocation(line: 75, scope: !275, inlinedAt: !395)
-!395 = !DILocation(line: 1879, scope: !277, inlinedAt: !396)
-!396 = !DILocation(line: 1089, scope: !279, inlinedAt: !397)
-!397 = !DILocation(line: 1083, scope: !261, inlinedAt: !388)
-!398 = !DILocation(line: 85, scope: !236, inlinedAt: !399)
-!399 = !DILocation(line: 544, scope: !283, inlinedAt: !400)
-!400 = !DILocation(line: 1915, scope: !285, inlinedAt: !401)
-!401 = !DILocation(line: 1911, scope: !287, inlinedAt: !402)
-!402 = !DILocation(line: 1895, scope: !277, inlinedAt: !395)
-!403 = !DILocation(line: 87, scope: !239, inlinedAt: !400)
-!404 = !DILocation(line: 85, scope: !236, inlinedAt: !405)
-!405 = !DILocation(line: 1918, scope: !292, inlinedAt: !401)
-!406 = !DILocation(line: 87, scope: !239, inlinedAt: !401)
-!407 = !DILocation(line: 86, scope: !124, inlinedAt: !401)
-!408 = !DILocation(line: 85, scope: !236, inlinedAt: !409)
-!409 = !DILocation(line: 1918, scope: !292, inlinedAt: !410)
-!410 = !DILocation(line: 1911, scope: !287, inlinedAt: !401)
-!411 = !DILocation(line: 87, scope: !239, inlinedAt: !410)
-!412 = !DILocation(line: 86, scope: !124, inlinedAt: !410)
-!413 = !DILocation(line: 78, scope: !301, inlinedAt: !414)
-!414 = !DILocation(line: 99, scope: !303, inlinedAt: !397)
-!415 = !DILocation(line: 85, scope: !236, inlinedAt: !416)
-!416 = !DILocation(line: 80, scope: !109, inlinedAt: !417)
-!417 = !DILocation(line: 7, scope: !307, inlinedAt: !418)
-!418 = !DILocation(line: 7, scope: !310, inlinedAt: !419)
-!419 = !DILocation(line: 79, scope: !312, inlinedAt: !420)
-!420 = !DILocation(line: 80, scope: !301, inlinedAt: !414)
-!421 = !DILocation(line: 1084, scope: !261, inlinedAt: !388)
-!422 = !DILocation(line: 1175, scope: !316, inlinedAt: !423)
-!423 = !DILocation(line: 1153, scope: !318, inlinedAt: !385)
-!424 = !DILocation(line: 85, scope: !236, inlinedAt: !425)
-!425 = !DILocation(line: 1918, scope: !292, inlinedAt: !426)
-!426 = !DILocation(line: 1911, scope: !287, inlinedAt: !427)
-!427 = !DILocation(line: 1895, scope: !277, inlinedAt: !428)
-!428 = !DILocation(line: 1879, scope: !277, inlinedAt: !429)
-!429 = !DILocation(line: 1089, scope: !279, inlinedAt: !430)
-!430 = !DILocation(line: 1176, scope: !316, inlinedAt: !423)
-!431 = !DILocation(line: 87, scope: !239, inlinedAt: !426)
-!432 = !DILocation(line: 86, scope: !124, inlinedAt: !426)
-!433 = !DILocation(line: 85, scope: !236, inlinedAt: !434)
-!434 = !DILocation(line: 1918, scope: !292, inlinedAt: !435)
-!435 = !DILocation(line: 1911, scope: !287, inlinedAt: !426)
-!436 = !DILocation(line: 87, scope: !239, inlinedAt: !435)
-!437 = !DILocation(line: 86, scope: !124, inlinedAt: !435)
-!438 = !DILocation(line: 84, scope: !334, inlinedAt: !439)
-!439 = !DILocation(line: 101, scope: !336, inlinedAt: !430)
-!440 = !DILocation(line: 85, scope: !236, inlinedAt: !441)
-!441 = !DILocation(line: 80, scope: !109, inlinedAt: !442)
-!442 = !DILocation(line: 42, scope: !307, inlinedAt: !443)
-!443 = !DILocation(line: 42, scope: !341, inlinedAt: !444)
-!444 = !DILocation(line: 82, scope: !343, inlinedAt: !445)
-!445 = !DILocation(line: 86, scope: !334, inlinedAt: !439)
-!446 = !DILocation(line: 87, scope: !334, inlinedAt: !439)
-!447 = !DILocation(line: 1177, scope: !316, inlinedAt: !423)
-!448 = !DILocation(line: 1175, scope: !316, inlinedAt: !449)
-!449 = !DILocation(line: 1153, scope: !318, inlinedAt: !450)
-!450 = !DILocation(line: 123, scope: !43)
-!451 = !DILocation(line: 85, scope: !236, inlinedAt: !452)
-!452 = !DILocation(line: 1918, scope: !292, inlinedAt: !453)
-!453 = !DILocation(line: 1911, scope: !287, inlinedAt: !454)
-!454 = !DILocation(line: 1895, scope: !277, inlinedAt: !455)
-!455 = !DILocation(line: 1879, scope: !277, inlinedAt: !456)
-!456 = !DILocation(line: 1089, scope: !279, inlinedAt: !457)
-!457 = !DILocation(line: 1176, scope: !316, inlinedAt: !449)
-!458 = !DILocation(line: 87, scope: !239, inlinedAt: !453)
-!459 = !DILocation(line: 86, scope: !124, inlinedAt: !453)
-!460 = !DILocation(line: 85, scope: !236, inlinedAt: !461)
-!461 = !DILocation(line: 1918, scope: !292, inlinedAt: !462)
-!462 = !DILocation(line: 1911, scope: !287, inlinedAt: !453)
-!463 = !DILocation(line: 87, scope: !239, inlinedAt: !462)
-!464 = !DILocation(line: 86, scope: !124, inlinedAt: !462)
-!465 = !DILocation(line: 84, scope: !334, inlinedAt: !466)
-!466 = !DILocation(line: 101, scope: !336, inlinedAt: !457)
-!467 = !DILocation(line: 85, scope: !236, inlinedAt: !468)
-!468 = !DILocation(line: 80, scope: !109, inlinedAt: !469)
-!469 = !DILocation(line: 42, scope: !307, inlinedAt: !470)
-!470 = !DILocation(line: 42, scope: !341, inlinedAt: !471)
-!471 = !DILocation(line: 82, scope: !343, inlinedAt: !472)
-!472 = !DILocation(line: 86, scope: !334, inlinedAt: !466)
-!473 = !DILocation(line: 87, scope: !334, inlinedAt: !466)
-!474 = !DILocation(line: 1177, scope: !316, inlinedAt: !449)
-!475 = !DILocation(line: 14, scope: !476, inlinedAt: !478)
-!476 = distinct !DISubprogram(name: "sync_threads;", linkageName: "sync_threads", scope: !477, file: !477, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!477 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/synchronization.jl", directory: ".")
-!478 = !DILocation(line: 127, scope: !43)
-!479 = !DILocation(line: 134, scope: !43)
-!480 = !DILocation(line: 1082, scope: !261, inlinedAt: !481)
-!481 = !DILocation(line: 1060, scope: !263, inlinedAt: !482)
-!482 = !DILocation(line: 135, scope: !43)
-!483 = !DILocation(line: 85, scope: !236, inlinedAt: !484)
-!484 = !DILocation(line: 1918, scope: !292, inlinedAt: !485)
-!485 = !DILocation(line: 1911, scope: !287, inlinedAt: !486)
-!486 = !DILocation(line: 1895, scope: !277, inlinedAt: !487)
-!487 = !DILocation(line: 1879, scope: !277, inlinedAt: !488)
-!488 = !DILocation(line: 1089, scope: !279, inlinedAt: !489)
-!489 = !DILocation(line: 1083, scope: !261, inlinedAt: !481)
-!490 = !DILocation(line: 87, scope: !239, inlinedAt: !485)
-!491 = !DILocation(line: 86, scope: !124, inlinedAt: !485)
-!492 = !DILocation(line: 85, scope: !236, inlinedAt: !493)
-!493 = !DILocation(line: 1918, scope: !292, inlinedAt: !494)
-!494 = !DILocation(line: 1911, scope: !287, inlinedAt: !485)
-!495 = !DILocation(line: 87, scope: !239, inlinedAt: !494)
-!496 = !DILocation(line: 86, scope: !124, inlinedAt: !494)
-!497 = !DILocation(line: 78, scope: !301, inlinedAt: !498)
-!498 = !DILocation(line: 99, scope: !303, inlinedAt: !489)
-!499 = !DILocation(line: 85, scope: !236, inlinedAt: !500)
-!500 = !DILocation(line: 80, scope: !109, inlinedAt: !501)
-!501 = !DILocation(line: 7, scope: !307, inlinedAt: !502)
-!502 = !DILocation(line: 7, scope: !310, inlinedAt: !503)
-!503 = !DILocation(line: 79, scope: !312, inlinedAt: !504)
-!504 = !DILocation(line: 80, scope: !301, inlinedAt: !498)
-!505 = !DILocation(line: 1084, scope: !261, inlinedAt: !481)
-!506 = !DILocation(line: 404, scope: !507, inlinedAt: !482)
-!507 = distinct !DISubprogram(name: "*;", linkageName: "*", scope: !508, file: !508, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!508 = !DIFile(filename: "float.jl", directory: ".")
-!509 = !DILocation(line: 400, scope: !510, inlinedAt: !482)
-!510 = distinct !DISubprogram(name: "+;", linkageName: "+", scope: !508, file: !508, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!511 = !DILocation(line: 398, scope: !512, inlinedAt: !513)
-!512 = distinct !DISubprogram(name: "==;", linkageName: "==", scope: !223, file: !223, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!513 = !DILocation(line: 624, scope: !230, inlinedAt: !482)
-!514 = !DILocation(line: 86, scope: !124, inlinedAt: !515)
-!515 = !DILocation(line: 625, scope: !230, inlinedAt: !482)
-!516 = !DILocation(line: 14, scope: !476, inlinedAt: !234)
-!517 = !DILocation(line: 398, scope: !512, inlinedAt: !233)
-!518 = !DILocation(line: 86, scope: !124, inlinedAt: !519)
-!519 = !DILocation(line: 625, scope: !230, inlinedAt: !234)
-!520 = !DILocation(line: 85, scope: !236, inlinedAt: !521)
-!521 = !DILocation(line: 141, scope: !43)
-!522 = !DILocation(line: 87, scope: !239, inlinedAt: !521)
-!523 = !DILocation(line: 86, scope: !124, inlinedAt: !521)
-!524 = !DILocation(line: 85, scope: !236, inlinedAt: !525)
-!525 = !DILocation(line: 142, scope: !43)
-!526 = !DILocation(line: 87, scope: !239, inlinedAt: !525)
-!527 = !DILocation(line: 86, scope: !124, inlinedAt: !525)
-!528 = !DILocation(line: 627, scope: !58, inlinedAt: !529)
-!529 = !DILocation(line: 708, scope: !61, inlinedAt: !530)
-!530 = !DILocation(line: 7, scope: !219, inlinedAt: !531)
-!531 = !DILocation(line: 259, scope: !222, inlinedAt: !532)
-!532 = !DILocation(line: 282, scope: !225, inlinedAt: !533)
-!533 = !DILocation(line: 350, scope: !251, inlinedAt: !534)
-!534 = !DILocation(line: 144, scope: !43)
-!535 = !DILocation(line: 441, scope: !254, inlinedAt: !533)
-!536 = !DILocation(line: 1175, scope: !316, inlinedAt: !537)
-!537 = !DILocation(line: 1153, scope: !318, inlinedAt: !538)
-!538 = !DILocation(line: 145, scope: !43)
-!539 = !DILocation(line: 82, scope: !265, inlinedAt: !540)
-!540 = !DILocation(line: 409, scope: !267, inlinedAt: !541)
-!541 = !DILocation(line: 317, scope: !269, inlinedAt: !542)
-!542 = !DILocation(line: 326, scope: !269, inlinedAt: !543)
-!543 = !DILocation(line: 158, scope: !272, inlinedAt: !544)
-!544 = !DILocation(line: 75, scope: !275, inlinedAt: !545)
-!545 = !DILocation(line: 1879, scope: !277, inlinedAt: !546)
-!546 = !DILocation(line: 1089, scope: !279, inlinedAt: !547)
-!547 = !DILocation(line: 1176, scope: !316, inlinedAt: !537)
-!548 = !DILocation(line: 85, scope: !236, inlinedAt: !549)
-!549 = !DILocation(line: 544, scope: !283, inlinedAt: !550)
-!550 = !DILocation(line: 1915, scope: !285, inlinedAt: !551)
-!551 = !DILocation(line: 1911, scope: !287, inlinedAt: !552)
-!552 = !DILocation(line: 1895, scope: !277, inlinedAt: !545)
-!553 = !DILocation(line: 87, scope: !239, inlinedAt: !550)
-!554 = !DILocation(line: 85, scope: !236, inlinedAt: !555)
-!555 = !DILocation(line: 1918, scope: !292, inlinedAt: !551)
-!556 = !DILocation(line: 87, scope: !239, inlinedAt: !551)
-!557 = !DILocation(line: 86, scope: !124, inlinedAt: !551)
-!558 = !DILocation(line: 85, scope: !236, inlinedAt: !559)
-!559 = !DILocation(line: 1918, scope: !292, inlinedAt: !560)
-!560 = !DILocation(line: 1911, scope: !287, inlinedAt: !551)
-!561 = !DILocation(line: 87, scope: !239, inlinedAt: !560)
-!562 = !DILocation(line: 86, scope: !124, inlinedAt: !560)
-!563 = !DILocation(line: 84, scope: !334, inlinedAt: !564)
-!564 = !DILocation(line: 101, scope: !336, inlinedAt: !547)
-!565 = !DILocation(line: 85, scope: !236, inlinedAt: !566)
-!566 = !DILocation(line: 80, scope: !109, inlinedAt: !567)
-!567 = !DILocation(line: 42, scope: !307, inlinedAt: !568)
-!568 = !DILocation(line: 42, scope: !341, inlinedAt: !569)
-!569 = !DILocation(line: 82, scope: !343, inlinedAt: !570)
-!570 = !DILocation(line: 86, scope: !334, inlinedAt: !564)
-!571 = !DILocation(line: 87, scope: !334, inlinedAt: !564)
-!572 = !DILocation(line: 1177, scope: !316, inlinedAt: !537)
-!573 = !DILocation(line: 147, scope: !43)
-!574 = !DILocation(line: 85, scope: !236, inlinedAt: !213)
-!575 = !DILocation(line: 260, scope: !576, inlinedAt: !213)
-!576 = distinct !DISubprogram(name: "div;", linkageName: "div", scope: !125, file: !125, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!577 = !DILocation(line: 85, scope: !236, inlinedAt: !232)
-!578 = !DILocation(line: 441, scope: !254, inlinedAt: !579)
-!579 = !DILocation(line: 350, scope: !580, inlinedAt: !582)
-!580 = distinct !DISubprogram(name: ">=;", linkageName: ">=", scope: !581, file: !581, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!581 = !DIFile(filename: "operators.jl", directory: ".")
-!582 = !DILocation(line: 285, scope: !583, inlinedAt: !584)
-!583 = distinct !DISubprogram(name: "unitrange_last;", linkageName: "unitrange_last", scope: !231, file: !231, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!584 = !DILocation(line: 280, scope: !585, inlinedAt: !586)
-!585 = distinct !DISubprogram(name: "UnitRange;", linkageName: "UnitRange", scope: !231, file: !231, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!586 = !DILocation(line: 5, scope: !587, inlinedAt: !232)
-!587 = distinct !DISubprogram(name: "Colon;", linkageName: "Colon", scope: !231, file: !231, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!588 = !DILocation(line: 82, scope: !265, inlinedAt: !589)
-!589 = !DILocation(line: 303, scope: !590, inlinedAt: !591)
-!590 = distinct !DISubprogram(name: ">;", linkageName: ">", scope: !581, file: !581, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!591 = !DILocation(line: 503, scope: !592, inlinedAt: !229)
-!592 = distinct !DISubprogram(name: "isempty;", linkageName: "isempty", scope: !231, file: !231, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
-!593 = !{i32 0, i32 2147483646}
-!594 = !{i32 0, i32 65534}
-!595 = !{i32 0, i32 1023}
-!596 = !{!597, !597, i64 0, i64 0}
-!597 = !{!"custom_tbaa_addrspace(1)", !598, i64 0}
-!598 = !{!"custom_tbaa"}
-!599 = !{!600, !600, i64 0, i64 0}
-!600 = !{!"custom_tbaa_addrspace(3)", !598, i64 0}
-!601 = distinct !DISubprogram(name: "report_exception", linkageName: "julia_report_exception_3645", scope: null, file: !15, line: 39, type: !44, scopeLine: 39, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !14, retainedNodes: !4)
-!602 = !DILocation(line: 80, scope: !603, inlinedAt: !604)
-!603 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !110, file: !110, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !14, retainedNodes: !4)
-!604 = !DILocation(line: 38, scope: !605, inlinedAt: !607)
-!605 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !606, file: !606, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !14, retainedNodes: !4)
-!606 = !DIFile(filename: "/opt/julia/usr/local/share/julia/packages/CUDA/0p5fn/src/device/intrinsics/output.jl", directory: ".")
-!607 = !DILocation(line: 38, scope: !608, inlinedAt: !609)
-!608 = distinct !DISubprogram(name: "_cuprintf;", linkageName: "_cuprintf", scope: !606, file: !606, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !14, retainedNodes: !4)
-!609 = !DILocation(line: 40, scope: !601)
-!610 = !DILocation(line: 44, scope: !601)
-!611 = distinct !DISubprogram(name: "signal_exception", linkageName: "julia_signal_exception_3704", scope: null, file: !15, line: 25, type: !44, scopeLine: 25, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
-!612 = !DILocation(line: 23, scope: !613, inlinedAt: !614)
-!613 = distinct !DISubprogram(name: "exception_flag;", linkageName: "exception_flag", scope: !15, file: !15, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
-!614 = !DILocation(line: 26, scope: !611)
-!615 = !DILocation(line: 27, scope: !611)
-!616 = !DILocation(line: 118, scope: !617, inlinedAt: !619)
-!617 = distinct !DISubprogram(name: "unsafe_store!;", linkageName: "unsafe_store!", scope: !618, file: !618, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
-!618 = !DIFile(filename: "pointer.jl", directory: ".")
-!619 = !DILocation(line: 118, scope: !617, inlinedAt: !620)
-!620 = !DILocation(line: 28, scope: !611)
-!621 = !{!622, !622, i64 0}
-!622 = !{!"jtbaa_data", !47, i64 0}
-!623 = !DILocation(line: 115, scope: !624, inlinedAt: !625)
-!624 = distinct !DISubprogram(name: "threadfence_system;", linkageName: "threadfence_system", scope: !477, file: !477, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
-!625 = !DILocation(line: 29, scope: !611)
-!626 = !DILocation(line: 80, scope: !627, inlinedAt: !628)
-!627 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !110, file: !110, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
-!628 = !DILocation(line: 38, scope: !629, inlinedAt: !630)
-!629 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !606, file: !606, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
-!630 = !DILocation(line: 38, scope: !631, inlinedAt: !632)
-!631 = distinct !DISubprogram(name: "_cuprintf;", linkageName: "_cuprintf", scope: !606, file: !606, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
-!632 = !DILocation(line: 31, scope: !611)
-!633 = !DILocation(line: 36, scope: !611)
+!216 = !DILocation(line: 85, scope: !217, inlinedAt: !213)
+!217 = distinct !DISubprogram(name: "-;", linkageName: "-", scope: !125, file: !125, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!218 = !DILocation(line: 260, scope: !219, inlinedAt: !213)
+!219 = distinct !DISubprogram(name: "div;", linkageName: "div", scope: !125, file: !125, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!220 = !DILocation(line: 620, scope: !221, inlinedAt: !223)
+!221 = distinct !DISubprogram(name: "iterate;", linkageName: "iterate", scope: !222, file: !222, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!222 = !DIFile(filename: "range.jl", directory: ".")
+!223 = !DILocation(line: 109, scope: !43)
+!224 = !DILocation(line: 624, scope: !221, inlinedAt: !225)
+!225 = !DILocation(line: 138, scope: !43)
+!226 = !DILocation(line: 85, scope: !217, inlinedAt: !227)
+!227 = !DILocation(line: 111, scope: !43)
+!228 = !DILocation(line: 87, scope: !229, inlinedAt: !227)
+!229 = distinct !DISubprogram(name: "*;", linkageName: "*", scope: !125, file: !125, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!230 = !DILocation(line: 86, scope: !124, inlinedAt: !227)
+!231 = !DILocation(line: 85, scope: !217, inlinedAt: !232)
+!232 = !DILocation(line: 112, scope: !43)
+!233 = !DILocation(line: 87, scope: !229, inlinedAt: !232)
+!234 = !DILocation(line: 86, scope: !124, inlinedAt: !232)
+!235 = !DILocation(line: 627, scope: !58, inlinedAt: !236)
+!236 = !DILocation(line: 708, scope: !61, inlinedAt: !237)
+!237 = !DILocation(line: 7, scope: !238, inlinedAt: !240)
+!238 = distinct !DISubprogram(name: "convert;", linkageName: "convert", scope: !239, file: !239, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!239 = !DIFile(filename: "number.jl", directory: ".")
+!240 = !DILocation(line: 259, scope: !241, inlinedAt: !243)
+!241 = distinct !DISubprogram(name: "_promote;", linkageName: "_promote", scope: !242, file: !242, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!242 = !DIFile(filename: "promotion.jl", directory: ".")
+!243 = !DILocation(line: 282, scope: !244, inlinedAt: !245)
+!244 = distinct !DISubprogram(name: "promote;", linkageName: "promote", scope: !242, file: !242, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!245 = !DILocation(line: 350, scope: !246, inlinedAt: !247)
+!246 = distinct !DISubprogram(name: "<=;", linkageName: "<=", scope: !242, file: !242, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!247 = !DILocation(line: 115, scope: !43)
+!248 = !DILocation(line: 441, scope: !249, inlinedAt: !245)
+!249 = distinct !DISubprogram(name: "<=;", linkageName: "<=", scope: !125, file: !125, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!250 = !DILocation(line: 87, scope: !229, inlinedAt: !247)
+!251 = !DILocation(line: 86, scope: !124, inlinedAt: !247)
+!252 = !DILocation(line: 87, scope: !229, inlinedAt: !253)
+!253 = !DILocation(line: 116, scope: !43)
+!254 = !DILocation(line: 86, scope: !124, inlinedAt: !253)
+!255 = !DILocation(line: 1082, scope: !256, inlinedAt: !257)
+!256 = distinct !DISubprogram(name: "_getindex;", linkageName: "_getindex", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!257 = !DILocation(line: 1060, scope: !258, inlinedAt: !253)
+!258 = distinct !DISubprogram(name: "getindex;", linkageName: "getindex", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!259 = !DILocation(line: 82, scope: !260, inlinedAt: !261)
+!260 = distinct !DISubprogram(name: "<;", linkageName: "<", scope: !125, file: !125, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!261 = !DILocation(line: 409, scope: !262, inlinedAt: !263)
+!262 = distinct !DISubprogram(name: "max;", linkageName: "max", scope: !242, file: !242, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!263 = !DILocation(line: 317, scope: !264, inlinedAt: !265)
+!264 = distinct !DISubprogram(name: "OneTo;", linkageName: "OneTo", scope: !222, file: !222, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!265 = !DILocation(line: 326, scope: !264, inlinedAt: !266)
+!266 = !DILocation(line: 158, scope: !267, inlinedAt: !269)
+!267 = distinct !DISubprogram(name: "map;", linkageName: "map", scope: !268, file: !268, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!268 = !DIFile(filename: "tuple.jl", directory: ".")
+!269 = !DILocation(line: 75, scope: !270, inlinedAt: !271)
+!270 = distinct !DISubprogram(name: "axes;", linkageName: "axes", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!271 = !DILocation(line: 1879, scope: !272, inlinedAt: !273)
+!272 = distinct !DISubprogram(name: "_sub2ind;", linkageName: "_sub2ind", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!273 = !DILocation(line: 1089, scope: !274, inlinedAt: !275)
+!274 = distinct !DISubprogram(name: "_to_linear_index;", linkageName: "_to_linear_index", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!275 = !DILocation(line: 1083, scope: !256, inlinedAt: !257)
+!276 = !DILocation(line: 85, scope: !217, inlinedAt: !277)
+!277 = !DILocation(line: 544, scope: !278, inlinedAt: !279)
+!278 = distinct !DISubprogram(name: "unsafe_length;", linkageName: "unsafe_length", scope: !222, file: !222, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!279 = !DILocation(line: 1915, scope: !280, inlinedAt: !281)
+!280 = distinct !DISubprogram(name: "nextL;", linkageName: "nextL", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!281 = !DILocation(line: 1911, scope: !282, inlinedAt: !283)
+!282 = distinct !DISubprogram(name: "_sub2ind_recurse;", linkageName: "_sub2ind_recurse", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!283 = !DILocation(line: 1895, scope: !272, inlinedAt: !271)
+!284 = !DILocation(line: 87, scope: !229, inlinedAt: !279)
+!285 = !DILocation(line: 85, scope: !217, inlinedAt: !286)
+!286 = !DILocation(line: 1918, scope: !287, inlinedAt: !281)
+!287 = distinct !DISubprogram(name: "offsetin;", linkageName: "offsetin", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!288 = !DILocation(line: 87, scope: !229, inlinedAt: !281)
+!289 = !DILocation(line: 86, scope: !124, inlinedAt: !281)
+!290 = !DILocation(line: 85, scope: !217, inlinedAt: !291)
+!291 = !DILocation(line: 1918, scope: !287, inlinedAt: !292)
+!292 = !DILocation(line: 1911, scope: !282, inlinedAt: !281)
+!293 = !DILocation(line: 87, scope: !229, inlinedAt: !292)
+!294 = !DILocation(line: 86, scope: !124, inlinedAt: !292)
+!295 = !DILocation(line: 78, scope: !296, inlinedAt: !297)
+!296 = distinct !DISubprogram(name: "arrayref;", linkageName: "arrayref", scope: !78, file: !78, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!297 = !DILocation(line: 99, scope: !298, inlinedAt: !275)
+!298 = distinct !DISubprogram(name: "getindex;", linkageName: "getindex", scope: !78, file: !78, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!299 = !DILocation(line: 85, scope: !217, inlinedAt: !300)
+!300 = !DILocation(line: 80, scope: !109, inlinedAt: !301)
+!301 = !DILocation(line: 7, scope: !302, inlinedAt: !304)
+!302 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !303, file: !303, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!303 = !DIFile(filename: "/home/local/.julia/packages/LLVM/dVU7J/src/interop/pointer.jl", directory: ".")
+!304 = !DILocation(line: 7, scope: !305, inlinedAt: !306)
+!305 = distinct !DISubprogram(name: "pointerref;", linkageName: "pointerref", scope: !303, file: !303, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!306 = !DILocation(line: 79, scope: !307, inlinedAt: !308)
+!307 = distinct !DISubprogram(name: "unsafe_load;", linkageName: "unsafe_load", scope: !303, file: !303, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!308 = !DILocation(line: 80, scope: !296, inlinedAt: !297)
+!309 = !DILocation(line: 1084, scope: !256, inlinedAt: !257)
+!310 = !DILocation(line: 1175, scope: !311, inlinedAt: !312)
+!311 = distinct !DISubprogram(name: "_setindex!;", linkageName: "_setindex!", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!312 = !DILocation(line: 1153, scope: !313, inlinedAt: !253)
+!313 = distinct !DISubprogram(name: "setindex!;", linkageName: "setindex!", scope: !6, file: !6, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!314 = !DILocation(line: 85, scope: !217, inlinedAt: !315)
+!315 = !DILocation(line: 1918, scope: !287, inlinedAt: !316)
+!316 = !DILocation(line: 1911, scope: !282, inlinedAt: !317)
+!317 = !DILocation(line: 1895, scope: !272, inlinedAt: !318)
+!318 = !DILocation(line: 1879, scope: !272, inlinedAt: !319)
+!319 = !DILocation(line: 1089, scope: !274, inlinedAt: !320)
+!320 = !DILocation(line: 1176, scope: !311, inlinedAt: !312)
+!321 = !DILocation(line: 87, scope: !229, inlinedAt: !316)
+!322 = !DILocation(line: 86, scope: !124, inlinedAt: !316)
+!323 = !DILocation(line: 85, scope: !217, inlinedAt: !324)
+!324 = !DILocation(line: 1918, scope: !287, inlinedAt: !325)
+!325 = !DILocation(line: 1911, scope: !282, inlinedAt: !316)
+!326 = !DILocation(line: 87, scope: !229, inlinedAt: !325)
+!327 = !DILocation(line: 86, scope: !124, inlinedAt: !325)
+!328 = !DILocation(line: 84, scope: !329, inlinedAt: !330)
+!329 = distinct !DISubprogram(name: "arrayset;", linkageName: "arrayset", scope: !78, file: !78, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!330 = !DILocation(line: 101, scope: !331, inlinedAt: !320)
+!331 = distinct !DISubprogram(name: "setindex!;", linkageName: "setindex!", scope: !78, file: !78, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!332 = !DILocation(line: 85, scope: !217, inlinedAt: !333)
+!333 = !DILocation(line: 80, scope: !109, inlinedAt: !334)
+!334 = !DILocation(line: 42, scope: !302, inlinedAt: !335)
+!335 = !DILocation(line: 42, scope: !336, inlinedAt: !337)
+!336 = distinct !DISubprogram(name: "pointerset;", linkageName: "pointerset", scope: !303, file: !303, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!337 = !DILocation(line: 82, scope: !338, inlinedAt: !339)
+!338 = distinct !DISubprogram(name: "unsafe_store!;", linkageName: "unsafe_store!", scope: !303, file: !303, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!339 = !DILocation(line: 86, scope: !329, inlinedAt: !330)
+!340 = !DILocation(line: 87, scope: !329, inlinedAt: !330)
+!341 = !DILocation(line: 1177, scope: !311, inlinedAt: !312)
+!342 = !DILocation(line: 1175, scope: !311, inlinedAt: !343)
+!343 = !DILocation(line: 1153, scope: !313, inlinedAt: !344)
+!344 = !DILocation(line: 118, scope: !43)
+!345 = !DILocation(line: 85, scope: !217, inlinedAt: !346)
+!346 = !DILocation(line: 1918, scope: !287, inlinedAt: !347)
+!347 = !DILocation(line: 1911, scope: !282, inlinedAt: !348)
+!348 = !DILocation(line: 1895, scope: !272, inlinedAt: !349)
+!349 = !DILocation(line: 1879, scope: !272, inlinedAt: !350)
+!350 = !DILocation(line: 1089, scope: !274, inlinedAt: !351)
+!351 = !DILocation(line: 1176, scope: !311, inlinedAt: !343)
+!352 = !DILocation(line: 87, scope: !229, inlinedAt: !347)
+!353 = !DILocation(line: 86, scope: !124, inlinedAt: !347)
+!354 = !DILocation(line: 85, scope: !217, inlinedAt: !355)
+!355 = !DILocation(line: 1918, scope: !287, inlinedAt: !356)
+!356 = !DILocation(line: 1911, scope: !282, inlinedAt: !347)
+!357 = !DILocation(line: 87, scope: !229, inlinedAt: !356)
+!358 = !DILocation(line: 86, scope: !124, inlinedAt: !356)
+!359 = !DILocation(line: 84, scope: !329, inlinedAt: !360)
+!360 = !DILocation(line: 101, scope: !331, inlinedAt: !351)
+!361 = !DILocation(line: 85, scope: !217, inlinedAt: !362)
+!362 = !DILocation(line: 80, scope: !109, inlinedAt: !363)
+!363 = !DILocation(line: 42, scope: !302, inlinedAt: !364)
+!364 = !DILocation(line: 42, scope: !336, inlinedAt: !365)
+!365 = !DILocation(line: 82, scope: !338, inlinedAt: !366)
+!366 = !DILocation(line: 86, scope: !329, inlinedAt: !360)
+!367 = !DILocation(line: 87, scope: !329, inlinedAt: !360)
+!368 = !DILocation(line: 1177, scope: !311, inlinedAt: !343)
+!369 = !DILocation(line: 87, scope: !229, inlinedAt: !370)
+!370 = !DILocation(line: 120, scope: !43)
+!371 = !DILocation(line: 86, scope: !124, inlinedAt: !370)
+!372 = !DILocation(line: 627, scope: !58, inlinedAt: !373)
+!373 = !DILocation(line: 708, scope: !61, inlinedAt: !374)
+!374 = !DILocation(line: 7, scope: !238, inlinedAt: !375)
+!375 = !DILocation(line: 259, scope: !241, inlinedAt: !376)
+!376 = !DILocation(line: 282, scope: !244, inlinedAt: !377)
+!377 = !DILocation(line: 350, scope: !246, inlinedAt: !370)
+!378 = !DILocation(line: 441, scope: !249, inlinedAt: !377)
+!379 = !DILocation(line: 87, scope: !229, inlinedAt: !380)
+!380 = !DILocation(line: 121, scope: !43)
+!381 = !DILocation(line: 86, scope: !124, inlinedAt: !380)
+!382 = !DILocation(line: 1082, scope: !256, inlinedAt: !383)
+!383 = !DILocation(line: 1060, scope: !258, inlinedAt: !380)
+!384 = !DILocation(line: 82, scope: !260, inlinedAt: !385)
+!385 = !DILocation(line: 409, scope: !262, inlinedAt: !386)
+!386 = !DILocation(line: 317, scope: !264, inlinedAt: !387)
+!387 = !DILocation(line: 326, scope: !264, inlinedAt: !388)
+!388 = !DILocation(line: 158, scope: !267, inlinedAt: !389)
+!389 = !DILocation(line: 75, scope: !270, inlinedAt: !390)
+!390 = !DILocation(line: 1879, scope: !272, inlinedAt: !391)
+!391 = !DILocation(line: 1089, scope: !274, inlinedAt: !392)
+!392 = !DILocation(line: 1083, scope: !256, inlinedAt: !383)
+!393 = !DILocation(line: 85, scope: !217, inlinedAt: !394)
+!394 = !DILocation(line: 544, scope: !278, inlinedAt: !395)
+!395 = !DILocation(line: 1915, scope: !280, inlinedAt: !396)
+!396 = !DILocation(line: 1911, scope: !282, inlinedAt: !397)
+!397 = !DILocation(line: 1895, scope: !272, inlinedAt: !390)
+!398 = !DILocation(line: 87, scope: !229, inlinedAt: !395)
+!399 = !DILocation(line: 85, scope: !217, inlinedAt: !400)
+!400 = !DILocation(line: 1918, scope: !287, inlinedAt: !396)
+!401 = !DILocation(line: 87, scope: !229, inlinedAt: !396)
+!402 = !DILocation(line: 86, scope: !124, inlinedAt: !396)
+!403 = !DILocation(line: 85, scope: !217, inlinedAt: !404)
+!404 = !DILocation(line: 1918, scope: !287, inlinedAt: !405)
+!405 = !DILocation(line: 1911, scope: !282, inlinedAt: !396)
+!406 = !DILocation(line: 87, scope: !229, inlinedAt: !405)
+!407 = !DILocation(line: 86, scope: !124, inlinedAt: !405)
+!408 = !DILocation(line: 78, scope: !296, inlinedAt: !409)
+!409 = !DILocation(line: 99, scope: !298, inlinedAt: !392)
+!410 = !DILocation(line: 85, scope: !217, inlinedAt: !411)
+!411 = !DILocation(line: 80, scope: !109, inlinedAt: !412)
+!412 = !DILocation(line: 7, scope: !302, inlinedAt: !413)
+!413 = !DILocation(line: 7, scope: !305, inlinedAt: !414)
+!414 = !DILocation(line: 79, scope: !307, inlinedAt: !415)
+!415 = !DILocation(line: 80, scope: !296, inlinedAt: !409)
+!416 = !DILocation(line: 1084, scope: !256, inlinedAt: !383)
+!417 = !DILocation(line: 1175, scope: !311, inlinedAt: !418)
+!418 = !DILocation(line: 1153, scope: !313, inlinedAt: !380)
+!419 = !DILocation(line: 85, scope: !217, inlinedAt: !420)
+!420 = !DILocation(line: 1918, scope: !287, inlinedAt: !421)
+!421 = !DILocation(line: 1911, scope: !282, inlinedAt: !422)
+!422 = !DILocation(line: 1895, scope: !272, inlinedAt: !423)
+!423 = !DILocation(line: 1879, scope: !272, inlinedAt: !424)
+!424 = !DILocation(line: 1089, scope: !274, inlinedAt: !425)
+!425 = !DILocation(line: 1176, scope: !311, inlinedAt: !418)
+!426 = !DILocation(line: 87, scope: !229, inlinedAt: !421)
+!427 = !DILocation(line: 86, scope: !124, inlinedAt: !421)
+!428 = !DILocation(line: 85, scope: !217, inlinedAt: !429)
+!429 = !DILocation(line: 1918, scope: !287, inlinedAt: !430)
+!430 = !DILocation(line: 1911, scope: !282, inlinedAt: !421)
+!431 = !DILocation(line: 87, scope: !229, inlinedAt: !430)
+!432 = !DILocation(line: 86, scope: !124, inlinedAt: !430)
+!433 = !DILocation(line: 84, scope: !329, inlinedAt: !434)
+!434 = !DILocation(line: 101, scope: !331, inlinedAt: !425)
+!435 = !DILocation(line: 85, scope: !217, inlinedAt: !436)
+!436 = !DILocation(line: 80, scope: !109, inlinedAt: !437)
+!437 = !DILocation(line: 42, scope: !302, inlinedAt: !438)
+!438 = !DILocation(line: 42, scope: !336, inlinedAt: !439)
+!439 = !DILocation(line: 82, scope: !338, inlinedAt: !440)
+!440 = !DILocation(line: 86, scope: !329, inlinedAt: !434)
+!441 = !DILocation(line: 87, scope: !329, inlinedAt: !434)
+!442 = !DILocation(line: 1177, scope: !311, inlinedAt: !418)
+!443 = !DILocation(line: 1175, scope: !311, inlinedAt: !444)
+!444 = !DILocation(line: 1153, scope: !313, inlinedAt: !445)
+!445 = !DILocation(line: 123, scope: !43)
+!446 = !DILocation(line: 85, scope: !217, inlinedAt: !447)
+!447 = !DILocation(line: 1918, scope: !287, inlinedAt: !448)
+!448 = !DILocation(line: 1911, scope: !282, inlinedAt: !449)
+!449 = !DILocation(line: 1895, scope: !272, inlinedAt: !450)
+!450 = !DILocation(line: 1879, scope: !272, inlinedAt: !451)
+!451 = !DILocation(line: 1089, scope: !274, inlinedAt: !452)
+!452 = !DILocation(line: 1176, scope: !311, inlinedAt: !444)
+!453 = !DILocation(line: 87, scope: !229, inlinedAt: !448)
+!454 = !DILocation(line: 86, scope: !124, inlinedAt: !448)
+!455 = !DILocation(line: 85, scope: !217, inlinedAt: !456)
+!456 = !DILocation(line: 1918, scope: !287, inlinedAt: !457)
+!457 = !DILocation(line: 1911, scope: !282, inlinedAt: !448)
+!458 = !DILocation(line: 87, scope: !229, inlinedAt: !457)
+!459 = !DILocation(line: 86, scope: !124, inlinedAt: !457)
+!460 = !DILocation(line: 84, scope: !329, inlinedAt: !461)
+!461 = !DILocation(line: 101, scope: !331, inlinedAt: !452)
+!462 = !DILocation(line: 85, scope: !217, inlinedAt: !463)
+!463 = !DILocation(line: 80, scope: !109, inlinedAt: !464)
+!464 = !DILocation(line: 42, scope: !302, inlinedAt: !465)
+!465 = !DILocation(line: 42, scope: !336, inlinedAt: !466)
+!466 = !DILocation(line: 82, scope: !338, inlinedAt: !467)
+!467 = !DILocation(line: 86, scope: !329, inlinedAt: !461)
+!468 = !DILocation(line: 87, scope: !329, inlinedAt: !461)
+!469 = !DILocation(line: 1177, scope: !311, inlinedAt: !444)
+!470 = !DILocation(line: 14, scope: !471, inlinedAt: !473)
+!471 = distinct !DISubprogram(name: "sync_threads;", linkageName: "sync_threads", scope: !472, file: !472, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!472 = !DIFile(filename: "/home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/synchronization.jl", directory: ".")
+!473 = !DILocation(line: 127, scope: !43)
+!474 = !DILocation(line: 134, scope: !43)
+!475 = !DILocation(line: 1082, scope: !256, inlinedAt: !476)
+!476 = !DILocation(line: 1060, scope: !258, inlinedAt: !477)
+!477 = !DILocation(line: 135, scope: !43)
+!478 = !DILocation(line: 85, scope: !217, inlinedAt: !479)
+!479 = !DILocation(line: 1918, scope: !287, inlinedAt: !480)
+!480 = !DILocation(line: 1911, scope: !282, inlinedAt: !481)
+!481 = !DILocation(line: 1895, scope: !272, inlinedAt: !482)
+!482 = !DILocation(line: 1879, scope: !272, inlinedAt: !483)
+!483 = !DILocation(line: 1089, scope: !274, inlinedAt: !484)
+!484 = !DILocation(line: 1083, scope: !256, inlinedAt: !476)
+!485 = !DILocation(line: 87, scope: !229, inlinedAt: !480)
+!486 = !DILocation(line: 86, scope: !124, inlinedAt: !480)
+!487 = !DILocation(line: 85, scope: !217, inlinedAt: !488)
+!488 = !DILocation(line: 1918, scope: !287, inlinedAt: !489)
+!489 = !DILocation(line: 1911, scope: !282, inlinedAt: !480)
+!490 = !DILocation(line: 87, scope: !229, inlinedAt: !489)
+!491 = !DILocation(line: 86, scope: !124, inlinedAt: !489)
+!492 = !DILocation(line: 78, scope: !296, inlinedAt: !493)
+!493 = !DILocation(line: 99, scope: !298, inlinedAt: !484)
+!494 = !DILocation(line: 85, scope: !217, inlinedAt: !495)
+!495 = !DILocation(line: 80, scope: !109, inlinedAt: !496)
+!496 = !DILocation(line: 7, scope: !302, inlinedAt: !497)
+!497 = !DILocation(line: 7, scope: !305, inlinedAt: !498)
+!498 = !DILocation(line: 79, scope: !307, inlinedAt: !499)
+!499 = !DILocation(line: 80, scope: !296, inlinedAt: !493)
+!500 = !DILocation(line: 1084, scope: !256, inlinedAt: !476)
+!501 = !DILocation(line: 404, scope: !502, inlinedAt: !477)
+!502 = distinct !DISubprogram(name: "*;", linkageName: "*", scope: !503, file: !503, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!503 = !DIFile(filename: "float.jl", directory: ".")
+!504 = !DILocation(line: 400, scope: !505, inlinedAt: !477)
+!505 = distinct !DISubprogram(name: "+;", linkageName: "+", scope: !503, file: !503, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!506 = !DILocation(line: 398, scope: !507, inlinedAt: !508)
+!507 = distinct !DISubprogram(name: "==;", linkageName: "==", scope: !242, file: !242, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!508 = !DILocation(line: 624, scope: !221, inlinedAt: !477)
+!509 = !DILocation(line: 86, scope: !124, inlinedAt: !510)
+!510 = !DILocation(line: 625, scope: !221, inlinedAt: !477)
+!511 = !DILocation(line: 14, scope: !471, inlinedAt: !225)
+!512 = !DILocation(line: 398, scope: !507, inlinedAt: !224)
+!513 = !DILocation(line: 86, scope: !124, inlinedAt: !514)
+!514 = !DILocation(line: 625, scope: !221, inlinedAt: !225)
+!515 = !DILocation(line: 85, scope: !217, inlinedAt: !516)
+!516 = !DILocation(line: 141, scope: !43)
+!517 = !DILocation(line: 87, scope: !229, inlinedAt: !516)
+!518 = !DILocation(line: 86, scope: !124, inlinedAt: !516)
+!519 = !DILocation(line: 85, scope: !217, inlinedAt: !520)
+!520 = !DILocation(line: 142, scope: !43)
+!521 = !DILocation(line: 87, scope: !229, inlinedAt: !520)
+!522 = !DILocation(line: 86, scope: !124, inlinedAt: !520)
+!523 = !DILocation(line: 627, scope: !58, inlinedAt: !524)
+!524 = !DILocation(line: 708, scope: !61, inlinedAt: !525)
+!525 = !DILocation(line: 7, scope: !238, inlinedAt: !526)
+!526 = !DILocation(line: 259, scope: !241, inlinedAt: !527)
+!527 = !DILocation(line: 282, scope: !244, inlinedAt: !528)
+!528 = !DILocation(line: 350, scope: !246, inlinedAt: !529)
+!529 = !DILocation(line: 144, scope: !43)
+!530 = !DILocation(line: 441, scope: !249, inlinedAt: !528)
+!531 = !DILocation(line: 1175, scope: !311, inlinedAt: !532)
+!532 = !DILocation(line: 1153, scope: !313, inlinedAt: !533)
+!533 = !DILocation(line: 145, scope: !43)
+!534 = !DILocation(line: 82, scope: !260, inlinedAt: !535)
+!535 = !DILocation(line: 409, scope: !262, inlinedAt: !536)
+!536 = !DILocation(line: 317, scope: !264, inlinedAt: !537)
+!537 = !DILocation(line: 326, scope: !264, inlinedAt: !538)
+!538 = !DILocation(line: 158, scope: !267, inlinedAt: !539)
+!539 = !DILocation(line: 75, scope: !270, inlinedAt: !540)
+!540 = !DILocation(line: 1879, scope: !272, inlinedAt: !541)
+!541 = !DILocation(line: 1089, scope: !274, inlinedAt: !542)
+!542 = !DILocation(line: 1176, scope: !311, inlinedAt: !532)
+!543 = !DILocation(line: 85, scope: !217, inlinedAt: !544)
+!544 = !DILocation(line: 544, scope: !278, inlinedAt: !545)
+!545 = !DILocation(line: 1915, scope: !280, inlinedAt: !546)
+!546 = !DILocation(line: 1911, scope: !282, inlinedAt: !547)
+!547 = !DILocation(line: 1895, scope: !272, inlinedAt: !540)
+!548 = !DILocation(line: 87, scope: !229, inlinedAt: !545)
+!549 = !DILocation(line: 85, scope: !217, inlinedAt: !550)
+!550 = !DILocation(line: 1918, scope: !287, inlinedAt: !546)
+!551 = !DILocation(line: 87, scope: !229, inlinedAt: !546)
+!552 = !DILocation(line: 86, scope: !124, inlinedAt: !546)
+!553 = !DILocation(line: 85, scope: !217, inlinedAt: !554)
+!554 = !DILocation(line: 1918, scope: !287, inlinedAt: !555)
+!555 = !DILocation(line: 1911, scope: !282, inlinedAt: !546)
+!556 = !DILocation(line: 87, scope: !229, inlinedAt: !555)
+!557 = !DILocation(line: 86, scope: !124, inlinedAt: !555)
+!558 = !DILocation(line: 84, scope: !329, inlinedAt: !559)
+!559 = !DILocation(line: 101, scope: !331, inlinedAt: !542)
+!560 = !DILocation(line: 85, scope: !217, inlinedAt: !561)
+!561 = !DILocation(line: 80, scope: !109, inlinedAt: !562)
+!562 = !DILocation(line: 42, scope: !302, inlinedAt: !563)
+!563 = !DILocation(line: 42, scope: !336, inlinedAt: !564)
+!564 = !DILocation(line: 82, scope: !338, inlinedAt: !565)
+!565 = !DILocation(line: 86, scope: !329, inlinedAt: !559)
+!566 = !DILocation(line: 87, scope: !329, inlinedAt: !559)
+!567 = !DILocation(line: 1177, scope: !311, inlinedAt: !532)
+!568 = !DILocation(line: 147, scope: !43)
+!569 = !DILocation(line: 85, scope: !217, inlinedAt: !223)
+!570 = !DILocation(line: 441, scope: !249, inlinedAt: !571)
+!571 = !DILocation(line: 350, scope: !572, inlinedAt: !574)
+!572 = distinct !DISubprogram(name: ">=;", linkageName: ">=", scope: !573, file: !573, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!573 = !DIFile(filename: "operators.jl", directory: ".")
+!574 = !DILocation(line: 285, scope: !575, inlinedAt: !576)
+!575 = distinct !DISubprogram(name: "unitrange_last;", linkageName: "unitrange_last", scope: !222, file: !222, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!576 = !DILocation(line: 280, scope: !577, inlinedAt: !578)
+!577 = distinct !DISubprogram(name: "UnitRange;", linkageName: "UnitRange", scope: !222, file: !222, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!578 = !DILocation(line: 5, scope: !579, inlinedAt: !223)
+!579 = distinct !DISubprogram(name: "Colon;", linkageName: "Colon", scope: !222, file: !222, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!580 = !DILocation(line: 82, scope: !260, inlinedAt: !581)
+!581 = !DILocation(line: 303, scope: !582, inlinedAt: !583)
+!582 = distinct !DISubprogram(name: ">;", linkageName: ">", scope: !573, file: !573, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!583 = !DILocation(line: 503, scope: !584, inlinedAt: !220)
+!584 = distinct !DISubprogram(name: "isempty;", linkageName: "isempty", scope: !222, file: !222, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !2, retainedNodes: !4)
+!585 = !{i32 0, i32 2147483646}
+!586 = !{i32 0, i32 65534}
+!587 = !{i32 0, i32 1023}
+!588 = !{!589, !589, i64 0, i64 0}
+!589 = !{!"custom_tbaa_addrspace(1)", !590, i64 0}
+!590 = !{!"custom_tbaa"}
+!591 = !{!592, !592, i64 0, i64 0}
+!592 = !{!"custom_tbaa_addrspace(3)", !590, i64 0}
+!593 = distinct !DISubprogram(name: "report_exception", linkageName: "julia_report_exception_3593", scope: null, file: !15, line: 39, type: !44, scopeLine: 39, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !14, retainedNodes: !4)
+!594 = !DILocation(line: 80, scope: !595, inlinedAt: !596)
+!595 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !110, file: !110, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !14, retainedNodes: !4)
+!596 = !DILocation(line: 38, scope: !597, inlinedAt: !599)
+!597 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !598, file: !598, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !14, retainedNodes: !4)
+!598 = !DIFile(filename: "/home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/output.jl", directory: ".")
+!599 = !DILocation(line: 38, scope: !600, inlinedAt: !601)
+!600 = distinct !DISubprogram(name: "_cuprintf;", linkageName: "_cuprintf", scope: !598, file: !598, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !14, retainedNodes: !4)
+!601 = !DILocation(line: 40, scope: !593)
+!602 = !DILocation(line: 44, scope: !593)
+!603 = distinct !DISubprogram(name: "signal_exception", linkageName: "julia_signal_exception_3667", scope: null, file: !15, line: 25, type: !44, scopeLine: 25, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
+!604 = !DILocation(line: 23, scope: !605, inlinedAt: !606)
+!605 = distinct !DISubprogram(name: "exception_flag;", linkageName: "exception_flag", scope: !15, file: !15, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
+!606 = !DILocation(line: 26, scope: !603)
+!607 = !DILocation(line: 27, scope: !603)
+!608 = !DILocation(line: 118, scope: !609, inlinedAt: !611)
+!609 = distinct !DISubprogram(name: "unsafe_store!;", linkageName: "unsafe_store!", scope: !610, file: !610, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
+!610 = !DIFile(filename: "pointer.jl", directory: ".")
+!611 = !DILocation(line: 118, scope: !609, inlinedAt: !612)
+!612 = !DILocation(line: 28, scope: !603)
+!613 = !{!614, !614, i64 0}
+!614 = !{!"jtbaa_data", !47, i64 0}
+!615 = !DILocation(line: 115, scope: !616, inlinedAt: !617)
+!616 = distinct !DISubprogram(name: "threadfence_system;", linkageName: "threadfence_system", scope: !472, file: !472, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
+!617 = !DILocation(line: 29, scope: !603)
+!618 = !DILocation(line: 80, scope: !619, inlinedAt: !620)
+!619 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !110, file: !110, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
+!620 = !DILocation(line: 38, scope: !621, inlinedAt: !622)
+!621 = distinct !DISubprogram(name: "macro expansion;", linkageName: "macro expansion", scope: !598, file: !598, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
+!622 = !DILocation(line: 38, scope: !623, inlinedAt: !624)
+!623 = distinct !DISubprogram(name: "_cuprintf;", linkageName: "_cuprintf", scope: !598, file: !598, type: !44, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !23, retainedNodes: !4)
+!624 = !DILocation(line: 31, scope: !603)
+!625 = !DILocation(line: 36, scope: !603)
