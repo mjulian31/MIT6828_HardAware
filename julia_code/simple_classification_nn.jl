@@ -7,7 +7,11 @@ using Printf
 using MLDatasets
 using Base.Threads
 
-include("request_handler.jl")
+if size(ARGS, 1) > 0 && ARGS[1] == "stdin"
+    include("request_handler_stdin.jl")
+else
+    include("request_handler.jl")
+end
 start_reciever()
 
 # matrix multiplication
