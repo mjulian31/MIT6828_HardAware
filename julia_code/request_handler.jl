@@ -15,6 +15,29 @@ struct response
     output
 end
 
+@enum machine_type
+    CL
+    LOC
+end
+
+machine = LOC
+
+@enum method_type
+    CUTOFF
+    CUTOFF_ANY
+    CUTOFF_IDEAL
+    LEVELS
+end
+
+method = LEVELS
+
+@eunum stdin_use
+    YES
+    NO
+end
+
+stdin = NO
+
 const REQ_START = "^"
 const REQ_END = "\$"
 const DELIM = ','
@@ -61,16 +84,75 @@ function get_cmd_args(N, R, M)
 end
 
 function get_target_pref(N, R, M)
-    if N*M >= 1024*256
-        return GPU_ONLY
-    elseif N*M >= 1024*32
-        return GPU_PREF
-    elseif N*M <= 32*64
-        return CPU_ONLY
-    elseif N*M <= 32*256
-        return CPU_PREF
+    if machine == CL
+        if method == LEVELS
+            if N*M >= 1024*256
+                return GPU_ONLY
+            elseif N*M >= 1024*16
+                return GPU_PREF
+            elseif N*M <= 32*64
+                return CPU_PREF
+            elseif N*M <= 10*10
+                return CPU_ONLY
+            else
+                return ANY
+            end
+        elseif method == CUTOFF_ANY
+            if N*M >= 1024
+                return GPU_ONLY
+            elseif N*M <= 100
+                return CPU_ONLY
+            else
+                return ANY
+            end
+        elseif method == CUTOFF_IDEAL
+            if N*M >= 100
+                return GPU_ONLY
+            else
+                return CPU_ONLY
+            end
+        else # CUTOFF
+            if N*M >= 1024
+                return GPU_ONLY
+            else
+                return CPU_ONLY
+            end
+        end
+    else
+        if method == LEVELS
+            if N*M >= 1024*256
+                return GPU_ONLY
+            elseif N*M >= 1024*32
+                return GPU_PREF
+            elseif N*M <= 64*128
+                return CPU_PREF
+            elseif N*M <= 64*10
+                return CPU_ONLY
+            else
+                return ANY
+            end
+        elseif method == CUTOFF_ANY
+            if N*M >= 1024*32
+                return GPU_ONLY
+            elseif N*M <= 64*10
+                return CPU_ONLY
+            else
+                return ANY
+            end
+        elseif method == CUTOFF_IDEAL
+            if N*M >= 64*64
+                return GPU_ONLY
+            else
+                return CPU_ONLY
+            end
+        else # CUTOFF
+            if N*M >= 1024*32
+                return GPU_ONLY
+            else
+                return CPU_ONLY
+            end
+        end
     end
-    return ANY
 end
 
 function get_cpu_ram(N, R, M)
@@ -165,7 +247,12 @@ function send_request(a, b, req_notifier)
     gpu_mem = get_gpu_mem(N, R, M)
     gpu_shared_mem = get_gpu_shared_mem(N, R, M)
     job_id = get_job_id(N, R, M)
-    stdin_len, stdin_input = 0, ""#get_mat_strings(a, b)
+
+    if stdin == YES
+        stdin_len, stdin_input = get_mat_strings(a, b)
+    else
+        stdin_len, stdin_input = 0, ""
+    end
 
     req_num = 0
     while true

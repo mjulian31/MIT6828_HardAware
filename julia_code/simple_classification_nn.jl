@@ -7,10 +7,43 @@ using Printf
 using MLDatasets
 using Base.Threads
 
-if size(ARGS, 1) > 0 && ARGS[1] == "stdin"
-    include("request_handler_stdin.jl")
+include("request_handler.jl")
+
+if size(ARGS, 1) > 2 && ARGS[1] == "stdin"
+    stdin = YES
+    if ARGS[2] == "cl"
+        machine = CL
+    else
+        machine = LOC
+    end
+    if ARGS[3] == "levels"
+        method = LEVELS
+    elseif ARGS[4] = "cutoff"
+        method = CUTOFF
+    elseif ARGS[4] = "ideal"
+        method = CUTOFF_IDEAL
+    else
+        method = CUTOFF_ANY
+    end
+elseif size(ARGS, 1) > 1
+    if ARGS[2] == "cl"
+        machine = CL
+    else
+        machine = LOC
+    end
+    if ARGS[3] == "levels"
+        method = LEVELS
+    elseif ARGS[4] = "cutoff"
+        method = CUTOFF
+    elseif ARGS[4] = "ideal"
+        method = CUTOFF_IDEAL
+    else
+        method = CUTOFF_ANY
+    end
+elseif size(ARGS, 1) > 0 && ARGS[1] == "stdin"
+    stdin = YES
 else
-    include("request_handler.jl")
+    stdin = NO
 end
 start_reciever()
 
