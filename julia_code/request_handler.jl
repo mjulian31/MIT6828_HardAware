@@ -129,7 +129,6 @@ function parse_response_string(response_str)
     else # good response
         # good headers, parse
         req_num = parse(Int, req_arr[2])
-        @printf("got %i\n", req_num)
         matrix_string = req_arr[end-1]
         output = parse_matrix_output(matrix_string)
         resp = response(req_num, req_arr[3:end-2]..., output)
@@ -185,9 +184,9 @@ end
 
 function start_reciever()
     @async begin
-       server = listen(RECEIVE_PORT)
+       listener = listen(RECEIVE_PORT)
        while true
-           sock = accept(server)
+           sock = accept(listener)
            t = @async try
                while isopen(sock)
                    response_str = readline(sock, keep=false)
@@ -209,7 +208,7 @@ function start_reciever()
             end
         end
         # while !istaskdone(t)
-        #     println("server is running...")
+        #     println("listener is running...")
         #     sleep(1)
         # end
     end
