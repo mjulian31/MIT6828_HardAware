@@ -1,0 +1,58 @@
+task id: matmul_32_256_64 -> cpu: 679
+task id: matmul_32_1024_256 -> cpu: 6875
+task id: matmul_1024_32_256 -> cpu: 13938
+task id: matmul_32_256_1024 -> cpu: 7868
+task id: matmul_256_32_64 -> cpu: 884
+task id: matmul_1024_1024_256 -> cpu: 250646
+task id: matmul_32_64_256 -> cpu: 619
+task id: matmul_64_32_10 -> cpu: 72
+task id: matmul_32_10_64 -> cpu: 54
+task id: matmul_32_64_10 -> cpu: 56
+
+task id: matmul_1024_32_256 -> gpu: 680
+task id: matmul_32_1024_256 -> gpu: 317
+task id: matmul_32_10_64 -> gpu: 127
+task id: matmul_64_32_10 -> gpu: 124
+task id: matmul_32_64_256 -> gpu: 159
+task id: matmul_256_32_64 -> gpu: 160
+task id: matmul_256_64_10 -> gpu: 282
+task id: matmul_1024_64_10 -> gpu: 236
+task id: matmul_32_256_64 -> gpu: 145
+task id: matmul_32_256_1024 -> gpu: 449
+task id: matmul_1024_256_64 -> gpu: 885
+task id: matmul_32_64_10 -> gpu: 125
+task id: matmul_256_1024_256 -> gpu: 1093
+task id: matmul_256_256_64 -> gpu: 352
+
+task id: matmul_32_256_64 -> num on cpu: 43
+task id: matmul_32_1024_256 -> num on cpu: 48
+task id: matmul_1024_32_256 -> num on cpu: 314
+task id: matmul_32_256_1024 -> num on cpu: 321
+task id: matmul_256_32_64 -> num on cpu: 321
+task id: matmul_1024_1024_256 -> num on cpu: 1
+task id: matmul_32_64_256 -> num on cpu: 334
+task id: matmul_64_32_10 -> num on cpu: 974
+task id: matmul_32_10_64 -> num on cpu: 802
+task id: matmul_32_64_10 -> num on cpu: 116
+
+task id: matmul_1024_32_256 -> num on gpu: 966
+task id: matmul_32_1024_256 -> num on gpu: 112
+task id: matmul_32_10_64 -> num on gpu: 478
+task id: matmul_64_32_10 -> num on gpu: 306
+task id: matmul_32_64_256 -> num on gpu: 946
+task id: matmul_256_32_64 -> num on gpu: 959
+task id: matmul_256_64_10 -> num on gpu: 1
+task id: matmul_1024_64_10 -> num on gpu: 1
+task id: matmul_32_256_64 -> num on gpu: 117
+task id: matmul_32_256_1024 -> num on gpu: 959
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_32_64_10 -> num on gpu: 44
+task id: matmul_256_1024_256 -> num on gpu: 1
+task id: matmul_256_256_64 -> num on gpu: 1
+
+
+
+real	11m25.700s (685.7s)
+user	5m51.508s
+sys	0m11.945s
+

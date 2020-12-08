@@ -1,0 +1,80 @@
+Run # 1 ------
+
+task id: matmul_64_32_10 -> cpu: 72
+task id: matmul_32_64_10 -> cpu: 56
+
+task id: matmul_256_64_10 -> gpu: 173
+task id: matmul_256_256_64 -> gpu: 219
+task id: matmul_256_1024_256 -> gpu: 1048
+task id: matmul_1024_256_64 -> gpu: 505
+task id: matmul_32_256_1024 -> gpu: 397
+task id: matmul_1024_64_10 -> gpu: 205
+task id: matmul_256_32_64 -> gpu: 164
+task id: matmul_1024_1024_256 -> gpu: 3389
+task id: matmul_32_64_256 -> gpu: 176
+task id: matmul_32_10_64 -> gpu: 144
+task id: matmul_32_256_64 -> gpu: 148
+task id: matmul_1024_32_256 -> gpu: 678
+task id: matmul_32_1024_256 -> gpu: 329
+
+task id: matmul_64_32_10 -> num on cpu: 1280
+task id: matmul_32_64_10 -> num on cpu: 160
+
+task id: matmul_256_64_10 -> num on gpu: 1
+task id: matmul_256_256_64 -> num on gpu: 1
+task id: matmul_256_1024_256 -> num on gpu: 1
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_32_256_1024 -> num on gpu: 1280
+task id: matmul_1024_64_10 -> num on gpu: 1
+task id: matmul_256_32_64 -> num on gpu: 1280
+task id: matmul_1024_1024_256 -> num on gpu: 1
+task id: matmul_32_64_256 -> num on gpu: 1280
+task id: matmul_32_10_64 -> num on gpu: 1280
+task id: matmul_32_256_64 -> num on gpu: 160
+task id: matmul_1024_32_256 -> num on gpu: 1280
+task id: matmul_32_1024_256 -> num on gpu: 160
+
+julia client runtime:
+878.141s
+
+Run # 2 ------
+
+task id: matmul_64_32_10 -> cpu: 72
+task id: matmul_32_64_10 -> cpu: 62
+
+task id: matmul_256_64_10 -> gpu: 153
+task id: matmul_256_256_64 -> gpu: 240
+task id: matmul_256_1024_256 -> gpu: 1075
+task id: matmul_1024_256_64 -> gpu: 589
+task id: matmul_32_256_1024 -> gpu: 457
+task id: matmul_1024_64_10 -> gpu: 200
+task id: matmul_256_32_64 -> gpu: 170
+task id: matmul_1024_1024_256 -> gpu: 3486
+task id: matmul_32_64_256 -> gpu: 154
+task id: matmul_32_10_64 -> gpu: 141
+task id: matmul_32_256_64 -> gpu: 150
+task id: matmul_1024_32_256 -> gpu: 680
+task id: matmul_32_1024_256 -> gpu: 318
+
+task id: matmul_64_32_10 -> num on cpu: 1280
+task id: matmul_32_64_10 -> num on cpu: 160
+
+task id: matmul_256_64_10 -> num on gpu: 1
+task id: matmul_256_256_64 -> num on gpu: 1
+task id: matmul_256_1024_256 -> num on gpu: 1
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_32_256_1024 -> num on gpu: 1280
+task id: matmul_1024_64_10 -> num on gpu: 1
+task id: matmul_256_32_64 -> num on gpu: 1280
+task id: matmul_1024_1024_256 -> num on gpu: 1
+task id: matmul_32_64_256 -> num on gpu: 1280
+task id: matmul_32_10_64 -> num on gpu: 1280
+task id: matmul_32_256_64 -> num on gpu: 160
+task id: matmul_1024_32_256 -> num on gpu: 1280
+task id: matmul_32_1024_256 -> num on gpu: 160
+
+julia client runtime:
+real	14m46.066s (886.066)
+user	5m48.423s
+sys	0m11.969s
+
