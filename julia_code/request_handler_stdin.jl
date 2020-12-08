@@ -15,6 +15,22 @@ struct response
     output
 end
 
+@enum machine_type
+    CL
+    LOC
+end
+
+machine = LOC
+
+@enum method_type
+    CUTOFF
+    CUTOFF_ANY
+    CUTOFF_IDEAL
+    LEVELS
+end
+
+method = LEVELS
+
 const REQ_START = "^"
 const REQ_END = "\$"
 const DELIM = ','
@@ -61,14 +77,38 @@ function get_cmd_args(N, R, M)
 end
 
 function get_target_pref(N, R, M)
-    if N*M >= 1024*256
-        return GPU_ONLY
-    elseif N*M >= 1024*32
-        return GPU_PREF
-    elseif N*M <= 32*64
-        return CPU_ONLY
-    elseif N*M <= 32*256
-        return CPU_PREF
+    if machine == CL
+        if method == LEVELS
+            if N*M >= 1024*256
+                return GPU_ONLY
+            elseif N*M >= 1024*32
+                return GPU_PREF
+            elseif N*M <= 32*64
+                return CPU_ONLY
+            elseif N*M <= 32*256
+                return CPU_PREF
+            end
+        elseif method == CUTOFF_ANY
+
+        else
+
+        end
+    else
+        if method == LEVELS
+            if N*M >= 1024*256
+                return GPU_ONLY
+            elseif N*M >= 1024*32
+                return GPU_PREF
+            elseif N*M <= 32*64
+                return CPU_ONLY
+            elseif N*M <= 32*256
+                return CPU_PREF
+            end
+        elseif method == CUTOFF_ANY
+
+        else
+
+        end
     end
     return ANY
 end
