@@ -88,7 +88,7 @@ void haws_socket_req_loop_newline(int socket) {
     // blocks here until connection opened from a client
     // non blocking reads so thread can monitor kill flag and not get stuck on readLine
     DEBUGPR("HAWS/RECVLOOP: listening...\n");
-    int socket_fd = socket_open_recv_socket(socket, false, "HAWS/RECVLOOP"); 
+    int socket_fd = socket_open_recv_socket(socket, true, "HAWS/RECVLOOP"); 
     DEBUGPR("HAWS/RECVLOOP: ...client connected!\n");
 
     long readBufSize = SOCKET_READ_BUF_SIZE;
@@ -98,11 +98,17 @@ void haws_socket_req_loop_newline(int socket) {
 
     while (!sockLoopKillFlag) {
         bytes_in = readLine(socket_fd, socket_read_buf, SOCKET_READ_BUF_SIZE);
-        assert(bytes_in != SOCKET_READ_BUF_SIZE);
-        if (bytes_in > 1) {
+        if (bytes_in > 0) {
+            assert(bytes_in < SOCKET_READ_BUF_SIZE);
             if(!haws.IsRespLoopRunning()) {
                 haws.StartRespLoop(); 
             }
+
+            if (socket_read_buf[0] == '\n') {
+                printf("\n\n\nHAWS/RECVLOOP: GOT A NEWLINE REQUEST\n\n\n"); 
+                assert(bytes_in == 1);
+            }
+
             if (socket_read_buf[0] != '^') {
                 printf("HAWS/RECVLOOP: didn't find start of request\n");
                 printf("HAWS/RECVLOOP: buffer:'");
@@ -290,16 +296,20 @@ long readLine(int fd, char *buffer, long n)
         numRead = read(fd, &ch, 1);
 
         if (numRead == -1) {
-            if (errno == EINTR)         /* Interrupted --> restart read() */
+            if (errno == EINTR) {         /* Interrupted --> restart read() */
+                printf("EINTR restarting\n");
                 continue;
-            else
+            } else {
+                printf("Readline Error\n");
                 return -1;              /* Some other error */
+            }
 
         } else if (numRead == 0) {      /* EOF */
-            if (totRead == 0)           /* No bytes read; return 0 */
+            if (totRead == 0) {           /* No bytes read; return 0 */
                 return 0;
-            else                        /* Some bytes read; add '\0' */
+            } else {                        /* Some bytes read; add '\0' */
                 break;
+            }
 
         } else {                        /* 'numRead' must be 1 if we get here */
             if (totRead < n - 1) {      /* Discard > (n - 1) bytes */
@@ -307,8 +317,9 @@ long readLine(int fd, char *buffer, long n)
                 *buf++ = ch;
             }
 
-            if (ch == '\n')
+            if (ch == '\n') {
                 break;
+            }
         }
     }
 

@@ -93,15 +93,15 @@ class HAWSTargetMgr {
         return this->tasksActive.find(pid) != this->tasksActive.end();
     }
     void PrintProcessProtected(pid_t pid) { // holding lock
-        printf("HWMGR: PID %d\n", pid);
-        printf("HWMGR:  in active set: %d\n", this->TaskIsActiveProtected(pid));  
-        printf("HWMGR:    task status: %s\n", TaskStatusToStr(tasksStatus[pid]));
-        printf("HWMGR:    status code: %d\n", tasksStatusCode[pid]);
-        printf("HWMGR:max cpu threads: %d\n", tasksMaxCPUThreads[pid]);  
-        printf("HWMGR:max gpu threads: %d\n", tasksMaxGPUThreads[pid]);  
-        printf("HWMGR:   max phys mem: %d\n", tasksMaxRAM[pid]);  
-        printf("HWMGR:   max gpu  mem: %d\n", tasksMaxGPURAM[pid]);  
-        printf("HWMGR:    billable ms: %ld\n", tasksBillableUS[pid]);  
+        DEBUGPR("HWMGR: PID %d\n", pid);
+        DEBUGPR("HWMGR:  in active set: %d\n", this->TaskIsActiveProtected(pid));  
+        DEBUGPR("HWMGR:    task status: %s\n", TaskStatusToStr(tasksStatus[pid]));
+        DEBUGPR("HWMGR:    status code: %d\n", tasksStatusCode[pid]);
+        DEBUGPR("HWMGR:max cpu threads: %d\n", tasksMaxCPUThreads[pid]);  
+        DEBUGPR("HWMGR:max gpu threads: %d\n", tasksMaxGPUThreads[pid]);  
+        DEBUGPR("HWMGR:   max phys mem: %d\n", tasksMaxRAM[pid]);  
+        DEBUGPR("HWMGR:   max gpu  mem: %d\n", tasksMaxGPURAM[pid]);  
+        DEBUGPR("HWMGR:    billable ms: %ld\n", tasksBillableUS[pid]);  
     }
     void PrintAllProcessesProtected() { // holding lock
         std::list<pid_t>::iterator it = allPids.begin();
@@ -110,7 +110,7 @@ class HAWSTargetMgr {
         }
     }
     void PrintDataProtected () { // holding lock
-        printf("TARGMGR/%s | processes %ld/%ld active/all\n", this->targStr.c_str(),
+        DEBUGPR("TARGMGR/%s | processes %ld/%ld active/all\n", this->targStr.c_str(),
                 tasksActive.size(), allPids.size());
         
     }
@@ -124,17 +124,17 @@ class HAWSTargetMgr {
         return rc == 0 ? stat_buf.st_size : -1;
     }
     void TaskCompleteGetDroppedOutput(pid_t pid) {
-        printf("TARGMGR/%s/FILEIN picking up dropped output\n", this->targStr.c_str());
+        DEBUGPR("TARGMGR/%s/FILEIN picking up dropped output\n", this->targStr.c_str());
 
         std::string filepath = "/opt/haws/bin/out/" + std::to_string(pid) + ".txt";
 
         int timeout = 0; // wait up to 30 seconds for file to appear after proc finishes
         while (!FileExists(filepath)) {
-            printf("TARGMGR/%s/FILEIN file %d.txt not there yet... wait %d/30\n", 
+            DEBUGPR("TARGMGR/%s/FILEIN file %d.txt not there yet... wait %d/30\n", 
                        this->targStr.c_str(), pid, timeout);
             sleep(1); // try again
             if (timeout == 30) {
-                printf("TARGMGR/%s/FILEIN file %d.txt didn't show up for %ds after bin exited\n", 
+                DEBUGPR("TARGMGR/%s/FILEIN file %d.txt didn't show up for %ds after bin exited\n", 
                        this->targStr.c_str(), pid, timeout);
                 assert(false);
             } timeout++;
@@ -150,18 +150,18 @@ class HAWSTargetMgr {
         assert(ferror(fp) == 0);
         fclose(fp);
         output[len++] = '\0'; //just to be safe 
-        printf("TARGMGR/%s/FILEIN save total output pointer\n", this->targStr.c_str());
+        DEBUGPR("TARGMGR/%s/FILEIN save total output pointer\n", this->targStr.c_str());
         taskLock.lock();
         tasksCompleted[pid] = output;
         tasksOutputLen[pid] = len;
         taskLock.unlock();
 
         // disabled for debugging 
-        //printf("TARGMGR/%s/FILEIN Delete dropped file\n", this->targStr.c_str());
+        //DEBUGPR("TARGMGR/%s/FILEIN Delete dropped file\n", this->targStr.c_str());
         if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
             assert(false);
         }
-        printf("TARGMGR/%s/FILEIN Done saving output\n", this->targStr.c_str());
+        DEBUGPR("TARGMGR/%s/FILEIN Done saving output\n", this->targStr.c_str());
     }
 
     void TaskCompleteAccountingProtected(pid_t pid, TaskStatus ts, int s_code, time_point ended) {
@@ -261,7 +261,7 @@ class HAWSTargetMgr {
 
             taskLock.unlock();
 
-            printf("HWMGR/%s: starting task done\n", this->targStr.c_str());
+            DEBUGPR("HWMGR/%s: starting task done\n", this->targStr.c_str());
             return pid;
         }
         
@@ -374,7 +374,7 @@ class HAWSTargetMgr {
             /* we no longer keep tasksCompleted values after proc completes. 
             std::unordered_map<pid_t, char*>::iterator mit = tasksCompleted.begin();
             while (mit != tasksCompleted.end()) {
-                printf("HWMGR/%s COMPLETED PID %d: formal output[%ld]\n", this->targStr.c_str(), 
+                DEBUGPR("HWMGR/%s COMPLETED PID %d: formal output[%ld]\n", this->targStr.c_str(), 
                        mit->first, tasksFormalOutputLen[mit->first]);
                 free(mit->second); 
                 mit++;
@@ -402,7 +402,7 @@ class HAWSTargetMgr {
             tasksMaxGPURAM.clear();
             tasksBillableUS.clear();
             tasksHandles.clear();
-            //printf("HWMGR/%s tasksHandles.size = %ld\n", this->targStr.c_str(), 
+            //DEBUGPR("HWMGR/%s tasksHandles.size = %ld\n", this->targStr.c_str(), 
             //       tasksHandles.size());
 
             taskLock.unlock();

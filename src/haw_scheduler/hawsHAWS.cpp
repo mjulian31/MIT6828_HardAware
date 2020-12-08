@@ -170,13 +170,13 @@ void HAWS::ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit,
         globalGPUMemAvail += gpuMgr->GetFreedGPURam();         // replenish gpu mem
 
         if (throttle++ % 5000 == 0) {
-            DEBUGPR("HAWS/RESMON: free cpu threads %d (%d%%)\n", globalCPUThreadsAvail,
+            printf("HAWS/RESMON: free cpu threads %d (%d%%)\n", globalCPUThreadsAvail,
                    (int)(((float) globalCPUThreadsAvail / (float) cpuThreadLimit)*100));
-            DEBUGPR("HAWS/RESMON: free gpu threads %d (%d%%)\n", globalGPUThreadsAvail,
+            printf("HAWS/RESMON: free gpu threads %d (%d%%)\n", globalGPUThreadsAvail,
                    (int)(((float) globalGPUThreadsAvail / (float) gpuThreadLimit)*100));
-            DEBUGPR("HAWS/RESMON: free phys mem %dMB (%d%%)\n", globalPhysMemAvail, 
+            printf("HAWS/RESMON: free phys mem %dMB (%d%%)\n", globalPhysMemAvail, 
                    (int)(((float) globalPhysMemAvail / (float) physMemLimitMB)*100));
-            DEBUGPR("HAWS/RESMON: free gpu mem %dMB (%d%%)\n", globalGPUMemAvail, 
+            printf("HAWS/RESMON: free gpu mem %dMB (%d%%)\n", globalGPUMemAvail, 
                    (int)(((float) globalGPUMemAvail / (float) gpuMemLimitMB)*100));
         }
 

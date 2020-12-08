@@ -12,6 +12,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include "hawsUtil.h"
 
 // stdin / stdout piping stuff from  
 // https://jineshkj.wordpress.com/2006/12/22/how-to-capture-stdin-stdout-and-stderr-of-child-program/
@@ -22,7 +23,7 @@ int subprocess_close_parent_stdin_pipe(ChildHandle* handle) {
 
 ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,    
                                           char* stdin_buff, int stdin_buff_len) {
-    printf("HAWS/SUBPROC: start subproc nonblocking \n");
+    DEBUGPR("HAWS/SUBPROC: start subproc nonblocking \n");
     pid_t  pid; 
     ChildHandle* handle = (ChildHandle*) malloc(sizeof(ChildHandle));
     int ret = 1; 
@@ -41,7 +42,7 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
     while (getline(ss, temp_str, ' ')) { // tokenize incoming string
         tokens.push_back(temp_str);
     } 
-    //printf("HAWS/SUBPROC: calloc argv_list[%ld] (token size is %ld)\n", 
+    //DEBUGPR("HAWS/SUBPROC: calloc argv_list[%ld] (token size is %ld)\n", 
     //       2 + tokens.size(), tokens.size());
 
     char** argv_list;
@@ -49,13 +50,13 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
     argv_list = (char**) calloc(2 + tokens.size(), sizeof(char*));
     int i = 0;
     argv_list[i] = (char*) binpath.c_str();
-    //printf("HAWS/SUBPROC: ARGTOKEN[%d] %s\n", i, argv_list[i]);
+    //DEBUGPR("HAWS/SUBPROC: ARGTOKEN[%d] %s\n", i, argv_list[i]);
     for (i = 1; i <= tokens.size(); i++) {
         argv_list[i] = (char*) tokens[i - 1].c_str();
-        //printf("HAWS/SUBPROC: ARGTOKEN[%d] %s\n", i, argv_list[i]); 
+        //DEBUGPR("HAWS/SUBPROC: ARGTOKEN[%d] %s\n", i, argv_list[i]); 
     }
     argv_list[i] = (char*) 0;
-    //printf("SUBPROCESS: ARGTOKEN[%d] %s\n", i+1, argv_list[i]); 
+    //DEBUGPR("SUBPROCESS: ARGTOKEN[%d] %s\n", i+1, argv_list[i]); 
     int argv_list_len = i;
 
     //argv_list now has [binpath, <arg1, arg2, ..., argN,> 0], read for execve
@@ -76,9 +77,9 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        // pid == 0 means child process created 
        // getpid() returns process id of calling process 
        // Here It will return process id of child process 
-       //printf("child process, pid = %u\n",getpid()); 
+       //DEBUGPR("child process, pid = %u\n",getpid()); 
        // Here It will return Parent of child Process means Parent process it self 
-       //printf("parent of child process, pid = %u\n",getppid());  
+       //DEBUGPR("parent of child process, pid = %u\n",getppid());  
   
        // the argv list first argument should point to   
        // filename associated with file being executed, ex argv_list[0] = /bin/ls
@@ -89,11 +90,11 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
        // the execv() only return if error occured. 
        // The return value is -1 
 
-       //printf("CHILD: dup pipe\n");
+       //DEBUGPR("CHILD: dup pipe\n");
        if (PIPE_STDIN)  { dup2(pipes[PARENT_WRITE_PIPE][READ_FD], STDIN_FILENO);  }
        if (PIPE_STDOUT) { dup2(pipes[PARENT_READ_PIPE][WRITE_FD], STDOUT_FILENO); }
 
-       //printf("CHILD: close pipes\n");
+       //DEBUGPR("CHILD: close pipes\n");
        // close fds not required by child. Also, we don't
        // want the exec'ed program to know these existed 
        if (PIPE_STDIN) { 
@@ -105,20 +106,20 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
             close(pipes[PARENT_READ_PIPE][READ_FD]);
        }
  
-       //printf("CHILD: execv\n");
+       //DEBUGPR("CHILD: execv\n");
        execv(argv_list[0],argv_list); 
        exit(0);  // not reached?
     } else{ 
-       printf("HAWS/SUBPROC: starting subprocess nonblocking\n");
+       DEBUGPR("HAWS/SUBPROC: starting subprocess nonblocking\n");
        // a positive number is returned for the pid of parent process 
        // getppid() returns process id of parent of calling process 
        // Here It will return parent of parent process's ID 
-       //printf("Parent Of parent process, pid = %u\n",getppid()); 
-       //printf("parent process, pid = %u\n",getpid());  
-       //printf("caught child pid %d\n", pid);
+       //DEBUGPR("Parent Of parent process, pid = %u\n",getppid()); 
+       //DEBUGPR("parent process, pid = %u\n",getpid());  
+       //DEBUGPR("caught child pid %d\n", pid);
 
        // close fds not required by parent
-       //printf("SUBPROCESS: close pipes\n");
+       //DEBUGPR("SUBPROCESS: close pipes\n");
        if (PIPE_STDIN)  { close(pipes[PARENT_WRITE_PIPE][READ_FD]); }
        if (PIPE_STDOUT) { close(pipes[PARENT_READ_PIPE][WRITE_FD]); }
     
@@ -126,17 +127,17 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
            // write in pid first
            std::string pidStr = std::to_string(pid) + "\n";
            assert(pidStr.length() > 0);
-           printf("HAWS/SUBPROC: send PID %d\n", pid); 
+           DEBUGPR("HAWS/SUBPROC: send PID %d\n", pid); 
            write(pipes[PARENT_WRITE_PIPE][WRITE_FD], pidStr.c_str(), strlen(pidStr.c_str()));
 
            // write in formal stdin
            if (stdin_buff_len > 0) {
-               printf("HAWS/SUBPROC: sending STDIN[%d]\n", stdin_buff_len);    
+               DEBUGPR("HAWS/SUBPROC: sending STDIN[%d]\n", stdin_buff_len);    
                write(pipes[PARENT_WRITE_PIPE][WRITE_FD], stdin_buff, stdin_buff_len);
                write(pipes[PARENT_WRITE_PIPE][WRITE_FD], (char*) "\n", 1); // end of input
-               printf("HAWS/SUBPROC: done sending STDIN[%d]\n", stdin_buff_len);    
+               DEBUGPR("HAWS/SUBPROC: done sending STDIN[%d]\n", stdin_buff_len);    
            } else {
-               printf("HAWS/SUBPROC: no stdin to send to bin\n");
+               DEBUGPR("HAWS/SUBPROC: no stdin to send to bin\n");
            }
        }
 
@@ -157,7 +158,7 @@ ChildHandle* start_subprocess_nonblocking(std::string binpath, std::string args,
 
        free(argv_list); // free command line args that were sent
 
-       printf("HAWS/SUBPROC: started successfully\n");
+       DEBUGPR("HAWS/SUBPROC: started successfully\n");
        return handle;
    }
    assert(false); // not reached
