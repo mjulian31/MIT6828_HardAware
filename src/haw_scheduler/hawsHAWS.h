@@ -15,10 +15,10 @@ extern bool sockLoopKillFlag;
 
 enum HAWSHWTarget { TargCPU, TargGPU };
 
-enum TaskStatus { 
-    TASK_RUNNING, 
-    TASK_FINISHED_SUCCESS, 
-    TASK_FINISHED_NONZERO, 
+enum TaskStatus {
+    TASK_RUNNING,
+    TASK_FINISHED_SUCCESS,
+    TASK_FINISHED_NONZERO,
     TASK_FINISHED_ABNORMAL
 };
 
@@ -34,6 +34,7 @@ typedef struct HAWSConclusion {
     int outputLen;
     char* freeableOutput;
     char* output;
+    char* taskID;
     // cost accumulation stuff
     long targetRealBillableUS;
 } HAWSResponse;
@@ -44,11 +45,11 @@ class HAWS {
         int gpuThreadLimit;
         int physMemLimitMB;
         int gpuMemLimitMB;
-        int gpuSharedMemLimitMB; 
-    
+        int gpuSharedMemLimitMB;
+
         bool schedLoopThreadRunning;
         std::thread* schedLoopThread;
-        
+
         // requests
         bool sockThreadReqsRunning;
         std::thread* sockThreadReqs;
@@ -58,9 +59,9 @@ class HAWS {
         int cpuTasksActive = 0; // unused?
         int gpuTasksActive = 0; // unused?
 
-        //SCHEDLOOP THREAD 
+        //SCHEDLOOP THREAD
         static void ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit,
-                                 int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemLimitMB); 
+                                 int physMemLimitMB, int gpuMemLimitMB, int gpuSharedMemLimitMB);
         static void ReapChildren();
         static void DispatchConclusion(pid_t, TaskStatus, int status, time_point time_completed);
         static void ProcessClientRequest(HAWSClientRequest* req);
@@ -68,7 +69,7 @@ class HAWS {
         static void StartTaskCPU(HAWSClientRequest* req);
         static void StartTaskGPU(HAWSClientRequest* req);
         static HAWSHWTarget DetermineReqTarget(HAWSClientRequest* req);
-   
+
         //RESPONSE THREAD
         static void RespLoop(int port);
         static void SendConclusion(int socket, char* buf, long max_bytes, HAWSConclusion* resp);
@@ -96,7 +97,7 @@ class HAWS {
         void Start();
         void StartSocket();
         void HardAwareSchedule(HAWSClientRequest* req);
-        static bool IsRespLoopRunning(); 
+        static bool IsRespLoopRunning();
         static void StartRespLoop();
         int GetNumActiveTasks();
         int GetNumQueuedReqs();
