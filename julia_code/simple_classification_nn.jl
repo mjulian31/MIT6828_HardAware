@@ -18,24 +18,24 @@ if size(ARGS, 1) > 2 && ARGS[1] == "stdin"
     end
     if ARGS[3] == "levels"
         method = LEVELS
-    elseif ARGS[4] == "cutoff"
+    elseif ARGS[3] == "cutoff"
         method = CUTOFF
-    elseif ARGS[4] == "ideal"
+    elseif ARGS[3] == "ideal"
         method = CUTOFF_IDEAL
     else
         method = CUTOFF_ANY
     end
 elseif size(ARGS, 1) > 1
-    if ARGS[2] == "cl"
+    if ARGS[1] == "cl"
         machine = CL
     else
         machine = LOC
     end
-    if ARGS[3] == "levels"
+    if ARGS[2] == "levels"
         method = LEVELS
-    elseif ARGS[4] == "cutoff"
+    elseif ARGS[2] == "cutoff"
         method = CUTOFF
-    elseif ARGS[4] == "ideal"
+    elseif ARGS[2] == "ideal"
         method = CUTOFF_IDEAL
     else
         method = CUTOFF_ANY
@@ -45,6 +45,8 @@ elseif size(ARGS, 1) > 0 && ARGS[1] == "stdin"
 else
     stdin = NO
 end
+
+@show machine, method, stdin
 start_reciever()
 
 # matrix multiplication
