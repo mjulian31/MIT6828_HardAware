@@ -252,9 +252,9 @@ end
 
 pred_map = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-x_train, y_train = MNIST.traindata(Float64, 1:4096)
-x_test, y_test  = MNIST.testdata(Float64, 1:512)
-DIM = 28
+x_train, y_train = MNIST.traindata(Float64, 1:1024)
+x_test, y_test  = MNIST.testdata(Float64, 1:256)
+DIM = 32
 num_features = size(pred_map, 1)
 
 x_train = prep_data(x_train, 28, DIM)
@@ -265,10 +265,10 @@ y_test = onehot_MNIST(y_test, pred_map)
 
 # set up layers
 fc1 = fc_layer(:none, :none, :none, :none, :none)
-fc_init(fc1, DIM*DIM, 512) # (num_train, DIMxDIM) -> (num_train, 128)
+fc_init(fc1, DIM*DIM, 256) # (num_train, DIMxDIM) -> (num_train, 128)
 act1 = act_layer(elem_tanh, elem_d_tanh, :none, :none)
 fc2 = fc_layer(:none, :none, :none, :none, :none)
-fc_init(fc2, 512, 64) # (num_train, 128) -> (num_train, 64)
+fc_init(fc2, 256, 64) # (num_train, 128) -> (num_train, 64)
 act2 = act_layer(elem_tanh, elem_d_tanh, :none, :none)
 fc3 = fc_layer(:none, :none, :none, :none, :none)
 fc_init(fc3, 64, num_features) # (num_train, 64) -> (num_train, num_features)
@@ -283,7 +283,7 @@ net = network([(fc1, fc_forward, fc_backward, true, fc_init_rand, fc_set_rand),
                 (act3, act_forward, act_backward, false, :none, :none)],
                 mse, d_mse)
 
-# run training, epochs=100, learning_rate=0.1, batch_size=32, rand_batch_size=8
+# run training, epochs=5, learning_rate=0.1, batch_size=32, rand_batch_size=8
 net_train(net, x_train, y_train, 5, 0.1, 32, 8, pred_map)
 
 # test

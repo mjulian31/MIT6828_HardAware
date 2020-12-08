@@ -60,8 +60,11 @@ function get_cmd_args(N, R, M)
     return string(N, " ", R, " ", M) #, " norand")
 end
 
-function get_target_pref(N, R, M) #TODO
-    return ANY
+function get_target_pref(N, R, M)
+    if N*M > 1024
+        return GPU_ONLY
+    end
+    return CPU_ONLY
 end
 
 function get_cpu_ram(N, R, M)
