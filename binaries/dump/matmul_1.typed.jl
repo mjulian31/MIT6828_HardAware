@@ -86,7 +86,7 @@ CodeInfo(
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %16  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││ %17  = (%16)($(QuoteNode(Ptr{Nothing} @0x0000000005a23198)), UInt32, Tuple{})::UInt32
+│    ││││ %17  = (%16)($(QuoteNode(Ptr{Nothing} @0x000000000441eda8)), UInt32, Tuple{})::UInt32
 │    ││└└
 │    ││┌ @ boot.jl:708 within `Int64'
 │    │││┌ @ boot.jl:632 within `toInt64'
@@ -99,13 +99,13 @@ CodeInfo(
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %20  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%20)($(QuoteNode(Ptr{Nothing} @0x0000000005a4f3d8)), UInt32, Tuple{})::UInt32
+│    ││││        (%20)($(QuoteNode(Ptr{Nothing} @0x0000000002c8b328)), UInt32, Tuple{})::UInt32
 │    │└└└
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_z'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %22  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%22)($(QuoteNode(Ptr{Nothing} @0x00000000043533f8)), UInt32, Tuple{})::UInt32
+│    ││││        (%22)($(QuoteNode(Ptr{Nothing} @0x0000000004422798)), UInt32, Tuple{})::UInt32
 │    └└└└
 │     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:96 within `coalesced_matmul_kernel!'
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:77 within `blockIdx'
@@ -113,13 +113,13 @@ CodeInfo(
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %24  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%24)($(QuoteNode(Ptr{Nothing} @0x0000000005a23198)), UInt32, Tuple{})::UInt32
+│    ││││        (%24)($(QuoteNode(Ptr{Nothing} @0x000000000441eda8)), UInt32, Tuple{})::UInt32
 │    │└└└
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:57 within `blockIdx_y'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %26  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││ %27  = (%26)($(QuoteNode(Ptr{Nothing} @0x0000000005a4f3d8)), UInt32, Tuple{})::UInt32
+│    ││││ %27  = (%26)($(QuoteNode(Ptr{Nothing} @0x0000000002c8b328)), UInt32, Tuple{})::UInt32
 │    ││└└
 │    ││┌ @ boot.jl:708 within `Int64'
 │    │││┌ @ boot.jl:632 within `toInt64'
@@ -132,7 +132,7 @@ CodeInfo(
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %30  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%30)($(QuoteNode(Ptr{Nothing} @0x00000000043533f8)), UInt32, Tuple{})::UInt32
+│    ││││        (%30)($(QuoteNode(Ptr{Nothing} @0x0000000004422798)), UInt32, Tuple{})::UInt32
 │    └└└└
 │     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:97 within `coalesced_matmul_kernel!'
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:91 within `threadIdx'
@@ -140,7 +140,7 @@ CodeInfo(
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %32  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││ %33  = (%32)($(QuoteNode(Ptr{Nothing} @0x00000000058ec378)), UInt32, Tuple{})::UInt32
+│    ││││ %33  = (%32)($(QuoteNode(Ptr{Nothing} @0x0000000004a57e78)), UInt32, Tuple{})::UInt32
 │    ││└└
 │    ││┌ @ boot.jl:708 within `Int64'
 │    │││┌ @ boot.jl:632 within `toInt64'
@@ -153,13 +153,13 @@ CodeInfo(
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %36  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%36)($(QuoteNode(Ptr{Nothing} @0x0000000005bfbb08)), UInt32, Tuple{})::UInt32
+│    ││││        (%36)($(QuoteNode(Ptr{Nothing} @0x0000000004b93d98)), UInt32, Tuple{})::UInt32
 │    │└└└
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_z'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %38  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%38)($(QuoteNode(Ptr{Nothing} @0x0000000005b0eaa8)), UInt32, Tuple{})::UInt32
+│    ││││        (%38)($(QuoteNode(Ptr{Nothing} @0x000000000454bd88)), UInt32, Tuple{})::UInt32
 │    └└└└
 │     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:98 within `coalesced_matmul_kernel!'
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:91 within `threadIdx'
@@ -167,13 +167,13 @@ CodeInfo(
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %40  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%40)($(QuoteNode(Ptr{Nothing} @0x00000000058ec378)), UInt32, Tuple{})::UInt32
+│    ││││        (%40)($(QuoteNode(Ptr{Nothing} @0x0000000004a57e78)), UInt32, Tuple{})::UInt32
 │    │└└└
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:47 within `threadIdx_y'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %42  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││ %43  = (%42)($(QuoteNode(Ptr{Nothing} @0x0000000005bfbb08)), UInt32, Tuple{})::UInt32
+│    ││││ %43  = (%42)($(QuoteNode(Ptr{Nothing} @0x0000000004b93d98)), UInt32, Tuple{})::UInt32
 │    ││└└
 │    ││┌ @ boot.jl:708 within `Int64'
 │    │││┌ @ boot.jl:632 within `toInt64'
@@ -186,14 +186,14 @@ CodeInfo(
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `_index'
 │    │││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/indexing.jl:7 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    ││││ %46  = Base.llvmcall::Core.IntrinsicFunction
-│    ││││        (%46)($(QuoteNode(Ptr{Nothing} @0x0000000005b0eaa8)), UInt32, Tuple{})::UInt32
+│    ││││        (%46)($(QuoteNode(Ptr{Nothing} @0x000000000454bd88)), UInt32, Tuple{})::UInt32
 │    └└└└
 │     @ /home/local/git/MIT6828_HardAware/binaries/generate_binaries.jl:101 within `coalesced_matmul_kernel!'
 │    ┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:24 within `macro expansion'
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:55 within `emit_shmem'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:55 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    │││ %48  = Base.llvmcall::Core.IntrinsicFunction
-│    │││ %49  = (%48)($(QuoteNode(Ptr{Nothing} @0x00000000058e7b08)), Core.LLVMPtr{Float32,3}, Tuple{})::Core.LLVMPtr{Float32,3}
+│    │││ %49  = (%48)($(QuoteNode(Ptr{Nothing} @0x0000000004a0a4a8)), Core.LLVMPtr{Float32,3}, Tuple{})::Core.LLVMPtr{Float32,3}
 │    │└└
 │    │ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:25 within `macro expansion'
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:31
@@ -204,7 +204,7 @@ CodeInfo(
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:55 within `emit_shmem'
 │    ││┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:55 within `macro expansion' @ /home/local/.julia/packages/LLVM/dVU7J/src/interop/base.jl:80
 │    │││ %51  = Base.llvmcall::Core.IntrinsicFunction
-│    │││ %52  = (%51)($(QuoteNode(Ptr{Nothing} @0x000000000597c5a8)), Core.LLVMPtr{Float32,3}, Tuple{})::Core.LLVMPtr{Float32,3}
+│    │││ %52  = (%51)($(QuoteNode(Ptr{Nothing} @0x0000000004a0ab78)), Core.LLVMPtr{Float32,3}, Tuple{})::Core.LLVMPtr{Float32,3}
 │    │└└
 │    │ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/intrinsics/memory_shared.jl:25 within `macro expansion'
 │    │┌ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:38 within `CuDeviceArray' @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:31
@@ -463,7 +463,7 @@ CodeInfo(
 │    │││││││┌ @ int.jl:85 within `-'
 │    ││││││││ %141 = Base.sub_int(%126, 1)::Int64
 │    │││││││└
-│    │││││││ %142 = (%140)($(QuoteNode(Ptr{Nothing} @0x0000000002e44ee8)), Float32, Tuple{Core.LLVMPtr{Float32,1},Int64}, %2, %141)::Float32
+│    │││││││ %142 = (%140)($(QuoteNode(Ptr{Nothing} @0x00000000044cba18)), Float32, Tuple{Core.LLVMPtr{Float32,1},Int64}, %2, %141)::Float32
 │    ││││└└└
 └────││││        goto #20
      │││└
@@ -597,7 +597,7 @@ CodeInfo(
 │    │││││││┌ @ int.jl:85 within `-'
 │    ││││││││ %186 = Base.sub_int(%171, 1)::Int64
 │    │││││││└
-│    │││││││        (%185)($(QuoteNode(Ptr{Nothing} @0x0000000003aa1fa8)), Nothing, Tuple{Core.LLVMPtr{Float32,3},Float32,Int64}, %49, %142, %186)::Nothing
+│    │││││││        (%185)($(QuoteNode(Ptr{Nothing} @0x0000000004512aa8)), Nothing, Tuple{Core.LLVMPtr{Float32,3},Float32,Int64}, %49, %142, %186)::Nothing
 │    ││││└└└
 │    ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
 └────││││        goto #34
@@ -734,7 +734,7 @@ CodeInfo(
 │    │││││││┌ @ int.jl:85 within `-'
 │    ││││││││ %232 = Base.sub_int(%217, 1)::Int64
 │    │││││││└
-│    │││││││        (%231)($(QuoteNode(Ptr{Nothing} @0x0000000003aa1fa8)), Nothing, Tuple{Core.LLVMPtr{Float32,3},Float32,Int64}, %49, 0.0f0, %232)::Nothing
+│    │││││││        (%231)($(QuoteNode(Ptr{Nothing} @0x0000000004512aa8)), Nothing, Tuple{Core.LLVMPtr{Float32,3},Float32,Int64}, %49, 0.0f0, %232)::Nothing
 │    ││││└└└
 │    ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
 └────││││        goto #49
@@ -931,7 +931,7 @@ CodeInfo(
 │    │││││││┌ @ int.jl:85 within `-'
 │    ││││││││ %297 = Base.sub_int(%282, 1)::Int64
 │    │││││││└
-│    │││││││ %298 = (%296)($(QuoteNode(Ptr{Nothing} @0x0000000002e44ee8)), Float32, Tuple{Core.LLVMPtr{Float32,1},Int64}, %3, %297)::Float32
+│    │││││││ %298 = (%296)($(QuoteNode(Ptr{Nothing} @0x00000000044cba18)), Float32, Tuple{Core.LLVMPtr{Float32,1},Int64}, %3, %297)::Float32
 │    ││││└└└
 └────││││        goto #68
      │││└
@@ -1065,7 +1065,7 @@ CodeInfo(
 │    │││││││┌ @ int.jl:85 within `-'
 │    ││││││││ %342 = Base.sub_int(%327, 1)::Int64
 │    │││││││└
-│    │││││││        (%341)($(QuoteNode(Ptr{Nothing} @0x0000000003aa1fa8)), Nothing, Tuple{Core.LLVMPtr{Float32,3},Float32,Int64}, %52, %298, %342)::Nothing
+│    │││││││        (%341)($(QuoteNode(Ptr{Nothing} @0x0000000004512aa8)), Nothing, Tuple{Core.LLVMPtr{Float32,3},Float32,Int64}, %52, %298, %342)::Nothing
 │    ││││└└└
 │    ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
 └────││││        goto #82
@@ -1202,7 +1202,7 @@ CodeInfo(
 │    │││││││┌ @ int.jl:85 within `-'
 │    ││││││││ %388 = Base.sub_int(%373, 1)::Int64
 │    │││││││└
-│    │││││││        (%387)($(QuoteNode(Ptr{Nothing} @0x0000000003aa1fa8)), Nothing, Tuple{Core.LLVMPtr{Float32,3},Float32,Int64}, %52, 0.0f0, %388)::Nothing
+│    │││││││        (%387)($(QuoteNode(Ptr{Nothing} @0x0000000004512aa8)), Nothing, Tuple{Core.LLVMPtr{Float32,3},Float32,Int64}, %52, 0.0f0, %388)::Nothing
 │    ││││└└└
 │    ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
 └────││││        goto #97
@@ -1348,7 +1348,7 @@ CodeInfo(
 │    │││││││┌ @ int.jl:85 within `-'
 │    ││││││││ %439 = Base.sub_int(%424, 1)::Int64
 │    │││││││└
-│    │││││││ %440 = (%438)($(QuoteNode(Ptr{Nothing} @0x00000000021dd0a8)), Float32, Tuple{Core.LLVMPtr{Float32,3},Int64}, %49, %439)::Float32
+│    │││││││ %440 = (%438)($(QuoteNode(Ptr{Nothing} @0x0000000004a363c8)), Float32, Tuple{Core.LLVMPtr{Float32,3},Int64}, %49, %439)::Float32
 │    ││││└└└
 └────││││        goto #113
      │││└
@@ -1480,7 +1480,7 @@ CodeInfo(
 │    │││││││┌ @ int.jl:85 within `-'
 │    ││││││││ %484 = Base.sub_int(%469, 1)::Int64
 │    │││││││└
-│    │││││││ %485 = (%483)($(QuoteNode(Ptr{Nothing} @0x00000000021dd0a8)), Float32, Tuple{Core.LLVMPtr{Float32,3},Int64}, %52, %484)::Float32
+│    │││││││ %485 = (%483)($(QuoteNode(Ptr{Nothing} @0x0000000004a363c8)), Float32, Tuple{Core.LLVMPtr{Float32,3},Int64}, %52, %484)::Float32
 │    ││││└└└
 └────││││        goto #127
      │││└
@@ -1733,7 +1733,7 @@ CodeInfo(
 │    │││││││┌ @ int.jl:85 within `-'
 │    ││││││││ %577 = Base.sub_int(%562, 1)::Int64
 │    │││││││└
-│    │││││││        (%576)($(QuoteNode(Ptr{Nothing} @0x0000000003251518)), Nothing, Tuple{Core.LLVMPtr{Float32,1},Float32,Int64}, %1, %516, %577)::Nothing
+│    │││││││        (%576)($(QuoteNode(Ptr{Nothing} @0x0000000004b7ade8)), Nothing, Tuple{Core.LLVMPtr{Float32,1},Float32,Int64}, %1, %516, %577)::Nothing
 │    ││││└└└
 │    ││││ @ /home/local/.julia/packages/CUDA/BIYoG/src/device/array.jl:87 within `arrayset'
 └────││││        goto #155
