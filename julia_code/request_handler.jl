@@ -1,5 +1,6 @@
 using Sockets
 using Base.Threads
+using Printf
 
 const SEND_PORT = 8080
 const RECEIVE_PORT = 8081
@@ -183,9 +184,9 @@ end
 
 function start_reciever()
     @async begin
-       server = listen(RECEIVE_PORT)
+       listener = listen(RECEIVE_PORT)
        while true
-           sock = accept(server)
+           sock = accept(listener)
            t = @async try
                while isopen(sock)
                    response_str = readline(sock, keep=false)
@@ -207,7 +208,7 @@ function start_reciever()
             end
         end
         # while !istaskdone(t)
-        #     println("server is running...")
+        #     println("listener is running...")
         #     sleep(1)
         # end
     end
