@@ -1,0 +1,55 @@
+task id: matmul_256_256_64 -> cpu: 7393
+task id: matmul_32_1024_256 -> cpu: 8988
+task id: matmul_32_256_1024 -> cpu: 8060
+task id: matmul_256_32_64 -> cpu: 910
+task id: matmul_32_64_256 -> cpu: 618
+task id: matmul_64_32_10 -> cpu: 73
+task id: matmul_32_10_64 -> cpu: 54
+task id: matmul_256_64_10 -> cpu: 617
+task id: matmul_32_64_10 -> cpu: 58
+task id: matmul_32_256_64 -> cpu: 460
+
+task id: matmul_256_1024_256 -> gpu: 1079
+task id: matmul_32_256_64 -> gpu: 150
+task id: matmul_32_64_10 -> gpu: 124
+task id: matmul_1024_256_64 -> gpu: 542
+task id: matmul_32_256_1024 -> gpu: 457
+task id: matmul_1024_64_10 -> gpu: 202
+task id: matmul_256_32_64 -> gpu: 160
+task id: matmul_1024_1024_256 -> gpu: 3434
+task id: matmul_32_64_256 -> gpu: 161
+task id: matmul_64_32_10 -> gpu: 127
+task id: matmul_32_10_64 -> gpu: 126
+task id: matmul_1024_32_256 -> gpu: 687
+task id: matmul_32_1024_256 -> gpu: 320
+
+task id: matmul_256_256_64 -> num on cpu: 1
+task id: matmul_32_1024_256 -> num on cpu: 47
+task id: matmul_32_256_1024 -> num on cpu: 317
+task id: matmul_256_32_64 -> num on cpu: 433
+task id: matmul_32_64_256 -> num on cpu: 460
+task id: matmul_64_32_10 -> num on cpu: 958
+task id: matmul_32_10_64 -> num on cpu: 981
+task id: matmul_256_64_10 -> num on cpu: 1
+task id: matmul_32_64_10 -> num on cpu: 126
+task id: matmul_32_256_64 -> num on cpu: 63
+
+task id: matmul_256_1024_256 -> num on gpu: 1
+task id: matmul_32_256_64 -> num on gpu: 97
+task id: matmul_32_64_10 -> num on gpu: 34
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_32_256_1024 -> num on gpu: 963
+task id: matmul_1024_64_10 -> num on gpu: 1
+task id: matmul_256_32_64 -> num on gpu: 847
+task id: matmul_1024_1024_256 -> num on gpu: 1
+task id: matmul_32_64_256 -> num on gpu: 820
+task id: matmul_64_32_10 -> num on gpu: 322
+task id: matmul_32_10_64 -> num on gpu: 299
+task id: matmul_1024_32_256 -> num on gpu: 1280
+task id: matmul_32_1024_256 -> num on gpu: 113
+
+
+real	11m13.829s
+user	5m58.659s
+sys	0m12.558s
+
