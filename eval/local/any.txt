@@ -47,3 +47,53 @@ real	12m8.734s
 user	5m52.288s
 sys	0m12.134s
 
+# RUN 2 ---- 
+
+
+task id: matmul_256_256_64 -> cpu: 7388
+task id: matmul_32_256_64 -> cpu: 516
+task id: matmul_1024_64_10 -> cpu: 2578
+task id: matmul_256_32_64 -> cpu: 909
+task id: matmul_32_64_256 -> cpu: 604
+task id: matmul_64_32_10 -> cpu: 72
+task id: matmul_32_10_64 -> cpu: 53
+task id: matmul_256_64_10 -> cpu: 815
+task id: matmul_32_64_10 -> cpu: 57
+task id: matmul_32_1024_256 -> cpu: 7146
+
+task id: matmul_256_1024_256 -> gpu: 1127
+task id: matmul_32_1024_256 -> gpu: 322
+task id: matmul_1024_32_256 -> gpu: 689
+task id: matmul_1024_256_64 -> gpu: 576
+task id: matmul_32_256_1024 -> gpu: 467
+task id: matmul_256_32_64 -> gpu: 161
+task id: matmul_1024_1024_256 -> gpu: 3196
+task id: matmul_32_64_256 -> gpu: 156
+task id: matmul_32_10_64 -> gpu: 126
+task id: matmul_32_256_64 -> gpu: 150
+
+task id: matmul_256_256_64 -> num on cpu: 1
+task id: matmul_32_256_64 -> num on cpu: 60
+task id: matmul_1024_64_10 -> num on cpu: 1
+task id: matmul_256_32_64 -> num on cpu: 440
+task id: matmul_32_64_256 -> num on cpu: 460
+task id: matmul_64_32_10 -> num on cpu: 1280
+task id: matmul_32_10_64 -> num on cpu: 835
+task id: matmul_256_64_10 -> num on cpu: 1
+task id: matmul_32_64_10 -> num on cpu: 160
+task id: matmul_32_1024_256 -> num on cpu: 52
+
+task id: matmul_256_1024_256 -> num on gpu: 1
+task id: matmul_32_1024_256 -> num on gpu: 108
+task id: matmul_1024_32_256 -> num on gpu: 1280
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_32_256_1024 -> num on gpu: 1280
+task id: matmul_256_32_64 -> num on gpu: 840
+task id: matmul_1024_1024_256 -> num on gpu: 1
+task id: matmul_32_64_256 -> num on gpu: 820
+task id: matmul_32_10_64 -> num on gpu: 445
+task id: matmul_32_256_64 -> num on gpu: 100
+
+real	11m55.017s
+user	5m51.458s
+sys	0m12.389s

@@ -53,3 +53,60 @@ real	11m13.829s
 user	5m58.659s
 sys	0m12.558s
 
+
+# RUN 2 --- 
+
+task id: matmul_256_1024_256 -> cpu: 64229
+task id: matmul_32_1024_256 -> cpu: 7526
+task id: matmul_32_256_1024 -> cpu: 7692
+task id: matmul_1024_64_10 -> cpu: 3187
+task id: matmul_256_32_64 -> cpu: 901
+task id: matmul_32_64_256 -> cpu: 617
+task id: matmul_64_32_10 -> cpu: 73
+task id: matmul_32_10_64 -> cpu: 54
+task id: matmul_256_64_10 -> cpu: 849
+task id: matmul_32_64_10 -> cpu: 56
+task id: matmul_32_256_64 -> cpu: 509
+
+task id: matmul_256_256_64 -> gpu: 235
+task id: matmul_1024_1024_256 -> gpu: 3469
+task id: matmul_32_64_256 -> gpu: 150
+task id: matmul_32_64_10 -> gpu: 125
+task id: matmul_32_256_64 -> gpu: 149
+task id: matmul_1024_256_64 -> gpu: 562
+task id: matmul_32_256_1024 -> gpu: 451
+task id: matmul_256_32_64 -> gpu: 165
+task id: matmul_64_32_10 -> gpu: 130
+task id: matmul_32_10_64 -> gpu: 129
+task id: matmul_1024_32_256 -> gpu: 689
+task id: matmul_32_1024_256 -> gpu: 326
+
+task id: matmul_256_1024_256 -> num on cpu: 1
+task id: matmul_32_1024_256 -> num on cpu: 42
+task id: matmul_32_256_1024 -> num on cpu: 340
+task id: matmul_1024_64_10 -> num on cpu: 1
+task id: matmul_256_32_64 -> num on cpu: 479
+task id: matmul_32_64_256 -> num on cpu: 466
+task id: matmul_64_32_10 -> num on cpu: 960
+task id: matmul_32_10_64 -> num on cpu: 953
+task id: matmul_256_64_10 -> num on cpu: 1
+task id: matmul_32_64_10 -> num on cpu: 115
+task id: matmul_32_256_64 -> num on cpu: 51
+
+task id: matmul_256_256_64 -> num on gpu: 1
+task id: matmul_1024_1024_256 -> num on gpu: 1
+task id: matmul_32_64_256 -> num on gpu: 814
+task id: matmul_32_64_10 -> num on gpu: 45
+task id: matmul_32_256_64 -> num on gpu: 109
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_32_256_1024 -> num on gpu: 940
+task id: matmul_256_32_64 -> num on gpu: 801
+task id: matmul_64_32_10 -> num on gpu: 320
+task id: matmul_32_10_64 -> num on gpu: 327
+task id: matmul_1024_32_256 -> num on gpu: 1280
+task id: matmul_32_1024_256 -> num on gpu: 118
+
+real	11m11.563s
+user	5m56.026s
+sys	0m12.301s
+
