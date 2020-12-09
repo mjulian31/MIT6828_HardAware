@@ -8,6 +8,9 @@ cpu_times = dict()
 cpu_time = 0
 gpu_time = 0
 
+total_run_cpu = 0
+total_run_gpu = 0
+
 with open(file, 'r') as f:
     lines = f.readlines()
     for line in lines:
@@ -27,8 +30,10 @@ with open(file, 'r') as f:
             else: # time averages
                 num = int(arr[7])
                 if arr[6] == "cpu:":
+                    total_run_cpu += num
                     cpu_time += cpu_times[id]*num
                 else:
+                    total_run_gpu += num
                     gpu_time += gpu_times[id]*num
 
 print(file)
@@ -38,3 +43,6 @@ print("cpu time", cpu_time)
 print("gpu time", gpu_time)
 print("total", cpu_time + gpu_time, "us")
 print("total", (cpu_time + gpu_time) / 1e+6, "sec")
+print("cpu num run", total_run_cpu)
+print("gpu num run", total_run_gpu)
+print("total run", total_run_cpu + total_run_gpu)
