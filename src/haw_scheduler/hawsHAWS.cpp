@@ -420,7 +420,7 @@ HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) { // SCHEDLOOP THR
     }
     if (hint == "any") {
         return (estCPU <= estGPU) ? HAWS::RandomizeTarget(TargCPU, HAWS::RandFavor(estCPU, estGPU, 0.0, numCPU, numGPU)) :
-                                    HAWS::RandomizeTarget(TargGPU, HAWS::RandFavor(estGPU, estCPU, 0.0, , numGPU, numCPU));
+                                    HAWS::RandomizeTarget(TargGPU, HAWS::RandFavor(estGPU, estCPU, 0.0, numGPU, numCPU));
     }
 
     return HAWS::RandomizeTarget(TargCPU, 0.5);
