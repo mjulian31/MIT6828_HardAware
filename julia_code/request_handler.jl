@@ -270,12 +270,11 @@ function send_request(a, b, req_notifier)
     # make the request string
     req_string = make_request_string(req_num, cmd_args, target_pref, cpu_thread, gpu_cpu_thread, gpu_thread, cpu_ram, gpu_ram, gpu_mem, gpu_shared_mem, job_id, stdin_len, stdin_input)
 
-    # save the notifier for later
-    notifiers[req_num] = req_notifier
-
     # send request to server (locked operation)
     lock(request_lock)
-    println(req_string)
+    # save the notifier for later
+    notifiers[req_num] = req_notifier
+    # println(req_string)
     println(server, req_string)
     unlock(request_lock)
 
