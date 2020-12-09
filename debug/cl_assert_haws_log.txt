@@ -1,0 +1,3154 @@
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 113
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 521.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 444.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18509]:
+HAWS/RESP: sent 1 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:114
+CSVPARSER/INT: reqNumStr:114
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'64 32 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:151552
+CSVPARSER/LONG: gpuSharedMemMBStr:151552
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_64_32_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:114,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,0,0,0,0,matmul_64_32_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124481
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 108
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1424.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 438.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18510]:
+HAWS/RESP: sent 1 response(s)
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 2 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 3 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 4 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 5 pending conclusions
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:115
+CSVPARSER/INT: reqNumStr:115
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'64 32 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:151552
+CSVPARSER/LONG: gpuSharedMemMBStr:151552
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_64_32_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:115,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,0,0,0,0,matmul_64_32_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124482
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 106
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1260.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 408.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18510]:
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:116
+CSVPARSER/INT: reqNumStr:116
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'64 32 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:151552
+CSVPARSER/LONG: gpuSharedMemMBStr:151552
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_64_32_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:116,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,0,0,0,0,matmul_64_32_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124483
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 109
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1043.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 472.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18510]:
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:117
+CSVPARSER/INT: reqNumStr:117
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'64 32 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:151552
+CSVPARSER/LONG: gpuSharedMemMBStr:151552
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_64_32_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:117,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,0,0,0,0,matmul_64_32_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124484
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 107
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 779.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 431.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18509]:
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:118
+CSVPARSER/INT: reqNumStr:118
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'64 32 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:151552
+CSVPARSER/LONG: gpuSharedMemMBStr:151552
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_64_32_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:118,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,0,0,0,0,matmul_64_32_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124485
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 111
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1396.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 345.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18510]:
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:119
+CSVPARSER/INT: reqNumStr:119
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'64 32 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:151552
+CSVPARSER/LONG: gpuSharedMemMBStr:151552
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_64_32_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:119,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,0,0,0,0,matmul_64_32_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124486
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 110
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1907.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 345.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18510]:
+HAWS/RESP: sent 5 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:120
+CSVPARSER/INT: reqNumStr:120
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'64 32 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:151552
+CSVPARSER/LONG: gpuSharedMemMBStr:151552
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_64_32_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:120,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,0,0,0,0,matmul_64_32_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124489
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 112
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 769.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 445.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18509]:
+HAWS/RESP: sent 1 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:121
+CSVPARSER/INT: reqNumStr:121
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'64 32 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:151552
+CSVPARSER/LONG: gpuSharedMemMBStr:151552
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_64_32_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:121,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,0,0,0,0,matmul_64_32_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124501
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+[dims 64x32 32x10 -> 64x10] [random? 1]
+pid: wall time 323.000000 us, cpu time 324.000000 us, pid 124482
+[dims 64x32 32x10 -> 64x10] [random? 1]
+pid: wall time 630.000000 us, cpu time 561.000000 us, pid 124486
+[dims 64x32 32x10 -> 64x10] [random? 1]
+[dims 64x32 32x10 -> 64x10] [random? 1]
+[dims 64x32 32x10 -> 64x10] [random? 1]
+pid: wall time 1288.000000 us, cpu time 365.000000 us, pid 124484
+pid: wall time 1222.000000 us, cpu time 321.000000 us, pid 124489
+pid: wall time 1318.000000 us, cpu time 377.000000 us, pid 124481
+[dims 64x32 32x10 -> 64x10] [random? 1]
+[dims 64x32 32x10 -> 64x10] [random? 1]
+pid: wall time 2899.000000 us, cpu time 372.000000 us, pid 124485
+pid: wall time 2843.000000 us, cpu time 331.000000 us, pid 124483
+[dims 64x32 32x10 -> 64x10] [random? 1]
+pid: wall time 786.000000 us, cpu time 271.000000 us, pid 124501
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 115
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 323.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 324.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 5849
+HAWS/RESP: SEND[5891]:
+HAWS/RESP: sent 1 response(s)
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 2 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 3 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 4 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 5 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 6 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 116
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 2843.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 331.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 5849
+HAWS/RESP: SEND[5892]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 117
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1288.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 365.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 5849
+HAWS/RESP: SEND[5892]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 118
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 2899.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 372.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 5849
+HAWS/RESP: SEND[5892]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 119
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 630.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 561.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 5849
+HAWS/RESP: SEND[5891]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 120
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1222.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 321.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 5849
+HAWS/RESP: SEND[5892]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 121
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 786.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 271.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 5849
+HAWS/RESP: SEND[5891]:
+HAWS/RESP: sent 6 response(s)
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 114
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1318.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 377.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 5849
+HAWS/RESP: SEND[5892]:
+HAWS/RESP: sent 1 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:122
+CSVPARSER/INT: reqNumStr:122
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 64 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:8
+CSVPARSER/INT: gpuThreadsGPUStr:8
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:1179648
+CSVPARSER/LONG: gpuSharedMemMBStr:1179648
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_64_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:122,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3,3,1,1,matmul_32_64_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:123
+CSVPARSER/INT: reqNumStr:123
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 64 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:8
+CSVPARSER/INT: gpuThreadsGPUStr:8
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:1179648
+CSVPARSER/LONG: gpuSharedMemMBStr:1179648
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_64_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:123,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3,3,1,1,matmul_32_64_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:124
+CSVPARSER/INT: reqNumStr:124
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 64 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:8
+CSVPARSER/INT: gpuThreadsGPUStr:8
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:1179648
+CSVPARSER/LONG: gpuSharedMemMBStr:1179648
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_64_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:124,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3,3,1,1,matmul_32_64_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:128
+CSVPARSER/INT: reqNumStr:128
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 64 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:8
+CSVPARSER/INT: gpuThreadsGPUStr:8
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:1179648
+CSVPARSER/LONG: gpuSharedMemMBStr:1179648
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_64_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:128,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3,3,1,1,matmul_32_64_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:125
+CSVPARSER/INT: reqNumStr:125
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 64 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:8
+CSVPARSER/INT: gpuThreadsGPUStr:8
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:1179648
+CSVPARSER/LONG: gpuSharedMemMBStr:1179648
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_64_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:125,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3,3,1,1,matmul_32_64_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:126
+CSVPARSER/INT: reqNumStr:126
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 64 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:8
+CSVPARSER/INT: gpuThreadsGPUStr:8
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:1179648
+CSVPARSER/LONG: gpuSharedMemMBStr:1179648
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_64_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:126,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3,3,1,1,matmul_32_64_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:129
+HAWS/SUBPROC: starting subprocess nonblocking
+CSVPARSER/INT: reqNumStr:129
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+HAWS/SUBPROC: send PID 124516
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 64 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:8
+CSVPARSER/INT: gpuThreadsGPUStr:8
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:1179648
+CSVPARSER/LONG: gpuSharedMemMBStr:1179648
+HAWS/SUBPROC: no stdin to send to bin
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_64_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+HAWS/SUBPROC: started successfully
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+REQ:129,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3,3,1,1,matmul_32_64_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:127
+CSVPARSER/INT: reqNumStr:127
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 64 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:8
+CSVPARSER/INT: gpuThreadsGPUStr:8
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:1179648
+CSVPARSER/LONG: gpuSharedMemMBStr:1179648
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_64_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:127,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3,3,1,1,matmul_32_64_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124517
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124518
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124519
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124520
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124521
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124522
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124523
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+[dims 32x64 64x256 -> 32x256] [random? 1]
+[dims 32x64 64x256 -> 32x256] [random? 1]
+[dims 32x64 64x256 -> 32x256] [random? 1]
+pid: wall time 485.000000 us, cpu time 486.000000 us, pid 124516
+[dims 32x64 64x256 -> 32x256] [random? 1]
+pid: wall time 550.000000 us, cpu time 509.000000 us, pid 124517
+[dims 32x64 64x256 -> 32x256] [random? 1]
+pid: wall time 452.000000 us, cpu time 452.000000 us, pid 124523
+pid: wall time 1280.000000 us, cpu time 444.000000 us, pid 124518
+pid: wall time 2610.000000 us, cpu time 356.000000 us, pid 124521
+[dims 32x64 64x256 -> 32x256] [random? 1]
+[dims 32x64 64x256 -> 32x256] [random? 1]
+[dims 32x64 64x256 -> 32x256] [random? 1]
+TARGMGR/cpu | processes 0/0 active/all
+TARGMGR/gpu | processes 8/129 active/all
+HAWS/RESMON: free cpu threads 142 (94%)
+HAWS/RESMON: free gpu threads 3520 (98%)
+HAWS/RESMON: free phys mem 204776MB (99%)
+HAWS/RESMON: free gpu mem 2992MB (99%)
+
+task id: matmul_1024_32_256 -> gpu: 666
+task id: matmul_32_256_1024 -> gpu: 448
+task id: matmul_32_256_64 -> gpu: 260
+task id: matmul_32_1024_256 -> gpu: 407
+task id: matmul_256_32_64 -> gpu: 364
+task id: matmul_32_64_256 -> gpu: 382
+task id: matmul_32_10_64 -> gpu: 271
+task id: matmul_32_64_10 -> gpu: 232
+task id: matmul_64_32_10 -> gpu: 221
+
+
+task id: matmul_1024_32_256 -> num on gpu: 16
+task id: matmul_32_256_1024 -> num on gpu: 16
+task id: matmul_32_256_64 -> num on gpu: 3
+task id: matmul_32_1024_256 -> num on gpu: 3
+task id: matmul_256_32_64 -> num on gpu: 16
+task id: matmul_32_64_256 -> num on gpu: 16
+task id: matmul_32_10_64 -> num on gpu: 24
+task id: matmul_32_64_10 -> num on gpu: 3
+task id: matmul_64_32_10 -> num on gpu: 24
+pid: wall time 1946.000000 us, cpu time 358.000000 us, pid 124519
+pid: wall time 1962.000000 us, cpu time 351.000000 us, pid 124522
+pid: wall time 1967.000000 us, cpu time 354.000000 us, pid 124520
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 122
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 485.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 486.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 81954
+HAWS/RESP: SEND[81997]:
+HAWS/RESP: sent 1 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:130
+CSVPARSER/INT: reqNumStr:130
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'256 32 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:16
+CSVPARSER/INT: gpuThreadsGPUStr:16
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:655360
+CSVPARSER/LONG: gpuSharedMemMBStr:655360
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_256_32_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:130,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3,3,1,0,matmul_256_32_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124545
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 128
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1946.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 358.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 81954
+HAWS/RESP: SEND[81998]:
+HAWS/RESP: sent 1 response(s)
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 2 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 3 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 4 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 5 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:131
+CSVPARSER/INT: reqNumStr:131
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'256 32 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:16
+CSVPARSER/INT: gpuThreadsGPUStr:16
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:655360
+CSVPARSER/LONG: gpuSharedMemMBStr:655360
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_256_32_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:131,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3,3,1,0,matmul_256_32_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 123
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 550.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 509.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 81954
+HAWS/RESP: SEND[81997]:
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:132
+CSVPARSER/INT: reqNumStr:132
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'256 32 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:16
+CSVPARSER/INT: gpuThreadsGPUStr:16
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:655360
+CSVPARSER/LONG: gpuSharedMemMBStr:655360
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_256_32_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:132,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3,3,1,0,matmul_256_32_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 124
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1280.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 444.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 81954
+HAWS/RESP: SEND[81998]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 125
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1967.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 354.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 81954
+HAWS/RESP: SEND[81998]:
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:133
+CSVPARSER/INT: reqNumStr:133
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'256 32 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:16
+CSVPARSER/INT: gpuThreadsGPUStr:16
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:655360
+CSVPARSER/LONG: gpuSharedMemMBStr:655360
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_256_32_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:133,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3,3,1,0,matmul_256_32_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 126
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 2610.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 356.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 81954
+HAWS/RESP: SEND[81998]:
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:134
+CSVPARSER/INT: reqNumStr:134
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'256 32 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:16
+CSVPARSER/INT: gpuThreadsGPUStr:16
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:655360
+CSVPARSER/LONG: gpuSharedMemMBStr:655360
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_256_32_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:134,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3,3,1,0,matmul_256_32_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 129
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1962.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 351.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 81954
+HAWS/RESP: SEND[81998]:
+HAWS/RESP: sent 5 response(s)
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124556
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124557
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124558
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:135
+CSVPARSER/INT: reqNumStr:135
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'256 32 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:16
+CSVPARSER/INT: gpuThreadsGPUStr:16
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:655360
+CSVPARSER/LONG: gpuSharedMemMBStr:655360
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_256_32_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:135,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3,3,1,0,matmul_256_32_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124559
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+[dims 256x32 32x64 -> 256x64] [random? 1]
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124560
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:136
+CSVPARSER/INT: reqNumStr:136
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'256 32 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:16
+CSVPARSER/INT: gpuThreadsGPUStr:16
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:655360
+CSVPARSER/LONG: gpuSharedMemMBStr:655360
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_256_32_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:136,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3,3,1,0,matmul_256_32_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+pid: wall time 369.000000 us, cpu time 325.000000 us, pid 124545
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124563
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 127
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 452.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 452.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 81954
+HAWS/RESP: SEND[81997]:
+HAWS/RESP: sent 1 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:137
+CSVPARSER/INT: reqNumStr:137
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'256 32 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:16
+CSVPARSER/INT: gpuThreadsGPUStr:16
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:655360
+CSVPARSER/LONG: gpuSharedMemMBStr:655360
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_256_32_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:137,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3,3,1,0,matmul_256_32_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124570
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 130
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 369.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 325.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 148368
+HAWS/RESP: SEND[148412]:
+HAWS/RESP: sent 1 response(s)
+[dims 256x32 32x64 -> 256x64] [random? 1]
+pid: wall time 1482.000000 us, cpu time 359.000000 us, pid 124556
+[dims 256x32 32x64 -> 256x64] [random? 1]
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+[dims 256x32 32x64 -> 256x64] [random? 1]
+pid: wall time 14339.000000 us, cpu time 3378.000000 us, pid 124558
+[dims 256x32 32x64 -> 256x64] [random? 1]
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 131
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1482.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 359.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 148368
+HAWS/RESP: SEND[148413]:
+HAWS/RESP: sent 1 response(s)
+pid: wall time 399.000000 us, cpu time 401.000000 us, pid 124557
+pid: wall time 1790.000000 us, cpu time 658.000000 us, pid 124559
+[dims 256x32 32x64 -> 256x64] [random? 1]
+[dims 256x32 32x64 -> 256x64] [random? 1]
+pid: wall time 750.000000 us, cpu time 503.000000 us, pid 124563
+pid: wall time 448.000000 us, cpu time 450.000000 us, pid 124560
+[dims 256x32 32x64 -> 256x64] [random? 1]
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 133
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 12
+HAWS/SEND:      wallTime: 14339.000000
+HAWS/SEND:    cpuTimeLen: 11
+HAWS/SEND:       cpuTime: 3378.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 148368
+HAWS/RESP: SEND[148415]:
+HAWS/RESP: sent 1 response(s)
+pid: wall time 720.000000 us, cpu time 320.000000 us, pid 124570
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 2 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 3 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 132
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 399.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 401.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 148368
+HAWS/RESP: SEND[148412]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 134
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1790.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 658.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 148368
+HAWS/RESP: SEND[148413]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 136
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 750.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 503.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 148368
+HAWS/RESP: SEND[148412]:
+HAWS/RESP: sent 3 response(s)
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 135
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 448.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 450.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 148368
+HAWS/RESP: SEND[148412]:
+HAWS/RESP: sent 1 response(s)
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 137
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 720.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 320.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 148368
+HAWS/RESP: SEND[148412]:
+HAWS/RESP: sent 1 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:138
+CSVPARSER/INT: reqNumStr:138
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 256 1024'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:32
+CSVPARSER/INT: gpuThreadsGPUStr:32
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[8]:17301504
+CSVPARSER/LONG: gpuSharedMemMBStr:17301504
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_256_1024'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:138,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,37,37,18,16,matmul_32_256_1024,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/RECVLOOP: found end of request, processing
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124580
+CSVPARSER/STRINT: reqNumStr[3]:140
+CSVPARSER/INT: reqNumStr:140
+HAWS/SUBPROC: no stdin to send to bin
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 256 1024'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:32
+CSVPARSER/INT: gpuThreadsGPUStr:32
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+HAWS/SUBPROC: started successfully
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[8]:17301504
+CSVPARSER/LONG: gpuSharedMemMBStr:17301504
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_256_1024'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:140,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,37,37,18,16,matmul_32_256_1024,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:141
+CSVPARSER/INT: reqNumStr:141
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 256 1024'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:32
+CSVPARSER/INT: gpuThreadsGPUStr:32
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[8]:17301504
+CSVPARSER/LONG: gpuSharedMemMBStr:17301504
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_256_1024'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+REQ:141,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,37,37,18,16,matmul_32_256_1024,0
+HAWS/RECVLOOP: scheduling...
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124581
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/RECVLOOP: scheduled!
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:142
+CSVPARSER/INT: reqNumStr:142
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 256 1024'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:32
+CSVPARSER/INT: gpuThreadsGPUStr:32
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[8]:17301504
+CSVPARSER/LONG: gpuSharedMemMBStr:17301504
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_256_1024'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:142,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,37,37,18,16,matmul_32_256_1024,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:139
+CSVPARSER/INT: reqNumStr:139
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 256 1024'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:32
+CSVPARSER/INT: gpuThreadsGPUStr:32
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[8]:17301504
+CSVPARSER/LONG: gpuSharedMemMBStr:17301504
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_256_1024'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:139,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,37,37,18,16,matmul_32_256_1024,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:143
+CSVPARSER/INT: reqNumStr:143
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 256 1024'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:32
+CSVPARSER/INT: gpuThreadsGPUStr:32
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[8]:17301504
+CSVPARSER/LONG: gpuSharedMemMBStr:17301504
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_256_1024'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:143,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,37,37,18,16,matmul_32_256_1024,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:144
+CSVPARSER/INT: reqNumStr:144
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 256 1024'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:32
+CSVPARSER/INT: gpuThreadsGPUStr:32
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[8]:17301504
+CSVPARSER/LONG: gpuSharedMemMBStr:17301504
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_256_1024'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+HAWS/SUBPROC: starting subprocess nonblocking
+REQ:144,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,37,37,18,16,matmul_32_256_1024,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/SUBPROC: send PID 124582
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:145
+CSVPARSER/INT: reqNumStr:145
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 256 1024'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[2]:32
+CSVPARSER/INT: gpuThreadsGPUStr:32
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[8]:17301504
+CSVPARSER/LONG: gpuSharedMemMBStr:17301504
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_256_1024'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:145,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,37,37,18,16,matmul_32_256_1024,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124583
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124584
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124585
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124586
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124587
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+[dims 32x256 256x1024 -> 32x1024] [random? 1]
+[dims 32x256 256x1024 -> 32x1024] [random? 1]
+[dims 32x256 256x1024 -> 32x1024] [random? 1]
+[dims 32x256 256x1024 -> 32x1024] [random? 1]
+[dims 32x256 256x1024 -> 32x1024] [random? 1]
+[dims 32x256 256x1024 -> 32x1024] [random? 1]
+[dims 32x256 256x1024 -> 32x1024] [random? 1]
+[dims 32x256 256x1024 -> 32x1024] [random? 1]
+pid: wall time 780.000000 us, cpu time 726.000000 us, pid 124580
+pid: wall time 1394.000000 us, cpu time 1109.000000 us, pid 124582
+pid: wall time 458.000000 us, cpu time 459.000000 us, pid 124587
+pid: wall time 452.000000 us, cpu time 454.000000 us, pid 124581
+pid: wall time 448.000000 us, cpu time 449.000000 us, pid 124583
+pid: wall time 1297.000000 us, cpu time 487.000000 us, pid 124585
+pid: wall time 1462.000000 us, cpu time 523.000000 us, pid 124584
+pid: wall time 1461.000000 us, cpu time 584.000000 us, pid 124586
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 2 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 138
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 780.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 726.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 327714
+HAWS/RESP: SEND[327758]:
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 141
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1394.000000
+HAWS/SEND:    cpuTimeLen: 11
+HAWS/SEND:       cpuTime: 1109.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 327714
+HAWS/RESP: SEND[327760]:
+HAWS/RESP: sent 2 response(s)
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 140
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 452.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 454.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 327714
+HAWS/RESP: SEND[327758]:
+HAWS/RESP: sent 1 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:146
+CSVPARSER/INT: reqNumStr:146
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'1024 32 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[3]:256
+CSVPARSER/INT: gpuThreadsGPUStr:256
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:2621440
+CSVPARSER/LONG: gpuSharedMemMBStr:2621440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_1024_32_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:146,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,37,37,18,2,matmul_1024_32_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124610
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 2 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 3 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 142
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 448.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 449.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 327714
+HAWS/RESP: SEND[327758]:
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:147
+CSVPARSER/INT: reqNumStr:147
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'1024 32 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[3]:256
+CSVPARSER/INT: gpuThreadsGPUStr:256
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:2621440
+CSVPARSER/LONG: gpuSharedMemMBStr:2621440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_1024_32_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:147,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,37,37,18,2,matmul_1024_32_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 139
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1462.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 523.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 327714
+HAWS/RESP: SEND[327759]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 143
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1297.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 487.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 327714
+HAWS/RESP: SEND[327759]:
+HAWS/RESP: sent 3 response(s)
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124611
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:148
+CSVPARSER/INT: reqNumStr:148
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'1024 32 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[3]:256
+CSVPARSER/INT: gpuThreadsGPUStr:256
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:2621440
+CSVPARSER/LONG: gpuSharedMemMBStr:2621440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_1024_32_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:148,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,37,37,18,2,matmul_1024_32_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124616
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 145
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 458.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 459.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 327714
+HAWS/RESP: SEND[327758]:
+HAWS/RESP: sent 1 response(s)
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:149
+CSVPARSER/INT: reqNumStr:149
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'1024 32 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[3]:256
+CSVPARSER/INT: gpuThreadsGPUStr:256
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:2621440
+CSVPARSER/LONG: gpuSharedMemMBStr:2621440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_1024_32_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:149,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,37,37,18,2,matmul_1024_32_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124622
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 144
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1461.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 584.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 327714
+HAWS/RESP: SEND[327759]:
+HAWS/RESP: sent 1 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:150
+CSVPARSER/INT: reqNumStr:150
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'1024 32 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[3]:256
+CSVPARSER/INT: gpuThreadsGPUStr:256
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:2621440
+CSVPARSER/LONG: gpuSharedMemMBStr:2621440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_1024_32_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:150,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,37,37,18,2,matmul_1024_32_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124631
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:151
+CSVPARSER/INT: reqNumStr:151
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'1024 32 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[3]:256
+CSVPARSER/INT: gpuThreadsGPUStr:256
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:2621440
+CSVPARSER/LONG: gpuSharedMemMBStr:2621440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_1024_32_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:151,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,37,37,18,2,matmul_1024_32_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124634
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+[dims 1024x32 32x256 -> 1024x256] [random? 1]
+[dims 1024x32 32x256 -> 1024x256] [random? 1]
+[dims 1024x32 32x256 -> 1024x256] [random? 1]
+[dims 1024x32 32x256 -> 1024x256] [random? 1]
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:152
+CSVPARSER/INT: reqNumStr:152
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'1024 32 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[3]:256
+CSVPARSER/INT: gpuThreadsGPUStr:256
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:2621440
+CSVPARSER/LONG: gpuSharedMemMBStr:2621440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_1024_32_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:152,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,37,37,18,2,matmul_1024_32_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:153
+CSVPARSER/INT: reqNumStr:153
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'1024 32 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[3]:256
+CSVPARSER/INT: gpuThreadsGPUStr:256
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:2621440
+CSVPARSER/LONG: gpuSharedMemMBStr:2621440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_1024_32_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+REQ:153,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,37,37,18,2,matmul_1024_32_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124637
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124638
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+[dims 1024x32 32x256 -> 1024x256] [random? 1]
+[dims 1024x32 32x256 -> 1024x256] [random? 1]
+pid: wall time 1571.000000 us, cpu time 793.000000 us, pid 124610
+pid: wall time 975.000000 us, cpu time 730.000000 us, pid 124622
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+[dims 1024x32 32x256 -> 1024x256] [random? 1]
+[dims 1024x32 32x256 -> 1024x256] [random? 1]
+pid: wall time 1659.000000 us, cpu time 1307.000000 us, pid 124616
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 146
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1571.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 793.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 2372423
+pid: wall time 1267.000000 us, cpu time 1097.000000 us, pid 124611
+HAWS/RESP: SEND[2372469]:
+HAWS/RESP: sent 1 response(s)
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 149
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 975.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 730.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 2372423
+pid: wall time 972.000000 us, cpu time 974.000000 us, pid 124631
+HAWS/RESP: SEND[2372468]:
+HAWS/RESP: sent 1 response(s)
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+pid: wall time 931.000000 us, cpu time 860.000000 us, pid 124634
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 148
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1659.000000
+HAWS/SEND:    cpuTimeLen: 11
+HAWS/SEND:       cpuTime: 1307.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 2372423
+pid: wall time 1586.000000 us, cpu time 799.000000 us, pid 124637
+HAWS/RESP: SEND[2372470]:
+pid: wall time 1613.000000 us, cpu time 825.000000 us, pid 124638
+HAWS/RESP: sent 1 response(s)
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 2 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 3 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 147
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1267.000000
+HAWS/SEND:    cpuTimeLen: 11
+HAWS/SEND:       cpuTime: 1097.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 2372423
+HAWS/RESP: SEND[2372470]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 150
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 972.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 974.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 2372423
+HAWS/RESP: SEND[2372468]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 151
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 931.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 860.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 2372423
+HAWS/RESP: SEND[2372468]:
+HAWS/RESP: sent 3 response(s)
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 2 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 152
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1586.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 799.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 2372423
+HAWS/RESP: SEND[2372469]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 153
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1613.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 825.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 2372423
+HAWS/RESP: SEND[2372469]:
+HAWS/RESP: sent 2 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:154
+CSVPARSER/INT: reqNumStr:154
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 1024 256'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:8
+CSVPARSER/INT: gpuThreadsGPUStr:8
+CSVPARSER/STRLONG: cpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: cpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuPhysmemMBStr[8]:38797312
+CSVPARSER/LONG: gpuPhysmemMBStr:38797312
+CSVPARSER/STRLONG: gpuMemMBStr[8]:19398656
+CSVPARSER/LONG: gpuMemMBStr:19398656
+CSVPARSER/STRLONG: gpuSharedMemMBStr[8]:18874368
+CSVPARSER/LONG: gpuSharedMemMBStr:18874368
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_1024_256'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:154,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 1024 256,gpu-only,1,1,8,37,37,18,18,matmul_32_1024_256,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 37MB/GPU 18MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124646
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+[dims 32x1024 1024x256 -> 32x256] [random? 1]
+pid: wall time 404.000000 us, cpu time 405.000000 us, pid 124646
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 154
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 404.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 405.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 90146
+HAWS/RESP: SEND[90189]:
+HAWS/RESP: sent 1 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:155
+CSVPARSER/INT: reqNumStr:155
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 256 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: cpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuPhysmemMBStr[7]:3407872
+CSVPARSER/LONG: gpuPhysmemMBStr:3407872
+CSVPARSER/STRLONG: gpuMemMBStr[7]:1703936
+CSVPARSER/LONG: gpuMemMBStr:1703936
+CSVPARSER/STRLONG: gpuSharedMemMBStr[7]:1572864
+CSVPARSER/LONG: gpuSharedMemMBStr:1572864
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_256_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:155,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 64,gpu-only,1,1,2,3,3,1,1,matmul_32_256_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 3MB/GPU 1MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124657
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+[dims 32x256 256x64 -> 32x64] [random? 1]
+pid: wall time 261.000000 us, cpu time 262.000000 us, pid 124657
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 155
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 261.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 262.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 20514
+HAWS/RESP: SEND[20557]:
+HAWS/RESP: sent 1 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:156
+CSVPARSER/INT: reqNumStr:156
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 64 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:1
+CSVPARSER/INT: gpuThreadsGPUStr:1
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:172032
+CSVPARSER/LONG: gpuSharedMemMBStr:172032
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_64_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:156,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 10,gpu-only,1,1,1,0,0,0,0,matmul_32_64_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124668
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+[dims 32x64 64x10 -> 32x10] [random? 1]
+pid: wall time 233.000000 us, cpu time 234.000000 us, pid 124668
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 156
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 233.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 234.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 3234
+HAWS/RESP: SEND[3276]:
+HAWS/RESP: sent 1 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:157
+CSVPARSER/INT: reqNumStr:157
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 10 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[5]:61440
+CSVPARSER/LONG: gpuSharedMemMBStr:61440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_10_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:157,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,0,0,0,0,matmul_32_10_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:159
+CSVPARSER/INT: reqNumStr:159
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 10 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[5]:61440
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124679
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+CSVPARSER/LONG: gpuSharedMemMBStr:61440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_10_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:159,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,0,0,0,0,matmul_32_10_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:158
+CSVPARSER/INT: reqNumStr:158
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 10 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[5]:61440
+CSVPARSER/LONG: gpuSharedMemMBStr:61440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_10_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:158,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,0,0,0,0,matmul_32_10_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:161
+CSVPARSER/INT: reqNumStr:161
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 10 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[5]:61440
+CSVPARSER/LONG: gpuSharedMemMBStr:61440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_10_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:161,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,0,0,0,0,matmul_32_10_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:160
+CSVPARSER/INT: reqNumStr:160
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 10 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[5]:61440
+CSVPARSER/LONG: gpuSharedMemMBStr:61440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_10_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:160,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,0,0,0,0,matmul_32_10_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:162
+CSVPARSER/INT: reqNumStr:162
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 10 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[5]:61440
+CSVPARSER/LONG: gpuSharedMemMBStr:61440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_10_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:162,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,0,0,0,0,matmul_32_10_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:163
+CSVPARSER/INT: reqNumStr:163
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 10 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[5]:61440
+CSVPARSER/LONG: gpuSharedMemMBStr:61440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_10_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+REQ:163,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,0,0,0,0,matmul_32_10_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124680
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:164
+CSVPARSER/INT: reqNumStr:164
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'32 10 64'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[5]:61440
+CSVPARSER/LONG: gpuSharedMemMBStr:61440
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_32_10_64'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:164,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,0,0,0,0,matmul_32_10_64,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124681
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124682
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124683
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124684
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124685
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124687
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+[dims 32x10 10x64 -> 32x64] [random? 1]
+pid: wall time 257.000000 us, cpu time 259.000000 us, pid 124679
+[dims 32x10 10x64 -> 32x64] [random? 1]
+pid: wall time 561.000000 us, cpu time 562.000000 us, pid 124687
+[dims 32x10 10x64 -> 32x64] [random? 1]
+[dims 32x10 10x64 -> 32x64] [random? 1]
+pid: wall time 1099.000000 us, cpu time 326.000000 us, pid 124683
+pid: wall time 977.000000 us, cpu time 279.000000 us, pid 124681
+[dims 32x10 10x64 -> 32x64] [random? 1]
+[dims 32x10 10x64 -> 32x64] [random? 1]
+pid: wall time 1961.000000 us, cpu time 333.000000 us, pid 124684
+pid: wall time 1921.000000 us, cpu time 339.000000 us, pid 124682
+[dims 32x10 10x64 -> 32x64] [random? 1]
+[dims 32x10 10x64 -> 32x64] [random? 1]
+pid: wall time 1780.000000 us, cpu time 384.000000 us, pid 124685
+pid: wall time 1753.000000 us, cpu time 355.000000 us, pid 124680
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 157
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 257.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 259.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18509]:
+HAWS/RESP: sent 1 response(s)
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:165
+CSVPARSER/INT: reqNumStr:165
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'64 32 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:151552
+CSVPARSER/LONG: gpuSharedMemMBStr:151552
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_64_32_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:165,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,0,0,0,0,matmul_64_32_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124708
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 2 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 3 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 4 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 159
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1753.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 355.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18510]:
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:166
+CSVPARSER/INT: reqNumStr:166
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'64 32 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:151552
+CSVPARSER/LONG: gpuSharedMemMBStr:151552
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_64_32_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:166,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,0,0,0,0,matmul_64_32_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 158
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 977.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 279.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18509]:
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:167
+CSVPARSER/INT: reqNumStr:167
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'64 32 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:151552
+CSVPARSER/LONG: gpuSharedMemMBStr:151552
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_64_32_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:167,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,0,0,0,0,matmul_64_32_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 160
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1099.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 326.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18510]:
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:168
+CSVPARSER/INT: reqNumStr:168
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'64 32 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:151552
+CSVPARSER/LONG: gpuSharedMemMBStr:151552
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_64_32_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:168,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,0,0,0,0,matmul_64_32_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 162
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1961.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 333.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18510]:
+HAWS/RESP: sent 4 response(s)
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 2 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 3 pending conclusions
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124719
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/RECVLOOP: found end of request, processing
+CSVPARSER/STRINT: reqNumStr[3]:169
+CSVPARSER/INT: reqNumStr:169
+CSVPARSER/CPPSTR: cpuBinPathCpp:'/opt/haws/bin/matmul_cpu'
+CSVPARSER/CPPSTR: gpuBinPathCpp:'/opt/haws/bin/matmul_gpu'
+CSVPARSER/CPPSTR: cmdLineArgsCpp:'64 32 10'
+CSVPARSER/CPPSTR: targHintCpp:'gpu-only'
+CSVPARSER/STRINT: cpuThreadsCPUStr[1]:1
+CSVPARSER/INT: cpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsCPUStr[1]:1
+CSVPARSER/INT: gpuThreadsCPUStr:1
+CSVPARSER/STRINT: gpuThreadsGPUStr[1]:2
+CSVPARSER/INT: gpuThreadsGPUStr:2
+CSVPARSER/STRLONG: cpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: cpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuPhysmemMBStr[6]:385024
+CSVPARSER/LONG: gpuPhysmemMBStr:385024
+CSVPARSER/STRLONG: gpuMemMBStr[6]:192512
+CSVPARSER/LONG: gpuMemMBStr:192512
+CSVPARSER/STRLONG: gpuSharedMemMBStr[6]:151552
+CSVPARSER/LONG: gpuSharedMemMBStr:151552
+CSVPARSER/CPPSTR: taskIDCpp:'matmul_64_32_10'
+CSVPARSER/STRLONG: taskStdInLenStr[1]:0
+CSVPARSER/LONG: taskStdInLenStr:0
+HAWS/RECVLOOP/CSV/STDIN: got 0 chars of stdin
+REQ:169,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,0,0,0,0,matmul_64_32_10,0
+HAWS/RECVLOOP: scheduling...
+HAWS/RECVLOOP: scheduled!
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124720
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124721
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS: Starting GPU Task (Phys 0MB/GPU 0MB)
+HAWS/SUBPROC: start subproc nonblocking 
+HAWS/SUBPROC: starting subprocess nonblocking
+HAWS/SUBPROC: send PID 124722
+HAWS/SUBPROC: no stdin to send to bin
+HAWS/SUBPROC: started successfully
+HWMGR/gpu: starting task done
+HAWS/REQ: freeing stdin
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 163
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1780.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 384.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18510]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 161
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1921.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 339.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18510]:
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 164
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 561.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 562.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 18466
+HAWS/RESP: SEND[18509]:
+HAWS/RESP: sent 3 response(s)
+[dims 64x32 32x10 -> 64x10] [random? 1]
+pid: wall time 639.000000 us, cpu time 324.000000 us, pid 124708
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 165
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 639.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 324.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 5849
+HAWS/RESP: SEND[5891]:
+HAWS/RESP: sent 1 response(s)
+[dims 64x32 32x10 -> 64x10] [random? 1]
+pid: wall time 273.000000 us, cpu time 275.000000 us, pid 124720
+[dims 64x32 32x10 -> 64x10] [random? 1]
+[dims 64x32 32x10 -> 64x10] [random? 1]
+pid: wall time 459.000000 us, cpu time 450.000000 us, pid 124719
+pid: wall time 694.000000 us, cpu time 314.000000 us, pid 124722
+[dims 64x32 32x10 -> 64x10] [random? 1]
+pid: wall time 1451.000000 us, cpu time 259.000000 us, pid 124721
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 167
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 273.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 275.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 5849
+HAWS/RESP: SEND[5891]:
+HAWS/RESP: sent 1 response(s)
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 1 pending conclusions
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/CONCLUSION: 2 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 166
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 459.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 450.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 5849
+HAWS/RESP: SEND[5891]:
+TARGMGR/gpu/FILEIN picking up dropped output
+TARGMGR/gpu/FILEIN save total output pointer
+TARGMGR/gpu/FILEIN Done saving output
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 169
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 10
+HAWS/SEND:      wallTime: 694.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 314.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 5849
+HAWS/RESP: SEND[5891]:
+HAWS/RESP: sent 2 response(s)
+HAWS/CONCLUSION: 1 pending conclusions
+HAWS/SEND: conclusion: 
+HAWS/SEND:        reqNum: 168
+HAWS/SEND:       targRan: gpu
+HAWS/SEND:   wallTimeLen: 11
+HAWS/SEND:      wallTime: 1451.000000
+HAWS/SEND:    cpuTimeLen: 10
+HAWS/SEND:       cpuTime: 259.000000
+HAWS/SEND:     exit code: 0
+HAWS/SEND:    output len: 5849
+HAWS/RESP: SEND[5892]:
+HAWS/RESP: sent 1 response(s)
+HAWS/RESMON: free cpu threads 150 (100%)
+HAWS/RESMON: free gpu threads 3584 (100%)
+HAWS/RESMON: free phys mem 204800MB (100%)
+HAWS/RESMON: free gpu mem 3000MB (100%)
+
+task id: matmul_1024_32_256 -> gpu: 666
+task id: matmul_32_256_1024 -> gpu: 448
+task id: matmul_32_256_64 -> gpu: 260
+task id: matmul_32_1024_256 -> gpu: 404
+task id: matmul_256_32_64 -> gpu: 364
+task id: matmul_32_64_256 -> gpu: 382
+task id: matmul_32_10_64 -> gpu: 257
+task id: matmul_32_64_10 -> gpu: 232
+task id: matmul_64_32_10 -> gpu: 221
+
+
+task id: matmul_1024_32_256 -> num on gpu: 24
+task id: matmul_32_256_1024 -> num on gpu: 24
+task id: matmul_32_256_64 -> num on gpu: 4
+task id: matmul_32_1024_256 -> num on gpu: 4
+task id: matmul_256_32_64 -> num on gpu: 24
+task id: matmul_32_64_256 -> num on gpu: 24
+task id: matmul_32_10_64 -> num on gpu: 32
+task id: matmul_32_64_10 -> num on gpu: 4
+task id: matmul_64_32_10 -> num on gpu: 29
+TARGMGR/cpu | processes 0/0 active/all
+TARGMGR/gpu | processes 0/169 active/all
+HAWS/RESMON: free cpu threads 150 (100%)
+HAWS/RESMON: free gpu threads 3584 (100%)
+HAWS/RESMON: free phys mem 204800MB (100%)
+HAWS/RESMON: free gpu mem 3000MB (100%)
+
+task id: matmul_1024_32_256 -> gpu: 666
+task id: matmul_32_256_1024 -> gpu: 448
+task id: matmul_32_256_64 -> gpu: 260
+task id: matmul_32_1024_256 -> gpu: 404
+task id: matmul_256_32_64 -> gpu: 364
+task id: matmul_32_64_256 -> gpu: 382
+task id: matmul_32_10_64 -> gpu: 257
+task id: matmul_32_64_10 -> gpu: 232
+task id: matmul_64_32_10 -> gpu: 221
+
+
+task id: matmul_1024_32_256 -> num on gpu: 24
+task id: matmul_32_256_1024 -> num on gpu: 24
+task id: matmul_32_256_64 -> num on gpu: 4
+task id: matmul_32_1024_256 -> num on gpu: 4
+task id: matmul_256_32_64 -> num on gpu: 24
+task id: matmul_32_64_256 -> num on gpu: 24
+task id: matmul_32_10_64 -> num on gpu: 32
+task id: matmul_32_64_10 -> num on gpu: 4
+task id: matmul_64_32_10 -> num on gpu: 29
+^CHAWS: Stopping ScheduleLoop
+HAWS: ScheduleLoop ended...
+HAWS: PrintData
+HAWS:   serviced 169 requests
+TARGMGR/cpu | processes 0/0 active/all
+TARGMGR/gpu | processes 0/169 active/all
+HAWS: Stopping Socket Loops
+HAWS: Stopping Requst Loop
+HAWS: waiting on req thread
+HAWS/RESPLOOP: saw stop request
+HAWS/RESPLOOP: freeing response buffer
+HAWS/RESPLOOP: closing socket
+HAWS/RESP/SOCK: close socket 5
+HAWS/RESPLOOP: stopped
+^Chaws: hawsHAWS.cpp:533: void HAWS::Stop(): Assertion `schedLoopThreadRunning' failed.
+/users/tandrews/MIT6828_HardAware/test/run_haws.sh: line 13: 123788 Aborted                 $bincmd
+

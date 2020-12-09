@@ -1,0 +1,69 @@
+^113,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,385024,385024,192512,61440,matmul_32_10_64,0,$
+^107,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,385024,385024,192512,61440,matmul_32_10_64,0,$
+^111,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,385024,385024,192512,61440,matmul_32_10_64,0,$
+^112,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,385024,385024,192512,61440,matmul_32_10_64,0,$
+^110,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,385024,385024,192512,61440,matmul_32_10_64,0,$
+^114,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,385024,385024,192512,151552,matmul_64_32_10,0,$
+^115,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,385024,385024,192512,151552,matmul_64_32_10,0,$
+^116,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,385024,385024,192512,151552,matmul_64_32_10,0,$
+^117,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,385024,385024,192512,151552,matmul_64_32_10,0,$
+^118,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,385024,385024,192512,151552,matmul_64_32_10,0,$
+^119,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,385024,385024,192512,151552,matmul_64_32_10,0,$
+^120,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,385024,385024,192512,151552,matmul_64_32_10,0,$
+^121,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,385024,385024,192512,151552,matmul_64_32_10,0,$
+^122,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3407872,3407872,1703936,1179648,matmul_32_64_256,0,$
+^123,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3407872,3407872,1703936,1179648,matmul_32_64_256,0,$
+^124,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3407872,3407872,1703936,1179648,matmul_32_64_256,0,$
+^128,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3407872,3407872,1703936,1179648,matmul_32_64_256,0,$
+^125,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3407872,3407872,1703936,1179648,matmul_32_64_256,0,$
+^126,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3407872,3407872,1703936,1179648,matmul_32_64_256,0,$
+^129,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3407872,3407872,1703936,1179648,matmul_32_64_256,0,$
+^127,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 256,gpu-only,1,1,8,3407872,3407872,1703936,1179648,matmul_32_64_256,0,$
+^130,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3407872,3407872,1703936,655360,matmul_256_32_64,0,$
+^131,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3407872,3407872,1703936,655360,matmul_256_32_64,0,$
+^132,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3407872,3407872,1703936,655360,matmul_256_32_64,0,$
+^133,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3407872,3407872,1703936,655360,matmul_256_32_64,0,$
+^134,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3407872,3407872,1703936,655360,matmul_256_32_64,0,$
+^135,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3407872,3407872,1703936,655360,matmul_256_32_64,0,$
+^136,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3407872,3407872,1703936,655360,matmul_256_32_64,0,$
+^137,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,256 32 64,gpu-only,1,1,16,3407872,3407872,1703936,655360,matmul_256_32_64,0,$
+^138,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,38797312,38797312,19398656,17301504,matmul_32_256_1024,0,$
+^140,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,38797312,38797312,19398656,17301504,matmul_32_256_1024,0,$
+^141,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,38797312,38797312,19398656,17301504,matmul_32_256_1024,0,$
+^142,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,38797312,38797312,19398656,17301504,matmul_32_256_1024,0,$
+^139,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,38797312,38797312,19398656,17301504,matmul_32_256_1024,0,$
+^143,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,38797312,38797312,19398656,17301504,matmul_32_256_1024,0,$
+^144,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,38797312,38797312,19398656,17301504,matmul_32_256_1024,0,$
+^145,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 1024,gpu-only,1,1,32,38797312,38797312,19398656,17301504,matmul_32_256_1024,0,$
+^146,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,38797312,38797312,19398656,2621440,matmul_1024_32_256,0,$
+^147,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,38797312,38797312,19398656,2621440,matmul_1024_32_256,0,$
+^148,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,38797312,38797312,19398656,2621440,matmul_1024_32_256,0,$
+^149,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,38797312,38797312,19398656,2621440,matmul_1024_32_256,0,$
+^150,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,38797312,38797312,19398656,2621440,matmul_1024_32_256,0,$
+^151,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,38797312,38797312,19398656,2621440,matmul_1024_32_256,0,$
+^152,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,38797312,38797312,19398656,2621440,matmul_1024_32_256,0,$
+^153,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,1024 32 256,gpu-only,1,1,256,38797312,38797312,19398656,2621440,matmul_1024_32_256,0,$
+iter 65 of 1024 of epoch 1
+^154,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 1024 256,gpu-only,1,1,8,38797312,38797312,19398656,18874368,matmul_32_1024_256,0,$
+^155,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 256 64,gpu-only,1,1,2,3407872,3407872,1703936,1572864,matmul_32_256_64,0,$
+^156,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 64 10,gpu-only,1,1,1,385024,385024,192512,172032,matmul_32_64_10,0,$
+^157,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,385024,385024,192512,61440,matmul_32_10_64,0,$
+^159,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,385024,385024,192512,61440,matmul_32_10_64,0,$
+^158,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,385024,385024,192512,61440,matmul_32_10_64,0,$
+^161,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,385024,385024,192512,61440,matmul_32_10_64,0,$
+^160,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,385024,385024,192512,61440,matmul_32_10_64,0,$
+^162,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,385024,385024,192512,61440,matmul_32_10_64,0,$
+^163,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,385024,385024,192512,61440,matmul_32_10_64,0,$
+^164,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,32 10 64,gpu-only,1,1,2,385024,385024,192512,61440,matmul_32_10_64,0,$
+^165,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,385024,385024,192512,151552,matmul_64_32_10,0,$
+^166,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,385024,385024,192512,151552,matmul_64_32_10,0,$
+^167,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,385024,385024,192512,151552,matmul_64_32_10,0,$
+^168,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,385024,385024,192512,151552,matmul_64_32_10,0,$
+^169,/opt/haws/bin/matmul_cpu,/opt/haws/bin/matmul_gpu,64 32 10,gpu-only,1,1,2,385024,385024,192512,151552,matmul_64_32_10,0,$
+(keys(notifiers), req_num) = (Any[11, 134, 158, 160, 29, 131, 74, 57, 31, 70, 33, 114, 165, 96, 133, 49, 84, 117, 93, 50, 77, 80, 132, 157, 153, 79, 71, 120, 154, 76, 167, 122, 143, 62, 107, 169, 21, 10, 102, 162, 129, 88, 149, 5, 63, 41, 15, 148, 55, 66, 155, 150, 95, 139, 90, 111, 14, 135, 125, 146, 130, 17, 65, 44, 37, 110, 127, 13, 99, 137, 141, 105, 30, 1, 47, 91, 43, 9, 128, 147, 104, 103, 152, 38, 118, 48, 100, 81, 140, 19, 51, 123, 108, 164, 2, 89, 136, 151, 144, 142, 78, 159, 112, 106, 121, 109, 26, 138, 4, 168, 94, 115, 54, 40, 101, 60, 34, 113, 12, 16, 92, 72, 28, 97, 68, 124, 39, 46, 85, 25, 42, 58, 59, 8, 20, 52, 18, 69, 166, 35, 83, 64, 145, 45, 86, 67, 126, 32, 82, 7, 75, 87, 3, 61, 36, 98, 161, 22, 6, 24, 73, 119, 156, 53, 116, 23, 27, 56], 163)
+
+AssertionError: false
+Stacktrace:
+ [1] parse_response_string(::String) at /users/tandrews/MIT6828_HardAware/julia_code/request_handler.jl:230
+ [2] macro expansion at /users/tandrews/MIT6828_HardAware/julia_code/request_handler.jl:295 [inlined]
+ [3] (::var"#2#4"{TCPSocket})() at ./task.jl:356

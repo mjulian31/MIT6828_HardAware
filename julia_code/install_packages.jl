@@ -5,3 +5,5 @@ import Pkg; Pkg.add("StaticArrays")
 import Pkg; Pkg.add("LLVM")
 import Pkg; Pkg.add("GPUCompiler")
 import Pkg; Pkg.add("FileIO")
+import Pkg; Pkg.add(“HDF5)
+

@@ -275,6 +275,7 @@ function send_request(a, b, req_notifier)
 
     # send request to server (locked operation)
     lock(request_lock)
+    println(req_string)
     println(server, req_string)
     unlock(request_lock)
 
