@@ -1,0 +1,56 @@
+real	6m56.239s
+user	4m24.507s
+sys	0m11.695s
+
+task id: matmul_256_256_64 -> cpu: 3370
+task id: matmul_32_256_1024 -> cpu: 8268
+task id: matmul_1024_64_10 -> cpu: 54244
+task id: matmul_256_32_64 -> cpu: 804
+task id: matmul_32_64_256 -> cpu: 598
+task id: matmul_64_32_10 -> cpu: 99
+task id: matmul_32_10_64 -> cpu: 55
+task id: matmul_256_64_10 -> cpu: 550
+task id: matmul_32_64_10 -> cpu: 87
+task id: matmul_32_256_64 -> cpu: 426
+task id: matmul_1024_32_256 -> cpu: 15083
+task id: matmul_32_1024_256 -> cpu: 6284
+
+task id: matmul_256_1024_256 -> gpu: 954
+task id: matmul_32_64_10 -> gpu: 109
+task id: matmul_32_256_64 -> gpu: 122
+task id: matmul_32_1024_256 -> gpu: 312
+task id: matmul_1024_32_256 -> gpu: 1129
+task id: matmul_1024_256_64 -> gpu: 439
+task id: matmul_32_256_1024 -> gpu: 3039
+task id: matmul_256_32_64 -> gpu: 199
+task id: matmul_1024_1024_256 -> gpu: 3082
+task id: matmul_32_64_256 -> gpu: 181
+task id: matmul_64_32_10 -> gpu: 557
+task id: matmul_32_10_64 -> gpu: 804
+
+task id: matmul_256_256_64 -> num on cpu: 1
+task id: matmul_32_256_1024 -> num on cpu: 407
+task id: matmul_1024_64_10 -> num on cpu: 1
+task id: matmul_256_32_64 -> num on cpu: 1273
+task id: matmul_32_64_256 -> num on cpu: 1194
+task id: matmul_64_32_10 -> num on cpu: 979
+task id: matmul_32_10_64 -> num on cpu: 979
+task id: matmul_256_64_10 -> num on cpu: 1
+task id: matmul_32_64_10 -> num on cpu: 1
+task id: matmul_32_256_64 -> num on cpu: 159
+task id: matmul_1024_32_256 -> num on cpu: 303
+task id: matmul_32_1024_256 -> num on cpu: 159
+
+task id: matmul_256_1024_256 -> num on gpu: 1
+task id: matmul_32_64_10 -> num on gpu: 159
+task id: matmul_32_256_64 -> num on gpu: 1
+task id: matmul_32_1024_256 -> num on gpu: 1
+task id: matmul_1024_32_256 -> num on gpu: 977
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_32_256_1024 -> num on gpu: 873
+task id: matmul_256_32_64 -> num on gpu: 7
+task id: matmul_1024_1024_256 -> num on gpu: 1
+task id: matmul_32_64_256 -> num on gpu: 86
+task id: matmul_64_32_10 -> num on gpu: 301
+task id: matmul_32_10_64 -> num on gpu: 301
+
