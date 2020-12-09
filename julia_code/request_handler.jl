@@ -147,9 +147,9 @@ function get_target_pref(N, R, M)
             end
         else # CUTOFF
             if N*M >= 1024*32
-                return GPU_ONLY
+                return GPU_PREF
             else
-                return CPU_ONLY
+                return CPU_PREF
             end
         end
     end
