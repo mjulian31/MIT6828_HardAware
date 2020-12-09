@@ -6,8 +6,8 @@
 #include <list>
 
 //print / debug stuff
-#define DEBUGPR(...) printf(__VA_ARGS__)
-//#define DEBUGPR(...) 
+//#define DEBUGPR(...) printf(__VA_ARGS__)
+#define DEBUGPR(...) 
 
 //list stuff
 #define IN_LIST(list, item) (std::find(list.begin(), list.end(), item) != list.end())

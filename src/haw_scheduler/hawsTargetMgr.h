@@ -158,10 +158,10 @@ class HAWSTargetMgr {
         taskLock.unlock();
 
         // disabled for debugging 
-        //DEBUGPR("TARGMGR/%s/FILEIN Delete dropped file\n", this->targStr.c_str());
-        //if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
-        //    assert(false);
-        //}
+        DEBUGPR("TARGMGR/%s/FILEIN Delete dropped file\n", this->targStr.c_str());
+        if( remove(filepath.c_str()) != 0 ) { // remove bin's output file now that its saved
+            assert(false);
+        }
         DEBUGPR("TARGMGR/%s/FILEIN Done saving output\n", this->targStr.c_str());
     }
 
