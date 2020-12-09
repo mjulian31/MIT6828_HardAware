@@ -1,0 +1,56 @@
+
+real	10m50.622s
+user	5m53.258s
+sys	0m12.524s
+
+
+task id: matmul_256_256_64 -> cpu: 7547
+task id: matmul_32_256_64 -> cpu: 883
+task id: matmul_32_256_1024 -> cpu: 11334
+task id: matmul_1024_64_10 -> cpu: 3325
+task id: matmul_256_32_64 -> cpu: 1525
+task id: matmul_32_64_256 -> cpu: 1029
+task id: matmul_64_32_10 -> cpu: 137
+task id: matmul_32_10_64 -> cpu: 92
+task id: matmul_32_64_10 -> cpu: 106
+task id: matmul_32_1024_256 -> cpu: 10232
+
+task id: matmul_256_1024_256 -> gpu: 1130
+task id: matmul_256_64_10 -> gpu: 148
+task id: matmul_32_64_10 -> gpu: 147
+task id: matmul_32_1024_256 -> gpu: 396
+task id: matmul_1024_32_256 -> gpu: 2608
+task id: matmul_1024_256_64 -> gpu: 3576
+task id: matmul_32_256_1024 -> gpu: 4301
+task id: matmul_256_32_64 -> gpu: 1102
+task id: matmul_1024_1024_256 -> gpu: 3441
+task id: matmul_32_64_256 -> gpu: 1370
+task id: matmul_64_32_10 -> gpu: 474
+task id: matmul_32_10_64 -> gpu: 750
+task id: matmul_32_256_64 -> gpu: 206
+
+task id: matmul_256_256_64 -> num on cpu: 1
+task id: matmul_32_256_64 -> num on cpu: 65
+task id: matmul_32_256_1024 -> num on cpu: 305
+task id: matmul_1024_64_10 -> num on cpu: 1
+task id: matmul_256_32_64 -> num on cpu: 455
+task id: matmul_32_64_256 -> num on cpu: 968
+task id: matmul_64_32_10 -> num on cpu: 963
+task id: matmul_32_10_64 -> num on cpu: 959
+task id: matmul_32_64_10 -> num on cpu: 120
+task id: matmul_32_1024_256 -> num on cpu: 54
+
+task id: matmul_256_1024_256 -> num on gpu: 1
+task id: matmul_256_64_10 -> num on gpu: 1
+task id: matmul_32_64_10 -> num on gpu: 40
+task id: matmul_32_1024_256 -> num on gpu: 106
+task id: matmul_1024_32_256 -> num on gpu: 1280
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_32_256_1024 -> num on gpu: 975
+task id: matmul_256_32_64 -> num on gpu: 825
+task id: matmul_1024_1024_256 -> num on gpu: 1
+task id: matmul_32_64_256 -> num on gpu: 312
+task id: matmul_64_32_10 -> num on gpu: 317
+task id: matmul_32_10_64 -> num on gpu: 321
+task id: matmul_32_256_64 -> num on gpu: 95
+
