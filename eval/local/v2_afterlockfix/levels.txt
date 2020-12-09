@@ -1,0 +1,56 @@
+# RUN 3 ---
+
+task id: matmul_32_1024_256 -> cpu: 7353
+task id: matmul_32_256_64 -> cpu: 682
+task id: matmul_32_256_1024 -> cpu: 7753
+task id: matmul_256_32_64 -> cpu: 906
+task id: matmul_32_64_256 -> cpu: 611
+task id: matmul_64_32_10 -> cpu: 72
+task id: matmul_32_10_64 -> cpu: 53
+task id: matmul_32_64_10 -> cpu: 58
+
+task id: matmul_1024_32_256 -> gpu: 679
+task id: matmul_32_1024_256 -> gpu: 320
+task id: matmul_32_10_64 -> gpu: 125
+task id: matmul_64_32_10 -> gpu: 124
+task id: matmul_32_64_256 -> gpu: 156
+task id: matmul_1024_1024_256 -> gpu: 3281
+task id: matmul_256_32_64 -> gpu: 158
+task id: matmul_256_64_10 -> gpu: 210
+task id: matmul_1024_64_10 -> gpu: 191
+task id: matmul_32_256_64 -> gpu: 148
+task id: matmul_32_256_1024 -> gpu: 439
+task id: matmul_1024_256_64 -> gpu: 512
+task id: matmul_32_64_10 -> gpu: 124
+task id: matmul_256_256_64 -> gpu: 222
+task id: matmul_256_1024_256 -> gpu: 950
+
+task id: matmul_32_1024_256 -> num on cpu: 65
+task id: matmul_32_256_64 -> num on cpu: 59
+task id: matmul_32_256_1024 -> num on cpu: 338
+task id: matmul_256_32_64 -> num on cpu: 445
+task id: matmul_32_64_256 -> num on cpu: 453
+task id: matmul_64_32_10 -> num on cpu: 945
+task id: matmul_32_10_64 -> num on cpu: 944
+task id: matmul_32_64_10 -> num on cpu: 108
+
+task id: matmul_1024_32_256 -> num on gpu: 1280
+task id: matmul_32_1024_256 -> num on gpu: 95
+task id: matmul_32_10_64 -> num on gpu: 336
+task id: matmul_64_32_10 -> num on gpu: 335
+task id: matmul_32_64_256 -> num on gpu: 827
+task id: matmul_1024_1024_256 -> num on gpu: 1
+task id: matmul_256_32_64 -> num on gpu: 835
+task id: matmul_256_64_10 -> num on gpu: 1
+task id: matmul_1024_64_10 -> num on gpu: 1
+task id: matmul_32_256_64 -> num on gpu: 101
+task id: matmul_32_256_1024 -> num on gpu: 942
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_32_64_10 -> num on gpu: 52
+task id: matmul_256_256_64 -> num on gpu: 1
+task id: matmul_256_1024_256 -> num on gpu: 1
+
+real	11m16.392s
+user	5m57.127s
+sys	0m12.480s
+
