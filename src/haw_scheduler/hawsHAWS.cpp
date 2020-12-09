@@ -121,7 +121,7 @@ void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, tim
        // put min wall time in map
        if (CPUTimeMap.count(id) > 0) {
          // in map
-         CPUTimeMap[id] = (wallTime < CPUTimeMap[id])? wallTime: CPUTimeMap[id];
+         CPUTimeMap[id] += wallTime;
        } else {
          // init
          CPUTimeMap[id] = wallTime;
@@ -143,7 +143,7 @@ void HAWS::DispatchConclusion(pid_t pid, TaskStatus task_status, int status, tim
        // put min wall time in map
        if (GPUTimeMap.count(id) > 0) {
          // in map
-         GPUTimeMap[id] = (wallTime < GPUTimeMap[id])? wallTime: GPUTimeMap[id];
+         GPUTimeMap[id] += wallTime;
        } else {
          // init
          GPUTimeMap[id] = wallTime;
@@ -223,11 +223,11 @@ void HAWS::ScheduleLoop(int cpuThreadLimit, int gpuThreadLimit,
                    (int)(((float) globalGPUMemAvail / (float) gpuMemLimitMB)*100));
             // print dictionaries
             for(std::unordered_map<std::string, long>::const_iterator it = CPUTimeMap.begin(); it != CPUTimeMap.end(); ++it) {
-                printf("task id: %s -> cpu: %ld\n", (it->first).c_str(), it->second);
+                printf("task id: %s -> cpu: %ld\n", (it->first).c_str(), it->second / CPUChoicesMap[it->first]);
             }
             printf("\n");
             for(std::unordered_map<std::string, long>::const_iterator it = GPUTimeMap.begin(); it != GPUTimeMap.end(); ++it) {
-                printf("task id: %s -> gpu: %ld\n", (it->first).c_str(), it->second);
+                printf("task id: %s -> gpu: %ld\n", (it->first).c_str(), it->second / GPUChoicesMap[it->first]);
             }
             // print freq dictionaries
             printf("\n");
@@ -390,12 +390,12 @@ HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) { // SCHEDLOOP THR
     long estGPU = LONG_MAX;
     if (GPUTimeMap.count(req->GetJobID()) > 0) {
       // in map
-      estGPU = GPUTimeMap[req->GetJobID()];
+      estGPU = GPUTimeMap[req->GetJobID()]/GPUChoicesMap[req->GetJobID()];
     }
     long estCPU = LONG_MAX;
     if (CPUTimeMap.count(req->GetJobID()) > 0) {
       // in map
-      estCPU = CPUTimeMap[req->GetJobID()];
+      estCPU = CPUTimeMap[req->GetJobID()]/CPUChoicesMap[req->GetJobID()];
     }
     if (hint == "cpu-please" && estCPU <= estGPU)
         return HAWS::RandomizeTarget(TargCPU, 0.75);
