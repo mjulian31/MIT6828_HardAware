@@ -1,0 +1,54 @@
+real	10m52.023s
+user	5m53.017s
+sys	0m12.063s
+
+task id: matmul_32_256_1024 -> cpu: 10896
+task id: matmul_256_32_64 -> cpu: 1491
+task id: matmul_32_64_256 -> cpu: 1034
+task id: matmul_64_32_10 -> cpu: 136
+task id: matmul_32_10_64 -> cpu: 89
+task id: matmul_256_64_10 -> cpu: 889
+task id: matmul_32_64_10 -> cpu: 114
+task id: matmul_32_256_64 -> cpu: 875
+task id: matmul_32_1024_256 -> cpu: 10022
+
+task id: matmul_64_32_10 -> gpu: 1782
+task id: matmul_32_64_256 -> gpu: 2537
+task id: matmul_1024_1024_256 -> gpu: 4043
+task id: matmul_256_32_64 -> gpu: 1320
+task id: matmul_1024_64_10 -> gpu: 201
+task id: matmul_1024_256_64 -> gpu: 536
+task id: matmul_1024_32_256 -> gpu: 2375
+task id: matmul_32_10_64 -> gpu: 2149
+task id: matmul_32_1024_256 -> gpu: 353
+task id: matmul_32_256_1024 -> gpu: 5411
+task id: matmul_32_256_64 -> gpu: 160
+task id: matmul_32_64_10 -> gpu: 146
+task id: matmul_256_256_64 -> gpu: 236
+task id: matmul_256_1024_256 -> gpu: 1109
+
+task id: matmul_32_256_1024 -> num on cpu: 531
+task id: matmul_256_32_64 -> num on cpu: 682
+task id: matmul_32_64_256 -> num on cpu: 924
+task id: matmul_64_32_10 -> num on cpu: 979
+task id: matmul_32_10_64 -> num on cpu: 979
+task id: matmul_256_64_10 -> num on cpu: 1
+task id: matmul_32_64_10 -> num on cpu: 1
+task id: matmul_32_256_64 -> num on cpu: 159
+task id: matmul_32_1024_256 -> num on cpu: 159
+
+task id: matmul_64_32_10 -> num on gpu: 301
+task id: matmul_32_64_256 -> num on gpu: 356
+task id: matmul_1024_1024_256 -> num on gpu: 1
+task id: matmul_256_32_64 -> num on gpu: 598
+task id: matmul_1024_64_10 -> num on gpu: 1
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_1024_32_256 -> num on gpu: 1280
+task id: matmul_32_10_64 -> num on gpu: 301
+task id: matmul_32_1024_256 -> num on gpu: 1
+task id: matmul_32_256_1024 -> num on gpu: 749
+task id: matmul_32_256_64 -> num on gpu: 1
+task id: matmul_32_64_10 -> num on gpu: 159
+task id: matmul_256_256_64 -> num on gpu: 1
+task id: matmul_256_1024_256 -> num on gpu: 1
+
