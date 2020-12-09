@@ -20,6 +20,7 @@
 #include <time.h>
 #include <unordered_map>
 #include <climits>
+#include <float.h>
 
 //using namespace std;
 
@@ -393,14 +394,14 @@ HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) { // SCHEDLOOP THR
     if (hint == "gpu-only") return TargGPU;
 
     // get our estimated runtimes so far
-    float estGPU = FLOAT_MAX;
+    float estGPU = FLT_MAX;
     long numGPU = 0;
     if (GPUTimeMap.count(req->GetJobID()) > 0) {
       // in map
       numGPU = GPUChoicesMap[req->GetJobID()];
       estGPU = static_cast<float>(GPUTimeMap[req->GetJobID()]) / static_cast<float>(numGPU);
     }
-    float estCPU = FLOAT_MAX;
+    float estCPU = FLT_MAX;
     long numCPU = 0;
     if (CPUTimeMap.count(req->GetJobID()) > 0) {
       // in map
@@ -415,7 +416,7 @@ HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) { // SCHEDLOOP THR
     if (hint == "gpu-please") {
         return HAWS::RandomizeTarget(TargGPU, HAWS::RandFavor(estGPU, estCPU, 10.0, numGPU, numCPU));
     }
-    if (hint == "any" && (estCPU == FLOAT_MAX || estGPU == FLOAT_MAX)) {
+    if (hint == "any" && (estCPU == FLT_MAX || estGPU == FLT_MAX)) {
         return HAWS::RandomizeTarget(TargCPU, 0.5);
     }
     if (hint == "any") {

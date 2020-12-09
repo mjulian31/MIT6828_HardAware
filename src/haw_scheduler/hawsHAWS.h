@@ -70,6 +70,8 @@ class HAWS {
         static void StartTaskGPU(HAWSClientRequest* req);
         static HAWSHWTarget DetermineReqTarget(HAWSClientRequest* req);
         static HAWSHWTarget RandomizeTarget(HAWSHWTarget best_target, float favor);
+        static float RandFavor(float biasHardware, float otherHardware, float bias, 
+                               long numBias, long numOther);
 
         //RESPONSE THREAD
         static void RespLoop(int port);
