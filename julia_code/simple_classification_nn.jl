@@ -331,4 +331,5 @@ actual = get_preds(y_test, pred_map)
 
 # calculate percent correct
 accuracy = sum(out .== actual)/size(actual, 1)*100
+@show machine, method, stdin
 @printf("final accuracy: %f %%\n", accuracy)
