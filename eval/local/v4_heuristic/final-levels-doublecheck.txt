@@ -1,0 +1,55 @@
+real	10m53.529s
+user	5m54.339s
+sys	0m12.160s
+
+
+task id: matmul_256_256_64 -> cpu: 7256
+task id: matmul_32_256_1024 -> cpu: 10862
+task id: matmul_256_32_64 -> cpu: 1548
+task id: matmul_32_64_256 -> cpu: 1026
+task id: matmul_64_32_10 -> cpu: 135
+task id: matmul_32_10_64 -> cpu: 92
+task id: matmul_256_64_10 -> cpu: 793
+task id: matmul_32_64_10 -> cpu: 114
+task id: matmul_32_256_64 -> cpu: 901
+task id: matmul_32_1024_256 -> cpu: 10166
+
+task id: matmul_256_1024_256 -> gpu: 1121
+task id: matmul_32_64_10 -> gpu: 162
+task id: matmul_32_256_64 -> gpu: 161
+task id: matmul_32_1024_256 -> gpu: 349
+task id: matmul_1024_32_256 -> gpu: 2220
+task id: matmul_1024_256_64 -> gpu: 534
+task id: matmul_32_256_1024 -> gpu: 5448
+task id: matmul_1024_64_10 -> gpu: 233
+task id: matmul_256_32_64 -> gpu: 995
+task id: matmul_1024_1024_256 -> gpu: 3395
+task id: matmul_32_64_256 -> gpu: 2963
+task id: matmul_64_32_10 -> gpu: 1657
+task id: matmul_32_10_64 -> gpu: 1937
+
+task id: matmul_256_256_64 -> num on cpu: 1
+task id: matmul_32_256_1024 -> num on cpu: 579
+task id: matmul_256_32_64 -> num on cpu: 610
+task id: matmul_32_64_256 -> num on cpu: 868
+task id: matmul_64_32_10 -> num on cpu: 979
+task id: matmul_32_10_64 -> num on cpu: 972
+task id: matmul_256_64_10 -> num on cpu: 1
+task id: matmul_32_64_10 -> num on cpu: 1
+task id: matmul_32_256_64 -> num on cpu: 159
+task id: matmul_32_1024_256 -> num on cpu: 159
+
+task id: matmul_256_1024_256 -> num on gpu: 1
+task id: matmul_32_64_10 -> num on gpu: 159
+task id: matmul_32_256_64 -> num on gpu: 1
+task id: matmul_32_1024_256 -> num on gpu: 1
+task id: matmul_1024_32_256 -> num on gpu: 1280
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_32_256_1024 -> num on gpu: 701
+task id: matmul_1024_64_10 -> num on gpu: 1
+task id: matmul_256_32_64 -> num on gpu: 670
+task id: matmul_1024_1024_256 -> num on gpu: 1
+task id: matmul_32_64_256 -> num on gpu: 412
+task id: matmul_64_32_10 -> num on gpu: 301
+task id: matmul_32_10_64 -> num on gpu: 308
+
