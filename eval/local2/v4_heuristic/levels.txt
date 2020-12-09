@@ -1,0 +1,57 @@
+run
+
+real	7m38.946s
+user	4m24.654s
+sys	0m11.867s
+
+task id: matmul_256_256_64 -> cpu: 3387
+task id: matmul_32_256_1024 -> cpu: 8194
+task id: matmul_256_32_64 -> cpu: 825
+task id: matmul_32_64_256 -> cpu: 598
+task id: matmul_64_32_10 -> cpu: 100
+task id: matmul_32_10_64 -> cpu: 54
+task id: matmul_256_64_10 -> cpu: 551
+task id: matmul_32_64_10 -> cpu: 72
+task id: matmul_32_256_64 -> cpu: 426
+task id: matmul_32_1024_256 -> cpu: 6355
+
+task id: matmul_256_1024_256 -> gpu: 1020
+task id: matmul_32_64_10 -> gpu: 105
+task id: matmul_32_256_64 -> gpu: 122
+task id: matmul_32_1024_256 -> gpu: 322
+task id: matmul_1024_32_256 -> gpu: 1081
+task id: matmul_1024_256_64 -> gpu: 510
+task id: matmul_32_256_1024 -> gpu: 2825
+task id: matmul_1024_64_10 -> gpu: 173
+task id: matmul_256_32_64 -> gpu: 497
+task id: matmul_1024_1024_256 -> gpu: 3046
+task id: matmul_32_64_256 -> gpu: 1374
+task id: matmul_64_32_10 -> gpu: 692
+task id: matmul_32_10_64 -> gpu: 709
+
+task id: matmul_256_256_64 -> num on cpu: 1
+task id: matmul_32_256_1024 -> num on cpu: 385
+task id: matmul_256_32_64 -> num on cpu: 592
+task id: matmul_32_64_256 -> num on cpu: 925
+task id: matmul_64_32_10 -> num on cpu: 979
+task id: matmul_32_10_64 -> num on cpu: 979
+task id: matmul_256_64_10 -> num on cpu: 1
+task id: matmul_32_64_10 -> num on cpu: 1
+task id: matmul_32_256_64 -> num on cpu: 159
+task id: matmul_32_1024_256 -> num on cpu: 159
+
+task id: matmul_256_1024_256 -> num on gpu: 1
+task id: matmul_32_64_10 -> num on gpu: 159
+task id: matmul_32_256_64 -> num on gpu: 1
+task id: matmul_32_1024_256 -> num on gpu: 1
+task id: matmul_1024_32_256 -> num on gpu: 1280
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_32_256_1024 -> num on gpu: 895
+task id: matmul_1024_64_10 -> num on gpu: 1
+task id: matmul_256_32_64 -> num on gpu: 688
+task id: matmul_1024_1024_256 -> num on gpu: 1
+task id: matmul_32_64_256 -> num on gpu: 355
+task id: matmul_64_32_10 -> num on gpu: 301
+task id: matmul_32_10_64 -> num on gpu: 301
+
+
