@@ -23,6 +23,11 @@
 
 //using namespace std;
 
+#define MAX(x, y) ((x > y)? x: y)
+#define MIN(x, y) ((x < y)? x: y)
+
+#define CONFIDENCE_LEVEL 300 // confident in estimates at 300 runs
+
 //std::mutex schedLoopKillFlagLock; // signal to stop schedule loop / running tasks
 bool schedLoopKillFlag;
 bool sockLoopKillFlag;
@@ -386,28 +391,39 @@ HAWSHWTarget HAWS::DetermineReqTarget(HAWSClientRequest* req) { // SCHEDLOOP THR
     std::string hint = req->GetTargHint();
     if (hint == "cpu-only") return TargCPU;
     if (hint == "gpu-only") return TargGPU;
-    // now estimate for "please" and "any" hints
-    long estGPU = LONG_MAX;
+
+    // get our estimated runtimes so far
+    float estGPU = FLOAT_MAX;
+    long numGPU = 0;
     if (GPUTimeMap.count(req->GetJobID()) > 0) {
       // in map
-      estGPU = GPUTimeMap[req->GetJobID()]/GPUChoicesMap[req->GetJobID()];
+      numGPU = GPUChoicesMap[req->GetJobID()];
+      estGPU = static_cast<float>(GPUTimeMap[req->GetJobID()]) / static_cast<float>(numGPU);
     }
-    long estCPU = LONG_MAX;
+    float estCPU = FLOAT_MAX;
+    long numCPU = 0;
     if (CPUTimeMap.count(req->GetJobID()) > 0) {
       // in map
-      estCPU = CPUTimeMap[req->GetJobID()]/CPUChoicesMap[req->GetJobID()];
+      numCPU = CPUChoicesMap[req->GetJobID()];
+      estCPU = static_cast<float>(CPUTimeMap[req->GetJobID()]) / static_cast<float>(numCPU);
     }
-    if (hint == "cpu-please" && estCPU <= estGPU)
-        return HAWS::RandomizeTarget(TargCPU, 0.75);
-    if (hint == "gpu-please" && estGPU <= estCPU)
-        return HAWS::RandomizeTarget(TargGPU, 0.75);
-    if (hint == "any" && (estCPU == LONG_MAX || estGPU == LONG_MAX))
-        return HAWS::RandomizeTarget(TargGPU, 0.50);
-    if (hint == "any")
-        return (estCPU <= estGPU) ? HAWS::RandomizeTarget(TargCPU, 0.65) :
-                                    HAWS::RandomizeTarget(TargGPU, 0.65);
-    return (estCPU <= estGPU) ? HAWS::RandomizeTarget(TargCPU, 0.65) :
-                                HAWS::RandomizeTarget(TargGPU, 0.65);
+
+    // now estimate for "please" and "any" hints
+    if (hint == "cpu-please") {
+        return HAWS::RandomizeTarget(TargCPU, HAWS::RandFavor(estCPU, estGPU, 10.0, numCPU, numGPU));
+    }
+    if (hint == "gpu-please") {
+        return HAWS::RandomizeTarget(TargGPU, HAWS::RandFavor(estGPU, estCPU, 10.0, numGPU, numCPU));
+    }
+    if (hint == "any" && (estCPU == FLOAT_MAX || estGPU == FLOAT_MAX)) {
+        return HAWS::RandomizeTarget(TargCPU, 0.5);
+    }
+    if (hint == "any") {
+        return (estCPU <= estGPU) ? HAWS::RandomizeTarget(TargCPU, HAWS::RandFavor(estCPU, estGPU, 0.0, numCPU, numGPU)) :
+                                    HAWS::RandomizeTarget(TargGPU, HAWS::RandFavor(estGPU, estCPU, 0.0, numGPU, numCPU));
+    }
+
+    return HAWS::RandomizeTarget(TargCPU, 0.5);
 }
 
 HAWSHWTarget HAWS::RandomizeTarget(HAWSHWTarget best_target, float favor) {
@@ -418,6 +434,23 @@ HAWSHWTarget HAWS::RandomizeTarget(HAWSHWTarget best_target, float favor) {
       if (rand() / static_cast<float>(RAND_MAX) > favor) return TargCPU;
       return TargGPU;
     }
+}
+
+float HAWS::RandFavor(float biasHardware, float otherHardware, float bias, long numBias, long numOther) {
+    if (biasHardware > otherHardware*4) {
+      return (numBias > CONFIDENCE_LEVEL)? 1.0: MAX(0.95 + bias, 1.0);
+    } else if (biasHardware > otherHardware*2) {
+      return (numBias > CONFIDENCE_LEVEL)? .9: MAX(0.80 + bias, 1.0);
+    } else if (biasHardware > otherHardware) {
+      return (numBias > CONFIDENCE_LEVEL)? .65: MAX(0.6 + bias, 1.0);
+    } else if (otherHardware > biasHardware*4) {
+      return (numOther > CONFIDENCE_LEVEL)? 1.0: MIN(0.95 - bias, 0.0);
+    } else if (otherHardware > biasHardware*2) {
+      return (numOther > CONFIDENCE_LEVEL)? .9: MIN(0.80 - bias, 0.0);
+    } else if (otherHardware > biasHardware) {
+      return (numOther > CONFIDENCE_LEVEL)? .65: MIN(0.6 - bias, 0.0);
+    }
+    return bias + 0.5; // equal
 }
 
 HAWS::HAWS() {
