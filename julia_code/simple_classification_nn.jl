@@ -280,7 +280,7 @@ function net_train(net, x_train, y_train, epochs, learning_rate, batch_size, ran
             preds = net_pred(net, x_train, pred_map)
             actual = get_preds(y_train, pred_map)
             accuracy = sum(preds .== actual)/size(preds, 1)*100
-            @printf("epoch %d/%d average error=%f, train accuracy=%f %%\n", epoch, epochs, err, accuracy)
+            #@printf("epoch %d/%d average error=%f, train accuracy=%f %%\n", epoch, epochs, err, accuracy)
         else
             @printf("epoch %d/%d average error=%f\n", epoch, epochs, err)
         end

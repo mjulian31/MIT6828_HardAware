@@ -1,0 +1,54 @@
+real	10m48.157s
+user	5m49.695s
+sys	0m12.507s
+
+task id: matmul_256_256_64 -> cpu: 7317
+task id: matmul_32_256_1024 -> cpu: 10857
+task id: matmul_256_32_64 -> cpu: 1507
+task id: matmul_32_64_256 -> cpu: 1036
+task id: matmul_64_32_10 -> cpu: 135
+task id: matmul_32_10_64 -> cpu: 91
+task id: matmul_256_64_10 -> cpu: 846
+task id: matmul_32_64_10 -> cpu: 114
+task id: matmul_32_256_64 -> cpu: 887
+task id: matmul_32_1024_256 -> cpu: 10138
+
+task id: matmul_256_1024_256 -> gpu: 1162
+task id: matmul_32_64_10 -> gpu: 193
+task id: matmul_32_256_64 -> gpu: 160
+task id: matmul_32_1024_256 -> gpu: 403
+task id: matmul_1024_32_256 -> gpu: 2222
+task id: matmul_1024_256_64 -> gpu: 592
+task id: matmul_32_256_1024 -> gpu: 5032
+task id: matmul_1024_64_10 -> gpu: 197
+task id: matmul_256_32_64 -> gpu: 1436
+task id: matmul_1024_1024_256 -> gpu: 3483
+task id: matmul_32_64_256 -> gpu: 3038
+task id: matmul_64_32_10 -> gpu: 1953
+task id: matmul_32_10_64 -> gpu: 1998
+
+task id: matmul_256_256_64 -> num on cpu: 1
+task id: matmul_32_256_1024 -> num on cpu: 545
+task id: matmul_256_32_64 -> num on cpu: 671
+task id: matmul_32_64_256 -> num on cpu: 920
+task id: matmul_64_32_10 -> num on cpu: 978
+task id: matmul_32_10_64 -> num on cpu: 978
+task id: matmul_256_64_10 -> num on cpu: 1
+task id: matmul_32_64_10 -> num on cpu: 1
+task id: matmul_32_256_64 -> num on cpu: 159
+task id: matmul_32_1024_256 -> num on cpu: 159
+
+task id: matmul_256_1024_256 -> num on gpu: 1
+task id: matmul_32_64_10 -> num on gpu: 159
+task id: matmul_32_256_64 -> num on gpu: 1
+task id: matmul_32_1024_256 -> num on gpu: 1
+task id: matmul_1024_32_256 -> num on gpu: 1280
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_32_256_1024 -> num on gpu: 735
+task id: matmul_1024_64_10 -> num on gpu: 1
+task id: matmul_256_32_64 -> num on gpu: 609
+task id: matmul_1024_1024_256 -> num on gpu: 1
+task id: matmul_32_64_256 -> num on gpu: 360
+task id: matmul_64_32_10 -> num on gpu: 302
+task id: matmul_32_10_64 -> num on gpu: 302
+
