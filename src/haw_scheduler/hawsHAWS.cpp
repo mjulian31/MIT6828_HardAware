@@ -439,17 +439,17 @@ HAWSHWTarget HAWS::RandomizeTarget(HAWSHWTarget best_target, float favor) {
 
 float HAWS::RandFavor(float biasHardware, float otherHardware, float bias, long numBias, long numOther) {
     if (biasHardware > otherHardware*4) {
-      return (numBias > CONFIDENCE_LEVEL)? 1.0: MAX(0.95 + bias, 1.0);
+      return (numBias > CONFIDENCE_LEVEL)? 1.0: MIN(0.95 + bias, 1.0);
     } else if (biasHardware > otherHardware*2) {
-      return (numBias > CONFIDENCE_LEVEL)? .9: MAX(0.80 + bias, 1.0);
+      return (numBias > CONFIDENCE_LEVEL)? .9: MIN(0.80 + bias, 1.0);
     } else if (biasHardware > otherHardware) {
-      return (numBias > CONFIDENCE_LEVEL)? .65: MAX(0.6 + bias, 1.0);
+      return (numBias > CONFIDENCE_LEVEL)? .65: MIN(0.6 + bias, 1.0);
     } else if (otherHardware > biasHardware*4) {
-      return (numOther > CONFIDENCE_LEVEL)? 1.0: MIN(0.95 - bias, 0.0);
+      return (numOther > CONFIDENCE_LEVEL)? 1.0: MAX(0.95 - bias, 0.0);
     } else if (otherHardware > biasHardware*2) {
-      return (numOther > CONFIDENCE_LEVEL)? .9: MIN(0.80 - bias, 0.0);
+      return (numOther > CONFIDENCE_LEVEL)? .9: MAX(0.80 - bias, 0.0);
     } else if (otherHardware > biasHardware) {
-      return (numOther > CONFIDENCE_LEVEL)? .65: MIN(0.6 - bias, 0.0);
+      return (numOther > CONFIDENCE_LEVEL)? .65: MAX(0.6 - bias, 0.0);
     }
     return bias + 0.5; // equal
 }
