@@ -90,10 +90,10 @@ function get_target_pref(N, R, M)
                 return GPU_ONLY
             elseif N*M >= 1024*16
                 return GPU_PREF
-            elseif N*M <= 32*64
-                return CPU_PREF
             elseif N*M <= 10*10
                 return CPU_ONLY
+            elseif N*M <= 32*64
+                return CPU_PREF
             else
                 return ANY
             end
@@ -124,10 +124,10 @@ function get_target_pref(N, R, M)
                 return GPU_ONLY
             elseif N*M >= 1024*32
                 return GPU_PREF
-            elseif N*M <= 64*128
-                return CPU_PREF
             elseif N*M <= 64*10
                 return CPU_ONLY
+            elseif N*M <= 64*128
+                return CPU_PREF
             else
                 return ANY
             end
