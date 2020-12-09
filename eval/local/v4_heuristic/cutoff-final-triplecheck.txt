@@ -22,9 +22,9 @@ task id: matmul_32_256_1024 -> gpu: 9840
 task id: matmul_256_256_64 -> num on cpu: 1
 task id: matmul_1024_64_10 -> num on cpu: 1
 task id: matmul_256_32_64 -> num on cpu: 1280
-task id: matmul_32_64_256 -> num on cpu: 1280
-task id: matmul_64_32_10 -> num on cpu: 1280
-task id: matmul_32_10_64 -> num on cpu: 1280
+task id: matmul_32_64_256 -> num on cpu: 1280 <------- all on CPU!
+task id: matmul_64_32_10 -> num on cpu: 1280 <------- all on CPU!
+task id: matmul_32_10_64 -> num on cpu: 1280 <------- all on CPU!
 task id: matmul_256_64_10 -> num on cpu: 1
 task id: matmul_32_64_10 -> num on cpu: 160
 task id: matmul_32_256_64 -> num on cpu: 160
@@ -32,7 +32,7 @@ task id: matmul_32_1024_256 -> num on cpu: 160
 
 task id: matmul_256_1024_256 -> num on gpu: 1
 task id: matmul_1024_1024_256 -> num on gpu: 1
-task id: matmul_1024_32_256 -> num on gpu: 1280
+task id: matmul_1024_32_256 -> num on gpu: 1280 <------ no movement!
 task id: matmul_1024_256_64 -> num on gpu: 1
-task id: matmul_32_256_1024 -> num on gpu: 1280
+task id: matmul_32_256_1024 -> num on gpu: 1280 <------ all on GPU!
 
