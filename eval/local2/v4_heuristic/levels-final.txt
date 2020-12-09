@@ -1,0 +1,55 @@
+real	7m37.367s
+user	4m24.824s
+sys	0m11.931s
+
+
+task id: matmul_32_256_1024 -> cpu: 8506
+task id: matmul_1024_64_10 -> cpu: 54535
+task id: matmul_256_32_64 -> cpu: 827
+task id: matmul_32_64_256 -> cpu: 604
+task id: matmul_64_32_10 -> cpu: 100
+task id: matmul_32_10_64 -> cpu: 54
+task id: matmul_256_64_10 -> cpu: 550
+task id: matmul_32_64_10 -> cpu: 96
+task id: matmul_32_256_64 -> cpu: 426
+task id: matmul_32_1024_256 -> cpu: 6239
+
+task id: matmul_256_256_64 -> gpu: 193
+task id: matmul_256_1024_256 -> gpu: 963
+task id: matmul_32_64_10 -> gpu: 107
+task id: matmul_32_256_64 -> gpu: 121
+task id: matmul_32_1024_256 -> gpu: 323
+task id: matmul_1024_32_256 -> gpu: 1048
+task id: matmul_1024_256_64 -> gpu: 486
+task id: matmul_32_256_1024 -> gpu: 2850
+task id: matmul_256_32_64 -> gpu: 433
+task id: matmul_1024_1024_256 -> gpu: 3079
+task id: matmul_32_64_256 -> gpu: 1207
+task id: matmul_64_32_10 -> gpu: 598
+task id: matmul_32_10_64 -> gpu: 757
+
+task id: matmul_32_256_1024 -> num on cpu: 412
+task id: matmul_1024_64_10 -> num on cpu: 1
+task id: matmul_256_32_64 -> num on cpu: 638
+task id: matmul_32_64_256 -> num on cpu: 908
+task id: matmul_64_32_10 -> num on cpu: 979
+task id: matmul_32_10_64 -> num on cpu: 979
+task id: matmul_256_64_10 -> num on cpu: 1
+task id: matmul_32_64_10 -> num on cpu: 2
+task id: matmul_32_256_64 -> num on cpu: 159
+task id: matmul_32_1024_256 -> num on cpu: 159
+
+task id: matmul_256_256_64 -> num on gpu: 1
+task id: matmul_256_1024_256 -> num on gpu: 1
+task id: matmul_32_64_10 -> num on gpu: 158
+task id: matmul_32_256_64 -> num on gpu: 1
+task id: matmul_32_1024_256 -> num on gpu: 1
+task id: matmul_1024_32_256 -> num on gpu: 1280
+task id: matmul_1024_256_64 -> num on gpu: 1
+task id: matmul_32_256_1024 -> num on gpu: 868
+task id: matmul_256_32_64 -> num on gpu: 642
+task id: matmul_1024_1024_256 -> num on gpu: 1
+task id: matmul_32_64_256 -> num on gpu: 372
+task id: matmul_64_32_10 -> num on gpu: 301
+task id: matmul_32_10_64 -> num on gpu: 301
+
